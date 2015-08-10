@@ -1,10 +1,28 @@
+/** BACKBONE UTILITIES **/
+
+var _sync = Backbone.sync;
+Backbone.sync = function(method, model, options){
+    options.beforeSend = function(xhr){
+        xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
+    };
+    return _sync(method, model, options);
+};
+
+var _url = Backbone.NestedModel.prototype.url;
+
+Backbone.NestedModel.prototype.url = function() {
+    var origUrl = _url.call(this);
+    return origUrl + (origUrl.charAt(origUrl.length - 1) == '/' ? '' : '/');
+}
+
 $(function() {
+        
     ListManager = new Marionette.Application();
     
     /** MODELS & COLLECTIONS **/
     
     ListManager.List =  Backbone.NestedModel.extend({
-        url: '/api/lists/',
+        urlRoot: '/api/lists/',
     });
     
     ListManager.ListItem =  Backbone.NestedModel.extend({
@@ -16,52 +34,30 @@ $(function() {
         url: '/api/lists/'
     });
     
-    ListManager.ListItemCollection = Backbone.Collection.extend({
-        model: ListManager.ListItem,
-        url: '/api/listitems/'
-    });
-    
     /** VIEWS **/
-    
-    ListManager.ListItemView = Marionette.ItemView.extend({
-        template: '#list-item-template',
-        tagName: 'li',
-        className: 'list-group-item',
-        onRender: function() {
-            this.stickit();
-        },
-        bindings: {
-            '.description': 'description',
-        },
-        initialize: function() {
-            this.listenTo(this.model, "change", this.render);
-        },
-    });
-    
-    ListManager.ListItemsView = Marionette.CompositeView.extend({
-        template: '#list-items-template',
-        childView: ListManager.ListItemView,
-        childViewContainer: 'ul',
-    });
     
     ListManager.ListView = Marionette.ItemView.extend({
         template: '#list-template',
         onRender: function() {
-            this.$('div.panel').append(this.listItemsView.render().$el.html());
             this.stickit();
         },
         bindings: {
             '.name': 'name',
         },
         initialize: function() {
-            this.listItems = new ListManager.ListItemCollection();
-            this.listItems.list = this.model.get('id');
-            this.listItems.set(this.model.get('items'));
-            this.listItemsView = new ListManager.ListItemsView({
-                collection: this.listItems,
-            });
             this.listenTo(this.model, "change", this.render);
         },
+        events: {
+            'click .add-button': 'createNewItem',
+        },
+        createNewItem: function() {
+            var listItem = new ListManager.ListItem({
+                description: this.$('.new-description').val(),
+                list: this.model.get('id')
+            });
+            listItem.save();
+            this.model.fetch();
+        }
     });
     
     ListManager.AllListsView = Marionette.CompositeView.extend({

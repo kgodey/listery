@@ -16,19 +16,22 @@
         </div>
         <script id="list-template" type="text/template">
             <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title name">Panel title</h3>
-              </div>
+                <div class="panel-heading">
+                    <h3 class="panel-title name">Panel title</h3>
+                </div>
+                <div class="panel-body new-item-region">
+                    <input type="text" class="new-description"/>
+                    <button class="add-button btn btn-default">Add</button>
+                </div>
+                <ul class="list-group">
+                    <% for (item in items) { %>
+                        <li class="list-group-item"><%= items[item].description %></li>
+                    <% } %>
+                </ul>
             </div>
         </script>
-        <script id="list-item-template" type="text/template">
-            <span class="description"></span>
-        </script>
-        <script id="list-items-template" type="text/template">
-            <ul class="list-group">
-            </ul>
-        </script>
         <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
+        <script src="{% static 'tasks/js/lib/jquery.cookie.js' %}"></script>
         <script src="{% static 'tasks/js/lib/underscore.js' %}"></script>
         <script src="{% static 'tasks/js/lib/backbone.js' %}"></script>
         <script src="{% static 'tasks/js/lib/backbone-nested.js' %}"></script>
