@@ -26,6 +26,7 @@ $(function() {
     ListManager.ListItemView = Marionette.ItemView.extend({
         template: '#list-item-template',
         tagName: 'li',
+        className: 'list-group-item',
         onRender: function() {
             this.stickit();
         },
@@ -46,7 +47,7 @@ $(function() {
     ListManager.ListView = Marionette.ItemView.extend({
         template: '#list-template',
         onRender: function() {
-            this.listItemsView.render().$el.appendTo(this.$el);
+            this.$('div.panel').append(this.listItemsView.render().$el.html());
             this.stickit();
         },
         bindings: {

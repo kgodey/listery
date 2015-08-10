@@ -15,13 +15,17 @@
             </div>
         </div>
         <script id="list-template" type="text/template">
-            <h2 class="name"></h2>
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title name">Panel title</h3>
+              </div>
+            </div>
         </script>
         <script id="list-item-template" type="text/template">
             <span class="description"></span>
         </script>
         <script id="list-items-template" type="text/template">
-            <ul>
+            <ul class="list-group">
             </ul>
         </script>
         <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
