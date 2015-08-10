@@ -55,6 +55,7 @@ $(function() {
         },
         initialize: function() {
             this.listItems = new ListManager.ListItemCollection();
+            this.listItems.list = this.model.get('id');
             this.listItems.set(this.model.get('items'));
             this.listItemsView = new ListManager.ListItemsView({
                 collection: this.listItems,
@@ -73,9 +74,9 @@ $(function() {
     
     ListManager.on('before:start', function() {
         var RegionContainer = Marionette.LayoutView.extend({
-            el: '#app-container',
+            el: '#app-region',
             regions: {
-                allLists: '#all-lists-container',
+                allLists: '#all-lists-region',
             }
         });
         ListManager.regions = new RegionContainer();
