@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Task Tracker</title>
+        <link rel="stylesheet" href="{% static 'tasks/css/lib/bootstrap-spacelab.css' %}">
+    </head>
+    <body>
+        <div id="app-container" class="container">
+            <div id="all-lists-container">
+                <script id="all-lists-template" type="text/template">
+                    <h1 class="page-header">All Lists</h1>
+                    <div>
+                    </div>
+                </script>
+            </div>
+        </div>
+        <script id="list-template" type="text/template">
+            <h2 class="name"></h2>
+        </script>
+        <script id="list-item-template" type="text/template">
+            <span class="description"></span>
+        </script>
+        <script id="list-items-template" type="text/template">
+            <ul>
+            </ul>
+        </script>
+        <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
+        <script src="{% static 'tasks/js/lib/underscore.js' %}"></script>
+        <script src="{% static 'tasks/js/lib/backbone.js' %}"></script>
+        <script src="{% static 'tasks/js/lib/backbone-nested.js' %}"></script>
+        <script src="{% static 'tasks/js/lib/backbone.marionette.js' %}"></script>
+        <script src="{% static 'tasks/js/lib/backbone.stickit.js' %}"></script>
+        <script src="{% static 'tasks/js/index.js' %}"></script>
+    </body>
+</html>
