@@ -8,7 +8,7 @@
         <div id="app-region" class="container">
             <div id="all-lists-region" class="col-md-4">
                 <script id="all-lists-template" type="text/template">
-                    <h1>All Lists</h1>
+                    <p>&nbsp;</p>
                     <input type="text" id="new-list-name"/>
                     <button class="add-list-button btn btn-default">Add New List</button>
                     <p>&nbsp;</p>
@@ -16,28 +16,24 @@
                     </ul>
                 </script>
             </div>
-            <div id="current-list-region" class="col-md-8">
+            <div class="col-md-8">
+                <div id="current-list-region">
+                </div>
+                <div id="current-list-items-region">
+                </div>
             </div>
         </div>
         <script id="list-template" type="text/template">
-            <h1>Current List</h1>
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title name">Panel title</h3>
-                </div>
-                <div class="panel-body new-item-region">
-                    <input type="text" class="new-description"/>
-                    <button class="add-button btn btn-default">Add</button>
-                </div>
-                <ul class="list-group">
-                    <% for (item in items) { %>
-                        <li class="list-group-item"><%= items[item].description %></li>
-                    <% } %>
-                </ul>
-            </div>
+            <h1><%= name %></h1>
+            <input type="text" class="new-description"/>
+            <button class="add-button btn btn-default">Add</button>
+            <p>&nbsp;</p>
         </script>
         <script id="list-name-template" type="text/template">
             <a href="#" class="switch-list" style="text-decoration: none;"><%= name %></a>
+        </script>
+        <script id="list-item-template" type="text/template">
+            <%= description %>
         </script>
         <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
         <script src="{% static 'tasks/js/lib/jquery.cookie.js' %}"></script>

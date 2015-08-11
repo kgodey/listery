@@ -19,7 +19,7 @@ $(function() {
         
     ListManager = new Marionette.Application();
     
-    ListManager.CurrentList;
+    ListManager.CurrentList, ListManager.CurrentListItems;
     
     /** MODELS & COLLECTIONS **/
     
@@ -36,32 +36,13 @@ $(function() {
         url: '/api/lists/'
     });
     
-    /** VIEWS **/
-    
-    ListManager.ListView = Marionette.ItemView.extend({
-        template: '#list-template',
-        onRender: function() {
-            this.stickit();
-        },
-        bindings: {
-            '.name': 'name',
-        },
-        initialize: function() {
-            this.listenTo(this.model, "change", this.render);
-        },
-        events: {
-            'click .add-button': 'createNewItem',
-        },
-        createNewItem: function() {
-            var listItem = new ListManager.ListItem({
-                description: this.$('.new-description').val(),
-                list: this.model.get('id')
-            });
-            listItem.save();
-            this.model.fetch();
-        }
+    ListManager.ListItemCollection = Backbone.Collection.extend({
+        model: ListManager.ListItem,
+        url: '/api/listitems/'
     });
     
+    /** VIEWS **/
+        
     ListManager.ListNameView = Marionette.ItemView.extend({
         tagName: 'li',
         className: function() {
@@ -81,12 +62,7 @@ $(function() {
             'click .switch-list': 'switchList',
         },
         switchList: function() {
-            ListManager.CurrentList = this.model;
-            var currentListView = new ListManager.ListView({
-                model: ListManager.CurrentList,
-            });
-            ListManager.regions.currentList.show(currentListView);
-            ListManager.allListsView.render();
+            ListManager.setCurrentList(this.model);
         }
     });
     
@@ -109,6 +85,59 @@ $(function() {
         },
     });
     
+    ListManager.ListItemView = Marionette.ItemView.extend({
+        template: '#list-item-template',
+        tagName: 'li',
+        className: 'list-group-item',
+    });
+    
+    ListManager.ListItemsView = Marionette.CollectionView.extend({
+        childView: ListManager.ListItemView,
+        tagName: 'ul',
+        className: 'list-group',
+    });
+    
+    ListManager.ListView = Marionette.ItemView.extend({
+        template: '#list-template',
+        initialize: function() {
+            this.listenTo(this.model, "change", this.render);
+        },
+        events: {
+            'click .add-button': 'createNewItem',
+        },
+        createNewItem: function() {
+            var listItem = new ListManager.ListItem({
+                description: this.$('.new-description').val(),
+                list: this.model.get('id')
+            });
+            listItem.save();
+            this.model.fetch({
+                success: function(model) {
+                    ListManager.setCurrentList(model);
+                }
+            });
+        }
+    });
+    
+    /** SET CURRENT LIST **/
+    
+    ListManager.setCurrentList = function(list) {
+        ListManager.CurrentList = list;
+        ListManager.CurrentListItems = new ListManager.ListItemCollection();
+        ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
+        
+        var currentListView = new ListManager.ListView({
+            model: ListManager.CurrentList,
+        });
+        var currentListItemsView = new ListManager.ListItemsView({
+            collection: ListManager.CurrentListItems,
+        });
+        
+        ListManager.regions.currentList.show(currentListView);
+        ListManager.regions.currentListItems.show(currentListItemsView);
+        ListManager.allListsView.render();
+    }
+    
     /** START **/
     
     ListManager.on('before:start', function() {
@@ -116,7 +145,8 @@ $(function() {
             el: '#app-region',
             regions: {
                 allLists: '#all-lists-region',
-                currentList: '#current-list-region'
+                currentList: '#current-list-region',
+                currentListItems: '#current-list-items-region',
             }
         });
         ListManager.regions = new RegionContainer();
@@ -131,12 +161,7 @@ $(function() {
         
         ListManager.AllLists.fetch({
             success: function() {
-                ListManager.CurrentList = ListManager.AllLists.models[0];
-                var currentListView = new ListManager.ListView({
-                    model: ListManager.CurrentList,
-                });
-                ListManager.regions.currentList.show(currentListView);
-                ListManager.allListsView.render();
+                ListManager.setCurrentList(ListManager.AllLists.models[0]);
             }
         });
         
