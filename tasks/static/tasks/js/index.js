@@ -52,12 +52,6 @@ $(function() {
             return 'list-group-item';
         },        
         template: '#list-name-template',
-        onRender: function() {
-            this.stickit();
-        },
-        bindings: {
-            '.name': 'name',
-        },
         events: {
             'click .switch-list': 'switchList',
         },
