@@ -6,15 +6,21 @@
     </head>
     <body>
         <div id="app-region" class="container">
-            <div id="all-lists-region">
+            <div id="all-lists-region" class="col-md-4">
                 <script id="all-lists-template" type="text/template">
-                    <h1 class="page-header">All Lists</h1>
-                    <div>
-                    </div>
+                    <h1>All Lists</h1>
+                    <input type="text" id="new-list-name"/>
+                    <button class="add-list-button btn btn-default">Add New List</button>
+                    <p>&nbsp;</p>
+                    <ul class='list-group'>
+                    </ul>
                 </script>
+            </div>
+            <div id="current-list-region" class="col-md-8">
             </div>
         </div>
         <script id="list-template" type="text/template">
+            <h1>Current List</h1>
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title name">Panel title</h3>
@@ -29,6 +35,9 @@
                     <% } %>
                 </ul>
             </div>
+        </script>
+        <script id="list-name-template" type="text/template">
+            <a href="#" class="switch-list" style="text-decoration: none;"><%= name %></a>
         </script>
         <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
         <script src="{% static 'tasks/js/lib/jquery.cookie.js' %}"></script>

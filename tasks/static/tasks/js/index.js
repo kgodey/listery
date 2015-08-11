@@ -19,6 +19,8 @@ $(function() {
         
     ListManager = new Marionette.Application();
     
+    ListManager.CurrentList;
+    
     /** MODELS & COLLECTIONS **/
     
     ListManager.List =  Backbone.NestedModel.extend({
@@ -60,10 +62,51 @@ $(function() {
         }
     });
     
+    ListManager.ListNameView = Marionette.ItemView.extend({
+        tagName: 'li',
+        className: function() {
+            if (this.model == ListManager.CurrentList) {
+                return 'list-group-item list-group-item-success';
+            }
+            return 'list-group-item';
+        },        
+        template: '#list-name-template',
+        onRender: function() {
+            this.stickit();
+        },
+        bindings: {
+            '.name': 'name',
+        },
+        events: {
+            'click .switch-list': 'switchList',
+        },
+        switchList: function() {
+            ListManager.CurrentList = this.model;
+            var currentListView = new ListManager.ListView({
+                model: ListManager.CurrentList,
+            });
+            ListManager.regions.currentList.show(currentListView);
+            ListManager.allListsView.render();
+        }
+    });
+    
     ListManager.AllListsView = Marionette.CompositeView.extend({
         template: '#all-lists-template',
-        childView: ListManager.ListView,
-        childViewContainer: 'div',
+        childView: ListManager.ListNameView,
+        childViewContainer: 'ul',
+        events: {
+            'click .add-list-button': 'createNewList',
+        },
+        initialize: function() {
+            this.listenTo(this.collection, "change", this.render);
+        },
+        createNewList: function() {
+            var newList = new ListManager.List({
+                name: this.$('#new-list-name').val(),
+            });
+            newList.save();
+            this.collection.fetch();
+        },
     });
     
     /** START **/
@@ -73,6 +116,7 @@ $(function() {
             el: '#app-region',
             regions: {
                 allLists: '#all-lists-region',
+                currentList: '#current-list-region'
             }
         });
         ListManager.regions = new RegionContainer();
@@ -80,13 +124,24 @@ $(function() {
     
     ListManager.on('start', function() {
         ListManager.AllLists = new ListManager.ListCollection();
-        ListManager.AllLists.fetch();
         
-        var allListsView = new ListManager.AllListsView({
+        ListManager.allListsView = new ListManager.AllListsView({
             collection: ListManager.AllLists,
         });
         
-        ListManager.regions.allLists.show(allListsView);
+        ListManager.AllLists.fetch({
+            success: function() {
+                ListManager.CurrentList = ListManager.AllLists.models[0];
+                var currentListView = new ListManager.ListView({
+                    model: ListManager.CurrentList,
+                });
+                ListManager.regions.currentList.show(currentListView);
+                ListManager.allListsView.render();
+            }
+        });
+        
+        ListManager.regions.allLists.show(ListManager.allListsView);
+        
     });
 
     ListManager.start();
