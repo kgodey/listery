@@ -4,6 +4,9 @@ from django.db import models
 
 class List(models.Model):
     name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    archived = models.BooleanField(default=False)
     
     @property
     def items(self):
@@ -14,10 +17,14 @@ class List(models.Model):
 
 
 class ListItem(models.Model):
-    description = models.TextField()
-    list = models.ForeignKey(List)
+    title = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    description = models.TextField(null=True, blank=True)
+    completed = models.BooleanField(default=False)
     assignee = models.ForeignKey(User, null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
+    list = models.ForeignKey(List)
     
     def __unicode__(self):
-        return self.description
+        return '%s (%s)' % (self.title, self.list.name)

@@ -109,11 +109,11 @@ $(function() {
         },
         events: {
             'click .add-button': 'createNewItem',
-            'keyup .new-description': 'processKeyUp',
+            'keyup .new-title': 'processKeyUp',
         },
         createNewItem: function() {
             var listItem = new ListManager.ListItem({
-                description: this.$('.new-description').val(),
+                title: this.$('.new-title').val(),
                 list: this.model.get('id')
             });
             listItem.save();

@@ -25,15 +25,15 @@
         </div>
         <script id="list-template" type="text/template">
             <h1><%= name %></h1>
-            <input type="text" class="new-description"/>
+            <input type="text" class="new-title"/>
             <button class="add-button btn btn-default">Add</button>
             <p>&nbsp;</p>
         </script>
         <script id="list-name-template" type="text/template">
-            <a href="#" class="switch-list" style="text-decoration: none;"><%= name %></a>
+            <a href="#" class="switch-list"><%= name %></a>
         </script>
         <script id="list-item-template" type="text/template">
-            <%= description %>
+            <%= title %>
         </script>
         <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
         <script src="{% static 'tasks/js/lib/jquery.cookie.js' %}"></script>

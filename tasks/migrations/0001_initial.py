@@ -17,13 +17,20 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('archived', models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
             name='ListItem',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('description', models.TextField()),
+                ('title', models.CharField(max_length=255)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('description', models.TextField(null=True, blank=True)),
+                ('completed', models.BooleanField(default=False)),
                 ('due_date', models.DateTimeField(null=True, blank=True)),
                 ('assignee', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
                 ('list', models.ForeignKey(to='tasks.List')),
