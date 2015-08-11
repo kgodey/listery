@@ -72,17 +72,28 @@ $(function() {
         childViewContainer: 'ul',
         events: {
             'click .add-list-button': 'createNewList',
+            'keyup #new-list-name': 'processKeyUp',
         },
         initialize: function() {
             this.listenTo(this.collection, "change", this.render);
         },
         createNewList: function() {
+            var self = this;
             var newList = new ListManager.List({
                 name: this.$('#new-list-name').val(),
             });
-            newList.save();
+            newList.save({}, {
+                success: function(model) {
+                    ListManager.setCurrentList(model);
+                }
+            });
             this.collection.fetch();
         },
+        processKeyUp: function(event) {
+            if (event.keyCode === 13) {
+                this.createNewList();
+            }
+        }
     });
     
     ListManager.ListItemView = Marionette.ItemView.extend({
@@ -104,6 +115,7 @@ $(function() {
         },
         events: {
             'click .add-button': 'createNewItem',
+            'keyup .new-description': 'processKeyUp',
         },
         createNewItem: function() {
             var listItem = new ListManager.ListItem({
@@ -116,6 +128,11 @@ $(function() {
                     ListManager.setCurrentList(model);
                 }
             });
+        },
+        processKeyUp: function(event) {
+            if (event.keyCode === 13) {
+                this.createNewItem();
+            }
         }
     });
     
