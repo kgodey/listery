@@ -117,7 +117,8 @@ $(function() {
         },
         events: {
             'click .delete-item': 'deleteItem',
-            'click .edit-item': 'editItem',
+            'click .edit-title': 'editItem',
+            'click .add-description': 'addDescription',
             'click .toggle-complete': 'toggleComplete',
             'keyup .toggle-complete': function(event) {
                 if (event.keyCode === 13) {
@@ -128,13 +129,13 @@ $(function() {
         deleteItem: function() {
             this.model.destroy();
         },
-        toggleEditing: function() {
-            this.$('.toggle-on-edit').toggleClass('hidden');
+        toggleEditing: function(className) {
+            this.$(className).toggleClass('hidden');
         },
         editItem: function() {
             var inputElement = this.$('.title-input');
-            var editSpan = this.$('.edit-item');
-            this.toggleEditing();
+            var editSpan = this.$('.edit-title');
+            this.toggleEditing('.toggle-on-title-edit');
             editSpan.removeClass('glyphicon-pencil');
             editSpan.addClass('glyphicon-floppy-save');
             if (inputElement.is(':visible')) {
@@ -142,6 +143,23 @@ $(function() {
                 inputElement.val(this.model.get('title'));
             } else {
                 this.model.save({title: inputElement.val()}, {
+                    patch: true,
+                });
+            }
+        },
+        addDescription: function() {
+            var inputElement = this.$('.description-input');
+            var editSpan = this.$('.add-description');
+            this.toggleEditing('.toggle-on-description-edit');
+            editSpan.removeClass('glyphicon-plus');
+            editSpan.addClass('glyphicon-floppy-save');
+            if (inputElement.is(':visible')) {
+                inputElement.focus();
+                inputElement.val(this.model.get('description'));
+            } else {
+                console.log(inputElement);
+                x = inputElement;
+                this.model.save({description: inputElement.val()}, {
                     patch: true,
                 });
             }
