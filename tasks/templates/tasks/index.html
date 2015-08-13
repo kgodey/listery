@@ -39,17 +39,24 @@
         </script>
         <script id="list-item-template" type="text/template">
             <input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>&nbsp;&nbsp;&nbsp;
-            <span class="toggle-on-title-edit title"><b><%= title %></b></span>
-            <span class="toggle-on-title-edit hidden"><input type="text" class="title-input" style="width: 80%"></span>
-            <% if (description) { %><i><span class="description toggle-on-description-edit"><br/><%= description %></span></i><% } %>
-            <br class="toggle-on-description-edit hidden"/><input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
+            <span class="edit-title">
+                <span class="toggle-on-title-edit title"><b><%= title %></b></span>
+            </span>
+            <span class="toggle-on-title-edit hidden">
+                <input type="text" class="title-input" style="width: 80%">
+            </span>
+            <% if (description) { %>
+                <span class="edit-description">
+                    <i><span class="description toggle-on-description-edit"><br/><%= description %></span></i>
+                </span>
+            <% } %>
+            <br class="toggle-on-description-edit hidden"/>
+            <input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
             <span class="pull-right">
                 <% if (!description) { %>
                     <span class="glyphicon glyphicon-plus add-description"></span>
                     &nbsp;
                 <% } %>
-                <span class="glyphicon glyphicon-pencil edit-title"></span>
-                &nbsp;
                 <span class="glyphicon glyphicon-remove delete-item"></span>
             </span>
         </script>

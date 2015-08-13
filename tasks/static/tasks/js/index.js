@@ -117,9 +117,22 @@ $(function() {
         },
         events: {
             'click .delete-item': 'deleteItem',
-            'click .edit-title': 'editItem',
+            'click .edit-title': 'editTitle',
+            'click .edit-description': 'editDescription',
             'click .add-description': 'addDescription',
             'click .toggle-complete': 'toggleComplete',
+            'focusout .title-input': 'saveTitle',
+            'focusout .description-input': 'saveDescription',
+            'keyup .title-input': function(event) {
+                if (event.keyCode === 13) {
+                    this.saveTitle();
+                }
+            },
+            'keyup .description-input': function(event) {
+                if (event.keyCode === 13) {
+                    this.saveDescription();
+                }
+            },
             'keyup .toggle-complete': function(event) {
                 if (event.keyCode === 13) {
                     this.toggleComplete();
@@ -132,20 +145,29 @@ $(function() {
         toggleEditing: function(className) {
             this.$(className).toggleClass('hidden');
         },
-        editItem: function() {
+        editTitle: function() {
             var inputElement = this.$('.title-input');
-            var editSpan = this.$('.edit-title');
             this.toggleEditing('.toggle-on-title-edit');
-            editSpan.removeClass('glyphicon-pencil');
-            editSpan.addClass('glyphicon-floppy-save');
-            if (inputElement.is(':visible')) {
-                inputElement.focus();
-                inputElement.val(this.model.get('title'));
-            } else {
-                this.model.save({title: inputElement.val()}, {
-                    patch: true,
-                });
-            }
+            inputElement.focus();
+            inputElement.val(this.model.get('title'));
+        },
+        editDescription: function() {
+            var inputElement = this.$('.description-input');
+            this.toggleEditing('.toggle-on-description-edit');
+            inputElement.focus();
+            inputElement.val(this.model.get('description'));
+        },
+        saveTitle: function() {
+            this.toggleEditing('.toggle-on-title-edit');
+            this.model.save({title: this.$('.title-input').val()}, {
+                patch: true,
+            });
+        },
+        saveDescription: function() {
+            this.toggleEditing('.toggle-on-title-edit');
+            this.model.save({description: this.$('.description-input').val()}, {
+                patch: true,
+            });
         },
         addDescription: function() {
             var inputElement = this.$('.description-input');
@@ -157,8 +179,6 @@ $(function() {
                 inputElement.focus();
                 inputElement.val(this.model.get('description'));
             } else {
-                console.log(inputElement);
-                x = inputElement;
                 this.model.save({description: inputElement.val()}, {
                     patch: true,
                 });
