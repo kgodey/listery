@@ -28,7 +28,7 @@ $(function() {
     });
     
     ListManager.ListItem =  Backbone.NestedModel.extend({
-        url: '/api/listitems/',
+        urlRoot: '/api/listitems/',
     });
     
     ListManager.ListCollection = Backbone.Collection.extend({
@@ -54,10 +54,17 @@ $(function() {
         template: '#list-name-template',
         events: {
             'click .switch-list': 'switchList',
+            'click .delete-item': 'deleteItem',
         },
         switchList: function() {
             ListManager.setCurrentList(this.model);
-        }
+        },
+        deleteItem: function() {
+            if (ListManager.CurrentList == this.model) {
+                ListManager.setCurrentList(ListManager.AllLists.models[0]);
+            }
+            this.model.destroy();
+        },
     });
     
     ListManager.AllListsView = Marionette.CompositeView.extend({
@@ -99,6 +106,27 @@ $(function() {
         template: '#list-item-template',
         tagName: 'li',
         className: 'list-group-item',
+        initialize: function() {
+            this.listenTo(this.model, "change", this.render);
+        },
+        events: {
+            'click .delete-item': 'deleteItem',
+            'click .toggle-complete': 'toggleComplete',
+            'keyup .toggle-complete': function(event) {
+                if (event.keyCode === 13) {
+                    this.toggleComplete();
+                }
+            },
+        },
+        deleteItem: function() {
+            this.model.destroy();
+        },
+        toggleComplete: function() {
+            var self = this;
+            this.model.save({completed: !self.model.get('completed')}, {
+                patch: true,
+            });
+        }
     });
     
     ListManager.ListItemsView = Marionette.CollectionView.extend({

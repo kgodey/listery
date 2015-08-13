@@ -33,9 +33,15 @@
         </script>
         <script id="list-name-template" type="text/template">
             <a href="#" class="switch-list"><%= name %></a>
+            <span class="pull-right delete-item">
+                <span class="glyphicon glyphicon-trash"></span>
+            </span>
         </script>
         <script id="list-item-template" type="text/template">
-            <%= title %>
+            <input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>&nbsp;&nbsp;&nbsp;<%= title %>
+            <span class="pull-right delete-item">
+                <span class="glyphicon glyphicon-trash"></span>
+            </span>
         </script>
         <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
         <script src="{% static 'tasks/js/lib/jquery.cookie.js' %}"></script>
