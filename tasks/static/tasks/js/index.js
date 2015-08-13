@@ -54,16 +54,22 @@ $(function() {
         template: '#list-name-template',
         events: {
             'click .switch-list': 'switchList',
-            'click .delete-item': 'deleteItem',
+            'click .archive-item': 'archiveItem',
         },
         switchList: function() {
             ListManager.setCurrentList(this.model);
         },
-        deleteItem: function() {
-            if (ListManager.CurrentList == this.model) {
-                ListManager.setCurrentList(ListManager.AllLists.models[0]);
-            }
-            this.model.destroy();
+        archiveItem: function() {
+            var self = this;
+            this.model.save({archived: true}, {
+                patch: true,
+                success: function() {
+                    if (ListManager.CurrentList == self.model) {
+                        ListManager.setCurrentList(ListManager.AllLists.models[0]);
+                    }
+                    ListManager.AllLists.remove(self.model.get('id'));
+                }
+            });
         },
     });
     

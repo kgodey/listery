@@ -13,7 +13,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ListViewSet(viewsets.ModelViewSet):
-    queryset = List.objects.all()
+    queryset = List.objects.filter(archived=False)
     serializer_class = ListSerializer
     permission_classes = (AllowAny,)
 
