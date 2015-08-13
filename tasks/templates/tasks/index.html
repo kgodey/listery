@@ -10,7 +10,8 @@
                 <script id="all-lists-template" type="text/template">
                     <p>&nbsp;</p>
                     <input type="text" id="new-list-name"/>
-                    <button class="add-list-button btn btn-default">Add New List</button>
+                    <button class="add-list-button btn btn-default toggle-on-add">Add New List</button>
+                    <img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
                     <p>&nbsp;</p>
                     <ul class='list-group'>
                     </ul>
@@ -26,7 +27,8 @@
         <script id="list-template" type="text/template">
             <h1><%= name %></h1>
             <input type="text" class="new-title"/>
-            <button class="add-button btn btn-default">Add</button>
+            <button class="add-button btn btn-default toggle-on-add">Add</button>
+            <img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
             <p>&nbsp;</p>
         </script>
         <script id="list-name-template" type="text/template">

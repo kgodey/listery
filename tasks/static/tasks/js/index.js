@@ -73,15 +73,20 @@ $(function() {
         },
         createNewList: function() {
             var self = this;
+            this.toggleLoading();
             var newList = new ListManager.List({
                 name: this.$('#new-list-name').val(),
             });
             newList.save({}, {
-                success: function(model) {
-                    ListManager.setCurrentList(model);
+                success: function() {
+                    ListManager.setCurrentList(newList);
+                    self.collection.add(newList);
+                    self.render();
                 }
             });
-            this.collection.fetch();
+        },
+        toggleLoading: function() {
+            this.$('.toggle-on-add').toggleClass('hidden');
         },
         processKeyUp: function(event) {
             if (event.keyCode === 13) {
@@ -105,21 +110,22 @@ $(function() {
     ListManager.ListView = Marionette.ItemView.extend({
         template: '#list-template',
         initialize: function() {
-            this.listenTo(this.model, "change", this.render);
+            this.listenTo(this.model, "change", this.setCurrentList);
         },
         events: {
             'click .add-button': 'createNewItem',
             'keyup .new-title': 'processKeyUp',
         },
         createNewItem: function() {
+            var self = this;
+            this.toggleLoading();
             var listItem = new ListManager.ListItem({
                 title: this.$('.new-title').val(),
                 list: this.model.get('id')
             });
-            listItem.save();
-            this.model.fetch({
-                success: function(model) {
-                    ListManager.setCurrentList(model);
+            listItem.save({}, {
+                success: function() {
+                    self.model.fetch();
                 }
             });
         },
@@ -127,6 +133,12 @@ $(function() {
             if (event.keyCode === 13) {
                 this.createNewItem();
             }
+        },
+        toggleLoading: function() {
+            this.$('.toggle-on-add').toggleClass('hidden');
+        },
+        setCurrentList: function() {
+            ListManager.setCurrentList(this.model);
         }
     });
     
@@ -137,16 +149,16 @@ $(function() {
         ListManager.CurrentListItems = new ListManager.ListItemCollection();
         ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
         
-        var currentListView = new ListManager.ListView({
+        ListManager.CurrentListView = new ListManager.ListView({
             model: ListManager.CurrentList,
         });
-        var currentListItemsView = new ListManager.ListItemsView({
+        ListManager.CurrentListItemsView = new ListManager.ListItemsView({
             collection: ListManager.CurrentListItems,
         });
         
-        ListManager.regions.currentList.show(currentListView);
-        ListManager.regions.currentListItems.show(currentListItemsView);
-        ListManager.allListsView.render();
+        ListManager.regions.currentList.show(ListManager.CurrentListView);
+        ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
+        ListManager.AllListsView.render();
     }
     
     /** START **/
@@ -166,7 +178,7 @@ $(function() {
     ListManager.on('start', function() {
         ListManager.AllLists = new ListManager.ListCollection();
         
-        ListManager.allListsView = new ListManager.AllListsView({
+        ListManager.AllListsView = new ListManager.AllListsView({
             collection: ListManager.AllLists,
         });
         
@@ -176,7 +188,7 @@ $(function() {
             }
         });
         
-        ListManager.regions.allLists.show(ListManager.allListsView);
+        ListManager.regions.allLists.show(ListManager.AllListsView);
         
     });
 
