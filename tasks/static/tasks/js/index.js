@@ -158,13 +158,11 @@ $(function() {
             inputElement.val(this.model.get('description'));
         },
         saveTitle: function() {
-            this.toggleEditing('.toggle-on-title-edit');
             this.model.save({title: this.$('.title-input').val()}, {
                 patch: true,
             });
         },
         saveDescription: function() {
-            this.toggleEditing('.toggle-on-title-edit');
             this.model.save({description: this.$('.description-input').val()}, {
                 patch: true,
             });
