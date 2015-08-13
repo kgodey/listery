@@ -44,10 +44,10 @@ $(function() {
     /** VIEWS **/
         
     ListManager.ListNameView = Marionette.ItemView.extend({
-        tagName: 'li',
+        tagName: 'a',
         className: function() {
             if (this.model == ListManager.CurrentList) {
-                return 'list-group-item list-group-item-success';
+                return 'list-group-item active';
             }
             return 'list-group-item';
         },        
@@ -70,7 +70,7 @@ $(function() {
     ListManager.AllListsView = Marionette.CompositeView.extend({
         template: '#all-lists-template',
         childView: ListManager.ListNameView,
-        childViewContainer: 'ul',
+        childViewContainer: 'div',
         events: {
             'click .add-list-button': 'createNewList',
             'keyup #new-list-name': 'processKeyUp',
@@ -104,13 +104,14 @@ $(function() {
     
     ListManager.ListItemView = Marionette.ItemView.extend({
         template: '#list-item-template',
-        tagName: 'li',
+        tagName: 'a',
         className: 'list-group-item',
         initialize: function() {
             this.listenTo(this.model, "change", this.render);
         },
         events: {
             'click .delete-item': 'deleteItem',
+            'click .edit-item': 'editItem',
             'click .toggle-complete': 'toggleComplete',
             'keyup .toggle-complete': function(event) {
                 if (event.keyCode === 13) {
@@ -120,6 +121,24 @@ $(function() {
         },
         deleteItem: function() {
             this.model.destroy();
+        },
+        toggleEditing: function() {
+            this.$('.toggle-on-edit').toggleClass('hidden');
+        },
+        editItem: function() {
+            var inputElement = this.$('.title-input');
+            var editSpan = this.$('.edit-item');
+            this.toggleEditing();
+            editSpan.removeClass('glyphicon-pencil');
+            editSpan.addClass('glyphicon-floppy-save');
+            if (inputElement.is(':visible')) {
+                inputElement.val(this.model.get('title'));
+                inputElement.focus();
+            } else {
+                this.model.save({title: inputElement.val()}, {
+                    patch: true,
+                });
+            }
         },
         toggleComplete: function() {
             var self = this;
@@ -131,7 +150,7 @@ $(function() {
     
     ListManager.ListItemsView = Marionette.CollectionView.extend({
         childView: ListManager.ListItemView,
-        tagName: 'ul',
+        tagName: 'div',
         className: 'list-group',
     });
     

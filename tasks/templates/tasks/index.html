@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Task Tracker</title>
-        <link rel="stylesheet" href="{% static 'tasks/css/lib/bootstrap-spacelab.css' %}">
+        <link rel="stylesheet" href="{% static 'tasks/css/lib/bootstrap.css' %}">
     </head>
     <body>
         <div id="app-region" class="container">
@@ -10,11 +10,11 @@
                 <script id="all-lists-template" type="text/template">
                     <p>&nbsp;</p>
                     <input type="text" id="new-list-name"/>
-                    <button class="add-list-button btn btn-default toggle-on-add">Add New List</button>
+                    <button class="add-list-button btn btn-info toggle-on-add">Add New List</button>
                     <img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
                     <p>&nbsp;</p>
-                    <ul class='list-group'>
-                    </ul>
+                    <div class='list-group'>
+                    </div>
                 </script>
             </div>
             <div class="col-md-8">
@@ -27,20 +27,24 @@
         <script id="list-template" type="text/template">
             <h1><%= name %></h1>
             <input type="text" class="new-title"/>
-            <button class="add-button btn btn-default toggle-on-add">Add</button>
+            <button class="add-button btn btn-info toggle-on-add">Add</button>
             <img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
             <p>&nbsp;</p>
         </script>
         <script id="list-name-template" type="text/template">
-            <a href="#" class="switch-list"><%= name %></a>
-            <span class="pull-right delete-item">
-                <span class="glyphicon glyphicon-trash"></span>
+            <span><%= name %></span>
+            <span class="pull-right">
+                <span class="glyphicon glyphicon-remove delete-item"></span>
             </span>
         </script>
         <script id="list-item-template" type="text/template">
-            <input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>&nbsp;&nbsp;&nbsp;<%= title %>
-            <span class="pull-right delete-item">
-                <span class="glyphicon glyphicon-trash"></span>
+            <input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>&nbsp;&nbsp;&nbsp;
+            <span class="toggle-on-edit"><%= title %></span>
+            <span class="toggle-on-edit hidden"><input type="text" class="title-input"></span>
+            <span class="pull-right">
+                <span class="glyphicon glyphicon-pencil edit-item"></span>
+                &nbsp;
+                <span class="glyphicon glyphicon-remove delete-item"></span>
             </span>
         </script>
         <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
