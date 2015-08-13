@@ -61,14 +61,28 @@ $(function() {
         },
         archiveItem: function() {
             var self = this;
-            this.model.save({archived: true}, {
-                patch: true,
-                success: function() {
-                    if (ListManager.CurrentList == self.model) {
-                        ListManager.setCurrentList(ListManager.AllLists.models[0]);
+            swal({
+                title: "Are you sure?",
+                text: "\"" + self.model.get('name') + "\" will be archived immediately.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, archive it!",
+                closeOnConfirm: true
+            },
+            function(){
+                self.model.save({archived: true}, {
+                    patch: true,
+                    success: function() {
+                        if (ListManager.CurrentList == self.model) {
+                            ListManager.setCurrentList(ListManager.AllLists.models[0]);
+                        }
+                        ListManager.AllLists.remove(self.model.get('id'));
+                    },
+                    error: function(model, response, options) {
+                        ListManager.parseError(model, response, options);
+                        self.model.fetch();
                     }
-                    ListManager.AllLists.remove(self.model.get('id'));
-                }
+                });
             });
         },
     });
@@ -95,6 +109,10 @@ $(function() {
                     ListManager.setCurrentList(newList);
                     self.collection.add(newList);
                     self.render();
+                },
+                error: function(model, response, options) {
+                    ListManager.parseError(model, response, options);
+                    self.toggleLoading();
                 }
             });
         },
@@ -140,7 +158,18 @@ $(function() {
             },
         },
         deleteItem: function() {
-            this.model.destroy();
+            var self = this;
+            swal({
+                title: "Are you sure?",
+                text: "\"" + self.model.get('title') + "\" will be deleted immediately.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: true
+            },
+            function(){
+                self.model.destroy();
+            });
         },
         toggleEditing: function(className) {
             this.$(className).toggleClass('hidden');
@@ -157,15 +186,25 @@ $(function() {
             inputElement.focus();
             inputElement.val(this.model.get('description'));
         },
-        saveTitle: function() {
-            this.model.save({title: this.$('.title-input').val()}, {
+        saveAttributes: function(attributes) {
+            var self = this;
+            this.model.save(attributes, {
                 patch: true,
+                error: function(model, response, options) {
+                    ListManager.parseError(model, response, options);
+                    if ('description' in attributes) {
+                        this.toggleEditing('.toggle-on-description-edit');
+                    } else if ('title' in attributes) {
+                        this.toggleEditing('.toggle-on-title-edit');
+                    }
+                }
             });
         },
+        saveTitle: function() {
+            this.saveAttributes({title: this.$('.title-input').val()});
+        },
         saveDescription: function() {
-            this.model.save({description: this.$('.description-input').val()}, {
-                patch: true,
-            });
+            this.saveAttributes({description: this.$('.description-input').val()});
         },
         addDescription: function() {
             var inputElement = this.$('.description-input');
@@ -177,9 +216,7 @@ $(function() {
                 inputElement.focus();
                 inputElement.val(this.model.get('description'));
             } else {
-                this.model.save({description: inputElement.val()}, {
-                    patch: true,
-                });
+                this.model.saveAttributes({description: inputElement.val()});
             }
         },
         toggleComplete: function() {
@@ -215,6 +252,10 @@ $(function() {
             listItem.save({}, {
                 success: function() {
                     self.model.fetch();
+                },
+                error: function(model, response, options) {
+                    ListManager.parseError(model, response, options);
+                    self.toggleLoading();
                 }
             });
         },
@@ -231,7 +272,7 @@ $(function() {
         }
     });
     
-    /** SET CURRENT LIST **/
+    /** UTILITY FUNCTIONS **/
     
     ListManager.setCurrentList = function(list) {
         ListManager.CurrentList = list;
@@ -249,6 +290,21 @@ $(function() {
         ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
         ListManager.AllListsView.render();
     }
+    
+    ListManager.parseError = function (model, response, options) {
+        var data = $.parseJSON(response.responseText);
+        var errorKey = Object.keys(data)[0];
+        var errorMessage = data[errorKey][0];
+        if (errorKey == 'non_field_errors') {
+            errorKey = 'Error';
+        }
+        var message = errorKey + ': ' + errorMessage;
+        swal({
+            title: 'Error',
+            text: message,
+            type: 'warning',
+        });
+    };
     
     /** START **/
     
