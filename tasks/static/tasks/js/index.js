@@ -138,8 +138,8 @@ $(function() {
             editSpan.removeClass('glyphicon-pencil');
             editSpan.addClass('glyphicon-floppy-save');
             if (inputElement.is(':visible')) {
-                inputElement.val(this.model.get('title'));
                 inputElement.focus();
+                inputElement.val(this.model.get('title'));
             } else {
                 this.model.save({title: inputElement.val()}, {
                     patch: true,
