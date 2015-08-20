@@ -13,6 +13,19 @@ class List(models.Model):
     def items(self):
         return self.listitem_set.order_by('order')
     
+    @property
+    def plaintext(self):
+        text = u'%s\n' % self.name.upper()
+        if self.items.exists():
+            text += u'\n'
+            for item in self.items:
+                text += u'[%(checked)s] %(title)s%(description)s\n' % {
+                    'checked': u'x' if item.completed else u' ',
+                    'title': item.title,
+                    'description': u'\n\t%s' % item.description if item.description else u'',
+                }
+        return text
+    
     def __unicode__(self):
         return self.name
 

@@ -28,6 +28,7 @@
             <input type="text" class="name-input" style="width: 75%; color: black;">
         </span>
         <span class="pull-right">
+            <span class="glyphicon glyphicon-save download-item"></span>&nbsp;
             <span class="glyphicon glyphicon-pencil edit-name"></span>&nbsp;
             <span class="glyphicon glyphicon-remove archive-item"></span>
         </span>
@@ -65,4 +66,7 @@
         </span>
     </script>
     <!-- END TEMPLATES -->
+    <form id="download-form" method="POST" class="hidden">
+        {% csrf_token %}
+    </form>
 {% endblock %}

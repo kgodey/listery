@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -19,6 +21,13 @@ class ListViewSet(viewsets.ModelViewSet):
     queryset = List.objects.filter(archived=False)
     serializer_class = ListSerializer
     permission_classes = (IsAuthenticated,)
+    
+    @detail_route(methods=['post'])
+    def download(self, request, pk=None):
+        item = self.get_object()
+        response = HttpResponse(item.plaintext, content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename="%s-%s.txt"' % (item.name, timezone.now())
+        return response
 
 
 class ListItemViewSet(viewsets.ModelViewSet):

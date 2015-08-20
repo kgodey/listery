@@ -55,6 +55,7 @@ $(function() {
         events: {
             'click .switch-list': 'switchList',
             'click .archive-item': 'archiveItem',
+            'click .download-item': 'downloadItem',
             'click .edit-name': 'editName',
             'focusout .name-input': 'saveName',
             'keyup .name-input': function(event) {
@@ -108,6 +109,10 @@ $(function() {
                 });
             });
         },
+        downloadItem: function(event, model, index) {
+            $('#download-form').attr('action', this.model.url() + 'download/');
+            $('#download-form').submit();
+        }
     });
     
     ListManager.AllListsView = Marionette.CompositeView.extend({
