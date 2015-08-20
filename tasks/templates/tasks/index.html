@@ -1,83 +1,68 @@
+{% extends 'tasks/base.html' %}
 {% load staticfiles %}
-<html>
-    <head>
-        <title>Task Tracker</title>
-        <link rel="stylesheet" href="{% static 'tasks/css/lib/bootstrap.css' %}">
-        <link rel="stylesheet" href="{% static 'tasks/css/lib/sweet-alert.css' %}">
-    </head>
-    <body>
-        <div id="app-region" class="container">
-            <div id="all-lists-region" class="col-md-4">
+{% block content %}
+    <div id="app-region" class="container">
+        <div id="all-lists-region" class="col-md-4">
+        </div>
+        <div class="col-md-8">
+            <div id="current-list-region">
             </div>
-            <div class="col-md-8">
-                <div id="current-list-region">
-                </div>
-                <div id="current-list-items-region">
-                </div>
+            <div id="current-list-items-region">
             </div>
         </div>
-        <!-- TEMPLATES -->
-        <script id="all-lists-template" type="text/template">
-            <p>&nbsp;</p>
-            <input type="text" id="new-list-name"/>
-            <button class="add-list-button btn btn-info toggle-on-add">Add New List</button>
-            <img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
-            <p>&nbsp;</p>
-            <div class='list-group'>
-            </div>
-        </script>
-        
-        <script id="list-name-template" type="text/template">
-            <span class="switch-list toggle-on-name-edit"><%= name %></span>
-            <span class="toggle-on-name-edit hidden">
-                <input type="text" class="name-input" style="width: 75%; color: black;">
+    </div>
+    <!-- TEMPLATES -->
+    <script id="all-lists-template" type="text/template">
+        <p>&nbsp;</p>
+        <input type="text" id="new-list-name"/>
+        <button class="add-list-button btn btn-info toggle-on-add">Add New List</button>
+        <img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
+        <p>&nbsp;</p>
+        <div class='list-group'>
+        </div>
+    </script>
+
+    <script id="list-name-template" type="text/template">
+        <span class="switch-list toggle-on-name-edit"><%= name %></span>
+        <span class="toggle-on-name-edit hidden">
+            <input type="text" class="name-input" style="width: 75%; color: black;">
+        </span>
+        <span class="pull-right">
+            <span class="glyphicon glyphicon-pencil edit-name"></span>&nbsp;
+            <span class="glyphicon glyphicon-remove archive-item"></span>
+        </span>
+    </script>
+
+    <script id="list-template" type="text/template">
+        <h1><%= name %></h1>
+        <input type="text" class="new-title"/>
+        <button class="add-button btn btn-info toggle-on-add">Add</button>
+        <img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
+        <p>&nbsp;</p>
+    </script>
+
+    <script id="list-item-template" type="text/template">
+        <input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>&nbsp;&nbsp;&nbsp;
+        <span class="edit-title">
+            <span class="toggle-on-title-edit title"><%= title %></span>
+        </span>
+        <span class="toggle-on-title-edit hidden">
+            <input type="text" class="title-input" style="width: 80%">
+        </span>
+        <% if (description) { %>
+            <span class="edit-description">
+                <small><i><span class="description toggle-on-description-edit"><br/><%= description %></span></i></small>
             </span>
-            <span class="pull-right">
-                <span class="glyphicon glyphicon-pencil edit-name"></span>&nbsp;
-                <span class="glyphicon glyphicon-remove archive-item"></span>
-            </span>
-        </script>
-        
-        <script id="list-template" type="text/template">
-            <h1><%= name %></h1>
-            <input type="text" class="new-title"/>
-            <button class="add-button btn btn-info toggle-on-add">Add</button>
-            <img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
-            <p>&nbsp;</p>
-        </script>
-        
-        <script id="list-item-template" type="text/template">
-            <input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>&nbsp;&nbsp;&nbsp;
-            <span class="edit-title">
-                <span class="toggle-on-title-edit title"><%= title %></span>
-            </span>
-            <span class="toggle-on-title-edit hidden">
-                <input type="text" class="title-input" style="width: 80%">
-            </span>
-            <% if (description) { %>
-                <span class="edit-description">
-                    <small><i><span class="description toggle-on-description-edit"><br/><%= description %></span></i></small>
-                </span>
+        <% } %>
+        <br class="toggle-on-description-edit hidden"/>
+        <input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
+        <span class="pull-right">
+            <% if (!description) { %>
+                <span class="glyphicon glyphicon-plus add-description"></span>
+                &nbsp;
             <% } %>
-            <br class="toggle-on-description-edit hidden"/>
-            <input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
-            <span class="pull-right">
-                <% if (!description) { %>
-                    <span class="glyphicon glyphicon-plus add-description"></span>
-                    &nbsp;
-                <% } %>
-                <span class="glyphicon glyphicon-remove delete-item"></span>
-            </span>
-        </script>
-        <!-- END TEMPLATES -->
-        <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
-        <script src="{% static 'tasks/js/lib/jquery-ui.js' %}"></script>
-        <script src="{% static 'tasks/js/lib/jquery.cookie.js' %}"></script>
-        <script src="{% static 'tasks/js/lib/sweet-alert.js' %}"></script>
-        <script src="{% static 'tasks/js/lib/underscore.js' %}"></script>
-        <script src="{% static 'tasks/js/lib/backbone.js' %}"></script>
-        <script src="{% static 'tasks/js/lib/backbone-nested.js' %}"></script>
-        <script src="{% static 'tasks/js/lib/backbone.marionette.js' %}"></script>
-        <script src="{% static 'tasks/js/index.js' %}"></script>
-    </body>
-</html>
+            <span class="glyphicon glyphicon-remove delete-item"></span>
+        </span>
+    </script>
+    <!-- END TEMPLATES -->
+{% endblock %}
