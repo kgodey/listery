@@ -275,6 +275,9 @@ $(function() {
         initialize: function() {
             this.listenTo(this.model, "change", this.setCurrentList);
         },
+        onShow: function() {
+            this.$('.new-title').focus();
+        },
         events: {
             'click .add-button': 'createNewItem',
             'keyup .new-title': 'processKeyUp',
