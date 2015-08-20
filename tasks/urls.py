@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from rest_framework import routers
 from rest_framework import urls as rest_framework_urls
+from rest_framework.authtoken import views as rest_framework_views
 
 from tasks import apis, views
 
@@ -14,5 +15,6 @@ router.register(r'listitems', apis.ListItemViewSet)
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^api/', include(rest_framework_urls, namespace='rest_framework')),
+    url(r'^api/token/$', rest_framework_views.obtain_auth_token),
     url(r'^api/', include(router.urls, namespace='api')),
 ]

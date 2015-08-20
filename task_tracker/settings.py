@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'ordered_model',
     'rest_framework',
+    'rest_framework.authtoken',
     'tasks',
 )
 
@@ -104,5 +105,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Login settings
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+
+# REST Framwork settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}

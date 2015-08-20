@@ -28,5 +28,12 @@
         <script src="{% static 'tasks/js/lib/backbone-nested.js' %}"></script>
         <script src="{% static 'tasks/js/lib/backbone.marionette.js' %}"></script>
         <script src="{% static 'tasks/js/index.js' %}"></script>
+        
+        <div class="col-md-4 col-md-offset-4">
+            <div class="well">
+                <strong>API token:</strong>&nbsp;&nbsp;&nbsp;<code>{{ user.auth_token }}</code>
+            </div>
+            <p>&nbsp;</p>
+        </div>
     </body>
 </html>
