@@ -24,21 +24,21 @@ $(function() {
     /** MODELS & COLLECTIONS **/
     
     ListManager.List =  Backbone.NestedModel.extend({
-        urlRoot: '/api/lists/',
+        urlRoot: '/api/v1/lists/',
     });
     
     ListManager.ListItem =  Backbone.NestedModel.extend({
-        urlRoot: '/api/listitems/',
+        urlRoot: '/api/v1/listitems/',
     });
     
     ListManager.ListCollection = Backbone.Collection.extend({
         model: ListManager.List,
-        url: '/api/lists/'
+        url: '/api/v1/lists/'
     });
     
     ListManager.ListItemCollection = Backbone.Collection.extend({
         model: ListManager.ListItem,
-        url: '/api/listitems/'
+        url: '/api/v1/listitems/'
     });
     
     /** VIEWS **/
@@ -268,7 +268,7 @@ $(function() {
         },
         processSort: function(event, model, index) {
             var id = model.get('id');
-            $.post('/api/listitems/' + id + '/reorder/', {
+            $.post(model.url() + 'reorder/', {
                 order: index,
                 csrfmiddlewaretoken: $.cookie('csrftoken'),
             });
