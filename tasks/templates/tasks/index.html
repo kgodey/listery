@@ -28,8 +28,12 @@
         </script>
         
         <script id="list-name-template" type="text/template">
-            <span class="switch-list"><%= name %></span>
+            <span class="switch-list toggle-on-name-edit"><%= name %></span>
+            <span class="toggle-on-name-edit hidden">
+                <input type="text" class="name-input" style="width: 75%; color: black;">
+            </span>
             <span class="pull-right">
+                <span class="glyphicon glyphicon-pencil edit-name"></span>&nbsp;
                 <span class="glyphicon glyphicon-remove archive-item"></span>
             </span>
         </script>
@@ -67,6 +71,7 @@
         </script>
         <!-- END TEMPLATES -->
         <script src="{% static 'tasks/js/lib/jquery-2.1.4.js' %}"></script>
+        <script src="{% static 'tasks/js/lib/jquery-ui.js' %}"></script>
         <script src="{% static 'tasks/js/lib/jquery.cookie.js' %}"></script>
         <script src="{% static 'tasks/js/lib/sweet-alert.js' %}"></script>
         <script src="{% static 'tasks/js/lib/underscore.js' %}"></script>

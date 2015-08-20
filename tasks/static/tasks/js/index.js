@@ -55,9 +55,32 @@ $(function() {
         events: {
             'click .switch-list': 'switchList',
             'click .archive-item': 'archiveItem',
+            'click .edit-name': 'editName',
+            'focusout .name-input': 'saveName',
+            'keyup .name-input': function(event) {
+                if (event.keyCode === 13) {
+                    this.saveName();
+                }
+            },
         },
         switchList: function() {
             ListManager.setCurrentList(this.model);
+        },
+        editName: function() {
+            var inputElement = this.$('.name-input');
+            this.$('.toggle-on-name-edit').toggleClass('hidden');
+            inputElement.focus();
+            inputElement.val(this.model.get('name'));
+        },
+        saveName: function() {
+            var self = this;
+            this.model.save({name: this.$('.name-input').val()}, {
+                patch: true,
+                error: function(model, response, options) {
+                    ListManager.parseError(model, response, options);
+                    self.model.fetch();
+                }
+            });
         },
         archiveItem: function() {
             var self = this;
@@ -141,6 +164,7 @@ $(function() {
             'click .toggle-complete': 'toggleComplete',
             'focusout .title-input': 'saveTitle',
             'focusout .description-input': 'saveDescription',
+            'drop': 'processDrop',
             'keyup .title-input': function(event) {
                 if (event.keyCode === 13) {
                     this.saveTitle();
@@ -224,13 +248,26 @@ $(function() {
             this.model.save({completed: !self.model.get('completed')}, {
                 patch: true,
             });
+        },
+        processDrop: function(event, index) {
+            this.$el.trigger('update-sort', [this.model, index]);
         }
     });
     
     ListManager.ListItemsView = Marionette.CollectionView.extend({
         childView: ListManager.ListItemView,
         tagName: 'div',
-        className: 'list-group',
+        className: 'list-group sortable',
+        events: {
+            'update-sort': 'processSort',
+        },
+        processSort: function(event, model, index) {
+            var id = model.get('id');
+            $.post('/api/listitems/' + id + '/reorder/', {
+                order: index,
+                csrfmiddlewaretoken: $.cookie('csrftoken'),
+            });
+        }
     });
     
     ListManager.ListView = Marionette.ItemView.extend({
@@ -289,6 +326,11 @@ $(function() {
         ListManager.regions.currentList.show(ListManager.CurrentListView);
         ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
         ListManager.AllListsView.render();
+        $('.sortable').sortable({
+            update: function(event, ui) {
+                ui.item.trigger('drop', ui.item.index());
+            }
+        });
     }
     
     ListManager.parseError = function (model, response, options) {
