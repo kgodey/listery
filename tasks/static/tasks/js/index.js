@@ -53,7 +53,7 @@ $(function() {
         },        
         template: '#list-name-template',
         events: {
-            'click .switch-list': 'switchList',
+            'click': 'switchList',
             'click .archive-item': 'archiveItem',
             'click .download-item': 'downloadItem',
             'click .edit-name': 'editName',
