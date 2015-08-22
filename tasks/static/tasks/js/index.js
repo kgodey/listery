@@ -63,8 +63,8 @@ $(function() {
 		template: '#list-name-template',
 		events: {
 			'click': 'switchList',
-			'mouseover': 'toggleHover',
-			'mouseout': 'toggleHover',
+			'mouseenter': 'toggleHover',
+			'mouseleave': 'toggleHover',
 			'click .archive-item': 'archiveItem',
 			'click .download-item': 'downloadItem',
 			'click .edit-name': 'editName',
@@ -182,8 +182,8 @@ $(function() {
 		},
 		events: {
 			'click .delete-item': 'deleteItem',
-			'mouseover': 'toggleHover',
-			'mouseout': 'toggleHover',
+			'mouseenter': 'toggleHover',
+			'mouseleave': 'toggleHover',
 			'dblclick .edit-title': 'editTitle',
 			'dblclick .edit-description': 'editDescription',
 			'click .add-description': 'addDescription',
@@ -362,6 +362,7 @@ $(function() {
 		$('.sortable').sortable({
 			update: function(event, ui) {
 				ui.item.trigger('drop', ui.item.index());
+				$(ui.item).find('.hover-options').toggleClass('hidden');
 			}
 		});
 	}
