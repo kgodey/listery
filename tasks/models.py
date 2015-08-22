@@ -43,3 +43,9 @@ class ListItem(OrderedModel):
 	
 	def __unicode__(self):
 		return '%s (%s)' % (self.title, self.list.name)
+	
+	def save(self, *args, **kwargs):
+		move_to_top = True if not self.pk else False
+		super(ListItem, self).save(*args, **kwargs)
+		if move_to_top:
+			self.top()
