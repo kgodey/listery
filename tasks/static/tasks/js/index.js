@@ -252,7 +252,11 @@ $(function() {
 					} else {
 						self.model.fetch();
 					}
-				}
+				},
+				success: function(model, response, options) {
+					var list = ListManager.AllLists.get(model.get('list'));
+					list.fetch();
+				},
 			});
 		},
 		saveTitle: function() {
@@ -274,10 +278,7 @@ $(function() {
 			}
 		},
 		toggleComplete: function() {
-			var self = this;
-			this.model.save({completed: !self.model.get('completed')}, {
-				patch: true,
-			});
+			this.saveAttributes({completed: !this.model.get('completed')});
 		},
 		processDrop: function(event, index) {
 			this.$el.trigger('update-sort', [this.model, index]);
