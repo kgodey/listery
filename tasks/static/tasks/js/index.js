@@ -31,6 +31,10 @@ $(function() {
 		urlRoot: '/api/v1/listitems/',
 	});
 	
+	ListManager.User = Backbone.NestedModel.extend({
+		urlRoot: '/api/v1/users/',
+	});
+	
 	ListManager.ListCollection = Backbone.Collection.extend({
 		model: ListManager.List,
 		url: '/api/v1/lists/'
@@ -39,6 +43,11 @@ $(function() {
 	ListManager.ListItemCollection = Backbone.Collection.extend({
 		model: ListManager.ListItem,
 		url: '/api/v1/listitems/'
+	});
+	
+	ListManager.UserCollection = Backbone.Collection.extend({
+		model: ListManager.User,
+		url: '/api/v1/users/'
 	});
 	
 	/** VIEWS **/
@@ -163,10 +172,11 @@ $(function() {
 		},
 		events: {
 			'click .delete-item': 'deleteItem',
-			'click .edit-title': 'editTitle',
-			'click .edit-description': 'editDescription',
+			'dblclick .edit-title': 'editTitle',
+			'dblclick .edit-description': 'editDescription',
 			'click .add-description': 'addDescription',
 			'click .toggle-complete': 'toggleComplete',
+			'change .set-assignee': 'setAssignee',
 			'focusout .title-input': 'saveTitle',
 			'focusout .description-input': 'saveDescription',
 			'drop': 'processDrop',
@@ -204,26 +214,16 @@ $(function() {
 			this.$(className).toggleClass('hidden');
 		},
 		editTitle: function(event) {
-			var target = this.$(event.currentTarget);
-			if (target.hasClass('noclick')) {
-				target.removeClass('noclick');
-			} else {
-				var inputElement = this.$('.title-input');
-				this.toggleEditing('.toggle-on-title-edit');
-				inputElement.focus();
-				inputElement.val(this.model.get('title'));
-			}
+			var inputElement = this.$('.title-input');
+			this.toggleEditing('.toggle-on-title-edit');
+			inputElement.focus();
+			inputElement.val(this.model.get('title'));
 		},
 		editDescription: function(event) {
-			var target = this.$(event.currentTarget);
-			if (target.hasClass('noclick')) {
-				target.removeClass('noclick');
-			} else {
-				var inputElement = this.$('.description-input');
-				this.toggleEditing('.toggle-on-description-edit');
-				inputElement.focus();
-				inputElement.val(this.model.get('description'));
-			}
+			var inputElement = this.$('.description-input');
+			this.toggleEditing('.toggle-on-description-edit');
+			inputElement.focus();
+			inputElement.val(this.model.get('description'));
 		},
 		saveAttributes: function(attributes) {
 			var self = this;
@@ -235,9 +235,18 @@ $(function() {
 						this.toggleEditing('.toggle-on-description-edit');
 					} else if ('title' in attributes) {
 						this.toggleEditing('.toggle-on-title-edit');
+					} else {
+						self.model.fetch();
 					}
 				}
 			});
+		},
+		setAssignee: function() {
+			var assignee = this.$('.set-assignee').val();
+			if (assignee === "null") {
+				assignee = null;
+			}
+			this.saveAttributes({assignee: assignee});
 		},
 		saveTitle: function() {
 			this.saveAttributes({title: this.$('.title-input').val()});
@@ -347,10 +356,6 @@ $(function() {
 		$('.sortable').sortable({
 			update: function(event, ui) {
 				ui.item.trigger('drop', ui.item.index());
-			},
-			start: function(event, ui) {
-				$(this).find('.edit-title').addClass('noclick');
-				$(this).find('.edit-description').addClass('noclick');
 			}
 		});
 	}
@@ -386,6 +391,7 @@ $(function() {
 	
 	ListManager.on('start', function() {
 		ListManager.AllLists = new ListManager.ListCollection();
+		ListManager.Users = new ListManager.UserCollection();
 		
 		ListManager.AllListsView = new ListManager.AllListsView({
 			collection: ListManager.AllLists,
@@ -394,6 +400,12 @@ $(function() {
 		ListManager.AllLists.fetch({
 			success: function() {
 				ListManager.setCurrentList(ListManager.AllLists.models[0]);
+			}
+		});
+		
+		ListManager.Users.fetch({
+			success: function() {
+				console.log(ListManager.Users);
 			}
 		});
 		
