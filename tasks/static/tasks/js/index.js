@@ -350,7 +350,7 @@ $(function() {
 		});
 		ListManager.CurrentListItemsView.list = ListManager.CurrentList;
 		
-		ListManager.regions.currentList.show(ListManager.CurrentListView);
+		ListManager.regions.currentListName.show(ListManager.CurrentListView);
 		ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 		ListManager.AllListsView.render();
 		$('.sortable').sortable({
@@ -384,8 +384,8 @@ $(function() {
 			el: '#app-region',
 			regions: {
 				allLists: '#all-lists-region',
-				currentList: '#current-list-region',
 				currentListItems: '#current-list-items-region',
+				currentListName: '#current-list-name-region',
 			}
 		});
 		ListManager.regions = new RegionContainer();
