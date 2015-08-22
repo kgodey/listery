@@ -13,8 +13,8 @@ router.register(r'listitems', apis.ListItemViewSet)
 
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^api/v1/', include(rest_framework_urls, namespace='rest_framework')),
-    url(r'^api/v1/token/$', rest_framework_views.obtain_auth_token),
-    url(r'^api/v1/', include(router.urls, namespace='api')),
+	url(r'^$', views.index, name='index'),
+	url(r'^api/v1/', include(rest_framework_urls, namespace='rest_framework')),
+	url(r'^api/v1/token/$', rest_framework_views.obtain_auth_token),
+	url(r'^api/v1/', include(router.urls, namespace='api')),
 ]

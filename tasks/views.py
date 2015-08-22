@@ -6,5 +6,5 @@ from tasks.models import List
 
 @login_required
 def index(request):
-    lists = List.objects.all()
-    return render(request, 'tasks/index.html', {'lists': lists})
+	lists = List.objects.all()
+	return render(request, 'tasks/index.html', {'lists': lists})
