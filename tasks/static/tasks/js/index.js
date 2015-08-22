@@ -73,8 +73,10 @@ $(function() {
 				}
 			},
 		},
-		switchList: function() {
-			ListManager.setCurrentList(this.model);
+		switchList: function(event) {
+			if (!$(event.target).hasClass('edit-name')) {
+				ListManager.setCurrentList(this.model);
+			}
 		},
 		editName: function() {
 			var inputElement = this.$('.name-input');
