@@ -22,7 +22,7 @@ class ListViewSet(viewsets.ModelViewSet):
 	serializer_class = ListSerializer
 	permission_classes = (IsAuthenticated,)
 	
-	@detail_route(methods=['post'])
+	@detail_route(methods=['get', 'post'])
 	def download(self, request, pk=None):
 		item = self.get_object()
 		response = HttpResponse(item.plaintext, content_type='text/plain')
