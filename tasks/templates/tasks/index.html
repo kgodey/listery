@@ -45,20 +45,15 @@
 	</script>
 
 	<script id="list-item-template" type="text/template">
-		<input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>&nbsp;&nbsp;&nbsp;
+		<span style="display: inline-block; text-align: center; width: 35px;" class="pull-left">
+			<input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>
+		</span>
 		<span class="edit-title">
 			<span class="toggle-on-title-edit title"><%= title %></span>
 		</span>
 		<span class="toggle-on-title-edit hidden">
 			<input type="text" class="title-input" style="width: 80%">
 		</span>
-		<% if (description) { %>
-			<span class="edit-description">
-				<small><i><span class="description toggle-on-description-edit"><br/><%= description %></span></i></small>
-			</span>
-		<% } %>
-		<br class="toggle-on-description-edit hidden"/>
-		<input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
 		<span class="pull-right">
 			<span class="hover-options hidden">
 				<% if (!description) { %>
@@ -67,6 +62,14 @@
 				<% } %>
 				<span class="glyphicon glyphicon-remove delete-item"></span>
 			</span>
+		</span>
+		<span style="display: block; padding-left: 35px;">
+			<% if (description) { %>
+				<span class="edit-description">
+					<small><i><span class="description toggle-on-description-edit" style="margin-top: 0; padding-top:0;"><%= description %></span></i></small>
+				</span>
+			<% } %>
+			<input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
 		</span>
 	</script>
 	<!-- END TEMPLATES -->
