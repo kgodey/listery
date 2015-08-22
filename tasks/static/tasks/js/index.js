@@ -203,11 +203,16 @@ $(function() {
         toggleEditing: function(className) {
             this.$(className).toggleClass('hidden');
         },
-        editTitle: function() {
-            var inputElement = this.$('.title-input');
-            this.toggleEditing('.toggle-on-title-edit');
-            inputElement.focus();
-            inputElement.val(this.model.get('title'));
+        editTitle: function(event) {
+			var target = this.$(event.currentTarget);
+			if (target.hasClass('noclick')) {
+				target.removeClass('noclick');
+			} else {
+	            var inputElement = this.$('.title-input');
+	            this.toggleEditing('.toggle-on-title-edit');
+	            inputElement.focus();
+	            inputElement.val(this.model.get('title'));
+			}
         },
         editDescription: function() {
             var inputElement = this.$('.description-input');
@@ -337,7 +342,10 @@ $(function() {
         $('.sortable').sortable({
             update: function(event, ui) {
                 ui.item.trigger('drop', ui.item.index());
-            }
+            },
+			start: function(event, ui) {
+				$(this).find('.edit-title').addClass('noclick');
+			}
         });
     }
     
