@@ -139,7 +139,6 @@ $(function() {
 		childView: ListManager.ListNameView,
 		childViewContainer: 'div',
 		events: {
-			'click .add-list-button': 'createNewList',
 			'keyup #new-list-name': 'processKeyUp',
 		},
 		initialize: function() {
@@ -147,7 +146,6 @@ $(function() {
 		},
 		createNewList: function() {
 			var self = this;
-			this.toggleLoading();
 			var newList = new ListManager.List({
 				name: this.$('#new-list-name').val(),
 			});
@@ -159,12 +157,8 @@ $(function() {
 				},
 				error: function(model, response, options) {
 					ListManager.parseError(model, response, options);
-					self.toggleLoading();
 				}
 			});
-		},
-		toggleLoading: function() {
-			this.$('.toggle-on-add').toggleClass('hidden');
 		},
 		processKeyUp: function(event) {
 			if (event.keyCode === 13) {
@@ -176,7 +170,7 @@ $(function() {
 	ListManager.ListItemView = Marionette.ItemView.extend({
 		template: '#list-item-template',
 		tagName: 'a',
-		className: 'list-group-item',
+		className: 'list-group-item sortable-row',
 		initialize: function() {
 			this.listenTo(this.model, "change", this.render);
 		},
@@ -285,44 +279,35 @@ $(function() {
 		}
 	});
 	
-	ListManager.ListItemsView = Marionette.CollectionView.extend({
+	ListManager.ListItemsView = Marionette.CompositeView.extend({
 		childView: ListManager.ListItemView,
-		tagName: 'div',
-		className: 'list-group sortable',
+		childViewContainer: 'div',
+		template: '#list-items-template',
 		events: {
 			'update-sort': 'processSort',
+			'keyup .new-title': 'processKeyUp',
 		},
+		onShow: function() {
+			this.$('.new-title').focus();
+		},
+		list: null,
 		processSort: function(event, model, index) {
 			var id = model.get('id');
 			$.post(model.url() + 'reorder/', {
 				order: index,
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
 			});
-		}
-	});
-	
-	ListManager.ListView = Marionette.ItemView.extend({
-		template: '#list-template',
-		initialize: function() {
-			this.listenTo(this.model, "change", this.setCurrentList);
-		},
-		onShow: function() {
-			this.$('.new-title').focus();
-		},
-		events: {
-			'click .add-button': 'createNewItem',
-			'keyup .new-title': 'processKeyUp',
 		},
 		createNewItem: function() {
 			var self = this;
 			this.toggleLoading();
 			var listItem = new ListManager.ListItem({
 				title: this.$('.new-title').val(),
-				list: this.model.get('id')
+				list: self.list.get('id'),
 			});
 			listItem.save({}, {
 				success: function() {
-					self.model.fetch();
+					self.list.fetch();
 				},
 				error: function(model, response, options) {
 					ListManager.parseError(model, response, options);
@@ -337,6 +322,13 @@ $(function() {
 		},
 		toggleLoading: function() {
 			this.$('.toggle-on-add').toggleClass('hidden');
+		},
+	});
+	
+	ListManager.ListView = Marionette.ItemView.extend({
+		template: '#list-template',
+		initialize: function() {
+			this.listenTo(this.model, "change", this.setCurrentList);
 		},
 		setCurrentList: function() {
 			ListManager.setCurrentList(this.model);
@@ -356,11 +348,13 @@ $(function() {
 		ListManager.CurrentListItemsView = new ListManager.ListItemsView({
 			collection: ListManager.CurrentListItems,
 		});
+		ListManager.CurrentListItemsView.list = ListManager.CurrentList;
 		
 		ListManager.regions.currentList.show(ListManager.CurrentListView);
 		ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 		ListManager.AllListsView.render();
 		$('.sortable').sortable({
+			items: 'a.sortable-row',
 			update: function(event, ui) {
 				ui.item.trigger('drop', ui.item.index());
 				$(ui.item).find('.hover-options').toggleClass('hidden');

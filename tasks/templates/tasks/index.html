@@ -13,12 +13,10 @@
 	</div>
 	<!-- TEMPLATES -->
 	<script id="all-lists-template" type="text/template">
-		<p>&nbsp;</p>
-		<input type="text" id="new-list-name"/>
-		<button class="add-list-button btn btn-info toggle-on-add">Add New List</button>
-		<img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
-		<p>&nbsp;</p>
 		<div class='list-group'>
+			<a class="list-group-item">
+				<input type="text" id="new-list-name" style="width: 100%" placeholder="Add new list"/>
+			</a>
 		</div>
 	</script>
 
@@ -37,11 +35,15 @@
 	</script>
 
 	<script id="list-template" type="text/template">
-		<h1><%= name %></h1>
-		<input type="text" class="new-title"/>
-		<button class="add-button btn btn-info toggle-on-add">Add</button>
-		<img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-add hidden"/>
-		<p>&nbsp;</p>
+		<h1 style="margin-bottom: 20px; margin-top: 10px;"><%= name %></h1>
+	</script>
+	
+	<script id="list-items-template" type="text/template">
+		<div class='list-group sortable'>
+			<a class="list-group-item">
+				<input type="text" class="new-title" style="width: 100%" placeholder="Add new item"/>
+			</a>
+		</div>
 	</script>
 
 	<script id="list-item-template" type="text/template">
