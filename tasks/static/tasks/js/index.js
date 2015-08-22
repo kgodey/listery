@@ -63,6 +63,8 @@ $(function() {
 		template: '#list-name-template',
 		events: {
 			'click': 'switchList',
+			'mouseover': 'toggleHover',
+			'mouseout': 'toggleHover',
 			'click .archive-item': 'archiveItem',
 			'click .download-item': 'downloadItem',
 			'click .edit-name': 'editName',
@@ -78,9 +80,15 @@ $(function() {
 				ListManager.setCurrentList(this.model);
 			}
 		},
+		toggleHover: function() {
+			this.toggleHidden('.hover-options');
+		},
+		toggleHidden: function(className) {
+			this.$(className).toggleClass('hidden');
+		},
 		editName: function() {
 			var inputElement = this.$('.name-input');
-			this.$('.toggle-on-name-edit').toggleClass('hidden');
+			this.toggleHidden('.toggle-on-name-edit');
 			inputElement.focus();
 			inputElement.val(this.model.get('name'));
 		},
@@ -174,13 +182,12 @@ $(function() {
 		},
 		events: {
 			'click .delete-item': 'deleteItem',
-			'mouseover': 'toggleDescription',
-			'mouseout': 'toggleDescription',
+			'mouseover': 'toggleHover',
+			'mouseout': 'toggleHover',
 			'dblclick .edit-title': 'editTitle',
 			'dblclick .edit-description': 'editDescription',
 			'click .add-description': 'addDescription',
 			'click .toggle-complete': 'toggleComplete',
-			'change .set-assignee': 'setAssignee',
 			'focusout .title-input': 'saveTitle',
 			'focusout .description-input': 'saveDescription',
 			'drop': 'processDrop',
@@ -214,21 +221,21 @@ $(function() {
 				self.model.destroy();
 			});
 		},
-		toggleDescription: function() {
-			this.toggleEditing('.add-description');
+		toggleHover: function() {
+			this.toggleHidden('.hover-options');
 		},
-		toggleEditing: function(className) {
+		toggleHidden: function(className) {
 			this.$(className).toggleClass('hidden');
 		},
 		editTitle: function(event) {
 			var inputElement = this.$('.title-input');
-			this.toggleEditing('.toggle-on-title-edit');
+			this.toggleHidden('.toggle-on-title-edit');
 			inputElement.focus();
 			inputElement.val(this.model.get('title'));
 		},
 		editDescription: function(event) {
 			var inputElement = this.$('.description-input');
-			this.toggleEditing('.toggle-on-description-edit');
+			this.toggleHidden('.toggle-on-description-edit');
 			inputElement.focus();
 			inputElement.val(this.model.get('description'));
 		},
@@ -239,21 +246,14 @@ $(function() {
 				error: function(model, response, options) {
 					ListManager.parseError(model, response, options);
 					if ('description' in attributes) {
-						this.toggleEditing('.toggle-on-description-edit');
+						this.toggleHidden('.toggle-on-description-edit');
 					} else if ('title' in attributes) {
-						this.toggleEditing('.toggle-on-title-edit');
+						this.toggleHidden('.toggle-on-title-edit');
 					} else {
 						self.model.fetch();
 					}
 				}
 			});
-		},
-		setAssignee: function() {
-			var assignee = this.$('.set-assignee').val();
-			if (assignee === "null") {
-				assignee = null;
-			}
-			this.saveAttributes({assignee: assignee});
 		},
 		saveTitle: function() {
 			this.saveAttributes({title: this.$('.title-input').val()});
@@ -264,7 +264,7 @@ $(function() {
 		addDescription: function() {
 			var inputElement = this.$('.description-input');
 			var editSpan = this.$('.add-description');
-			this.toggleEditing('.toggle-on-description-edit');
+			this.toggleHidden('.toggle-on-description-edit');
 			editSpan.removeClass('glyphicon-plus');
 			if (inputElement.is(':visible')) {
 				inputElement.focus();

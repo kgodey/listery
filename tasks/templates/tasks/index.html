@@ -28,9 +28,11 @@
 			<input type="text" class="name-input" style="width: 75%; color: black;">
 		</span>
 		<span class="pull-right">
-			<span class="glyphicon glyphicon-save download-item"></span>&nbsp;
-			<span class="glyphicon glyphicon-pencil edit-name"></span>&nbsp;
-			<span class="glyphicon glyphicon-remove archive-item"></span>
+			<span class="hover-options hidden">
+				<span class="glyphicon glyphicon-save download-item"></span>&nbsp;
+				<span class="glyphicon glyphicon-pencil edit-name"></span>&nbsp;
+				<span class="glyphicon glyphicon-remove archive-item"></span>
+			</span>
 		</span>
 	</script>
 
@@ -58,17 +60,13 @@
 		<br class="toggle-on-description-edit hidden"/>
 		<input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
 		<span class="pull-right">
-			<% if (!description) { %>
-				<span class="glyphicon glyphicon-plus add-description hidden"></span>
-				&nbsp;
-			<% } %>
-			<select class="set-assignee">
-				<option value=null>none</option>
-				<% _.each(ListManager.Users.models, function(user){ %>
-					<option value="<%= user.get('id') %>" <% if (assignee === user.get('id')) { %>selected=selected<% } %>><%= user.get('username') %></option>
-				<% }) %>
-			</select>&nbsp;
-			<span class="glyphicon glyphicon-remove delete-item"></span>
+			<span class="hover-options hidden">
+				<% if (!description) { %>
+					<span class="glyphicon glyphicon-plus add-description"></span>
+					&nbsp;
+				<% } %>
+				<span class="glyphicon glyphicon-remove delete-item"></span>
+			</span>
 		</span>
 	</script>
 	<!-- END TEMPLATES -->
