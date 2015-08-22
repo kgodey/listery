@@ -172,6 +172,8 @@ $(function() {
 		},
 		events: {
 			'click .delete-item': 'deleteItem',
+			'mouseover': 'toggleDescription',
+			'mouseout': 'toggleDescription',
 			'dblclick .edit-title': 'editTitle',
 			'dblclick .edit-description': 'editDescription',
 			'click .add-description': 'addDescription',
@@ -209,6 +211,9 @@ $(function() {
 			function(){
 				self.model.destroy();
 			});
+		},
+		toggleDescription: function() {
+			this.toggleEditing('.add-description');
 		},
 		toggleEditing: function(className) {
 			this.$(className).toggleClass('hidden');
@@ -259,7 +264,6 @@ $(function() {
 			var editSpan = this.$('.add-description');
 			this.toggleEditing('.toggle-on-description-edit');
 			editSpan.removeClass('glyphicon-plus');
-			editSpan.addClass('glyphicon-floppy-save');
 			if (inputElement.is(':visible')) {
 				inputElement.focus();
 				inputElement.val(this.model.get('description'));
@@ -403,11 +407,7 @@ $(function() {
 			}
 		});
 		
-		ListManager.Users.fetch({
-			success: function() {
-				console.log(ListManager.Users);
-			}
-		});
+		ListManager.Users.fetch({});
 		
 		ListManager.regions.allLists.show(ListManager.AllListsView);
 		

@@ -58,16 +58,16 @@
 		<br class="toggle-on-description-edit hidden"/>
 		<input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
 		<span class="pull-right">
+			<% if (!description) { %>
+				<span class="glyphicon glyphicon-plus add-description hidden"></span>
+				&nbsp;
+			<% } %>
 			<select class="set-assignee">
 				<option value=null>none</option>
 				<% _.each(ListManager.Users.models, function(user){ %>
 					<option value="<%= user.get('id') %>" <% if (assignee === user.get('id')) { %>selected=selected<% } %>><%= user.get('username') %></option>
 				<% }) %>
-			</select>
-			<% if (!description) { %>
-				<span class="glyphicon glyphicon-plus add-description"></span>
-				&nbsp;
-			<% } %>
+			</select>&nbsp;
 			<span class="glyphicon glyphicon-remove delete-item"></span>
 		</span>
 	</script>
