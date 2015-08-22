@@ -15,7 +15,7 @@
 	</div>
 	<!-- TEMPLATES -->
 	<script id="all-lists-template" type="text/template">
-		<div class='list-group'>
+		<div class='list-group' style="cursor: pointer;">
 			<a class="list-group-item">
 				<input type="text" id="new-list-name" style="width: 100%" placeholder="Add new list"/>
 			</a>
@@ -29,9 +29,9 @@
 		</span>
 		<span class="pull-right">
 			<span class="hover-options hidden">
-				<span class="glyphicon glyphicon-save download-item"></span>&nbsp;
-				<span class="glyphicon glyphicon-pencil edit-name"></span>&nbsp;
-				<span class="glyphicon glyphicon-remove archive-item"></span>
+				<span class="glyphicon glyphicon-save download-item" style="cursor: pointer;"></span>&nbsp;
+				<span class="glyphicon glyphicon-pencil edit-name" style="cursor: pointer;"></span>&nbsp;
+				<span class="glyphicon glyphicon-remove archive-item" style="cursor: pointer;"></span>
 			</span>
 		</span>
 	</script>
@@ -41,7 +41,7 @@
 	</script>
 	
 	<script id="list-items-template" type="text/template">
-		<div class='list-group sortable'>
+		<div class='list-group sortable' style="cursor: default;">
 			<a class="list-group-item">
 				<input type="text" class="new-title" style="width: 100%" placeholder="Add new item"/>
 			</a>
@@ -61,10 +61,10 @@
 		<span class="pull-right">
 			<span class="hover-options hidden">
 				<% if (!description) { %>
-					<span class="glyphicon glyphicon-plus add-description"></span>
+					<span class="glyphicon glyphicon-plus add-description" style="cursor: pointer;"></span>
 					&nbsp;
 				<% } %>
-				<span class="glyphicon glyphicon-remove delete-item"></span>
+				<span class="glyphicon glyphicon-remove delete-item" style="cursor: pointer;"></span>
 			</span>
 		</span>
 		<span style="display: block; padding-left: 35px;">
