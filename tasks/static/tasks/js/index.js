@@ -314,10 +314,12 @@ $(function() {
 		list: null,
 		processSort: function(event, model, index) {
 			var id = model.get('id');
-			$.post(model.url() + 'reorder/', {
-				order: index,
-				csrfmiddlewaretoken: $.cookie('csrftoken'),
-			});
+			if (index != model.get('order')) {
+				$.post(model.url() + 'reorder/', {
+					order: index,
+					csrfmiddlewaretoken: $.cookie('csrftoken'),
+				});
+			}
 		},
 		createNewItem: function() {
 			var self = this;
