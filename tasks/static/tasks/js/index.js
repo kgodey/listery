@@ -355,7 +355,7 @@ $(function() {
 		ListManager.AllListsView.render();
 		$('.sortable').sortable({
 			items: 'a.sortable-row',
-			update: function(event, ui) {
+			stop: function(event, ui) {
 				ui.item.trigger('drop', ui.item.index());
 				$(ui.item).find('.hover-options').toggleClass('hidden');
 			}
