@@ -45,7 +45,13 @@ class ListItem(OrderedModel):
 		return '%s (%s)' % (self.title, self.list.name)
 	
 	def save(self, *args, **kwargs):
-		move_to_top = True if not self.pk else False
+		move_to_top = False
+		if not self.pk:
+			move_to_top = True
+		else:
+			old_item = ListItem.objects.get(id=self.pk)
+			if old_item.list != self.list:
+				move_to_top = True
 		super(ListItem, self).save(*args, **kwargs)
 		if move_to_top:
 			self.top()

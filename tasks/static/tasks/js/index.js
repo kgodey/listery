@@ -56,9 +56,9 @@ $(function() {
 		tagName: 'a',
 		className: function() {
 			if (this.model == ListManager.CurrentList) {
-				return 'list-group-item active';
+				return 'list-group-item active droppable';
 			}
-			return 'list-group-item';
+			return 'list-group-item droppable';
 		},		  
 		template: '#list-name-template',
 		events: {
@@ -131,6 +131,24 @@ $(function() {
 		downloadItem: function(event, model, index) {
 			$('#download-form').attr('action', this.model.url() + 'download/');
 			$('#download-form').submit();
+		},
+		onDomRefresh: function() {
+			var self = this;
+			this.$el.droppable({
+				tolerance: 'pointer',
+				hoverClass: 'list-group-item-info',
+				drop: function(event, ui) {
+					var item = ListManager.CurrentListItems.get($(ui.draggable).attr('id'));
+					var oldList = ListManager.AllLists.get(item.get('list'));
+					item.save({list: self.model.get('id')}, {
+						patch: true,
+						success: function(model, response, options) {
+							oldList.fetch();
+							self.model.fetch();
+						},
+					});
+				}
+			});
 		}
 	});
 	
@@ -164,7 +182,7 @@ $(function() {
 			if (event.keyCode === 13) {
 				this.createNewList();
 			}
-		}
+		},
 	});
 	
 	ListManager.ListItemView = Marionette.ItemView.extend({
@@ -173,6 +191,9 @@ $(function() {
 		className: 'list-group-item sortable-row',
 		initialize: function() {
 			this.listenTo(this.model, "change", this.render);
+		},
+		attributes: function() {
+			return { id: this.model.get('id') }
 		},
 		events: {
 			'click .delete-item': 'deleteItem',
@@ -355,7 +376,7 @@ $(function() {
 		ListManager.AllListsView.render();
 		$('.sortable').sortable({
 			items: 'a.sortable-row',
-			stop: function(event, ui) {
+			out: function(event, ui) {
 				ui.item.trigger('drop', ui.item.index());
 				$(ui.item).find('.hover-options').toggleClass('hidden');
 			}
