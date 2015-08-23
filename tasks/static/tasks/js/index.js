@@ -56,15 +56,16 @@ $(function() {
 		tagName: 'a',
 		className: function() {
 			if (this.model == ListManager.CurrentList) {
-				return 'list-group-item active droppable';
+				return 'list-group-item active droppable sortable-row';
 			}
-			return 'list-group-item droppable';
+			return 'list-group-item droppable sortable-row';
 		},		  
 		template: '#list-name-template',
 		events: {
 			'click': 'switchList',
 			'mouseenter': 'toggleHover',
 			'mouseleave': 'toggleHover',
+			'reorder': 'processReorder',
 			'click .archive-item': 'archiveItem',
 			'click .download-item': 'downloadItem',
 			'click .edit-name': 'editName',
@@ -93,13 +94,20 @@ $(function() {
 			inputElement.val(this.model.get('name'));
 		},
 		saveName: function() {
+			this.saveAttributes({name: this.$('.name-input').val()});
+		},
+		saveAttributes: function(attributes, success) {
 			var self = this;
-			this.model.save({name: this.$('.name-input').val()}, {
+			if (!success) {
+				success = function() {};
+			}
+			this.model.save(attributes, {
 				patch: true,
 				error: function(model, response, options) {
 					ListManager.parseError(model, response, options);
 					self.model.fetch();
-				}
+				},
+				success: success,
 			});
 		},
 		archiveItem: function() {
@@ -112,25 +120,31 @@ $(function() {
 				confirmButtonText: "Yes, archive it!",
 				closeOnConfirm: true
 			},
-			function(){
-				self.model.save({archived: true}, {
-					patch: true,
-					success: function() {
-						if (ListManager.CurrentList == self.model) {
-							ListManager.setCurrentList(ListManager.AllLists.models[0]);
-						}
-						ListManager.AllLists.remove(self.model.get('id'));
-					},
-					error: function(model, response, options) {
-						ListManager.parseError(model, response, options);
-						self.model.fetch();
+			function() {
+				self.saveAttributes({archived: true}, function() {
+					if (ListManager.CurrentList == self.model) {
+						ListManager.setCurrentList(ListManager.AllLists.models[0]);
 					}
+					ListManager.AllLists.remove(self.model.get('id'));
 				});
 			});
 		},
 		downloadItem: function(event, model, index) {
 			$('#download-form').attr('action', this.model.url() + 'download/');
 			$('#download-form').submit();
+		},
+		processReorder: function(event, index) {
+			if (this.model.get('order') != index) {
+				var self = this;
+				$.post(this.model.url() + 'reorder/', {
+					order: index,
+					csrfmiddlewaretoken: $.cookie('csrftoken'),
+				})
+					.always(function() {
+						self.model.fetch();
+						ListManager.AllLists.fetch();
+				});
+			}
 		},
 		onDomRefresh: function() {
 			var self = this;
@@ -139,14 +153,16 @@ $(function() {
 				hoverClass: 'list-group-item-info',
 				drop: function(event, ui) {
 					var item = ListManager.CurrentListItems.get($(ui.draggable).attr('id'));
-					var oldList = ListManager.AllLists.get(item.get('list'));
-					item.save({list: self.model.get('id')}, {
-						patch: true,
-						success: function(model, response, options) {
-							oldList.fetch();
-							self.model.fetch();
-						},
-					});
+					if (item) {
+						var oldList = ListManager.AllLists.get(item.get('list'));
+						item.save({list: self.model.get('id')}, {
+							patch: true,
+							success: function(model, response, options) {
+								oldList.fetch();
+								self.model.fetch();
+							},
+						});
+					}
 				}
 			});
 		}
@@ -183,6 +199,14 @@ $(function() {
 				this.createNewList();
 			}
 		},
+		onDomRefresh: function() {
+			$('.list-sortable').sortable({
+				items: 'a.sortable-row',
+				update: function(event, ui) {
+					ui.item.trigger('reorder', ui.item.index());
+				}
+			});
+		}
 	});
 	
 	ListManager.ListItemView = Marionette.ItemView.extend({
@@ -195,6 +219,7 @@ $(function() {
 		attributes: function() {
 			return { id: this.model.get('id') }
 		},
+		list: null,
 		events: {
 			'click .delete-item': 'deleteItem',
 			'mouseenter': 'toggleHover',
@@ -269,7 +294,7 @@ $(function() {
 					}
 				},
 				success: function(model, response, options) {
-					var list = ListManager.AllLists.get(model.get('list'));
+					var list = ListManager.AllLists.get(self.model.get('list'));
 					list.fetch();
 				},
 			});
@@ -296,8 +321,19 @@ $(function() {
 			this.saveAttributes({completed: !this.model.get('completed')});
 		},
 		processDrop: function(event, index) {
-			this.$el.trigger('update-sort', [this.model, index]);
-		}
+			if (this.model.get('order') != index) {
+				var self = this;
+				$.post(this.model.url() + 'reorder/', {
+					order: index,
+					csrfmiddlewaretoken: $.cookie('csrftoken'),
+				})
+					.always(function() {
+						self.model.fetch();
+						var list = ListManager.AllLists.get(self.model.get('list'));
+						list.fetch();
+				});
+			}
+		},
 	});
 	
 	ListManager.ListItemsView = Marionette.CompositeView.extend({
@@ -305,22 +341,12 @@ $(function() {
 		childViewContainer: 'div',
 		template: '#list-items-template',
 		events: {
-			'update-sort': 'processSort',
 			'keyup .new-title': 'processKeyUp',
 		},
 		onShow: function() {
 			this.$('.new-title').focus();
 		},
 		list: null,
-		processSort: function(event, model, index) {
-			var id = model.get('id');
-			if (index != model.get('order')) {
-				$.post(model.url() + 'reorder/', {
-					order: index,
-					csrfmiddlewaretoken: $.cookie('csrftoken'),
-				});
-			}
-		},
 		createNewItem: function() {
 			var self = this;
 			this.toggleLoading();
@@ -376,7 +402,7 @@ $(function() {
 		ListManager.regions.currentListName.show(ListManager.CurrentListView);
 		ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 		ListManager.AllListsView.render();
-		$('.sortable').sortable({
+		$('.item-sortable').sortable({
 			items: 'a.sortable-row',
 			out: function(event, ui) {
 				ui.item.trigger('drop', ui.item.index());

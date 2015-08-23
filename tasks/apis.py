@@ -18,7 +18,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ListViewSet(viewsets.ModelViewSet):
-	queryset = List.objects.filter(archived=False)
+	queryset = List.objects.filter(archived=False).order_by('order')
 	serializer_class = ListSerializer
 	permission_classes = (IsAuthenticated,)
 	
@@ -28,6 +28,17 @@ class ListViewSet(viewsets.ModelViewSet):
 		response = HttpResponse(item.plaintext, content_type='text/plain')
 		response['Content-Disposition'] = 'attachment; filename="%s-%s.txt"' % (item.name, timezone.now())
 		return response
+	
+	@detail_route(methods=['post'])
+	def reorder(self, request, pk=None):
+		item = self.get_object()
+		position = request.data.get('order', None)
+		if position is not None:
+			item.to(int(position))
+			serializer = ListSerializer(item)
+			return Response(serializer.data, status=status.HTTP_200_OK)
+		else:
+			return Response({'order': ['Please specify an order.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListItemViewSet(viewsets.ModelViewSet):

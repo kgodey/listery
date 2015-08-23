@@ -3,7 +3,7 @@ from django.db import models
 from ordered_model.models import OrderedModel
 
 
-class List(models.Model):
+class List(OrderedModel):
 	name = models.CharField(max_length=255, unique=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
@@ -28,6 +28,14 @@ class List(models.Model):
 	
 	def __unicode__(self):
 		return self.name
+	
+	def save(self, *args, **kwargs):
+		move_to_top = False
+		if not self.pk:
+			move_to_top = True
+		super(List, self).save(*args, **kwargs)
+		if move_to_top:
+			self.top()
 
 
 class ListItem(OrderedModel):
