@@ -56,9 +56,9 @@ $(function() {
 		tagName: 'a',
 		className: function() {
 			if (this.model == ListManager.CurrentList) {
-				return 'list-group-item active droppable sortable-row';
+				return 'list-group-item active droppable sortable-list-name';
 			}
-			return 'list-group-item droppable sortable-row';
+			return 'list-group-item droppable sortable-list-name';
 		},		  
 		template: '#list-name-template',
 		events: {
@@ -75,6 +75,27 @@ $(function() {
 					this.saveName();
 				}
 			},
+		},
+		onDomRefresh: function() {
+			var self = this;
+			this.$el.droppable({
+				tolerance: 'pointer',
+				accept: '.sortable-row',
+				hoverClass: 'list-group-item-info',
+				drop: function(event, ui) {
+					var item = ListManager.CurrentListItems.get($(ui.draggable).attr('id'));
+					if (item) {
+						var oldList = ListManager.AllLists.get(item.get('list'));
+						item.save({list: self.model.get('id')}, {
+							patch: true,
+							success: function(model, response, options) {
+								oldList.fetch();
+								self.model.fetch();
+							},
+						});
+					}
+				}
+			});
 		},
 		switchList: function(event) {
 			if (!$(event.target).hasClass('edit-name')) {
@@ -145,26 +166,6 @@ $(function() {
 						ListManager.AllLists.fetch();
 				});
 			}
-		},
-		onDomRefresh: function() {
-			var self = this;
-			this.$el.droppable({
-				tolerance: 'pointer',
-				hoverClass: 'list-group-item-info',
-				drop: function(event, ui) {
-					var item = ListManager.CurrentListItems.get($(ui.draggable).attr('id'));
-					if (item) {
-						var oldList = ListManager.AllLists.get(item.get('list'));
-						item.save({list: self.model.get('id')}, {
-							patch: true,
-							success: function(model, response, options) {
-								oldList.fetch();
-								self.model.fetch();
-							},
-						});
-					}
-				}
-			});
 		}
 	});
 	
@@ -201,7 +202,7 @@ $(function() {
 		},
 		onDomRefresh: function() {
 			$('.list-sortable').sortable({
-				items: 'a.sortable-row',
+				items: 'a.sortable-list-name',
 				update: function(event, ui) {
 					ui.item.trigger('reorder', ui.item.index());
 				}
