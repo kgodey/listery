@@ -73,6 +73,8 @@ $(function() {
 			'keyup .name-input': function(event) {
 				if (event.keyCode === 13) {
 					this.saveName();
+				} else if (event.keyCode === 27) {
+					this.render();
 				}
 			},
 		},
@@ -240,11 +242,15 @@ $(function() {
 			'keyup .title-input': function(event) {
 				if (event.keyCode === 13) {
 					this.saveTitle();
+				} else if (event.keyCode === 27) {
+					this.render();
 				}
 			},
 			'keyup .description-input': function(event) {
 				if (event.keyCode === 13) {
 					this.saveDescription();
+				} else if (event.keyCode === 27) {
+					this.render();
 				}
 			},
 			'keyup .toggle-complete': function(event) {
