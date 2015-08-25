@@ -159,19 +159,14 @@ $(function() {
 			$('#download-form').submit();
 		},
 		processReorder: function(event, index) {
-			if (this.model.get('order') != index) {
-				var self = this;
-				$.post(this.model.url() + 'reorder/', {
-					order: index,
-					csrfmiddlewaretoken: $.cookie('csrftoken'),
-				})
-					.fail(function() {
-						ListManager.AllLists.fetch();
-					})
-					.always(function() {
-						self.model.fetch();
-				});
-			}
+			var self = this;
+			$.post(this.model.url() + 'reorder/', {
+				order: index,
+				csrfmiddlewaretoken: $.cookie('csrftoken'),
+			})
+				.always(function() {
+					ListManager.AllLists.fetch();
+			});
 		}
 	});
 	
