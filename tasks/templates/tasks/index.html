@@ -84,3 +84,7 @@
 		{% csrf_token %}
 	</form>
 {% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'tasks/js/index.js' %}"></script>
+{% endblock %}

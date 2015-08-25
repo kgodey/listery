@@ -27,7 +27,8 @@
 		<script src="{% static 'tasks/js/lib/backbone.js' %}"></script>
 		<script src="{% static 'tasks/js/lib/backbone-nested.js' %}"></script>
 		<script src="{% static 'tasks/js/lib/backbone.marionette.js' %}"></script>
-		<script src="{% static 'tasks/js/index.js' %}"></script>
+		{% block scripts %}
+		{% endblock %}
 
 		{% if user.is_authenticated %}
 			<div class="col-md-4 col-md-offset-4">
