@@ -94,7 +94,7 @@ $(function() {
 							},
 						});
 					}
-				}
+				},
 			});
 		},
 		switchList: function(event) {
@@ -204,6 +204,7 @@ $(function() {
 		onDomRefresh: function() {
 			$('.list-sortable').sortable({
 				items: 'a.sortable-list-name',
+				cursor: 'move',
 				update: function(event, ui) {
 					ui.item.trigger('reorder', ui.item.index());
 				},
@@ -409,6 +410,7 @@ $(function() {
 		ListManager.AllListsView.render();
 		$('.item-sortable').sortable({
 			items: 'a.sortable-row',
+			cursor: 'move',
 			out: function(event, ui) {
 				ui.item.trigger('drop', ui.item.index());
 				$(ui.item).find('.hover-options').toggleClass('hidden');
