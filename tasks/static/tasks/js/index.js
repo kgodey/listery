@@ -231,7 +231,7 @@ $(function() {
 			'click .toggle-complete': 'toggleComplete',
 			'focusout .title-input': 'saveTitle',
 			'focusout .description-input': 'saveDescription',
-			'drop': 'processDrop',
+			'drop': 'processReorder',
 			'keyup .title-input': function(event) {
 				if (event.keyCode === 13) {
 					this.saveTitle();
@@ -321,7 +321,7 @@ $(function() {
 		toggleComplete: function() {
 			this.saveAttributes({completed: !this.model.get('completed')});
 		},
-		processDrop: function(event, index) {
+		processReorder: function(event, index) {
 			if (this.model.get('order') != index) {
 				var self = this;
 				$.post(this.model.url() + 'reorder/', {
