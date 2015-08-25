@@ -8,6 +8,18 @@
 					<p><strong>Error:</strong> Please enter a correct username and password. Note that both fields are case-sensitive.</p>
 				</div>
 			{% endif %}
+			{% if form.username.errors %}
+				<div class="alert alert-danger">
+					<b>Username:</b>
+					{{ form.username.errors }}
+				</div>
+			{% endif %}
+			{% if form.password.errors %}
+				<div class="alert alert-danger">
+					<b>Password:</b>
+					{{ form.password.errors }}
+				</div>
+			{% endif %}
 			<form action="{% url 'django.contrib.auth.views.login' %}" method="post" class="form-horizontal" role="form">
 				{% csrf_token %}
 				<div class="form-group">
