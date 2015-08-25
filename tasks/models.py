@@ -8,6 +8,8 @@ class List(OrderedModel):
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	archived = models.BooleanField(default=False)
+	private = models.BooleanField(default=True)
+	owner = models.ForeignKey(User, null=True, blank=True)
 	
 	@property
 	def items(self):

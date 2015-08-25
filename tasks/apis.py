@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.db.models import Q
 from django.utils import timezone
 from rest_framework import status
 from rest_framework import viewsets
@@ -21,6 +22,12 @@ class ListViewSet(viewsets.ModelViewSet):
 	queryset = List.objects.filter(archived=False).order_by('order')
 	serializer_class = ListSerializer
 	permission_classes = (IsAuthenticated,)
+	
+	def perform_create(self, serializer):
+		serializer.save(owner=self.request.user)
+	
+	def get_queryset(self):
+		return self.queryset.filter(Q(owner=self.request.user) | Q(private=False))
 	
 	@detail_route(methods=['get', 'post'])
 	def download(self, request, pk=None):

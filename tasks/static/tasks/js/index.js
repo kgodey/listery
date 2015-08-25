@@ -382,12 +382,25 @@ $(function() {
 	
 	ListManager.ListView = Marionette.ItemView.extend({
 		template: '#list-template',
+		events: {
+			'click .toggle-private': 'togglePrivate',
+		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.setCurrentList);
 		},
 		setCurrentList: function() {
 			ListManager.setCurrentList(this.model);
-		}
+		},
+		togglePrivate: function() {
+			var self = this;
+			this.model.save({private: !this.model.get('private')}, {
+				patch: true,
+				error: function(model, response, options) {
+					ListManager.parseError(model, response, options);
+					self.model.fetch();
+				},
+			});
+		},
 	});
 	
 	/** UTILITY FUNCTIONS **/

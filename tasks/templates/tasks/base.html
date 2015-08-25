@@ -35,6 +35,9 @@
 				<p class="text-center"><strong>API token:</strong>&nbsp;&nbsp;&nbsp;<code>{{ user.auth_token }}</code></p>
 				<p>&nbsp;</p>
 			</div>
+			<script>
+				var userID = {{ user.id }};
+			</script>
 		{% endif %}
 	</body>
 </html>

@@ -37,7 +37,10 @@
 	</script>
 
 	<script id="list-template" type="text/template">
-		<h1 style="margin-bottom: 20px; margin-top: 10px;"><%= name %></h1>
+		<h1 style="margin-bottom: 20px; margin-top: 10px; display: inline-block;"><%= name %></h1>
+			<% if (owner === userID) { %>
+				<span class="label label-default" style="vertical-align: middle; margin-left: 10px;"><input type="checkbox" class="toggle-private" <%= private ? "" : "checked" %>/>&nbsp;Shared</span>
+			<% } %>
 	</script>
 	
 	<script id="list-items-template" type="text/template">
