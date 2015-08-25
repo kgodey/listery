@@ -293,23 +293,28 @@ $(function() {
 		},
 		saveAttributes: function(attributes) {
 			var self = this;
-			this.model.save(attributes, {
-				patch: true,
-				error: function(model, response, options) {
-					ListManager.parseError(model, response, options);
-					if ('description' in attributes) {
-						this.toggleHidden('.toggle-on-description-edit');
-					} else if ('title' in attributes) {
-						this.toggleHidden('.toggle-on-title-edit');
-					} else {
-						self.model.fetch();
-					}
-				},
-				success: function(model, response, options) {
-					var list = ListManager.AllLists.get(self.model.get('list'));
-					list.fetch();
-				},
-			});
+			this.model.set(attributes);
+			if (this.model.changedAttributes()) {
+				this.model.save(attributes, {
+					patch: true,
+					error: function(model, response, options) {
+						ListManager.parseError(model, response, options);
+						if ('description' in attributes) {
+							this.toggleHidden('.toggle-on-description-edit');
+						} else if ('title' in attributes) {
+							this.toggleHidden('.toggle-on-title-edit');
+						} else {
+							self.model.fetch();
+						}
+					},
+					success: function(model, response, options) {
+						var list = ListManager.AllLists.get(self.model.get('list'));
+						list.fetch();
+					},
+				});
+			} else {
+				this.render();
+			}
 		},
 		saveTitle: function() {
 			this.saveAttributes({title: this.$('.title-input').val()});
@@ -333,18 +338,16 @@ $(function() {
 			this.saveAttributes({completed: !this.model.get('completed')});
 		},
 		processReorder: function(event, index) {
-			if (this.model.get('order') != index) {
-				var self = this;
-				$.post(this.model.url() + 'reorder/', {
-					order: index,
-					csrfmiddlewaretoken: $.cookie('csrftoken'),
-				})
-					.always(function() {
-						self.model.fetch();
-						var list = ListManager.AllLists.get(self.model.get('list'));
-						list.fetch();
-				});
-			}
+			var self = this;
+			$.post(this.model.url() + 'reorder/', {
+				order: index,
+				csrfmiddlewaretoken: $.cookie('csrftoken'),
+			})
+				.always(function() {
+					self.model.fetch();
+					var list = ListManager.AllLists.get(self.model.get('list'));
+					list.fetch();
+			});
 		},
 	});
 	
@@ -412,29 +415,31 @@ $(function() {
 	/** UTILITY FUNCTIONS **/
 	
 	ListManager.setCurrentList = function(list) {
-		ListManager.CurrentList = list;
-		ListManager.CurrentListItems = new ListManager.ListItemCollection();
-		ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
+		if (ListManager.CurrentList != list) {
+			ListManager.CurrentList = list;
+			ListManager.CurrentListItems = new ListManager.ListItemCollection();
+			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
 		
-		ListManager.CurrentListView = new ListManager.ListView({
-			model: ListManager.CurrentList,
-		});
-		ListManager.CurrentListItemsView = new ListManager.ListItemsView({
-			collection: ListManager.CurrentListItems,
-		});
-		ListManager.CurrentListItemsView.list = ListManager.CurrentList;
+			ListManager.CurrentListView = new ListManager.ListView({
+				model: ListManager.CurrentList,
+			});
+			ListManager.CurrentListItemsView = new ListManager.ListItemsView({
+				collection: ListManager.CurrentListItems,
+			});
+			ListManager.CurrentListItemsView.list = ListManager.CurrentList;
 		
-		ListManager.regions.currentListName.show(ListManager.CurrentListView);
-		ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
-		ListManager.AllListsView.render();
-		$('.item-sortable').sortable({
-			items: 'a.sortable-row',
-			cursor: 'move',
-			out: function(event, ui) {
-				ui.item.trigger('drop', ui.item.index());
-				$(ui.item).find('.hover-options').toggleClass('hidden');
-			}
-		});
+			ListManager.regions.currentListName.show(ListManager.CurrentListView);
+			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
+			ListManager.AllListsView.render();
+			$('.item-sortable').sortable({
+				items: 'a.sortable-row',
+				cursor: 'move',
+				out: function(event, ui) {
+					ui.item.trigger('drop', ui.item.index());
+					$(ui.item).find('.hover-options').toggleClass('hidden');
+				}
+			});
+		}
 	}
 	
 	ListManager.parseError = function (model, response, options) {
