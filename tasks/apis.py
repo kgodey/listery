@@ -53,6 +53,9 @@ class ListItemViewSet(viewsets.ModelViewSet):
 	serializer_class = ListItemSerializer
 	permission_classes = (IsAuthenticated,)
 	
+	def get_queryset(self):
+		return self.queryset.filter(Q(list__owner=self.request.user) | Q(list__private=False))
+	
 	@detail_route(methods=['post'])
 	def reorder(self, request, pk=None):
 		item = self.get_object()
