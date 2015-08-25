@@ -98,8 +98,12 @@ $(function() {
 			});
 		},
 		switchList: function(event) {
-			if (!$(event.target).hasClass('edit-name')) {
-				ListManager.setCurrentList(this.model);
+			if ($(event.target).hasClass('noclick')) {
+				$(event.target).removeClass('noclick');
+			} else {
+				if (!$(event.target).hasClass('edit-name')) {
+					ListManager.setCurrentList(this.model);
+				}
 			}
 		},
 		toggleHover: function() {
@@ -161,9 +165,11 @@ $(function() {
 					order: index,
 					csrfmiddlewaretoken: $.cookie('csrftoken'),
 				})
+					.fail(function() {
+						ListManager.AllLists.fetch();
+					})
 					.always(function() {
 						self.model.fetch();
-						ListManager.AllLists.fetch();
 				});
 			}
 		}
@@ -205,6 +211,9 @@ $(function() {
 				items: 'a.sortable-list-name',
 				update: function(event, ui) {
 					ui.item.trigger('reorder', ui.item.index());
+				},
+				start: function(event, ui) {
+					$(ui.item).addClass('noclick');
 				}
 			});
 		}
