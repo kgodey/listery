@@ -239,6 +239,7 @@ $(function() {
 			'mouseleave': 'toggleHover',
 			'click .try-again': 'trySaveAgain',
 			'click .revert': 'revertModel',
+			'click .refresh-list': 'refreshList',
 			'dblclick .edit-title': 'editTitle',
 			'dblclick .edit-description': 'editDescription',
 			'click .add-description': 'addDescription',
@@ -346,6 +347,17 @@ $(function() {
 				}
 			});
 		},
+		refreshList: function() {
+			var list = ListManager.AllLists.get(this.model.get('list'));
+			list.fetch({
+				error: function(model, response, options) {
+					ListManager.parseError(model, response, options);
+				},
+				success: function(model, response, options) {
+					ListManager.setCurrentList(list, true);
+				}
+			});
+		},
 		saveTitle: function() {
 			this.saveAttributes({title: this.$('.title-input').val()});
 		},
@@ -372,6 +384,11 @@ $(function() {
 			$.post(this.model.url() + 'reorder/', {
 				order: index,
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
+			}).fail(function(){
+				if (!self.$el.find('.refresh-list').length) {
+					self.$el.prepend('<strong>There was an error saving your changes to the server.</strong>&nbsp;<button class="refresh-list" type="button" class="btn btn-primary btn-xs">Refresh List</button><br/>');
+				}
+				self.$el.addClass('list-group-item-danger');
 			})
 				.always(function() {
 					self.model.fetch();
@@ -444,8 +461,8 @@ $(function() {
 	
 	/** UTILITY FUNCTIONS **/
 	
-	ListManager.setCurrentList = function(list) {
-		if (ListManager.CurrentList != list) {
+	ListManager.setCurrentList = function(list, forceSet) {
+		if (ListManager.CurrentList != list || forceSet) {
 			ListManager.CurrentList = list;
 			ListManager.CurrentListItems = new ListManager.ListItemCollection();
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
