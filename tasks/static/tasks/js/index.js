@@ -446,10 +446,7 @@ $(function() {
 			'click .toggle-private': 'togglePrivate',
 		},
 		initialize: function() {
-			this.listenTo(this.model, "change", this.setCurrentList);
-		},
-		setCurrentList: function() {
-			ListManager.setCurrentList(this.model);
+			this.listenTo(this.model, "change", this.render);
 		},
 		togglePrivate: function() {
 			var self = this;
