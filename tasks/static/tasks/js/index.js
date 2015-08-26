@@ -131,7 +131,7 @@ $(function() {
 	ListManager.ListSelectorView = Marionette.ItemView.extend({
 		tagName: 'a',
 		className: function() {
-			if (this.model == ListManager.CurrentList) {
+			if (this.model.get('id') === ListManager.CurrentList.get('id')) {
 				return 'list-group-item active droppable sortable-list-name';
 			}
 			return 'list-group-item droppable sortable-list-name';
@@ -482,6 +482,7 @@ $(function() {
 			'click .toggle-private': 'togglePrivate',
 		},
 		initialize: function() {
+			this.listenTo(ListManager.CurrentList, "change", this.updateCurrentList);
 			this.listenTo(this.model, "change", this.render);
 		},
 		togglePrivate: function() {
@@ -493,6 +494,9 @@ $(function() {
 				},
 			});
 		},
+		updateCurrentList: function() {
+			this.model.set(ListManager.CurrentList.toJSON());
+		}
 	});
 	
 	ListManager.ErrorHandlingView = Marionette.ItemView.extend({
@@ -503,9 +507,8 @@ $(function() {
 	
 	ListManager.setCurrentList = function(list) {
 		if (ListManager.CurrentList != list) {
-			ListManager.CurrentList = list;
+			ListManager.CurrentList.set(list.toJSON());
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
-			ListManager.CurrentList.set(ListManager.CurrentList.toJSON());
 		}
 	}
 		
@@ -520,6 +523,12 @@ $(function() {
 				currentListHeader: '#current-list-header-region',
 			}
 		});
+		
+		ListManager.CurrentList = new ListManager.List({});
+		ListManager.CurrentListItems = new ListManager.ListItemCollection();
+		ListManager.CurrentListItemsView = new ListManager.ListItemsView({
+			collection: ListManager.CurrentListItems,
+		});
 		ListManager.regions = new RegionContainer();
 	});
 	
@@ -531,15 +540,10 @@ $(function() {
 			collection: ListManager.AllLists,
 		});
 		
-		ListManager.CurrentListItems = new ListManager.ListItemCollection();
-		ListManager.CurrentListItemsView = new ListManager.ListItemsView({
-			collection: ListManager.CurrentListItems,
-		});
-		
 		ListManager.AllLists.fetch({
 			success: function() {
 				ListManager.CurrentListHeaderView = new ListManager.ListHeaderView({
-					model: ListManager.AllLists.models[0],
+					model: ListManager.CurrentList,
 				});
 				ListManager.setCurrentList(ListManager.AllLists.models[0]);
 				
