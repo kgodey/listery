@@ -506,13 +506,7 @@ $(function() {
 		if (ListManager.CurrentList != list) {
 			ListManager.CurrentList = list;
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
-		
-			ListManager.CurrentListHeaderView = new ListManager.ListHeaderView({
-				model: ListManager.CurrentList,
-			});
-		
-			ListManager.regions.currentListName.show(ListManager.CurrentListHeaderView);
-			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
+			ListManager.CurrentList.set(ListManager.CurrentList.toJSON());
 		}
 	}
 		
@@ -545,7 +539,13 @@ $(function() {
 		
 		ListManager.AllLists.fetch({
 			success: function() {
+				ListManager.CurrentListHeaderView = new ListManager.ListHeaderView({
+					model: ListManager.AllLists.models[0],
+				});
 				ListManager.setCurrentList(ListManager.AllLists.models[0]);
+				
+				ListManager.regions.currentListName.show(ListManager.CurrentListHeaderView);
+				ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 			}
 		});
 		
