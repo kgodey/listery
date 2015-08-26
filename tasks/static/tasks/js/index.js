@@ -333,8 +333,9 @@ $(function() {
 					patch: true,
 					error: function(model, response, options) {
 						ListManager.parseError(model, response, options);
-						if (!self.$el.find('.try-again').length) {
-							self.$el.prepend('<strong>There was an error saving your changes to the server.</strong>&nbsp;<button class="try-again" type="button" class="btn btn-primary btn-xs">Try again</button>&nbsp;&nbsp;<button class="revert" type="button" class="btn btn-primary btn-xs">Refresh</button><br/>');
+						if (!self.$el.find('.error-handling').length) {
+							var errorView = new ListManager.ErrorHandlingView({});
+							self.$el.prepend(errorView.render().el);
 						}
 						self.$el.addClass('list-group-item-danger');
 						self.toggleHidden('.toggle-on-save');
@@ -490,6 +491,10 @@ $(function() {
 				},
 			});
 		},
+	});
+	
+	ListManager.ErrorHandlingView = Marionette.ItemView.extend({
+		template: '#error-template'
 	});
 	
 	/** UTILITY FUNCTIONS **/
