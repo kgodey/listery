@@ -437,6 +437,10 @@ $(function() {
 		events: {
 			'keyup .new-title': 'processKeyUp',
 		},
+		initialize: function() {
+			this.listenTo(ListManager.CurrentList, "change", this.updateItems);
+			this.listenTo(this.collection, "change", this.render);
+		},
 		onShow: function() {
 			this.$('.new-title').focus();
 		},
@@ -464,6 +468,9 @@ $(function() {
 			if (event.keyCode === 13) {
 				this.createNewItem();
 			}
+		},
+		updateItems: function() {
+			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
 		}
 	});
 	
