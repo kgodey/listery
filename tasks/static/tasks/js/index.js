@@ -183,6 +183,18 @@ $(function() {
 			this.listenTo(this.collection, "change", this.render);
 			this.listenTo(this.collection, "sync", this.render);
 		},
+		onDomRefresh: function() {
+			$('.list-sortable').sortable({
+				items: 'a.sortable-list-name',
+				cursor: 'move',
+				update: function(event, ui) {
+					ui.item.trigger('reorder', ui.item.index());
+				},
+				start: function(event, ui) {
+					$(ui.item).addClass('noclick');
+				}
+			});
+		},
 		createNewList: function() {
 			var self = this;
 			var newList = new ListManager.List({
@@ -203,18 +215,6 @@ $(function() {
 			if (event.keyCode === 13) {
 				this.createNewList();
 			}
-		},
-		onDomRefresh: function() {
-			$('.list-sortable').sortable({
-				items: 'a.sortable-list-name',
-				cursor: 'move',
-				update: function(event, ui) {
-					ui.item.trigger('reorder', ui.item.index());
-				},
-				start: function(event, ui) {
-					$(ui.item).addClass('noclick');
-				}
-			});
 		}
 	});
 	
@@ -410,6 +410,16 @@ $(function() {
 		onShow: function() {
 			this.$('.new-title').focus();
 		},
+		onDomRefresh: function() {
+			$('.item-sortable').sortable({
+				items: 'a.sortable-row',
+				cursor: 'move',
+				out: function(event, ui) {
+					ui.item.trigger('drop', ui.item.index());
+					$(ui.item).find('.hover-options').toggleClass('hidden');
+				}
+			});
+		},
 		list: null,
 		createNewItem: function() {
 			var self = this;
@@ -481,14 +491,6 @@ $(function() {
 			ListManager.regions.currentListName.show(ListManager.CurrentListHeaderView);
 			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 			ListManager.AllListsView.render();
-			$('.item-sortable').sortable({
-				items: 'a.sortable-row',
-				cursor: 'move',
-				out: function(event, ui) {
-					ui.item.trigger('drop', ui.item.index());
-					$(ui.item).find('.hover-options').toggleClass('hidden');
-				}
-			});
 		}
 	}
 	
