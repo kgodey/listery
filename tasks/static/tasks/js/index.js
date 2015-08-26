@@ -52,7 +52,7 @@ $(function() {
 	
 	/** VIEWS **/
 		
-	ListManager.ListNameView = Marionette.ItemView.extend({
+	ListManager.ListSelectorView = Marionette.ItemView.extend({
 		tagName: 'a',
 		className: function() {
 			if (this.model == ListManager.CurrentList) {
@@ -173,7 +173,7 @@ $(function() {
 	
 	ListManager.AllListsView = Marionette.CompositeView.extend({
 		template: '#all-lists-template',
-		childView: ListManager.ListNameView,
+		childView: ListManager.ListSelectorView,
 		childViewContainer: 'div',
 		events: {
 			'keyup #new-list-name': 'processKeyUp',
@@ -440,7 +440,7 @@ $(function() {
 		},
 	});
 	
-	ListManager.ListView = Marionette.ItemView.extend({
+	ListManager.ListHeaderView = Marionette.ItemView.extend({
 		template: '#list-template',
 		events: {
 			'click .toggle-private': 'togglePrivate',
@@ -471,7 +471,7 @@ $(function() {
 			ListManager.CurrentListItems = new ListManager.ListItemCollection();
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
 		
-			ListManager.CurrentListView = new ListManager.ListView({
+			ListManager.CurrentListHeaderView = new ListManager.ListHeaderView({
 				model: ListManager.CurrentList,
 			});
 			ListManager.CurrentListItemsView = new ListManager.ListItemsView({
@@ -479,7 +479,7 @@ $(function() {
 			});
 			ListManager.CurrentListItemsView.list = ListManager.CurrentList;
 		
-			ListManager.regions.currentListName.show(ListManager.CurrentListView);
+			ListManager.regions.currentListName.show(ListManager.CurrentListHeaderView);
 			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 			ListManager.AllListsView.render();
 			$('.item-sortable').sortable({
