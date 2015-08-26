@@ -53,10 +53,24 @@ $(function() {
 	
 	ListManager.List =	Backbone.NestedModel.extend({
 		urlRoot: '/api/v1/lists/',
+		validate: function(attrs, options) {
+			if (attrs.name.length > 255) {
+				return 'Sorry, the maximum length for a list name is 255.';
+			} else if (attrs.name.length < 1) {
+				return 'Sorry, list names cannot be blank';
+			}
+		}
 	});
 	
 	ListManager.ListItem =	Backbone.NestedModel.extend({
 		urlRoot: '/api/v1/listitems/',
+		validate: function(attrs, options) {
+			if (attrs.title.length > 255) {
+				return 'Sorry, the maximum length for an item title is 255. Please use the description field instead.';
+			} else if (attrs.title.length < 1) {
+				return 'Sorry, list items cannot be blank';
+			}
+		}
 	});
 	
 	ListManager.User = Backbone.NestedModel.extend({
@@ -138,6 +152,15 @@ $(function() {
 		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.updateHeader);
+			this.listenTo(this.model, "invalid", this.showError);
+		},
+		showError: function(model, error, options) {
+			swal({
+				title: 'Error',
+				text: error,
+				type: 'warning',
+			});
+			this.model.fetch();
 		},
 		template: '#list-name-template',
 		events: {
@@ -203,6 +226,7 @@ $(function() {
 		},
 		saveAttributes: function(attributes, success) {
 			var self = this;
+			this.model.set(attributes);
 			this.model.save(attributes, {
 				patch: true,
 				error: function(model, response, options) {
@@ -302,6 +326,15 @@ $(function() {
 		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.render);
+			this.listenTo(this.model, "invalid", this.showError);
+		},
+		showError: function(model, error, options) {
+			swal({
+				title: 'Error',
+				text: error,
+				type: 'warning',
+			});
+			this.model.fetch();
 		},
 		attributes: function() {
 			return { id: this.model.get('id') }
