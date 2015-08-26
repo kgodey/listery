@@ -386,7 +386,7 @@ $(function() {
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
 			}).fail(function(){
 				if (!self.$el.find('.refresh-list').length) {
-					self.$el.prepend('<strong>There was an error saving your changes to the server.</strong>&nbsp;<button class="refresh-list" type="button" class="btn btn-primary btn-xs">Refresh List</button><br/>');
+					self.$el.prepend('<strong>There was an error reordering the list.</strong>&nbsp;<button class="refresh-list" type="button" class="btn btn-primary btn-xs">Refresh</button><br/>');
 				}
 				self.$el.addClass('list-group-item-danger');
 			})
@@ -418,7 +418,11 @@ $(function() {
 			});
 			listItem.save({}, {
 				success: function() {
-					self.list.fetch();
+					self.list.fetch({
+						success: function(model, response, options) {
+							ListManager.setCurrentList(self.list, true);
+						}
+					});
 				},
 				error: function(model, response, options) {
 					ListManager.parseError(model, response, options);
