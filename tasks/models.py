@@ -37,7 +37,7 @@ class List(OrderedModel):
 			move_to_top = True
 		super(List, self).save(*args, **kwargs)
 		if move_to_top:
-			self.top()
+			self.to(1)
 
 
 class ListItem(OrderedModel):
@@ -64,4 +64,4 @@ class ListItem(OrderedModel):
 				move_to_top = True
 		super(ListItem, self).save(*args, **kwargs)
 		if move_to_top:
-			self.top()
+			self.to(1)
