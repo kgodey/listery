@@ -135,7 +135,10 @@ $(function() {
 				return 'list-group-item active droppable sortable-list-name';
 			}
 			return 'list-group-item droppable sortable-list-name';
-		},		  
+		},
+		initialize: function() {
+			this.listenTo(this.model, "change", this.updateHeader);
+		},
 		template: '#list-name-template',
 		events: {
 			'click': 'switchList',
@@ -206,7 +209,9 @@ $(function() {
 					self.model.fetch();
 				},
 				success: function(model, response, options) {
-					success(model, response, options);
+					if (success) {
+						success(model, response, options);
+					}
 				},
 			});
 		},
@@ -232,6 +237,11 @@ $(function() {
 		downloadItem: function(event, model, index) {
 			$('#download-form').attr('action', this.model.url() + 'download/');
 			$('#download-form').submit();
+		},
+		updateHeader: function() {
+			if (ListManager.CurrentList == this.model) {
+				ListManager.CurrentListHeaderView.model.set(this.model.toJSON());
+			}
 		}
 	});
 	
@@ -274,6 +284,9 @@ $(function() {
 		processKeyUp: function(event) {
 			if (event.keyCode === 13) {
 				this.createNewList();
+			} else if (event.keyCode === 27) {
+				$('#new-list-name').val("");
+				$('#new-list-name').blur();
 			}
 		}
 	});
@@ -467,6 +480,9 @@ $(function() {
 		processKeyUp: function(event) {
 			if (event.keyCode === 13) {
 				this.createNewItem();
+			} else if (event.keyCode === 27) {
+				$('.new-title').val("");
+				$('.new-title').blur();
 			}
 		},
 		updateItems: function() {
@@ -493,6 +509,7 @@ $(function() {
 		},
 		setCurrentList: function() {
 			ListManager.setCurrentList(this.model);
+			this.render();
 		}
 	});
 	
@@ -508,14 +525,14 @@ $(function() {
 			ListManager.CurrentListItems = new ListManager.ListItemCollection();
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
 			
-			ListManager.CurrentListView = new ListManager.ListHeaderView({
+			ListManager.CurrentListHeaderView = new ListManager.ListHeaderView({
 				model: ListManager.CurrentList,
 			});
 			ListManager.CurrentListItemsView = new ListManager.ListItemsView({
 				collection: ListManager.CurrentListItems,
 			});
 			
-			ListManager.regions.currentListHeader.show(ListManager.CurrentListView);
+			ListManager.regions.currentListHeader.show(ListManager.CurrentListHeaderView);
 			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 		}
 	}
