@@ -50,6 +50,30 @@ $(function() {
 		url: '/api/v1/users/'
 	});
 	
+	/** BEHAVIORS **/
+	
+    Marionette.Behaviors.behaviorsLookup = function() {
+         return ListManager.Behaviors;
+    }
+	
+	ListManager.Behaviors = {};
+	
+	ListManager.Behaviors.HoverBehavior = Marionette.Behavior.extend({
+		defaults: {
+			hoverClass: '.hover-options',
+		},
+		events: {
+			'mouseenter': 'toggleHover',
+			'mouseleave': 'toggleHover',
+		},
+		toggleHover: function() {
+			this.toggleHidden(this.options.hoverClass);
+		},
+		toggleHidden: function(className) {
+			this.$(className).toggleClass('hidden');
+		},
+	});
+	
 	/** VIEWS **/
 		
 	ListManager.ListSelectorView = Marionette.ItemView.extend({
@@ -63,8 +87,6 @@ $(function() {
 		template: '#list-name-template',
 		events: {
 			'click': 'switchList',
-			'mouseenter': 'toggleHover',
-			'mouseleave': 'toggleHover',
 			'reorder': 'processReorder',
 			'click .archive-item': 'archiveItem',
 			'click .download-item': 'downloadItem',
@@ -77,6 +99,9 @@ $(function() {
 					this.render();
 				}
 			},
+		},
+		behaviors: {
+			HoverBehavior: {}
 		},
 		onDomRefresh: function() {
 			var self = this;
@@ -108,9 +133,6 @@ $(function() {
 					ListManager.AllListsView.render();
 				}
 			}
-		},
-		toggleHover: function() {
-			this.toggleHidden('.hover-options');
 		},
 		toggleHidden: function(className) {
 			this.$(className).toggleClass('hidden');
@@ -237,8 +259,6 @@ $(function() {
 		changedAttributes: false,
 		events: {
 			'click .delete-item': 'deleteItem',
-			'mouseenter': 'toggleHover',
-			'mouseleave': 'toggleHover',
 			'click .try-again': 'trySaveAgain',
 			'click .revert': 'revertModel',
 			'click .refresh-list': 'refreshList',
@@ -269,6 +289,9 @@ $(function() {
 				}
 			},
 		},
+		behaviors: {
+			HoverBehavior: {}
+		},
 		deleteItem: function() {
 			var self = this;
 			swal({
@@ -282,9 +305,6 @@ $(function() {
 			function(){
 				self.model.destroy();
 			});
-		},
-		toggleHover: function() {
-			this.toggleHidden('.hover-options');
 		},
 		toggleHidden: function(className) {
 			this.$(className).toggleClass('hidden');
