@@ -407,12 +407,7 @@ $(function() {
 			});
 		},
 		refreshList: function() {
-			var list = ListManager.AllLists.get(this.model.get('list'));
-			list.fetch({
-				success: function(model, response, options) {
-					ListManager.setCurrentList(list, true);
-				}
-			});
+			ListManager.CurrentList.fetch({});
 		},
 		saveTitle: function() {
 			this.saveAttributes({title: this.$('.title-input').val()});
@@ -444,6 +439,11 @@ $(function() {
 		events: {
 			'keyup .new-title': 'processKeyUp',
 		},
+		initialize: function() {
+			this.listenTo(ListManager.CurrentList, "sync", this.updateCurrentList);
+			this.listenTo(ListManager.CurrentList, "change", this.updateCurrentList);
+			this.listenTo(this.collection, "change", this.render);
+		},
 		onShow: function() {
 			this.$('.new-title').focus();
 		},
@@ -451,30 +451,19 @@ $(function() {
 			$('.item-sortable').sortable({
 				items: 'a.sortable-row',
 				cursor: 'move',
-				out: function(event, ui) {
+				update: function(event, ui) {
 					ui.item.trigger('reorder', ui.item.index());
-					$(ui.item).find('.hover-options').toggleClass('hidden');
 				}
 			});
 		},
-		list: null,
 		createNewItem: function() {
-			var self = this;
-			this.toggleLoading();
 			var listItem = new ListManager.ListItem({
 				title: this.$('.new-title').val(),
-				list: self.list.get('id'),
+				list: ListManager.CurrentList.get('id'),
 			});
 			listItem.save({}, {
 				success: function() {
-					self.list.fetch({
-						success: function(model, response, options) {
-							ListManager.setCurrentList(self.list, true);
-						}
-					});
-				},
-				error: function(model, response, options) {
-					self.toggleLoading();
+					ListManager.CurrentList.fetch({});
 				}
 			});
 		},
@@ -483,9 +472,9 @@ $(function() {
 				this.createNewItem();
 			}
 		},
-		toggleLoading: function() {
-			this.$('.toggle-on-add').toggleClass('hidden');
-		},
+		updateCurrentList: function() {
+			this.collection.set(ListManager.CurrentList.get('items'));
+		}
 	});
 	
 	ListManager.ListHeaderView = Marionette.ItemView.extend({
@@ -513,8 +502,8 @@ $(function() {
 	
 	/** UTILITY FUNCTIONS **/
 	
-	ListManager.setCurrentList = function(list, forceSet) {
-		if (ListManager.CurrentList != list || forceSet) {
+	ListManager.setCurrentList = function(list) {
+		if (ListManager.CurrentList != list) {
 			ListManager.CurrentList = list;
 			ListManager.CurrentListItems = new ListManager.ListItemCollection();
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
@@ -525,11 +514,9 @@ $(function() {
 			ListManager.CurrentListItemsView = new ListManager.ListItemsView({
 				collection: ListManager.CurrentListItems,
 			});
-			ListManager.CurrentListItemsView.list = ListManager.CurrentList;
 		
 			ListManager.regions.currentListName.show(ListManager.CurrentListHeaderView);
 			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
-			ListManager.AllListsView.render();
 		}
 	}
 		
@@ -564,7 +551,6 @@ $(function() {
 		ListManager.Users.fetch({});
 		
 		ListManager.regions.allLists.show(ListManager.AllListsView);
-		
 	});
 
 	ListManager.start();
