@@ -74,6 +74,31 @@ $(function() {
 		},
 	});
 	
+	ListManager.Behaviors.ReorderBehavior = Marionette.Behavior.extend({
+		defaults: {
+			fetchItem: function() { return ListManager.AllLists },
+		},
+		events: {
+			'reorder': 'processReorder',
+		},
+		processReorder: function(event, index) {
+			var self = this;
+			$.post(this.view.model.url() + 'reorder/', {
+				order: index,
+				csrfmiddlewaretoken: $.cookie('csrftoken'),
+			}).fail(function(){
+				if (!self.$el.find('.refresh-list').length) {
+					self.$el.prepend('<strong>There was an error reordering the list.</strong>&nbsp;<button class="refresh-list" type="button" class="btn btn-primary btn-xs">Refresh</button><br/>');
+				}
+				self.$el.addClass('list-group-item-danger');
+			})
+				.always(function() {
+					self.view.model.fetch();
+					self.options.fetchItem().fetch();
+			});
+		},
+	});
+	
 	/** VIEWS **/
 		
 	ListManager.ListSelectorView = Marionette.ItemView.extend({
@@ -87,7 +112,6 @@ $(function() {
 		template: '#list-name-template',
 		events: {
 			'click': 'switchList',
-			'reorder': 'processReorder',
 			'click .archive-item': 'archiveItem',
 			'click .download-item': 'downloadItem',
 			'click .edit-name': 'editName',
@@ -101,7 +125,8 @@ $(function() {
 			},
 		},
 		behaviors: {
-			HoverBehavior: {}
+			HoverBehavior: {},
+			ReorderBehavior: {},
 		},
 		onDomRefresh: function() {
 			var self = this;
@@ -181,16 +206,6 @@ $(function() {
 		downloadItem: function(event, model, index) {
 			$('#download-form').attr('action', this.model.url() + 'download/');
 			$('#download-form').submit();
-		},
-		processReorder: function(event, index) {
-			var self = this;
-			$.post(this.model.url() + 'reorder/', {
-				order: index,
-				csrfmiddlewaretoken: $.cookie('csrftoken'),
-			})
-				.always(function() {
-					ListManager.AllLists.fetch();
-			});
 		}
 	});
 	
@@ -268,7 +283,7 @@ $(function() {
 			'click .toggle-complete': 'toggleComplete',
 			'focusout .title-input': 'saveTitle',
 			'focusout .description-input': 'saveDescription',
-			'drop': 'processReorder',
+			'reorder': 'processReorder',
 			'keyup .title-input': function(event) {
 				if (event.keyCode === 13) {
 					this.saveTitle();
@@ -290,7 +305,10 @@ $(function() {
 			},
 		},
 		behaviors: {
-			HoverBehavior: {}
+			HoverBehavior: {},
+			ReorderBehavior: {
+				fetchItem: function() { return ListManager.CurrentList},
+			}
 		},
 		deleteItem: function() {
 			var self = this;
@@ -401,24 +419,7 @@ $(function() {
 		},
 		toggleComplete: function() {
 			this.saveAttributes({completed: !this.model.get('completed')});
-		},
-		processReorder: function(event, index) {
-			var self = this;
-			$.post(this.model.url() + 'reorder/', {
-				order: index,
-				csrfmiddlewaretoken: $.cookie('csrftoken'),
-			}).fail(function(){
-				if (!self.$el.find('.refresh-list').length) {
-					self.$el.prepend('<strong>There was an error reordering the list.</strong>&nbsp;<button class="refresh-list" type="button" class="btn btn-primary btn-xs">Refresh</button><br/>');
-				}
-				self.$el.addClass('list-group-item-danger');
-			})
-				.always(function() {
-					self.model.fetch();
-					var list = ListManager.AllLists.get(self.model.get('list'));
-					list.fetch();
-			});
-		},
+		}
 	});
 	
 	ListManager.ListItemsView = Marionette.CompositeView.extend({
@@ -436,7 +437,7 @@ $(function() {
 				items: 'a.sortable-row',
 				cursor: 'move',
 				out: function(event, ui) {
-					ui.item.trigger('drop', ui.item.index());
+					ui.item.trigger('reorder', ui.item.index());
 					$(ui.item).find('.hover-options').toggleClass('hidden');
 				}
 			});
