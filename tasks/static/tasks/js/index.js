@@ -542,10 +542,10 @@ $(function() {
 		
 		ListManager.AllLists.fetch({
 			success: function() {
+				ListManager.setCurrentList(ListManager.AllLists.models[0]);
 				ListManager.CurrentListHeaderView = new ListManager.ListHeaderView({
 					model: ListManager.CurrentList,
 				});
-				ListManager.setCurrentList(ListManager.AllLists.models[0]);
 				
 				ListManager.regions.currentListHeader.show(ListManager.CurrentListHeaderView);
 				ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
