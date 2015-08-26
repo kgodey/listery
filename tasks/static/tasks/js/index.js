@@ -505,14 +505,10 @@ $(function() {
 	ListManager.setCurrentList = function(list) {
 		if (ListManager.CurrentList != list) {
 			ListManager.CurrentList = list;
-			ListManager.CurrentListItems = new ListManager.ListItemCollection();
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
 		
 			ListManager.CurrentListHeaderView = new ListManager.ListHeaderView({
 				model: ListManager.CurrentList,
-			});
-			ListManager.CurrentListItemsView = new ListManager.ListItemsView({
-				collection: ListManager.CurrentListItems,
 			});
 		
 			ListManager.regions.currentListName.show(ListManager.CurrentListHeaderView);
@@ -540,6 +536,11 @@ $(function() {
 		
 		ListManager.AllListsView = new ListManager.AllListsView({
 			collection: ListManager.AllLists,
+		});
+		
+		ListManager.CurrentListItems = new ListManager.ListItemCollection();
+		ListManager.CurrentListItemsView = new ListManager.ListItemsView({
+			collection: ListManager.CurrentListItems,
 		});
 		
 		ListManager.AllLists.fetch({
