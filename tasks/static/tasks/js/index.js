@@ -125,16 +125,15 @@ $(function() {
 		},
 		saveAttributes: function(attributes, success) {
 			var self = this;
-			if (!success) {
-				success = function() {};
-			}
 			this.model.save(attributes, {
 				patch: true,
 				error: function(model, response, options) {
 					ListManager.parseError(model, response, options);
 					self.model.fetch();
 				},
-				success: success,
+				success: function(model, response, options) {
+					success(model, response, options);
+				},
 			});
 		},
 		archiveItem: function() {
@@ -220,7 +219,12 @@ $(function() {
 	ListManager.ListItemView = Marionette.ItemView.extend({
 		template: '#list-item-template',
 		tagName: 'a',
-		className: 'list-group-item sortable-row',
+		className: function() {
+			if (this.errorState) {
+				return 'list-group-item list-group-item-danger sortable-row';
+			}
+			return 'list-group-item sortable-row';
+		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.render);
 		},
@@ -228,10 +232,13 @@ $(function() {
 			return { id: this.model.get('id') }
 		},
 		list: null,
+		changedAttributes: false,
 		events: {
 			'click .delete-item': 'deleteItem',
 			'mouseenter': 'toggleHover',
 			'mouseleave': 'toggleHover',
+			'click .try-again': 'trySaveAgain',
+			'click .revert': 'revertModel',
 			'dblclick .edit-title': 'editTitle',
 			'dblclick .edit-description': 'editDescription',
 			'click .add-description': 'addDescription',
@@ -293,28 +300,51 @@ $(function() {
 		},
 		saveAttributes: function(attributes) {
 			var self = this;
-			this.model.set(attributes);
-			if (this.model.changedAttributes()) {
+			if (!self.changedAttributes) {
+				this.model.set(attributes);
+				self.changedAttributes = this.model.changedAttributes();
+			}
+			this.toggleHidden('.toggle-on-save');
+			if (self.changedAttributes) {
 				this.model.save(attributes, {
 					patch: true,
 					error: function(model, response, options) {
 						ListManager.parseError(model, response, options);
-						if ('description' in attributes) {
-							this.toggleHidden('.toggle-on-description-edit');
-						} else if ('title' in attributes) {
-							this.toggleHidden('.toggle-on-title-edit');
-						} else {
-							self.model.fetch();
+						if (!self.$el.find('.try-again').length) {
+							self.$el.prepend('<strong>There was an error saving your changes to the server.</strong>&nbsp;<button class="try-again" type="button" class="btn btn-primary btn-xs">Try again</button>&nbsp;&nbsp;<button class="revert" type="button" class="btn btn-primary btn-xs">Refresh</button><br/>');
 						}
+						self.$el.addClass('list-group-item-danger');
+						self.toggleHidden('.toggle-on-save');
 					},
 					success: function(model, response, options) {
 						var list = ListManager.AllLists.get(self.model.get('list'));
+						self.$el.removeClass('list-group-item-danger');
 						list.fetch();
+						self.changedAttributes = false;
 					},
 				});
 			} else {
 				this.render();
 			}
+		},
+		trySaveAgain: function() {
+			this.saveAttributes(self.changedAttributes);
+		},
+		revertModel: function() {
+			var self = this;
+			this.model.fetch({
+				error: function(model, response, options) {
+					swal({
+						title: 'Error',
+						text: 'The server appears to be down. Please try again later.',
+						type: 'warning',
+					});
+				},
+				success: function(model, response, options) {
+					self.$el.removeClass('list-group-item-danger');
+					self.changedAttributes = false;
+				}
+			});
 		},
 		saveTitle: function() {
 			this.saveAttributes({title: this.$('.title-input').val()});
@@ -443,13 +473,19 @@ $(function() {
 	}
 	
 	ListManager.parseError = function (model, response, options) {
-		var data = $.parseJSON(response.responseText);
-		var errorKey = Object.keys(data)[0];
-		var errorMessage = data[errorKey][0];
-		if (errorKey == 'non_field_errors') {
-			errorKey = 'Error';
+		try {
+			var data = $.parseJSON(response.responseText);
+		} catch (e) {
+			var message = 'The server appears to be down. Please try again later.';
 		}
-		var message = errorKey + ': ' + errorMessage;
+		if (data) {
+			var errorKey = Object.keys(data)[0];
+			var errorMessage = data[errorKey][0];
+			if (errorKey == 'non_field_errors') {
+				errorKey = 'Error';
+			}
+			var message = errorKey + ': ' + errorMessage;
+		}
 		swal({
 			title: 'Error',
 			text: message,
