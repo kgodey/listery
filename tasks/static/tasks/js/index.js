@@ -214,15 +214,15 @@ $(function() {
 			var self = this;
 			swal({
 				title: "Are you sure?",
-				text: "\"" + self.model.get('name') + "\" will be archived immediately.",
+				text: "\"" + self.model.get('name') + "\" will be deleted immediately.",
 				type: "warning",
 				showCancelButton: true,
-				confirmButtonText: "Yes, archive it!",
+				confirmButtonText: "Yes, delete it!",
 				closeOnConfirm: true
 			},
 			function() {
 				self.saveAttributes({archived: true}, function() {
-					if (ListManager.CurrentList == self.model) {
+					if (ListManager.CurrentList.get('id') === self.model.get('id')) {
 						ListManager.setCurrentList(ListManager.AllLists.models[0]);
 					}
 					ListManager.AllLists.remove(self.model.get('id'));
