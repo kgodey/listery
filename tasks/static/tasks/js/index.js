@@ -105,6 +105,7 @@ $(function() {
 			} else {
 				if (!$(event.target).hasClass('edit-name')) {
 					ListManager.setCurrentList(this.model);
+					ListManager.AllListsView.render();
 				}
 			}
 		},
@@ -180,6 +181,7 @@ $(function() {
 		},
 		initialize: function() {
 			this.listenTo(this.collection, "change", this.render);
+			this.listenTo(this.collection, "sync", this.render);
 		},
 		createNewList: function() {
 			var self = this;
