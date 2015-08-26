@@ -121,7 +121,7 @@ $(function() {
 				self.$el.addClass('list-group-item-danger');
 			})
 				.always(function() {
-					self.view.model.fetch();
+					// self.view.model.fetch();
 					self.options.fetchItem().fetch();
 			});
 		},
@@ -518,7 +518,7 @@ $(function() {
 			regions: {
 				allLists: '#all-lists-region',
 				currentListItems: '#current-list-items-region',
-				currentListName: '#current-list-name-region',
+				currentListHeader: '#current-list-header-region',
 			}
 		});
 		ListManager.regions = new RegionContainer();
@@ -544,7 +544,7 @@ $(function() {
 				});
 				ListManager.setCurrentList(ListManager.AllLists.models[0]);
 				
-				ListManager.regions.currentListName.show(ListManager.CurrentListHeaderView);
+				ListManager.regions.currentListHeader.show(ListManager.CurrentListHeaderView);
 				ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 			}
 		});
