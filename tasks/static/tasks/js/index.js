@@ -121,7 +121,6 @@ $(function() {
 				self.$el.addClass('list-group-item-danger');
 			})
 				.always(function() {
-					// self.view.model.fetch();
 					self.options.fetchItem().fetch();
 			});
 		},
