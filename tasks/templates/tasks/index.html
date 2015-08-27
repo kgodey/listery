@@ -80,14 +80,6 @@
 			<input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
 		</span>
 	</script>
-	
-	<script id="error-template" type="text/template">
-		<div class="error-handling">
-			<strong>There was an error saving your changes to the server.</strong>&nbsp;
-			<button class="try-again" type="button" class="btn btn-primary btn-xs">Try again</button>&nbsp;&nbsp;
-			<button class="revert" type="button" class="btn btn-primary btn-xs">Refresh</button><br/>
-		</div>
-	</script>
 	<!-- END TEMPLATES -->
 	<form id="download-form" method="POST" class="hidden">
 		{% csrf_token %}

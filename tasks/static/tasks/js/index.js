@@ -128,14 +128,8 @@ $(function() {
 			$.post(this.view.model.url() + 'reorder/', {
 				order: index,
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
-			}).fail(function(){
-				if (!self.$el.find('.refresh-list').length) {
-					self.$el.prepend('<strong>There was an error reordering the list.</strong>&nbsp;<button class="refresh-list" type="button" class="btn btn-primary btn-xs">Refresh</button><br/>');
-				}
-				self.$el.addClass('list-group-item-danger');
-			})
-				.always(function() {
-					self.options.fetchItem().fetch();
+			}).always(function() {
+				self.options.fetchItem().fetch();
 			});
 		},
 	});
@@ -342,9 +336,6 @@ $(function() {
 		changedAttributes: false,
 		events: {
 			'click .delete-item': 'deleteItem',
-			'click .try-again': 'trySaveAgain',
-			'click .revert': 'revertModel',
-			'click .refresh-list': 'refreshList',
 			'dblclick .edit-title': 'editTitle',
 			'dblclick .edit-description': 'editDescription',
 			'click .add-description': 'addDescription',
@@ -412,17 +403,8 @@ $(function() {
 			if (self.changedAttributes) {
 				this.model.save(attributes, {
 					patch: true,
-					error: function(model, response, options) {
-						if (!self.$el.find('.error-handling').length) {
-							var errorView = new ListManager.ErrorHandlingView({});
-							self.$el.prepend(errorView.render().el);
-						}
-						self.$el.addClass('list-group-item-danger');
-						self.toggleHidden('.toggle-on-save');
-					},
 					success: function(model, response, options) {
 						var list = ListManager.AllLists.get(self.model.get('list'));
-						self.$el.removeClass('list-group-item-danger');
 						list.fetch();
 						self.changedAttributes = false;
 					},
@@ -430,28 +412,6 @@ $(function() {
 			} else {
 				this.render();
 			}
-		},
-		trySaveAgain: function() {
-			this.saveAttributes(self.changedAttributes);
-		},
-		revertModel: function() {
-			var self = this;
-			this.model.fetch({
-				error: function(model, response, options) {
-					swal({
-						title: 'Error',
-						text: 'The server appears to be down. Please try again later.',
-						type: 'warning',
-					});
-				},
-				success: function(model, response, options) {
-					self.$el.removeClass('list-group-item-danger');
-					self.changedAttributes = false;
-				}
-			});
-		},
-		refreshList: function() {
-			ListManager.CurrentList.fetch({});
 		},
 		saveTitle: function() {
 			this.saveAttributes({title: this.$('.title-input').val()});
@@ -542,10 +502,6 @@ $(function() {
 			ListManager.setCurrentList(this.model);
 			this.render();
 		}
-	});
-	
-	ListManager.ErrorHandlingView = Marionette.ItemView.extend({
-		template: '#error-template'
 	});
 	
 	/** UTILITY FUNCTIONS **/
