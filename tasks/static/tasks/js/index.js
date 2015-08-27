@@ -487,10 +487,8 @@ $(function() {
 			this.listenTo(ListManager.CurrentList, "change", this.updateItems);
 			this.listenTo(this.collection, "change", this.render);
 		},
-		onShow: function() {
-			this.$('.new-title').focus();
-		},
 		onDomRefresh: function() {
+			this.$('.new-title').focus();
 			$('.item-sortable').sortable({
 				items: 'a.sortable-row',
 				cursor: 'move',
