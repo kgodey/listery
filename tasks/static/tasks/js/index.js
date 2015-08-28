@@ -53,28 +53,18 @@ $(function() {
 	
 	ListManager.List =	Backbone.NestedModel.extend({
 		urlRoot: '/api/v1/lists/',
-		validate: function(attrs, options) {
-			if (attrs.name.length > 255) {
-				return 'Sorry, the maximum length for a list name is 255.';
-			} else if (attrs.name.length < 1) {
-				return 'Sorry, list names cannot be blank';
-			}
-		}
+		errorState: false,
+		errorMessage: 'An unknown error has occured. Please refresh the page.'
 	});
 	
 	ListManager.ListItem =	Backbone.NestedModel.extend({
 		urlRoot: '/api/v1/listitems/',
-		validate: function(attrs, options) {
-			if (attrs.title.length > 255) {
-				return 'Sorry, the maximum length for an item title is 255. Please use the description field instead.';
-			} else if (attrs.title.length < 1) {
-				return 'Sorry, list items cannot be blank';
-			}
-		}
+		errorState: false,
+		errorMessage: 'An unknown error has occured. Please refresh the page.'
 	});
 	
 	ListManager.User = Backbone.NestedModel.extend({
-		urlRoot: '/api/v1/users/',
+		urlRoot: '/api/v1/users/'
 	});
 	
 	ListManager.ListCollection = Backbone.Collection.extend({
@@ -113,25 +103,30 @@ $(function() {
 		},
 		toggleHidden: function(className) {
 			this.$(className).toggleClass('hidden');
-		},
+		}
 	});
 	
 	ListManager.Behaviors.ReorderBehavior = Marionette.Behavior.extend({
 		defaults: {
 			fetchItem: function() { return ListManager.AllLists },
+			parentView: function() { return ListManager.AllListsView }
 		},
 		events: {
-			'reorder': 'processReorder',
+			'reorder': 'processReorder'
 		},
 		processReorder: function(event, index) {
 			var self = this;
 			$.post(this.view.model.url() + 'reorder/', {
 				order: index,
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
+			}).fail(function() {
+				self.view.model.errorState = true;
+				self.view.model.errorMessage = 'This item could not be reordered at this time. We\'ve restored it to its previous position. Please refresh the page and try again.';
+				self.options.parentView().render();
 			}).always(function() {
 				self.options.fetchItem().fetch();
 			});
-		},
+		}
 	});
 	
 	/** VIEWS **/
@@ -146,15 +141,6 @@ $(function() {
 		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.updateHeader);
-			this.listenTo(this.model, "invalid", this.showError);
-		},
-		showError: function(model, error, options) {
-			swal({
-				title: 'Error',
-				text: error,
-				type: 'warning',
-			});
-			this.model.fetch();
 		},
 		template: '#list-name-template',
 		events: {
@@ -320,15 +306,24 @@ $(function() {
 		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.render);
-			this.listenTo(this.model, "invalid", this.showError);
 		},
-		showError: function(model, error, options) {
-			swal({
-				title: 'Error',
-				text: error,
-				type: 'warning',
-			});
-			this.model.fetch();
+		onShow: function() {
+			if (this.model.errorState) {
+				var self = this;
+				var idName = 'dismiss-popover-' + this.model.get('id');
+				this.$el.popover({
+					title: 'Error',
+					html: true,
+					content: '<p>' + this.model.errorMessage + '</p><button id="' + idName + '">Got it!</button>',
+					placement: 'auto left'
+				});
+				self.model.errorState = self.model.constructor.prototype.errorState;
+				self.model.errorMessage = self.model.constructor.prototype.errorMessage;
+				this.$el.popover('show');
+				$('#' + idName).click(function() {
+					self.$el.popover('destroy');
+				});
+			}
 		},
 		attributes: function() {
 			return { id: this.model.get('id') }
@@ -361,7 +356,8 @@ $(function() {
 		behaviors: {
 			HoverBehavior: {},
 			ReorderBehavior: {
-				fetchItem: function() { return ListManager.CurrentList},
+				fetchItem: function() { return ListManager.CurrentList },
+				parentView: function() { return ListManager.CurrentListItemsView }
 			}
 		},
 		deleteItem: function() {
