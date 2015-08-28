@@ -129,6 +129,27 @@ $(function() {
 		}
 	});
 	
+	ListManager.Behaviors.ErrorPopoverBehavior = Marionette.Behavior.extend({
+		onShow: function() {
+			if (this.view.model.errorState) {
+				var self = this;
+				var idName = 'dismiss-popover-' + this.view.model.get('id');
+				this.view.$el.popover({
+					title: 'Error',
+					html: true,
+					content: '<p>' + this.view.model.errorMessage + '</p><button id="' + idName + '">Got it!</button>',
+					placement: 'auto left'
+				});
+				this.view.model.errorState = this.view.model.constructor.prototype.errorState;
+				this.view.model.errorMessage = this.view.model.constructor.prototype.errorMessage;
+				this.view.$el.popover('show');
+				$('#' + idName).click(function() {
+					self.view.$el.popover('destroy');
+				});
+			}
+		}
+	});
+	
 	/** VIEWS **/
 		
 	ListManager.ListSelectorView = Marionette.ItemView.extend({
@@ -160,6 +181,7 @@ $(function() {
 		behaviors: {
 			HoverBehavior: {},
 			ReorderBehavior: {},
+			ErrorPopoverBehavior: {}
 		},
 		onDomRefresh: function() {
 			var self = this;
@@ -307,24 +329,6 @@ $(function() {
 		initialize: function() {
 			this.listenTo(this.model, "change", this.render);
 		},
-		onShow: function() {
-			if (this.model.errorState) {
-				var self = this;
-				var idName = 'dismiss-popover-' + this.model.get('id');
-				this.$el.popover({
-					title: 'Error',
-					html: true,
-					content: '<p>' + this.model.errorMessage + '</p><button id="' + idName + '">Got it!</button>',
-					placement: 'auto left'
-				});
-				self.model.errorState = self.model.constructor.prototype.errorState;
-				self.model.errorMessage = self.model.constructor.prototype.errorMessage;
-				this.$el.popover('show');
-				$('#' + idName).click(function() {
-					self.$el.popover('destroy');
-				});
-			}
-		},
 		attributes: function() {
 			return { id: this.model.get('id') }
 		},
@@ -358,7 +362,8 @@ $(function() {
 			ReorderBehavior: {
 				fetchItem: function() { return ListManager.CurrentList },
 				parentView: function() { return ListManager.CurrentListItemsView }
-			}
+			},
+			ErrorPopoverBehavior: {}
 		},
 		deleteItem: function() {
 			var self = this;
