@@ -54,13 +54,15 @@ $(function() {
 	ListManager.List =	Backbone.NestedModel.extend({
 		urlRoot: '/api/v1/lists/',
 		errorState: false,
-		errorMessage: 'An unknown error has occured. Please refresh the page.'
+		errorMessage: 'An unknown error has occured. Please refresh the page.',
+		errorAttribute: null
 	});
 	
 	ListManager.ListItem =	Backbone.NestedModel.extend({
 		urlRoot: '/api/v1/listitems/',
 		errorState: false,
-		errorMessage: 'An unknown error has occured. Please refresh the page.'
+		errorMessage: 'An unknown error has occured. Please refresh the page.',
+		errorAttribute: null
 	});
 	
 	ListManager.User = Backbone.NestedModel.extend({
@@ -114,6 +116,9 @@ $(function() {
 		events: {
 			'reorder': 'processReorder'
 		},
+		onShow: function() {
+			this.view.$el.trigger('handle-potential-error');
+		},
 		processReorder: function(event, index) {
 			var self = this;
 			$.post(this.view.model.url() + 'reorder/', {
@@ -130,11 +135,17 @@ $(function() {
 	});
 	
 	ListManager.Behaviors.ErrorPopoverBehavior = Marionette.Behavior.extend({
-		onShow: function() {
+		defaults: {
+			element: function(view) { return view.$el; }
+		},
+		events: {
+			'handle-potential-error': 'handlePotentialError'
+		},
+		handlePotentialError: function() {
 			if (this.view.model.errorState) {
-				var self = this;
+				var element = this.options.element(this.view);
 				var idName = 'dismiss-popover-' + this.view.model.get('id');
-				this.view.$el.popover({
+				element.popover({
 					title: 'Error',
 					html: true,
 					content: '<p>' + this.view.model.errorMessage + '</p><button id="' + idName + '">Got it!</button>',
@@ -142,9 +153,10 @@ $(function() {
 				});
 				this.view.model.errorState = this.view.model.constructor.prototype.errorState;
 				this.view.model.errorMessage = this.view.model.constructor.prototype.errorMessage;
-				this.view.$el.popover('show');
+				this.view.model.errorAttribute = this.view.model.constructor.prototype.errorAttribute;
+				element.popover('show');
 				$('#' + idName).click(function() {
-					self.view.$el.popover('destroy');
+					element.popover('destroy');
 				});
 			}
 		}
@@ -336,7 +348,6 @@ $(function() {
 		attributes: function() {
 			return { id: this.model.get('id') }
 		},
-		changedAttributes: false,
 		events: {
 			'click .delete-item': 'deleteItem',
 			'dblclick .edit-title': 'editTitle',
@@ -367,7 +378,19 @@ $(function() {
 				fetchItem: function() { return ListManager.CurrentList },
 				parentView: function() { return ListManager.CurrentListItemsView }
 			},
-			ErrorPopoverBehavior: {}
+			ErrorPopoverBehavior: {
+				element: function(view) {
+					if (view.model.errorAttribute === 'title') {
+						return view.$('.edit-title');
+					} else if (view.model.errorAttribute === 'description') {
+						return view.$('.edit-description');
+					} else if (view.model.errorAttribute === 'completed') {
+						return view.$('.toggle-complete');
+					} else {
+						return view.$el;
+					}
+				}
+			}
 		},
 		deleteItem: function() {
 			var self = this;
@@ -400,23 +423,28 @@ $(function() {
 		},
 		saveAttributes: function(attributes) {
 			var self = this;
-			if (!self.changedAttributes) {
-				this.model.set(attributes);
-				self.changedAttributes = this.model.changedAttributes();
-			}
 			this.toggleHidden('.toggle-on-save');
-			if (self.changedAttributes) {
-				this.model.save(attributes, {
-					patch: true,
-					success: function(model, response, options) {
-						var list = ListManager.AllLists.get(self.model.get('list'));
-						list.fetch();
-						self.changedAttributes = false;
-					},
-				});
-			} else {
-				this.render();
-			}
+			this.model.save(attributes, {
+				patch: true,
+				wait: true,
+				success: function(model, response, options) {
+					var list = ListManager.AllLists.get(self.model.get('list'));
+					list.fetch();
+				},
+				error: function(model, response, options) {
+					self.model.errorState = true;
+					self.model.errorMessage = 'Sorry, your changes could not be saved to the server, so we\'ve restored them to their previous state. Please refresh the page if this continues to be an issue.';
+					if ('title' in attributes) {
+						self.model.errorAttribute = 'title';
+					} else if ('description' in attributes) {
+						self.model.errorAttribute = 'description';
+					} else if ('completed' in attributes) {
+						self.model.errorAttribute = 'completed';
+					}
+					self.render();
+					self.$el.trigger('handle-potential-error');
+				}
+			});
 		},
 		saveTitle: function() {
 			if (this.$('.title-input').val()) {
