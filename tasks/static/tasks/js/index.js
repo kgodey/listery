@@ -224,7 +224,9 @@ $(function() {
 			inputElement.val(this.model.get('name'));
 		},
 		saveName: function() {
-			this.saveAttributes({name: this.$('.name-input').val()});
+			if (this.$('.name-input').val()) {
+				this.saveAttributes({name: this.$('.name-input').val()});
+			}
 		},
 		saveAttributes: function(attributes, success) {
 			var self = this;
@@ -295,17 +297,19 @@ $(function() {
 			});
 		},
 		createNewList: function() {
-			var self = this;
-			var newList = new ListManager.List({
-				name: this.$('#new-list-name').val(),
-			});
-			newList.save({}, {
-				success: function() {
-					ListManager.setCurrentList(newList);
-					self.collection.add(newList);
-					self.render();
-				}
-			});
+			if (this.$('#new-list-name').val()) {
+				var self = this;
+				var newList = new ListManager.List({
+					name: this.$('#new-list-name').val(),
+				});
+				newList.save({}, {
+					success: function() {
+						ListManager.setCurrentList(newList);
+						self.collection.add(newList);
+						self.render();
+					}
+				});
+			}
 		},
 		processKeyUp: function(event) {
 			if (event.keyCode === 13) {
@@ -415,7 +419,9 @@ $(function() {
 			}
 		},
 		saveTitle: function() {
-			this.saveAttributes({title: this.$('.title-input').val()});
+			if (this.$('.title-input').val()) {
+				this.saveAttributes({title: this.$('.title-input').val()});
+			}
 		},
 		saveDescription: function() {
 			this.saveAttributes({description: this.$('.description-input').val()});
@@ -459,15 +465,17 @@ $(function() {
 			});
 		},
 		createNewItem: function() {
-			var listItem = new ListManager.ListItem({
-				title: this.$('.new-title').val(),
-				list: ListManager.CurrentList.get('id'),
-			});
-			listItem.save({}, {
-				success: function() {
-					ListManager.CurrentList.fetch({});
-				}
-			});
+			if (this.$('.new-title').val().length) {
+				var listItem = new ListManager.ListItem({
+					title: this.$('.new-title').val(),
+					list: ListManager.CurrentList.get('id'),
+				});
+				listItem.save({}, {
+					success: function() {
+						ListManager.CurrentList.fetch({});
+					}
+				});
+			}
 		},
 		processKeyUp: function(event) {
 			if (event.keyCode === 13) {

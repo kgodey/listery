@@ -17,7 +17,7 @@
 	<script id="all-lists-template" type="text/template">
 		<div class='list-group list-sortable' style="cursor: pointer;">
 			<a class="list-group-item">
-				<input type="text" id="new-list-name" style="width: 100%" placeholder="Add new list"/>
+				<input type="text" id="new-list-name" style="width: 100%" placeholder="Add new list" maxlength=255/>
 			</a>
 		</div>
 	</script>
@@ -25,7 +25,7 @@
 	<script id="list-name-template" type="text/template">
 		<span class="toggle-on-name-edit"><%= name %></span>
 		<span class="toggle-on-name-edit hidden">
-			<input type="text" class="name-input" style="width: 75%; color: black;">
+			<input type="text" class="name-input" style="width: 75%; color: black;" maxlength=255>
 		</span>
 		<span class="pull-right">
 			<span class="hover-options hidden">
@@ -46,7 +46,7 @@
 	<script id="list-items-template" type="text/template">
 		<div class='list-group item-sortable' style="cursor: default;">
 			<a class="list-group-item">
-				<input type="text" class="new-title" style="width: 100%" placeholder="Add new item"/>
+				<input type="text" class="new-title" style="width: 100%" placeholder="Add new item" maxlength=255/>
 			</a>
 		</div>
 	</script>
@@ -59,7 +59,7 @@
 			<span class="toggle-on-title-edit title"><%= title %></span>
 		</span>
 		<span class="toggle-on-title-edit hidden">
-			<input type="text" class="title-input" style="width: 80%">
+			<input type="text" class="title-input" style="width: 80%" maxlength=255>
 		</span>
 		<span class="pull-right">
 			<img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
