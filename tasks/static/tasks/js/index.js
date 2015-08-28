@@ -465,7 +465,7 @@ $(function() {
 			});
 		},
 		createNewItem: function() {
-			if (this.$('.new-title').val().length) {
+			if (this.$('.new-title').val()) {
 				var listItem = new ListManager.ListItem({
 					title: this.$('.new-title').val(),
 					list: ListManager.CurrentList.get('id'),
