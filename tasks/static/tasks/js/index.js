@@ -193,7 +193,11 @@ $(function() {
 		behaviors: {
 			HoverBehavior: {},
 			ReorderBehavior: {},
-			ErrorPopoverBehavior: {}
+			ErrorPopoverBehavior: {
+				element: function(view) {
+					return view.$el;
+				}
+			}
 		},
 		onDomRefresh: function() {
 			var self = this;
@@ -242,11 +246,18 @@ $(function() {
 		},
 		saveAttributes: function(attributes, success) {
 			var self = this;
-			this.model.set(attributes);
 			this.model.save(attributes, {
 				patch: true,
+				wait: true,
 				error: function(model, response, options) {
-					self.model.fetch();
+					self.model.errorState = true;
+					if ('name' in attributes) {
+						self.model.errorMessage = 'Sorry, the changed name could not be saved to the server, so we\'ve restored the previous name. Please try again and refresh the page if this continues to be an issue.';
+					} else if ('archived' in attributes) {
+						self.model.errorMessage = 'Sorry, the list could not be archived, so we\'ve restored it to its previous state. Please try again and refresh the page if this continues to be an issue.';
+					}
+					self.render();
+					self.$el.trigger('handle-potential-error');
 				},
 				success: function(model, response, options) {
 					if (success) {
@@ -380,15 +391,7 @@ $(function() {
 			},
 			ErrorPopoverBehavior: {
 				element: function(view) {
-					if (view.model.errorAttribute === 'title') {
-						return view.$('.edit-title');
-					} else if (view.model.errorAttribute === 'description') {
-						return view.$('.edit-description');
-					} else if (view.model.errorAttribute === 'completed') {
-						return view.$('.toggle-complete');
-					} else {
-						return view.$el;
-					}
+					return view.$el;
 				}
 			}
 		},
@@ -433,13 +436,12 @@ $(function() {
 				},
 				error: function(model, response, options) {
 					self.model.errorState = true;
-					self.model.errorMessage = 'Sorry, your changes could not be saved to the server, so we\'ve restored them to their previous state. Please refresh the page if this continues to be an issue.';
 					if ('title' in attributes) {
-						self.model.errorAttribute = 'title';
+						self.model.errorMessage = 'Sorry, the updated title could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.';
 					} else if ('description' in attributes) {
-						self.model.errorAttribute = 'description';
+						self.model.errorMessage = 'Sorry, the updated description could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.';
 					} else if ('completed' in attributes) {
-						self.model.errorAttribute = 'completed';
+						self.model.errorMessage = 'Sorry, the updated completion status could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.';
 					}
 					self.render();
 					self.$el.trigger('handle-potential-error');
@@ -523,6 +525,17 @@ $(function() {
 		events: {
 			'click .toggle-private': 'togglePrivate',
 		},
+		behaviors: {
+			ErrorPopoverBehavior: {
+				element: function(view) {
+					if (view.model.errorAttribute === 'private') {
+						return view.$('.toggle-private');
+					} else {
+						return view.$el;
+					}
+				}
+			}
+		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.setCurrentList);
 		},
@@ -530,8 +543,13 @@ $(function() {
 			var self = this;
 			this.model.save({private: !this.model.get('private')}, {
 				patch: true,
+				wait: true,
 				error: function(model, response, options) {
-					self.model.fetch();
+					self.model.errorState = true;
+					self.model.errorMessage = 'Sorry, your changes could not be saved to the server, so we\'ve restored them to their previous state. Please refresh the page if this continues to be an issue.';
+					self.model.errorAttribute = 'private';
+					self.render();
+					self.$el.trigger('handle-potential-error');
 				},
 			});
 		},
