@@ -332,7 +332,7 @@ $(function() {
 		},
 		createNewList: function() {
 			var inputElement = this.$('#new-list-name');
-			if (inputElement).val()) {
+			if (inputElement.val()) {
 				var self = this;
 				inputElement.prop('disabled', true);
 				ListManager.NewList = new ListManager.List({
