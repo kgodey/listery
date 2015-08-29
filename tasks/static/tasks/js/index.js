@@ -455,7 +455,15 @@ $(function() {
 				closeOnConfirm: true
 			},
 			function(){
-				self.model.destroy();
+				self.model.destroy({
+					wait: true,
+					error: function() {
+						self.model.errorState = true;
+						self.model.errorMessage = 'Sorry, we could not delete this item on the server, so we\'ve restored it to its previous position. Please try again and refresh the page if this continues to be an issue.';
+						self.render();
+						self.$el.trigger('handle-potential-error');
+					}
+				});
 			});
 		},
 		toggleHidden: function(className) {
@@ -522,14 +530,6 @@ $(function() {
 					self.$el.trigger('handle-potential-error');
 				}
 			});
-		},
-		saveTitle: function() {
-			if (this.$('.title-input').val()) {
-				this.saveAttributes({title: this.$('.title-input').val()});
-			}
-		},
-		saveDescription: function() {
-			this.saveAttributes({description: this.$('.description-input').val()});
 		},
 		toggleComplete: function() {
 			this.saveAttributes({completed: !this.model.get('completed')});
