@@ -232,8 +232,18 @@ $(function() {
 				$(event.target).removeClass('noclick');
 			} else {
 				if (!$(event.target).hasClass('edit-name')) {
-					ListManager.setCurrentList(this.model);
-					ListManager.AllListsView.render();
+					var self = this;
+					this.model.fetch({
+						error: function(model, response, options) {
+							self.model.errorState = true;
+							self.model.errorMessage = 'Sorry, there was an error switching to this list. Please try again and refresh the page if this continues to be an issue.';
+							self.$el.trigger('handle-potential-error');
+						},
+						success: function(model, response, options) {
+							ListManager.setCurrentList(self.model);
+							ListManager.AllListsView.render();
+						}
+					});
 				}
 			}
 		},
