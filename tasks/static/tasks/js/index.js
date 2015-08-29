@@ -6,12 +6,6 @@ Backbone.sync = function(method, model, options){
 		xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
 	};
 	
-	var _error = options.error;
-	options.error = function(response) {
-		ListManager.parseError(response);
-		_error(response);
-	}
-	
 	return _sync(method, model, options);
 };
 
@@ -25,29 +19,6 @@ Backbone.NestedModel.prototype.url = function() {
 $(function() {
 		
 	ListManager = new Marionette.Application();
-
-	ListManager.parseError = function (response) {
-		try {
-			var data = $.parseJSON(response.responseText);
-		} catch (e) {
-			var message = 'The server appears to be down. Please try again later.';
-		}
-		if (data) {
-			var errorKey = Object.keys(data)[0];
-			var errorMessage = data[errorKey][0];
-			if (errorKey == 'non_field_errors') {
-				errorKey = 'Error';
-			}
-			var message = errorKey + ': ' + errorMessage;
-		}
-		swal({
-			title: 'Error',
-			text: message,
-			type: 'warning',
-		});
-	};
-	
-	ListManager.CurrentList, ListManager.CurrentListItems;
 	
 	/** MODELS & COLLECTIONS **/
 	
