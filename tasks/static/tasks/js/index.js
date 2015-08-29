@@ -77,8 +77,12 @@ $(function() {
 			'mouseenter': 'toggleHover',
 			'mouseleave': 'toggleHover',
 		},
-		toggleHover: function() {
-			this.toggleHidden(this.options.hoverClass);
+		toggleHover: function(event) {
+			if ($(event.target).hasClass('nohover')) {
+				$(event.target).removeClass('nohover');
+			} else {
+				this.toggleHidden(this.options.hoverClass);
+			}
 		},
 		toggleHidden: function(className) {
 			this.$(className).toggleClass('hidden');
@@ -321,6 +325,7 @@ $(function() {
 				},
 				start: function(event, ui) {
 					$(ui.item).addClass('noclick');
+					$(ui.item).addClass('nohover');
 				}
 			});
 		},
@@ -506,6 +511,9 @@ $(function() {
 				cursor: 'move',
 				update: function(event, ui) {
 					ui.item.trigger('reorder', ui.item.index());
+				},
+				start: function(event, ui) {
+					$(ui.item).addClass('nohover');
 				}
 			});
 		},
