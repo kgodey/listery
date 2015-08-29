@@ -46,8 +46,6 @@ class ListItem(OrderedModel):
 	updated_at = models.DateTimeField(auto_now=True)
 	description = models.TextField(null=True, blank=True)
 	completed = models.BooleanField(default=False)
-	assignee = models.ForeignKey(User, null=True, blank=True)
-	due_date = models.DateTimeField(null=True, blank=True)
 	list = models.ForeignKey(List)
 	order_with_respect_to = 'list'
 	
