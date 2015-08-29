@@ -81,7 +81,6 @@ $(function() {
 	
 	ListManager.Behaviors.ReorderBehavior = Marionette.Behavior.extend({
 		defaults: {
-			fetchItem: function() { return ListManager.AllLists },
 			parentView: function() { return ListManager.AllListsView }
 		},
 		events: {
@@ -99,8 +98,6 @@ $(function() {
 				self.view.model.errorState = true;
 				self.view.model.errorMessage = 'This item could not be reordered at this time. We\'ve restored it to its previous position. Please refresh the page and try again.';
 				self.options.parentView().render();
-			}).always(function() {
-				self.options.fetchItem().fetch();
 			});
 		}
 	});
@@ -389,7 +386,6 @@ $(function() {
 		behaviors: {
 			HoverBehavior: {},
 			ReorderBehavior: {
-				fetchItem: function() { return ListManager.CurrentList },
 				parentView: function() { return ListManager.CurrentListItemsView }
 			},
 			ErrorPopoverBehavior: {
