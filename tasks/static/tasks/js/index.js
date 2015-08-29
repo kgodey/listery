@@ -42,12 +42,18 @@ $(function() {
 	
 	ListManager.ListCollection = Backbone.Collection.extend({
 		model: ListManager.List,
-		url: '/api/v1/lists/'
+		url: '/api/v1/lists/',
+		comparator: function(model) {
+			return model.get('order');
+		}
 	});
 	
 	ListManager.ListItemCollection = Backbone.Collection.extend({
 		model: ListManager.ListItem,
-		url: '/api/v1/listitems/'
+		url: '/api/v1/listitems/',
+		comparator: function(model) {
+			return model.get('order');
+		}
 	});
 	
 	ListManager.UserCollection = Backbone.Collection.extend({
@@ -94,6 +100,9 @@ $(function() {
 			$.post(this.view.model.url() + 'reorder/', {
 				order: index,
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
+			}).done(function() {
+				var collection = self.options.parentView().collection;
+				collection.fetch({silent: true});
 			}).fail(function() {
 				self.view.model.errorState = true;
 				self.view.model.errorMessage = 'This item could not be reordered at this time. We\'ve restored it to its previous position. Please refresh the page and try again.';
@@ -263,10 +272,11 @@ $(function() {
 			},
 			function() {
 				self.saveAttributes({archived: true}, function() {
+					ListManager.AllLists.remove(self.model.get('id'));
 					if (ListManager.CurrentList === self.model) {
 						ListManager.setCurrentList(ListManager.AllLists.models[0]);
+						ListManager.AllListsView.render();
 					}
-					ListManager.AllLists.remove(self.model.get('id'));
 				});
 			});
 		},
