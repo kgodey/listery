@@ -170,6 +170,9 @@ $(function() {
 					this.saveName();
 				} else if (event.keyCode === 27) {
 					this.render();
+				} else {
+					this.$('.name-input').tooltip('destroy');
+					this.tooltipShown = false;
 				}
 			},
 		},
@@ -238,8 +241,16 @@ $(function() {
 			inputElement.val(this.model.get('name'));
 		},
 		saveName: function() {
-			if (this.$('.name-input').val()) {
-				this.saveAttributes({name: this.$('.name-input').val()});
+			var inputElement = this.$('.name-input');
+			if (inputElement.val()) {
+				this.saveAttributes({name: inputElement.val()});
+			} else {
+				inputElement.tooltip({
+					placement: 'top',
+					title: 'List names cannot be blank!'
+				});
+				inputElement.tooltip('show');
+				this.tooltipShown = true;
 			}
 		},
 		saveAttributes: function(attributes, success) {
@@ -353,6 +364,16 @@ $(function() {
 						inputElement.prop('disabled', false);
 					}
 				});
+			} else {
+				inputElement.tooltip({
+					placement: 'top',
+					title: 'List names cannot be blank!'
+				});
+				inputElement.tooltip('show');
+				this.tooltipShown = true;
+				setTimeout(function() {
+					inputElement.tooltip('destroy');
+				}, 60000);
 			}
 		},
 		processKeyUp: function(event) {
@@ -361,6 +382,11 @@ $(function() {
 			} else if (event.keyCode === 27) {
 				$('#new-list-name').val("");
 				$('#new-list-name').blur();
+			} else {
+				if (this.tooltipShown) {
+					this.$('#new-list-name').tooltip('destroy');
+					this.tooltipShown = false;
+				}
 			}
 		}
 	});
@@ -382,23 +408,26 @@ $(function() {
 		},
 		events: {
 			'click .delete-item': 'deleteItem',
-			'dblclick .edit-title': 'editTitle',
-			'dblclick .edit-description': 'editDescription',
-			'click .add-description': 'addDescription',
+			'dblclick': 'editTitleAndDescription',
 			'click .toggle-complete': 'toggleComplete',
-			'focusout .title-input': 'saveTitle',
-			'focusout .description-input': 'saveDescription',
+			'focusout .title-input': 'saveTitleAndDescription',
+			'focusout .description-input': 'saveTitleAndDescription',
 			'reorder': 'processReorder',
 			'keyup .title-input': function(event) {
 				if (event.keyCode === 13) {
-					this.saveTitle();
+					this.saveTitleAndDescription(true);
 				} else if (event.keyCode === 27) {
 					this.render();
+				} else {
+					if (this.tooltipShown) {
+						this.$el.tooltip('destroy');
+						this.tooltipShown = false;
+					}
 				}
 			},
 			'keyup .description-input': function(event) {
 				if (event.keyCode === 13) {
-					this.saveDescription();
+					this.saveTitleAndDescription(true);
 				} else if (event.keyCode === 27) {
 					this.render();
 				}
@@ -432,17 +461,47 @@ $(function() {
 		toggleHidden: function(className) {
 			this.$(className).toggleClass('hidden');
 		},
-		editTitle: function(event) {
-			var inputElement = this.$('.title-input');
-			this.toggleHidden('.toggle-on-title-edit');
-			inputElement.focus();
-			inputElement.val(this.model.get('title'));
+		editTitleAndDescription: function(event) {
+			var titleInputElement = this.$('.title-input');
+			var descriptionInputElement = this.$('.description-input');
+			this.toggleHidden('.toggle-on-title-description-edit');
+			if ($(event.target).hasClass('description')) {
+				descriptionInputElement.focus();
+			} else {
+				titleInputElement.focus();
+			}
+			descriptionInputElement.val(this.model.get('description'));
+			titleInputElement.val(this.model.get('title'));
 		},
-		editDescription: function(event) {
-			var inputElement = this.$('.description-input');
-			this.toggleHidden('.toggle-on-description-edit');
-			inputElement.focus();
-			inputElement.val(this.model.get('description'));
+		saveTitleAndDescription: function(isEnter) {
+			var titleInputElement = this.$('.title-input');
+			var descriptionInputElement = this.$('.description-input');
+			var self = this;
+			setTimeout(function() {
+				if ((!titleInputElement.is(':focus') && !descriptionInputElement.is(':focus')) || isEnter === true) {
+					if (!titleInputElement.val()) {
+						self.$el.tooltip({
+							placement: 'top',
+							title: 'List items cannot be blank!'
+						});
+						self.$el.tooltip('show');
+						self.tooltipShown = true;
+					} else {
+						var attrsToSave = {};
+						if (titleInputElement.val() != self.model.get('title')) {
+							attrsToSave.title = titleInputElement.val()
+						}
+						if (descriptionInputElement.val() != self.model.get('description')) {
+							attrsToSave.description = descriptionInputElement.val()
+						}
+						if (Object.keys(attrsToSave).length) {
+							self.saveAttributes(attrsToSave);
+						} else {
+							self.render();
+						}
+					}
+				}
+			}, 0);
 		},
 		saveAttributes: function(attributes) {
 			var self = this;
@@ -471,18 +530,6 @@ $(function() {
 		},
 		saveDescription: function() {
 			this.saveAttributes({description: this.$('.description-input').val()});
-		},
-		addDescription: function() {
-			var inputElement = this.$('.description-input');
-			var editSpan = this.$('.add-description');
-			this.toggleHidden('.toggle-on-description-edit');
-			editSpan.removeClass('glyphicon-plus');
-			if (inputElement.is(':visible')) {
-				inputElement.focus();
-				inputElement.val(this.model.get('description'));
-			} else {
-				this.model.saveAttributes({description: inputElement.val()});
-			}
 		},
 		toggleComplete: function() {
 			this.saveAttributes({completed: !this.model.get('completed')});
@@ -546,6 +593,16 @@ $(function() {
 						inputElement.prop('disabled', false);
 					}
 				});
+			} else {
+				inputElement.tooltip({
+					placement: 'top',
+					title: 'List items cannot be blank!'
+				});
+				inputElement.tooltip('show');
+				this.tooltipShown = true;
+				setTimeout(function() {
+					inputElement.tooltip('destroy');
+				}, 60000);
 			}
 		},
 		processKeyUp: function(event) {
@@ -554,6 +611,11 @@ $(function() {
 			} else if (event.keyCode === 27) {
 				$('.new-title').val("");
 				$('.new-title').blur();
+			} else {
+				if (this.tooltipShown) {
+					this.$('.new-title').tooltip('destroy');
+					this.tooltipShown = false;
+				}
 			}
 		},
 		updateItems: function() {

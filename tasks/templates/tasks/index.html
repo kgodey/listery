@@ -72,28 +72,24 @@
 			<input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>
 		</span>
 		<span class="edit-title" style="cursor: text;">
-			<span class="toggle-on-title-edit title"><%= title %></span>
+			<span class="toggle-on-title-description-edit title"><%= title %></span>
 		</span>
-		<span class="toggle-on-title-edit hidden">
-			<input type="text" class="title-input" style="width: 80%" maxlength=255>
+		<span class="toggle-on-title-description-edit hidden">
+			<input type="text" class="title-input" style="width: 80%" maxlength=255 placeholder="Title"/>
 		</span>
 		<span class="pull-right">
 			<img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
 			<span class="hover-options hidden">
-				<% if (!description) { %>
-					<span class="glyphicon glyphicon-plus add-description" style="cursor: pointer;"></span>
-					&nbsp;
-				<% } %>
 				<span class="glyphicon glyphicon-remove delete-item" style="cursor: pointer;"></span>
 			</span>
 		</span>
 		<span style="display: block; padding-left: 35px;">
 			<% if (description) { %>
 				<span class="edit-description">
-					<small><i><span class="description toggle-on-description-edit" style="margin-top: 0; padding-top:0;"><%= description %></span></i></small>
+					<small><i><span class="description toggle-on-title-description-edit" style="margin-top: 0; padding-top:0;"><%= description %></span></i></small>
 				</span>
 			<% } %>
-			<input type="textarea" class="toggle-on-description-edit description-input hidden" style="width: 80%"/>
+			<input type="textarea" class="toggle-on-title-description-edit description-input hidden" style="width: 84%; margin-top: 0.5em; font-size: 0.8em;" placeholder="Description"/>
 		</span>
 	</script>
 	<!-- END TEMPLATES -->
