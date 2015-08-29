@@ -243,7 +243,11 @@ $(function() {
 		saveName: function() {
 			var inputElement = this.$('.name-input');
 			if (inputElement.val()) {
-				this.saveAttributes({name: inputElement.val()});
+				if (inputElement.val() != this.model.get('name')) {
+					this.saveAttributes({name: inputElement.val()});
+				} else {
+					this.toggleHidden('.toggle-on-name-edit');
+				}
 			} else {
 				inputElement.tooltip({
 					placement: 'top',
@@ -505,7 +509,7 @@ $(function() {
 						if (Object.keys(attrsToSave).length) {
 							self.saveAttributes(attrsToSave);
 						} else {
-							self.render();
+							self.toggleHidden('.toggle-on-title-description-edit');
 						}
 					}
 				}
