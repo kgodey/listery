@@ -322,9 +322,9 @@ $(function() {
 				});
 				ListManager.NewList.save({}, {
 					success: function() {
+						self.collection.add(ListManager.NewList, {at: 0});
 						ListManager.setCurrentList(ListManager.NewList);
-						self.collection.add(ListManager.NewList);
-						self.render();
+						this.$('#new-list-name').val("");
 					},
 					error: function() {
 						ListManager.NewList.errorState = true;
@@ -429,10 +429,6 @@ $(function() {
 			this.model.save(attributes, {
 				patch: true,
 				wait: true,
-				success: function(model, response, options) {
-					var list = ListManager.AllLists.get(self.model.get('list'));
-					list.fetch();
-				},
 				error: function(model, response, options) {
 					self.model.errorState = true;
 					if ('title' in attributes) {
@@ -512,7 +508,8 @@ $(function() {
 				});
 				ListManager.NewListItem.save({}, {
 					success: function() {
-						ListManager.CurrentList.fetch({});
+						self.collection.add(ListManager.NewListItem, {at: 0});
+						this.$('.new-title').val("");
 					},
 					error: function() {
 						ListManager.NewListItem.errorState = true;
