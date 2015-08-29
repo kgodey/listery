@@ -148,9 +148,9 @@ $(function() {
 				var element = this.options.element(this.view);
 				var idName = 'dismiss-popover-' + model.get('id');
 				element.popover({
-					title: 'Error',
+					title: '<span class="glyphicon glyphicon-exclamation-sign pull-left"></span>Error<span class="glyphicon glyphicon-exclamation-sign pull-right"></span>',
 					html: true,
-					content: '<p>' + model.errorMessage + '</p><button id="' + idName + '">Got it!</button>',
+					content: '<p>' + model.errorMessage + '</p><button id="' + idName + '" class="btn btn-danger pull-right">OK</button>',
 					placement: 'auto left'
 				});
 				model.errorState = model.constructor.prototype.errorState;

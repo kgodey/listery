@@ -1,5 +1,20 @@
 {% extends 'tasks/base.html' %}
 {% load staticfiles %}
+{% block style %}
+<style>
+.popover-title {
+	color: white;
+	background: #d9534f;
+	border-color: #d43f3a;
+	font-size: 1.5em;
+	text-align: center;
+}
+.popover-content {
+    color: #d9534f;
+	display: inline-block;
+}
+</style>
+{% endblock %}
 {% block content %}
 	<div id="app-region" class="container">
 		<div class="row">
