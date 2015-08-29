@@ -244,6 +244,7 @@ $(function() {
 		},
 		saveAttributes: function(attributes, success) {
 			var self = this;
+			this.toggleHidden('.toggle-on-save');
 			this.model.save(attributes, {
 				patch: true,
 				wait: true,
@@ -330,21 +331,26 @@ $(function() {
 			});
 		},
 		createNewList: function() {
-			if (this.$('#new-list-name').val()) {
+			var inputElement = this.$('#new-list-name');
+			if (inputElement).val()) {
 				var self = this;
+				inputElement.prop('disabled', true);
 				ListManager.NewList = new ListManager.List({
-					name: this.$('#new-list-name').val(),
+					name: inputElement.val(),
 				});
 				ListManager.NewList.save({}, {
 					success: function() {
 						self.collection.add(ListManager.NewList, {at: 0});
 						ListManager.setCurrentList(ListManager.NewList);
-						this.$('#new-list-name').val("");
+						inputElement.val("");
 					},
 					error: function() {
 						ListManager.NewList.errorState = true;
 						ListManager.NewList.errorMessage = 'Sorry, we could not save this list to the server. Please try again and refresh the page if this continues to be an issue.';
 						self.$el.trigger('handle-potential-error');
+					},
+					complete: function() {
+						inputElement.prop('disabled', false);
 					}
 				});
 			}
@@ -518,21 +524,26 @@ $(function() {
 			});
 		},
 		createNewItem: function() {
-			if (this.$('.new-title').val()) {
+			var inputElement = this.$('.new-title');
+			if (inputElement.val()) {
 				var self = this;
+				inputElement.prop('disabled', true);
 				ListManager.NewListItem = new ListManager.ListItem({
-					title: this.$('.new-title').val(),
+					title: inputElement.val(),
 					list: ListManager.CurrentList.get('id'),
 				});
 				ListManager.NewListItem.save({}, {
 					success: function() {
 						self.collection.add(ListManager.NewListItem, {at: 0});
-						this.$('.new-title').val("");
+						inputElement.val("");
 					},
 					error: function() {
 						ListManager.NewListItem.errorState = true;
 						ListManager.NewListItem.errorMessage = 'Sorry, we could not save this item to the server. Please try again and refresh the page if this continues to be an issue.';
 						self.$el.trigger('handle-potential-error');
+					},
+					complete: function() {
+						inputElement.prop('disabled', false);
 					}
 				});
 			}
@@ -551,7 +562,7 @@ $(function() {
 	});
 	
 	ListManager.ListHeaderView = Marionette.ItemView.extend({
-		template: '#list-template',
+		template: '#list-header-template',
 		events: {
 			'click .toggle-private': 'togglePrivate',
 		},
@@ -571,6 +582,8 @@ $(function() {
 		},
 		togglePrivate: function() {
 			var self = this;
+			var inputElement = this.$('toggle-private');
+			inputElement.prop('disabled', true);
 			this.model.save({private: !this.model.get('private')}, {
 				patch: true,
 				wait: true,
@@ -581,6 +594,9 @@ $(function() {
 					self.render();
 					self.$el.trigger('handle-potential-error');
 				},
+				complete: function() {
+					inputElement.prop('disabled', false);
+				}
 			});
 		},
 		setCurrentList: function() {

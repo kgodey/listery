@@ -44,6 +44,7 @@
 		</span>
 		<span class="pull-right">
 			<span class="hover-options hidden">
+				<img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
 				<span class="glyphicon glyphicon-save download-item" style="cursor: pointer;"></span>&nbsp;
 				<span class="glyphicon glyphicon-pencil edit-name" style="cursor: pointer;"></span>&nbsp;
 				<span class="glyphicon glyphicon-remove archive-item" style="cursor: pointer;"></span>
@@ -51,7 +52,7 @@
 		</span>
 	</script>
 
-	<script id="list-template" type="text/template">
+	<script id="list-header-template" type="text/template">
 		<h1 style="margin-bottom: 20px; margin-top: 10px; display: inline-block;"><%= name %></h1>
 			<% if (owner === userID) { %>
 				<span class="label label-default" style="vertical-align: middle; margin-left: 10px;"><input type="checkbox" class="toggle-private" <%= private ? "" : "checked" %>/>&nbsp;Shared</span>
