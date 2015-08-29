@@ -136,24 +136,26 @@ $(function() {
 	
 	ListManager.Behaviors.ErrorPopoverBehavior = Marionette.Behavior.extend({
 		defaults: {
-			element: function(view) { return view.$el; }
+			element: function(view) { return view.$el; },
+			model: function(view) { return view.model; }
 		},
 		events: {
 			'handle-potential-error': 'handlePotentialError'
 		},
 		handlePotentialError: function() {
-			if (this.view.model.errorState) {
+			var model = this.options.model(this.view);
+			if (model && model.errorState) {
 				var element = this.options.element(this.view);
-				var idName = 'dismiss-popover-' + this.view.model.get('id');
+				var idName = 'dismiss-popover-' + model.get('id');
 				element.popover({
 					title: 'Error',
 					html: true,
-					content: '<p>' + this.view.model.errorMessage + '</p><button id="' + idName + '">Got it!</button>',
+					content: '<p>' + model.errorMessage + '</p><button id="' + idName + '">Got it!</button>',
 					placement: 'auto left'
 				});
-				this.view.model.errorState = this.view.model.constructor.prototype.errorState;
-				this.view.model.errorMessage = this.view.model.constructor.prototype.errorMessage;
-				this.view.model.errorAttribute = this.view.model.constructor.prototype.errorAttribute;
+				model.errorState = model.constructor.prototype.errorState;
+				model.errorMessage = model.constructor.prototype.errorMessage;
+				model.errorAttribute = model.constructor.prototype.errorAttribute;
 				element.popover('show');
 				$('#' + idName).click(function() {
 					element.popover('destroy');
@@ -214,6 +216,11 @@ $(function() {
 							success: function(model, response, options) {
 								oldList.fetch();
 								self.model.fetch();
+							},
+							error: function(model, response, options) {
+								self.model.errorState = true;
+								self.model.errorMessage = 'Sorry, we could not move the selected item into this list, so we\'ve restored its previous position. Please try again and refresh the page if this continues to be an issue.';
+								self.$el.trigger('handle-potential-error');
 							},
 						});
 					}
@@ -303,6 +310,16 @@ $(function() {
 		events: {
 			'keyup #new-list-name': 'processKeyUp',
 		},
+		behaviors: {
+			ErrorPopoverBehavior: {
+				element: function(view) {
+					return view.$('#new-list-name');
+				},
+				model: function(view) {
+					return ListManager.NewList;
+				}
+			}
+		},
 		initialize: function() {
 			this.listenTo(this.collection, "change", this.render);
 			this.listenTo(this.collection, "sync", this.render);
@@ -322,14 +339,19 @@ $(function() {
 		createNewList: function() {
 			if (this.$('#new-list-name').val()) {
 				var self = this;
-				var newList = new ListManager.List({
+				ListManager.NewList = new ListManager.List({
 					name: this.$('#new-list-name').val(),
 				});
-				newList.save({}, {
+				ListManager.NewList.save({}, {
 					success: function() {
-						ListManager.setCurrentList(newList);
-						self.collection.add(newList);
+						ListManager.setCurrentList(ListManager.NewList);
+						self.collection.add(ListManager.NewList);
 						self.render();
+					},
+					error: function() {
+						ListManager.NewList.errorState = true;
+						ListManager.NewList.errorMessage = 'Sorry, we could not save this list to the server. Please try again and refresh the page if this continues to be an issue.';
+						self.$el.trigger('handle-potential-error');
 					}
 				});
 			}
@@ -480,6 +502,16 @@ $(function() {
 		events: {
 			'keyup .new-title': 'processKeyUp',
 		},
+		behaviors: {
+			ErrorPopoverBehavior: {
+				element: function(view) {
+					return view.$('.new-title');
+				},
+				model: function(view) {
+					return ListManager.NewListItem;
+				}
+			}
+		},
 		initialize: function() {
 			this.listenTo(ListManager.CurrentList, "change", this.updateItems);
 			this.listenTo(this.collection, "change", this.render);
@@ -496,13 +528,19 @@ $(function() {
 		},
 		createNewItem: function() {
 			if (this.$('.new-title').val()) {
-				var listItem = new ListManager.ListItem({
+				var self = this;
+				ListManager.NewListItem = new ListManager.ListItem({
 					title: this.$('.new-title').val(),
 					list: ListManager.CurrentList.get('id'),
 				});
-				listItem.save({}, {
+				ListManager.NewListItem.save({}, {
 					success: function() {
 						ListManager.CurrentList.fetch({});
+					},
+					error: function() {
+						ListManager.NewListItem.errorState = true;
+						ListManager.NewListItem.errorMessage = 'Sorry, we could not save this item to the server. Please try again and refresh the page if this continues to be an issue.';
+						self.$el.trigger('handle-potential-error');
 					}
 				});
 			}
