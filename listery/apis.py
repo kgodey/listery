@@ -8,8 +8,8 @@ from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from tasks.models import List, ListItem
-from tasks.serializers import UserSerializer, ListSerializer, ListItemSerializer
+from listery.models import List, ListItem
+from listery.serializers import UserSerializer, ListSerializer, ListItemSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

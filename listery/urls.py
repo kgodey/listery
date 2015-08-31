@@ -3,7 +3,7 @@ from rest_framework import routers
 from rest_framework import urls as rest_framework_urls
 from rest_framework.authtoken import views as rest_framework_views
 
-from tasks import apis, views
+from listery import apis, views
 
 
 router = routers.DefaultRouter()

@@ -1,4 +1,4 @@
-{% extends 'tasks/base.html' %}
+{% extends 'listery/base.html' %}
 {% load staticfiles %}
 {% block style %}
 <style>
@@ -44,7 +44,7 @@
 		</span>
 		<span class="pull-right">
 			<span class="hover-options hidden">
-				<img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
+				<img src="{% static 'listery/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
 				<span class="glyphicon glyphicon-save download-item" style="cursor: pointer;"></span>&nbsp;
 				<span class="glyphicon glyphicon-pencil edit-name" style="cursor: pointer;"></span>&nbsp;
 				<span class="glyphicon glyphicon-remove archive-item" style="cursor: pointer;"></span>
@@ -78,7 +78,7 @@
 			<input type="text" class="title-input" style="width: 80%" maxlength=255 placeholder="Title"/>
 		</span>
 		<span class="pull-right">
-			<img src="{% static 'tasks/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
+			<img src="{% static 'listery/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
 			<span class="hover-options hidden">
 				<span class="glyphicon glyphicon-remove delete-item" style="cursor: pointer;"></span>
 			</span>
@@ -99,5 +99,5 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'tasks/js/index.js' %}"></script>
+	<script src="{% static 'listery/js/index.js' %}"></script>
 {% endblock %}
