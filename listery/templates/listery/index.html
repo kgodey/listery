@@ -53,10 +53,18 @@
 	</script>
 
 	<script id="list-header-template" type="text/template">
-		<h1 style="margin-bottom: 20px; margin-top: 10px; display: inline-block;"><%= name %></h1>
-			<% if (owner === userID) { %>
-				<span class="label label-default" style="vertical-align: middle; margin-left: 10px;"><input type="checkbox" class="toggle-private" <%= private ? "" : "checked" %>/>&nbsp;Shared</span>
-			<% } %>
+		<div class="row" style="margin-bottom: 20px;">
+			<div class="col-md-10">
+				<h1 style="margin-top: 10px;"><%= name %></h1>
+			</div>
+			<div class="col-md-2">
+				<div style="margin-top: 20px;">
+					<% if (owner === userID) { %>
+						<span class="label label-default" style="vertical-align: middle; margin-left: 10px;"><input type="checkbox" class="toggle-private" <%= private ? "" : "checked" %>/>&nbsp;Shared</span>
+					<% } %>
+				</div>
+			</div>
+		</div>
 	</script>
 	
 	<script id="list-items-template" type="text/template">
