@@ -106,7 +106,12 @@ $(function() {
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
 			}).done(function() {
 				var collection = self.options.parentView().collection;
-				collection.fetch({silent: true});
+				collection.fetch({
+					silent: true,
+					success: function(collection, response, options) {
+						collection.sort();
+					}
+				});
 			}).fail(function() {
 				self.view.model.errorState = true;
 				self.view.model.errorMessage = 'This item could not be reordered at this time. We\'ve restored it to its previous position. Please refresh the page and try again.';
