@@ -38,7 +38,7 @@
 	</script>
 
 	<script id="list-name-template" type="text/template">
-		<div class="toggle-on-name-edit" style="width: 75%; display: inline-block;"><%= name %></div>
+		<div class="toggle-on-name-edit" style="width: 75%; display: inline-block;"><%- name %></div>
 		<span class="toggle-on-name-edit hidden">
 			<input type="text" class="name-input" style="width: 75%; color: black;" maxlength=255 placeholder="Name">
 		</span>
@@ -55,7 +55,7 @@
 	<script id="list-header-template" type="text/template">
 		<div class="row" style="margin-bottom: 20px;">
 			<div class="col-md-10">
-				<h1 style="margin-top: 10px;"><%= name %></h1>
+				<h1 style="margin-top: 10px;"><%- name %></h1>
 			</div>
 			<div class="col-md-2">
 				<div style="margin-top: 20px;">
@@ -80,7 +80,7 @@
 			<input type="checkbox" class="toggle-complete" <%= completed ? "checked" : "" %>/>
 		</span>
 		<span class="edit-title" style="cursor: text;">
-			<div class="toggle-on-title-description-edit title" style="width: 90%; display: inline-block;"><%= title %></div>
+			<div class="toggle-on-title-description-edit title" style="width: 90%; display: inline-block;"><%- title %></div>
 		</span>
 		<span class="toggle-on-title-description-edit hidden">
 			<input type="text" class="title-input" style="width: 80%" maxlength=255 placeholder="Title"/>
@@ -94,7 +94,7 @@
 		<span style="display: block; padding-left: 35px;">
 			<% if (description) { %>
 				<span class="edit-description">
-					<small><i><span class="description toggle-on-title-description-edit" style="margin-top: 0; padding-top:0;"><%= description %></span></i></small>
+					<small><i><span class="description toggle-on-title-description-edit" style="margin-top: 0; padding-top:0;"><%- description %></span></i></small>
 				</span>
 			<% } %>
 			<input type="textarea" class="toggle-on-title-description-edit description-input hidden" style="width: 84%; margin-top: 0.5em; font-size: 0.8em;" placeholder="Description"/>
