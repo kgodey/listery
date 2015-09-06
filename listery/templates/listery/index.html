@@ -38,15 +38,10 @@
 	</script>
 
 	<script id="list-name-template" type="text/template">
-		<div class="toggle-on-name-edit" style="width: 75%; display: inline-block;"><%- name %></div>
-		<span class="toggle-on-name-edit hidden">
-			<input type="text" class="name-input" style="width: 75%; color: black;" maxlength=255 placeholder="Name">
-		</span>
+		<div style="width: 80%; display: inline-block;"><%- name %></div>
 		<span class="pull-right">
 			<span class="hover-options hidden">
-				<img src="{% static 'listery/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
 				<span class="glyphicon glyphicon-save download-item" style="cursor: pointer;"></span>&nbsp;
-				<span class="glyphicon glyphicon-pencil edit-name" style="cursor: pointer;"></span>&nbsp;
 				<span class="glyphicon glyphicon-remove archive-item" style="cursor: pointer;"></span>
 			</span>
 		</span>
@@ -54,12 +49,16 @@
 
 	<script id="list-header-template" type="text/template">
 		<div class="row" style="margin-bottom: 20px;">
-			<div class="col-md-10">
-				<h1 style="margin-top: 10px;"><%- name %></h1>
+			<div class="col-md-10 edit-name">
+				<h1 class="toggle-on-name-edit" style="margin-top: 10px;"><%- name %></h1>
+				<span class="toggle-on-name-edit hidden">
+					<input type="text" class="name-input" style="width: 75%; color: black;" maxlength=255 placeholder="Name">
+				</span>
 			</div>
 			<div class="col-md-2">
 				<div style="margin-top: 20px;">
 					<% if (owner === userID) { %>
+						<img src="{% static 'listery/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
 						<span class="label label-default" style="vertical-align: middle; margin-left: 10px;"><input type="checkbox" class="toggle-private" <%= private ? "" : "checked" %>/>&nbsp;Shared</span>
 					<% } %>
 				</div>

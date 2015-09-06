@@ -160,26 +160,11 @@ $(function() {
 			}
 			return 'list-group-item droppable sortable-list-name';
 		},
-		initialize: function() {
-			this.listenTo(this.model, "change", this.updateHeader);
-		},
 		template: '#list-name-template',
 		events: {
 			'click': 'switchList',
 			'click .archive-item': 'archiveItem',
-			'click .download-item': 'downloadItem',
-			'click .edit-name': 'editName',
-			'focusout .name-input': 'saveName',
-			'keyup .name-input': function(event) {
-				if (event.keyCode === 13) {
-					this.saveName();
-				} else if (event.keyCode === 27) {
-					this.render();
-				} else {
-					this.$('.name-input').tooltip('destroy');
-					this.tooltipShown = false;
-				}
-			},
+			'click .download-item': 'downloadItem'
 		},
 		behaviors: {
 			HoverBehavior: {},
@@ -220,70 +205,22 @@ $(function() {
 			if ($(event.target).hasClass('noclick')) {
 				$(event.target).removeClass('noclick');
 			} else {
-				if (!$(event.target).hasClass('edit-name')) {
-					var self = this;
-					this.model.fetch({
-						error: function(model, response, options) {
-							self.model.errorState = true;
-							self.model.errorMessage = 'Sorry, there was an error switching to this list. Please try again and refresh the page if this continues to be an issue.';
-							self.$el.trigger('handle-potential-error');
-						},
-						success: function(model, response, options) {
-							ListManager.setCurrentList(self.model);
-							ListManager.AllListsView.render();
-						}
-					});
-				}
+				var self = this;
+				this.model.fetch({
+					error: function(model, response, options) {
+						self.model.errorState = true;
+						self.model.errorMessage = 'Sorry, there was an error switching to this list. Please try again and refresh the page if this continues to be an issue.';
+						self.$el.trigger('handle-potential-error');
+					},
+					success: function(model, response, options) {
+						ListManager.setCurrentList(self.model);
+						ListManager.AllListsView.render();
+					}
+				});
 			}
 		},
 		toggleHidden: function(className) {
 			this.$(className).toggleClass('hidden');
-		},
-		editName: function() {
-			var inputElement = this.$('.name-input');
-			this.toggleHidden('.toggle-on-name-edit');
-			inputElement.focus();
-			inputElement.val(this.model.get('name'));
-		},
-		saveName: function() {
-			var inputElement = this.$('.name-input');
-			if (inputElement.val()) {
-				if (inputElement.val() != this.model.get('name')) {
-					this.saveAttributes({name: inputElement.val()});
-				} else {
-					this.toggleHidden('.toggle-on-name-edit');
-				}
-			} else {
-				inputElement.tooltip({
-					placement: 'top',
-					title: 'List names cannot be blank!'
-				});
-				inputElement.tooltip('show');
-				this.tooltipShown = true;
-			}
-		},
-		saveAttributes: function(attributes, success) {
-			var self = this;
-			this.toggleHidden('.toggle-on-save');
-			this.model.save(attributes, {
-				patch: true,
-				wait: true,
-				error: function(model, response, options) {
-					self.model.errorState = true;
-					if ('name' in attributes) {
-						self.model.errorMessage = 'Sorry, the changed name could not be saved to the server, so we\'ve restored the previous name. Please try again and refresh the page if this continues to be an issue.';
-					} else if ('archived' in attributes) {
-						self.model.errorMessage = 'Sorry, the list could not be archived, so we\'ve restored it to its previous state. Please try again and refresh the page if this continues to be an issue.';
-					}
-					self.render();
-					self.$el.trigger('handle-potential-error');
-				},
-				success: function(model, response, options) {
-					if (success) {
-						success(model, response, options);
-					}
-				},
-			});
 		},
 		archiveItem: function() {
 			var self = this;
@@ -296,23 +233,28 @@ $(function() {
 				closeOnConfirm: true
 			},
 			function() {
-				self.saveAttributes({archived: true}, function() {
-					ListManager.AllLists.remove(self.model.get('id'));
-					if (ListManager.CurrentList === self.model) {
-						ListManager.setCurrentList(ListManager.AllLists.models[0]);
-						ListManager.AllListsView.render();
-					}
+				self.model.save({archived: true}, {
+					patch: true,
+					wait: true,
+					success: function() {
+						ListManager.AllLists.remove(self.model.get('id'));
+						if (ListManager.CurrentList === self.model) {
+							ListManager.setCurrentList(ListManager.AllLists.models[0]);
+							ListManager.AllListsView.render();
+						}
+					},
+					error: function(model, response, options) {
+						self.model.errorState = true;
+						self.model.errorMessage = 'Sorry, the list could not be archived, so we\'ve restored it to its previous state. Please try again and refresh the page if this continues to be an issue.';
+						self.render();
+						self.$el.trigger('handle-potential-error');
+					},
 				});
 			});
 		},
 		downloadItem: function(event, model, index) {
 			$('#download-form').attr('action', this.model.url() + 'download/');
 			$('#download-form').submit();
-		},
-		updateHeader: function() {
-			if (ListManager.CurrentList == this.model) {
-				ListManager.CurrentListHeaderView.model.set(this.model.toJSON());
-			}
 		}
 	});
 	
@@ -636,6 +578,18 @@ $(function() {
 		template: '#list-header-template',
 		events: {
 			'click .toggle-private': 'togglePrivate',
+			'dblclick .edit-name': 'editName',
+			'focusout .name-input': 'saveName',
+			'keyup .name-input': function(event) {
+				if (event.keyCode === 13) {
+					this.saveName();
+				} else if (event.keyCode === 27) {
+					this.render();
+				} else {
+					this.$('.name-input').tooltip('destroy');
+					this.tooltipShown = false;
+				}
+			},
 		},
 		behaviors: {
 			ErrorPopoverBehavior: {
@@ -652,20 +606,30 @@ $(function() {
 			this.listenTo(this.model, "change", this.setCurrentList);
 		},
 		togglePrivate: function() {
-			var self = this;
 			var inputElement = this.$('toggle-private');
 			inputElement.prop('disabled', true);
-			this.model.save({private: !this.model.get('private')}, {
+			this.model.saveAttributes({private: !this.model.get('private')});
+		},
+		saveAttributes: function(attributes) {
+			var self = this;
+			this.toggleHidden('.toggle-on-save');
+			this.model.save(attributes, {
 				patch: true,
 				wait: true,
 				error: function(model, response, options) {
 					self.model.errorState = true;
-					self.model.errorMessage = 'Sorry, your changes could not be saved to the server, so we\'ve restored them to their previous state. Please refresh the page if this continues to be an issue.';
-					self.model.errorAttribute = 'private';
+					if ('name' in attributes) {
+						self.model.errorMessage = 'Sorry, the changed name could not be saved to the server, so we\'ve restored the previous name. Please try again and refresh the page if this continues to be an issue.';
+						self.model.errorAttribute = 'name';
+					} else if ('private' in attributes) {
+						self.model.errorMessage = 'Sorry, your change in sharing status could not be saved to the server, so we\'ve restored it to the previous state. Please refresh the page if this continues to be an issue.';
+						self.model.errorAttribute = 'private';
+					}
 					self.render();
 					self.$el.trigger('handle-potential-error');
 				},
 				complete: function() {
+					var inputElement = self.$('toggle-private');
 					inputElement.prop('disabled', false);
 				}
 			});
@@ -673,6 +637,32 @@ $(function() {
 		setCurrentList: function() {
 			ListManager.setCurrentList(this.model);
 			this.render();
+		},
+		toggleHidden: function(className) {
+			this.$(className).toggleClass('hidden');
+		},
+		editName: function() {
+			var inputElement = this.$('.name-input');
+			this.toggleHidden('.toggle-on-name-edit');
+			inputElement.focus();
+			inputElement.val(this.model.get('name'));
+		},
+		saveName: function() {
+			var inputElement = this.$('.name-input');
+			if (inputElement.val()) {
+				if (inputElement.val() != this.model.get('name')) {
+					this.saveAttributes({name: inputElement.val()});
+				} else {
+					this.toggleHidden('.toggle-on-name-edit');
+				}
+			} else {
+				inputElement.tooltip({
+					placement: 'top',
+					title: 'List names cannot be blank!'
+				});
+				inputElement.tooltip('show');
+				this.tooltipShown = true;
+			}
 		}
 	});
 	
