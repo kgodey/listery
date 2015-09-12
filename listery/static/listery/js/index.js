@@ -91,7 +91,8 @@ $(function() {
 	
 	ListManager.Behaviors.ReorderBehavior = Marionette.Behavior.extend({
 		defaults: {
-			parentView: function() { return ListManager.AllListsView }
+			parentView: function() { return ListManager.AllListsView },
+			fetchItem: function() { return ListManager.AllLists }
 		},
 		events: {
 			'reorder': 'processReorder'
@@ -105,12 +106,8 @@ $(function() {
 				order: index,
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
 			}).done(function() {
-				var collection = self.options.parentView().collection;
-				collection.fetch({
-					silent: true,
-					success: function(collection, response, options) {
-						collection.sort();
-					}
+				self.options.fetchItem().fetch({
+					silent: true
 				});
 			}).fail(function() {
 				self.view.model.errorState = true;
@@ -387,7 +384,8 @@ $(function() {
 		behaviors: {
 			HoverBehavior: {},
 			ReorderBehavior: {
-				parentView: function() { return ListManager.CurrentListItemsView }
+				parentView: function() { return ListManager.CurrentListItemsView },
+				fetchItem: function() { return ListManager.CurrentList }
 			},
 			ErrorPopoverBehavior: {
 				element: function(view) {
