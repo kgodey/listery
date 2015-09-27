@@ -606,7 +606,7 @@ $(function() {
 		togglePrivate: function() {
 			var inputElement = this.$('toggle-private');
 			inputElement.prop('disabled', true);
-			this.model.saveAttributes({private: !this.model.get('private')});
+			this.saveAttributes({private: !this.model.get('private')});
 		},
 		saveAttributes: function(attributes) {
 			var self = this;
