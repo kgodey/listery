@@ -2,6 +2,12 @@
 
 Listery is a simple single-page list management application built with Django and Backbone/Marionette. It has an intuitive drag and drop interface, supports multiple users with a simple shared list mechanic, and can export lists to text files.
 
+## Demo
+
+A Listery demo is available at https://dry-scrubland-6661.herokuapp.com/. There are two user accounts available:  
+Username: `demo1`, password: `demo1`  
+Username: `demo2`, password: `demo2`  
+
 ## Local setup
 
 You should be able to run Listery locally using the example project provided.

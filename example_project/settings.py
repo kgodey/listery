@@ -127,7 +127,7 @@ REST_FRAMEWORK = {
 	)
 }
 
-LISTERY_TITLE = 'Listery'
+LISTERY_TITLE = 'Listery Demo'
 
 # Heroku settings
 
