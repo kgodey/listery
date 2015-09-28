@@ -8,7 +8,7 @@ You should be able to run Listery locally using the example project provided.
 
 ## Using Listery as an app
 
-1. Add the following to your `INSTALLED_APPS` in your project `settings.py` file:
+* Add the following to your `INSTALLED_APPS` in your project `settings.py` file:
 
 ```
 'ordered_model',
@@ -17,13 +17,13 @@ You should be able to run Listery locally using the example project provided.
 'listery',
 ```
 
-2. Add the following to your template context processors in your project `settings.py` file:
+* Add the following to your template context processors in your project `settings.py` file:
 
 ```
 'listery.context_processors.listery_info'
 ```
 
-3. Make sure your Django REST framework setup has session authentication and token authentication enabled. The settings are:
+* Make sure your Django REST framework setup has session authentication and token authentication enabled. The settings are:
 
 ```
 REST_FRAMEWORK = {
@@ -34,4 +34,4 @@ REST_FRAMEWORK = {
 }
 ```
 
-4. Optionally set your site title using the setting `LISTERY_TITLE`
+* Optionally set your site title using the setting `LISTERY_TITLE`
