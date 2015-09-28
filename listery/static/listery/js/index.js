@@ -61,6 +61,21 @@ $(function() {
 		url: '/api/v1/users/'
 	});
 	
+	/** ROUTERS **/
+	
+	ListManager.BaseRouter = Marionette.AppRouter.extend({
+		appRoutes: {
+			'list/:id': 'openList',
+		}
+	});
+	
+	var routerController = {
+		openList: function(id) {
+			var list = ListManager.AllLists.get(id);
+			ListManager.setCurrentList(list);
+		}
+	}
+	
 	/** BEHAVIORS **/
 	
     Marionette.Behaviors.behaviorsLookup = function() {
@@ -668,6 +683,8 @@ $(function() {
 	
 	ListManager.setCurrentList = function(list) {
 		if (ListManager.CurrentList != list) {
+			var id = list.get('id');
+			ListManager.Router.navigate('list/' + id);
 			ListManager.CurrentList = list;
 			ListManager.CurrentListItems = new ListManager.ListItemCollection();
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
@@ -709,13 +726,25 @@ $(function() {
 		
 		ListManager.AllLists.fetch({
 			success: function() {
-				ListManager.setCurrentList(ListManager.AllLists.models[0]);
+				var currentURL = Backbone.history.getFragment();
+				if (currentURL) {
+					var listID = parseInt(currentURL.replace('list/', ''));
+					ListManager.setCurrentList(ListManager.AllLists.get(listID));
+				} else {
+					ListManager.setCurrentList(ListManager.AllLists.models[0]);
+				}
 			}
 		});
 		
 		ListManager.Users.fetch({});
 		
 		ListManager.regions.allLists.show(ListManager.AllListsView);
+		ListManager.Router = new ListManager.BaseRouter({
+			controller: routerController
+		});
+		if (Backbone.history) {
+			Backbone.history.start();
+		}
 	});
 
 	ListManager.start();
