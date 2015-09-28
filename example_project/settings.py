@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +27,7 @@ SECRET_KEY = 'k-zm+%gr*35fba72&vz^n14ino1&)+kmg7peg23f_%cv!$z&yc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -81,12 +83,17 @@ WSGI_APPLICATION = 'example_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if 'DATABASE_URL' in os.environ:
+	DATABASES = {
+		'default': dj_database_url.config(),
 	}
-}
+else:
+	DATABASES = {
+		'default': {
+			'ENGINE': 'django.db.backends.sqlite3',
+			'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+		}
+	}
 
 
 # Internationalization
@@ -121,3 +128,17 @@ REST_FRAMEWORK = {
 }
 
 LISTERY_TITLE = 'Listery'
+
+# Heroku settings
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+if 'DATABASE_URL' in os.environ:
+	# Static asset configuration
+	BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+	STATIC_ROOT = 'staticfiles'
+
+	STATICFILES_DIRS = (
+	    os.path.join(BASE_DIR, 'static'),
+	)
