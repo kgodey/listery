@@ -441,14 +441,16 @@ $(function() {
 		editTitleAndDescription: function(event) {
 			var titleInputElement = this.$('.title-input');
 			var descriptionInputElement = this.$('.description-input');
-			this.toggleHidden('.toggle-on-title-description-edit');
-			if ($(event.target).hasClass('description')) {
-				descriptionInputElement.focus();
-			} else {
-				titleInputElement.focus();
+			if (!titleInputElement.is(':visible')) {
+				this.toggleHidden('.toggle-on-title-description-edit');
+				if ($(event.target).hasClass('description')) {
+					descriptionInputElement.focus();
+				} else {
+					titleInputElement.focus();
+				}
+				descriptionInputElement.val(this.model.get('description'));
+				titleInputElement.val(this.model.get('title'));
 			}
-			descriptionInputElement.val(this.model.get('description'));
-			titleInputElement.val(this.model.get('title'));
 		},
 		saveTitleAndDescription: function(isEnter) {
 			var titleInputElement = this.$('.title-input');
@@ -661,9 +663,11 @@ $(function() {
 		},
 		editName: function() {
 			var inputElement = this.$('.name-input');
-			this.toggleHidden('.toggle-on-name-edit');
-			inputElement.focus();
-			inputElement.val(this.model.get('name'));
+			if (!inputElement.is(':visible')) {
+				this.toggleHidden('.toggle-on-name-edit');
+				inputElement.focus();
+				inputElement.val(this.model.get('name'));
+			}
 		},
 		saveName: function() {
 			var inputElement = this.$('.name-input');
