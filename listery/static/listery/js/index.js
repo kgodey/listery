@@ -419,6 +419,8 @@ $(function() {
 				closeOnConfirm: true
 			},
 			function(){
+				var currentScrollX = window.scrollX;
+				var currentScrollY = window.scrollY;
 				self.model.destroy({
 					wait: true,
 					error: function() {
@@ -426,6 +428,9 @@ $(function() {
 						self.model.errorMessage = 'Sorry, we could not delete this item on the server, so we\'ve restored it to its previous position. Please try again and refresh the page if this continues to be an issue.';
 						self.render();
 						self.$el.trigger('handle-potential-error');
+					},
+					success: function() {
+						window.scrollTo(currentScrollX, currentScrollY);
 					}
 				});
 			});
