@@ -484,6 +484,8 @@ $(function() {
 		},
 		saveAttributes: function(attributes) {
 			var self = this;
+			var currentScrollX = window.scrollX;
+			var currentScrollY = window.scrollY;
 			this.toggleHidden('.toggle-on-save');
 			this.model.save(attributes, {
 				patch: true,
@@ -499,6 +501,9 @@ $(function() {
 					}
 					self.render();
 					self.$el.trigger('handle-potential-error');
+				},
+				success: function() {
+					window.scrollTo(currentScrollX, currentScrollY);
 				}
 			});
 		},
