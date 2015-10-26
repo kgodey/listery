@@ -603,6 +603,7 @@ $(function() {
 		template: '#list-header-template',
 		events: {
 			'click .toggle-private': 'togglePrivate',
+			'click .quick-sort': 'quickSort',
 			'dblclick .edit-name': 'editName',
 			'focusout .name-input': 'saveName',
 			'keyup .name-input': function(event) {
@@ -657,6 +658,19 @@ $(function() {
 					var inputElement = self.$('toggle-private');
 					inputElement.prop('disabled', false);
 				}
+			});
+		},
+		quickSort: function() {
+			var self = this;
+			$.post(this.model.url() + 'quick_sort/', {
+				csrfmiddlewaretoken: $.cookie('csrftoken'),
+			}).done(function() {
+				self.model.fetch({});
+			}).fail(function() {
+				self.model.errorState = true;
+				self.model.errorAttribute = 'name';
+				self.model.errorMessage = 'This list could not be sorted at this time. Please refresh the page if this continues to be an issue.';
+				self.$el.trigger('handle-potential-error');
 			});
 		},
 		setCurrentList: function() {

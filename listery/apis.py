@@ -29,6 +29,13 @@ class ListViewSet(viewsets.ModelViewSet):
 	def get_queryset(self):
 		return self.queryset.filter(Q(owner=self.request.user) | Q(private=False))
 	
+	@detail_route(methods=['post'])
+	def quick_sort(self, request, pk=None):
+		item = self.get_object()
+		item.quick_sort()
+		serializer = ListSerializer(item)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+	
 	@detail_route(methods=['get', 'post'])
 	def download(self, request, pk=None):
 		item = self.get_object()

@@ -40,6 +40,19 @@ class List(OrderedModel):
 		super(List, self).save(*args, **kwargs)
 		if move_to_top:
 			self.to(1)
+	
+	def quick_sort(self):
+		index = 1
+		non_completed = self.items.filter(completed=False).order_by('title')
+		completed = self.items.filter(completed=True).order_by('title')
+		for item in non_completed:
+			item.order = index
+			item.save()
+			index += 1
+		for item in completed:
+			item.order = index
+			item.save()
+			index += 1
 
 
 class ListItem(OrderedModel):
