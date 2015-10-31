@@ -41,6 +41,13 @@ class List(OrderedModel):
 		if move_to_top:
 			self.to(1)
 	
+	def reindex(self):
+		index = 1
+		for item in self.items:
+			item.order = index
+			item.save()
+			index += 1
+	
 	def quick_sort(self):
 		index = 1
 		non_completed = self.items.filter(completed=False).order_by('title')
@@ -69,12 +76,17 @@ class ListItem(OrderedModel):
 	
 	def save(self, *args, **kwargs):
 		move_to_top = False
+		old_list = None
 		if not self.pk:
 			move_to_top = True
 		else:
 			old_item = ListItem.objects.get(id=self.pk)
 			if old_item.list != self.list:
+				old_list = old_item.list
 				move_to_top = True
 		super(ListItem, self).save(*args, **kwargs)
 		if move_to_top:
 			self.to(1)
+			self.list.reindex()
+		if old_list:
+			old_list.reindex()
