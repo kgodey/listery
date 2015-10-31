@@ -532,6 +532,7 @@ $(function() {
 		initialize: function() {
 			this.listenTo(ListManager.CurrentList, "change", this.updateItems);
 			this.listenTo(this.collection, "change", this.render);
+			this.listenTo(this.collection, "reset", this.render);
 		},
 		onDomRefresh: function() {
 			this.$('.new-title').focus();
@@ -595,7 +596,7 @@ $(function() {
 			}
 		},
 		updateItems: function() {
-			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
+			ListManager.CurrentListItems.reset(ListManager.CurrentList.get('items'));
 		}
 	});
 	
