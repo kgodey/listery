@@ -205,7 +205,7 @@ $(function() {
 							},
 							error: function(model, response, options) {
 								self.model.errorState = true;
-								self.model.errorMessage = 'Sorry, we could not move the selected item into this list, so we\'ve restored its previous position. Please try again and refresh the page if this continues to be an issue.';
+								self.model.errorMessage = ListManager.ParseError(response, 'Sorry, we could not move the selected item into this list, so we\'ve restored its previous position. Please try again and refresh the page if this continues to be an issue.');
 								self.$el.trigger('handle-potential-error');
 							},
 						});
@@ -221,7 +221,7 @@ $(function() {
 				this.model.fetch({
 					error: function(model, response, options) {
 						self.model.errorState = true;
-						self.model.errorMessage = 'Sorry, there was an error switching to this list. Please try again and refresh the page if this continues to be an issue.';
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, there was an error switching to this list. Please try again and refresh the page if this continues to be an issue.');
 						self.$el.trigger('handle-potential-error');
 					},
 					success: function(model, response, options) {
@@ -257,7 +257,7 @@ $(function() {
 					},
 					error: function(model, response, options) {
 						self.model.errorState = true;
-						self.model.errorMessage = 'Sorry, the list could not be archived, so we\'ve restored it to its previous state. Please try again and refresh the page if this continues to be an issue.';
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, the list could not be archived, so we\'ve restored it to its previous state. Please try again and refresh the page if this continues to be an issue.');
 						self.render();
 						self.$el.trigger('handle-potential-error');
 					},
@@ -318,9 +318,9 @@ $(function() {
 						ListManager.setCurrentList(ListManager.NewList);
 						inputElement.val("");
 					},
-					error: function() {
+					error: function(model, response, options) {
 						ListManager.NewList.errorState = true;
-						ListManager.NewList.errorMessage = 'Sorry, we could not save this list to the server. Please try again and refresh the page if this continues to be an issue.';
+						ListManager.NewList.errorMessage = ListManager.ParseError(response, 'Sorry, we could not save this list to the server. Please try again and refresh the page if this continues to be an issue.');
 						self.$el.trigger('handle-potential-error');
 					},
 					complete: function() {
@@ -423,9 +423,9 @@ $(function() {
 				var currentScrollY = window.scrollY;
 				self.model.destroy({
 					wait: true,
-					error: function() {
+					error: function(model, response, options) {
 						self.model.errorState = true;
-						self.model.errorMessage = 'Sorry, we could not delete this item on the server, so we\'ve restored it to its previous position. Please try again and refresh the page if this continues to be an issue.';
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, we could not delete this item on the server, so we\'ve restored it to its previous position. Please try again and refresh the page if this continues to be an issue.');
 						self.render();
 						self.$el.trigger('handle-potential-error');
 					},
@@ -493,11 +493,11 @@ $(function() {
 				error: function(model, response, options) {
 					self.model.errorState = true;
 					if ('title' in attributes) {
-						self.model.errorMessage = 'Sorry, the updated title could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.';
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, the updated title could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.');
 					} else if ('description' in attributes) {
-						self.model.errorMessage = 'Sorry, the updated description could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.';
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, the updated description could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.');
 					} else if ('completed' in attributes) {
-						self.model.errorMessage = 'Sorry, the updated completion status could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.';
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, the updated completion status could not be saved to the server, so we\'ve restored the previous one. Please try again and refresh the page if this continues to be an issue.');
 					}
 					self.render();
 					self.$el.trigger('handle-potential-error');
@@ -561,9 +561,9 @@ $(function() {
 						self.collection.add(ListManager.NewListItem, {at: 0});
 						inputElement.val("");
 					},
-					error: function() {
+					error: function(model, response, options) {
 						ListManager.NewListItem.errorState = true;
-						ListManager.NewListItem.errorMessage = 'Sorry, we could not save this item to the server. Please try again and refresh the page if this continues to be an issue.';
+						ListManager.NewListItem.errorMessage = ListManager.ParseError(response, 'Sorry, we could not save this item to the server. Please try again and refresh the page if this continues to be an issue.');
 						self.$el.trigger('handle-potential-error');
 					},
 					complete: function() {
@@ -646,10 +646,10 @@ $(function() {
 				error: function(model, response, options) {
 					self.model.errorState = true;
 					if ('name' in attributes) {
-						self.model.errorMessage = 'Sorry, the changed name could not be saved to the server, so we\'ve restored the previous name. Please try again and refresh the page if this continues to be an issue.';
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, the changed name could not be saved to the server, so we\'ve restored the previous name. Please try again and refresh the page if this continues to be an issue.');
 						self.model.errorAttribute = 'name';
 					} else if ('private' in attributes) {
-						self.model.errorMessage = 'Sorry, your change in sharing status could not be saved to the server, so we\'ve restored it to the previous state. Please refresh the page if this continues to be an issue.';
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, your change in sharing status could not be saved to the server, so we\'ve restored it to the previous state. Please refresh the page if this continues to be an issue.');
 						self.model.errorAttribute = 'private';
 					}
 					self.render();
@@ -728,6 +728,32 @@ $(function() {
 			ListManager.regions.currentListHeader.show(ListManager.CurrentListHeaderView);
 			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 		}
+	}
+	
+	ListManager.ParseError = function(response, defaultMessage) {
+		try {
+			var errorObject = $.parseJSON(response.responseText);
+		} catch(e) {
+			return defaultMessage;
+		}
+		var errorKey = Object.keys(errorObject)[0];
+		var newErrorObject = null;
+		var errorMessage = ''
+		if (typeof errorObject == 'object') {
+			while (typeof errorObject[errorKey][0] != 'string') {
+				newErrorObject = errorObject[errorKey][0];
+				errorKey = Object.keys(errorObject[errorKey][0])[0];
+				errorObject = newErrorObject;
+			}
+			if (errorKey == 'non_field_errors') {
+				errorMessage = 'Error: ';
+			}
+			else {
+				errorMessage = errorKey.replace('_', ' ') + ': ';
+			}
+			errorMessage += errorObject[errorKey][0];
+		}
+		return errorMessage ? errorMessage : defaultMessage;
 	}
 		
 	/** START **/

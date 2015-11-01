@@ -22,3 +22,12 @@ class ListSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = List
+	
+	def validate(self, data):
+		owner = self.context['request'].user
+		if 'name' in data:
+			same_name_lists = List.objects.filter(owner=owner, archived=False, name__iexact=data['name'])
+			if same_name_lists.exists():
+				raise serializers.ValidationError('An active list with that name already exists.')
+		return data
+

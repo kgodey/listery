@@ -6,7 +6,7 @@ from listery.signals import *
 
 
 class List(OrderedModel):
-	name = models.CharField(max_length=255, unique=True)
+	name = models.CharField(max_length=255)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	archived = models.BooleanField(default=False)
