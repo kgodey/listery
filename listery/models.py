@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.transaction import atomic
 from ordered_model.models import OrderedModel
 
 from listery.signals import *
@@ -41,13 +42,17 @@ class List(OrderedModel):
 		if move_to_top:
 			self.to(1)
 	
+	@atomic
 	def reindex(self):
 		index = 1
 		for item in self.items:
-			item.order = index
-			item.save()
+			old_order = item.order
+			if old_order != index:
+				item.order = index
+				item.save()
 			index += 1
 	
+	@atomic
 	def quick_sort(self):
 		index = 1
 		non_completed = self.items.filter(completed=False).order_by('title')
