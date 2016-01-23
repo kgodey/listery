@@ -225,7 +225,7 @@ $(function() {
 						self.$el.trigger('handle-potential-error');
 					},
 					success: function(model, response, options) {
-						ListManager.setCurrentList(self.model);
+						ListManager.setCurrentList(self.model, true);
 						ListManager.AllListsView.render();
 					}
 				});
@@ -535,7 +535,6 @@ $(function() {
 			this.listenTo(this.collection, "reset", this.render);
 		},
 		onDomRefresh: function() {
-			this.$('.new-title').focus();
 			$('.item-sortable').sortable({
 				items: 'a.sortable-row',
 				cursor: 'move',
@@ -710,7 +709,7 @@ $(function() {
 	
 	/** UTILITY FUNCTIONS **/
 	
-	ListManager.setCurrentList = function(list) {
+	ListManager.setCurrentList = function(list, setFocus) {
 		if (ListManager.CurrentList != list) {
 			var id = list.get('id');
 			ListManager.Router.navigate('list/' + id);
@@ -727,6 +726,10 @@ $(function() {
 			
 			ListManager.regions.currentListHeader.show(ListManager.CurrentListHeaderView);
 			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
+			
+			if (setFocus) {
+				ListManager.CurrentListItemsView.$('.new-title').focus();
+			}
 		}
 	}
 	
@@ -784,9 +787,9 @@ $(function() {
 				var currentURL = Backbone.history.getFragment();
 				if (currentURL) {
 					var listID = parseInt(currentURL.replace('list/', ''));
-					ListManager.setCurrentList(ListManager.AllLists.get(listID));
+					ListManager.setCurrentList(ListManager.AllLists.get(listID), true);
 				} else {
-					ListManager.setCurrentList(ListManager.AllLists.models[0]);
+					ListManager.setCurrentList(ListManager.AllLists.models[0], true);
 				}
 			}
 		});
