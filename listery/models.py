@@ -19,6 +19,14 @@ class List(OrderedModel):
 		return self.listitem_set.order_by('order')
 	
 	@property
+	def item_count(self):
+		return self.items.count()
+	
+	@property
+	def checked_item_count(self):
+		return self.items.filter(completed=True).count()
+	
+	@property
 	def plaintext(self):
 		text = u'%s\n' % self.name.upper()
 		if self.items.exists():

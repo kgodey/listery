@@ -9,6 +9,7 @@ from listery import apis, views
 router = routers.DefaultRouter()
 router.register(r'users', apis.UserViewSet)
 router.register(r'lists', apis.ListViewSet)
+router.register(r'list_counts', apis.ListCountViewSet)
 router.register(r'listitems', apis.ListItemViewSet)
 
 

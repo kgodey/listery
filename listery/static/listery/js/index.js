@@ -36,6 +36,10 @@ $(function() {
 		errorAttribute: null
 	});
 	
+	ListManager.ListCount = Backbone.NestedModel.extend({
+		urlRoot: '/api/v1/list_counts/',
+	});
+	
 	ListManager.User = Backbone.NestedModel.extend({
 		urlRoot: '/api/v1/users/'
 	});
@@ -503,6 +507,9 @@ $(function() {
 					self.$el.trigger('handle-potential-error');
 				},
 				success: function() {
+					if ('completed' in attributes) {
+						ListManager.CurrentListCount.fetch();
+					}
 					window.scrollTo(currentScrollX, currentScrollY);
 				}
 			});
@@ -558,6 +565,7 @@ $(function() {
 				ListManager.NewListItem.save({}, {
 					success: function() {
 						self.collection.add(ListManager.NewListItem, {at: 0});
+						ListManager.CurrentListCount.fetch();
 						inputElement.val("");
 					},
 					error: function(model, response, options) {
@@ -673,7 +681,7 @@ $(function() {
 				self.$el.trigger('handle-potential-error');
 			});
 		},
-		setCurrentList: function() {
+		setCurrentList: function(model) {
 			ListManager.setCurrentList(this.model);
 			this.render();
 		},
@@ -707,13 +715,25 @@ $(function() {
 		}
 	});
 	
+	ListManager.ListCountView = Marionette.ItemView.extend({
+		template: '#list-count-template',
+		initialize: function() {
+			this.listenTo(this.model, "change", this.render);
+		},
+	});
+	
 	/** UTILITY FUNCTIONS **/
 	
-	ListManager.setCurrentList = function(list, setFocus) {
+	ListManager.setCurrentList = function(list, listCount, setFocus) {
 		if (ListManager.CurrentList != list) {
 			var id = list.get('id');
 			ListManager.Router.navigate('list/' + id);
 			ListManager.CurrentList = list;
+			ListManager.CurrentListCount = new ListManager.ListCount({
+				id: list.get('id'),
+				checked_item_count: list.get('checked_item_count'),
+				item_count: list.get('item_count')
+			});
 			ListManager.CurrentListItems = new ListManager.ListItemCollection();
 			ListManager.CurrentListItems.set(ListManager.CurrentList.get('items'));
 			
@@ -723,9 +743,13 @@ $(function() {
 			ListManager.CurrentListItemsView = new ListManager.ListItemsView({
 				collection: ListManager.CurrentListItems,
 			});
+			ListManager.CurrentListCountView = new ListManager.ListCountView({
+				model: ListManager.CurrentListCount,
+			});
 			
 			ListManager.regions.currentListHeader.show(ListManager.CurrentListHeaderView);
 			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
+			ListManager.regions.currentListCount.show(ListManager.CurrentListCountView);
 			
 			if (setFocus) {
 				ListManager.CurrentListItemsView.$('.new-title').focus();
@@ -768,6 +792,7 @@ $(function() {
 				allLists: '#all-lists-region',
 				currentListItems: '#current-list-items-region',
 				currentListHeader: '#current-list-header-region',
+				currentListCount: '#current-list-count-region',
 			}
 		});
 		
@@ -784,13 +809,13 @@ $(function() {
 		
 		ListManager.AllLists.fetch({
 			success: function() {
+				var listID = 0;
 				var currentURL = Backbone.history.getFragment();
 				if (currentURL) {
-					var listID = parseInt(currentURL.replace('list/', ''));
-					ListManager.setCurrentList(ListManager.AllLists.get(listID), true);
-				} else {
-					ListManager.setCurrentList(ListManager.AllLists.models[0], true);
+					listID = parseInt(currentURL.replace('list/', ''));
 				}
+				var currentList = ListManager.AllLists.get(listID);
+				ListManager.setCurrentList(currentList, true);
 			}
 		});
 		

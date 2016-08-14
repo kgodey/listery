@@ -19,6 +19,8 @@ class ListItemSerializer(serializers.ModelSerializer):
 
 class ListSerializer(serializers.ModelSerializer):
 	items = ListItemSerializer(many=True, read_only=True)
+	item_count = serializers.ReadOnlyField()
+	checked_item_count = serializers.ReadOnlyField()
 	
 	class Meta:
 		model = List
@@ -31,3 +33,11 @@ class ListSerializer(serializers.ModelSerializer):
 				raise serializers.ValidationError('An active list with that name already exists.')
 		return data
 
+
+class ListCountSerializer(serializers.ModelSerializer):
+	item_count = serializers.ReadOnlyField()
+	checked_item_count = serializers.ReadOnlyField()
+	
+	class Meta:
+		model = List
+		fields = ('id', 'item_count', 'checked_item_count')

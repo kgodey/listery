@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from listery.models import List, ListItem
-from listery.serializers import UserSerializer, ListSerializer, ListItemSerializer
+from listery.serializers import UserSerializer, ListSerializer, ListCountSerializer, ListItemSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -53,6 +53,12 @@ class ListViewSet(viewsets.ModelViewSet):
 			return Response(serializer.data, status=status.HTTP_200_OK)
 		else:
 			return Response({'order': ['Please specify an order.']}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ListCountViewSet(viewsets.ModelViewSet):
+	queryset = List.objects.filter(archived=False).order_by('order')
+	serializer_class = ListCountSerializer
+	permission_classes = (IsAuthenticated,)
 
 
 class ListItemViewSet(viewsets.ModelViewSet):
