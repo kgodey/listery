@@ -52,21 +52,22 @@
 	</script>
 
 	<script id="list-header-template" type="text/template">
-		<div class="row" style="margin-bottom: 20px;">
+		<div class="row">
 			<div class="col-md-8 edit-name">
 				<h1 class="toggle-on-name-edit" style="margin-top: 10px;"><%- name %></h1>
 				<span class="toggle-on-name-edit hidden">
 					<input type="text" class="name-input" style="width: 75%; color: black;" maxlength=255 placeholder="Name">
 				</span>
 			</div>
-			<div class="col-md-4">
-				<div style="margin-top: 20px;">
-					<button class="btn btn-default btn-sm quick-sort">Quick Sort</button>
+		</div>
+		<div class="row" style="margin-bottom: 10px;">
+			<div class="col-md-8">
+					<button class="btn btn-default btn-sm quick-sort"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Quick Sort</button>
+					<button class="btn btn-default btn-sm check-all"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Check All</button>
+					<button class="btn btn-default btn-sm uncheck-all"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> Uncheck All</button>
 					<% if (owner === userID) { %>
-						<img src="{% static 'listery/images/loading.gif' %}" class="toggle-on-save hidden"/>&nbsp;
-						<span class="label label-default" style="vertical-align: middle; margin-left: 10px;"><input type="checkbox" class="toggle-private" <%= private ? "" : "checked" %>/>&nbsp;Shared</span>
+						<button class="btn btn-default btn-sm toggle-private"><% if (private) { %><span class="glyphicon glyphicon-share" aria-hidden="true"></span> Share<% } else { %><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Unshare<% } %></button>
 					<% } %>
-				</div>
 			</div>
 		</div>
 	</script>

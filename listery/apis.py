@@ -36,6 +36,20 @@ class ListViewSet(viewsets.ModelViewSet):
 		serializer = ListSerializer(item)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 	
+	@detail_route(methods=['post'])
+	def uncheck_all(self, request, pk=None):
+		item = self.get_object()
+		item.uncheck_all()
+		serializer = ListSerializer(item)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+	
+	@detail_route(methods=['post'])
+	def check_all(self, request, pk=None):
+		item = self.get_object()
+		item.check_all()
+		serializer = ListSerializer(item)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+	
 	@detail_route(methods=['get', 'post'])
 	def download(self, request, pk=None):
 		item = self.get_object()

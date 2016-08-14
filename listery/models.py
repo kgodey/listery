@@ -73,6 +73,12 @@ class List(OrderedModel):
 			item.order = index
 			item.save()
 			index += 1
+	
+	def uncheck_all(self):
+		self.items.update(completed=False)
+	
+	def check_all(self):
+		self.items.update(completed=True)
 
 
 class ListItem(OrderedModel):

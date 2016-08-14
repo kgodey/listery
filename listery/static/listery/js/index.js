@@ -612,6 +612,8 @@ $(function() {
 		events: {
 			'click .toggle-private': 'togglePrivate',
 			'click .quick-sort': 'quickSort',
+			'click .check-all': 'checkAll',
+			'click .uncheck-all': 'uncheckAll',
 			'dblclick .edit-name': 'editName',
 			'focusout .name-input': 'saveName',
 			'keyup .name-input': function(event) {
@@ -669,15 +671,24 @@ $(function() {
 			});
 		},
 		quickSort: function() {
+			this.listTransform('quick_sort');
+		},
+		checkAll: function() {
+			this.listTransform('check_all');
+		},
+		uncheckAll: function() {
+			this.listTransform('uncheck_all');
+		},
+		listTransform(transformURL) {
 			var self = this;
-			$.post(this.model.url() + 'quick_sort/', {
+			$.post(this.model.url() + transformURL + '/', {
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
 			}).done(function() {
 				self.model.fetch({});
 			}).fail(function() {
 				self.model.errorState = true;
 				self.model.errorAttribute = 'name';
-				self.model.errorMessage = 'This list could not be sorted at this time. Please refresh the page if this continues to be an issue.';
+				self.model.errorMessage = 'This operation cannot be performed at this time. Please refresh the page if this continues to be an issue.';
 				self.$el.trigger('handle-potential-error');
 			});
 		},
@@ -809,7 +820,7 @@ $(function() {
 		
 		ListManager.AllLists.fetch({
 			success: function() {
-				var listID = 0;
+				var listID = ListManager.AllLists.models[0].get('id');
 				var currentURL = Backbone.history.getFragment();
 				if (currentURL) {
 					listID = parseInt(currentURL.replace('list/', ''));
