@@ -610,10 +610,6 @@ $(function() {
 	ListManager.ListHeaderView = Marionette.ItemView.extend({
 		template: '#list-header-template',
 		events: {
-			'click .toggle-private': 'togglePrivate',
-			'click .quick-sort': 'quickSort',
-			'click .check-all': 'checkAll',
-			'click .uncheck-all': 'uncheckAll',
 			'dblclick .edit-name': 'editName',
 			'focusout .name-input': 'saveName',
 			'keyup .name-input': function(event) {
@@ -627,24 +623,8 @@ $(function() {
 				}
 			},
 		},
-		behaviors: {
-			ErrorPopoverBehavior: {
-				element: function(view) {
-					if (view.model.errorAttribute === 'private') {
-						return view.$('.toggle-private');
-					} else {
-						return view.$el;
-					}
-				}
-			}
-		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.setCurrentList);
-		},
-		togglePrivate: function() {
-			var inputElement = this.$('toggle-private');
-			inputElement.prop('disabled', true);
-			this.saveAttributes({private: !this.model.get('private')});
 		},
 		saveAttributes: function(attributes) {
 			var self = this;
@@ -657,39 +637,10 @@ $(function() {
 					if ('name' in attributes) {
 						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, the changed name could not be saved to the server, so we\'ve restored the previous name. Please try again and refresh the page if this continues to be an issue.');
 						self.model.errorAttribute = 'name';
-					} else if ('private' in attributes) {
-						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, your change in sharing status could not be saved to the server, so we\'ve restored it to the previous state. Please refresh the page if this continues to be an issue.');
-						self.model.errorAttribute = 'private';
 					}
 					self.render();
 					self.$el.trigger('handle-potential-error');
-				},
-				complete: function() {
-					var inputElement = self.$('toggle-private');
-					inputElement.prop('disabled', false);
 				}
-			});
-		},
-		quickSort: function() {
-			this.listTransform('quick_sort');
-		},
-		checkAll: function() {
-			this.listTransform('check_all');
-		},
-		uncheckAll: function() {
-			this.listTransform('uncheck_all');
-		},
-		listTransform(transformURL) {
-			var self = this;
-			$.post(this.model.url() + transformURL + '/', {
-				csrfmiddlewaretoken: $.cookie('csrftoken'),
-			}).done(function() {
-				self.model.fetch({});
-			}).fail(function() {
-				self.model.errorState = true;
-				self.model.errorAttribute = 'name';
-				self.model.errorMessage = 'This operation cannot be performed at this time. Please refresh the page if this continues to be an issue.';
-				self.$el.trigger('handle-potential-error');
 			});
 		},
 		setCurrentList: function(model) {
@@ -726,6 +677,80 @@ $(function() {
 		}
 	});
 	
+	ListManager.ListActionsView = Marionette.ItemView.extend({
+		template: '#list-actions-template',
+		initialize: function() {
+			this.listenTo(this.model, "change", this.render);
+		},
+		events: {
+			'click .toggle-private': 'togglePrivate',
+			'click .quick-sort': 'quickSort',
+			'click .check-all': 'checkAll',
+			'click .uncheck-all': 'uncheckAll',
+		},
+		behaviors: {
+			ErrorPopoverBehavior: {
+				element: function(view) {
+					if (view.model.errorAttribute === 'private') {
+						return view.$('.toggle-private');
+					} else {
+						return view.$el;
+					}
+				}
+			}
+		},
+		initialize: function() {
+			this.listenTo(this.model, "change", this.render);
+		},
+		togglePrivate: function() {
+			var inputElement = this.$('toggle-private');
+			inputElement.prop('disabled', true);
+			this.saveAttributes({private: !this.model.get('private')});
+		},
+		saveAttributes: function(attributes) {
+			var self = this;
+			this.model.save(attributes, {
+				patch: true,
+				wait: true,
+				error: function(model, response, options) {
+					self.model.errorState = true;
+					if ('private' in attributes) {
+						self.model.errorMessage = ListManager.ParseError(response, 'Sorry, your change in sharing status could not be saved to the server, so we\'ve restored it to the previous state. Please refresh the page if this continues to be an issue.');
+						self.model.errorAttribute = 'private';
+					}
+					self.render();
+					self.$el.trigger('handle-potential-error');
+				},
+				complete: function() {
+					var inputElement = self.$('toggle-private');
+					inputElement.prop('disabled', false);
+				}
+			});
+		},
+		quickSort: function() {
+			this.listTransform('quick_sort');
+		},
+		checkAll: function() {
+			this.listTransform('check_all');
+		},
+		uncheckAll: function() {
+			this.listTransform('uncheck_all');
+		},
+		listTransform(transformURL) {
+			var self = this;
+			$.post(this.model.url() + transformURL + '/', {
+				csrfmiddlewaretoken: $.cookie('csrftoken'),
+			}).done(function() {
+				self.model.fetch({});
+			}).fail(function() {
+				self.model.errorState = true;
+				self.model.errorAttribute = 'name';
+				self.model.errorMessage = 'This operation cannot be performed at this time. Please refresh the page if this continues to be an issue.';
+				self.$el.trigger('handle-potential-error');
+			});
+		},
+	});
+	
 	ListManager.ListCountView = Marionette.ItemView.extend({
 		template: '#list-count-template',
 		initialize: function() {
@@ -751,6 +776,9 @@ $(function() {
 			ListManager.CurrentListHeaderView = new ListManager.ListHeaderView({
 				model: ListManager.CurrentList,
 			});
+			ListManager.CurrentListActionsView = new ListManager.ListActionsView({
+				model: ListManager.CurrentList,
+			});
 			ListManager.CurrentListItemsView = new ListManager.ListItemsView({
 				collection: ListManager.CurrentListItems,
 			});
@@ -761,6 +789,7 @@ $(function() {
 			ListManager.regions.currentListHeader.show(ListManager.CurrentListHeaderView);
 			ListManager.regions.currentListItems.show(ListManager.CurrentListItemsView);
 			ListManager.regions.currentListCount.show(ListManager.CurrentListCountView);
+			ListManager.regions.currentListActions.show(ListManager.CurrentListActionsView);
 			
 			if (setFocus) {
 				ListManager.CurrentListItemsView.$('.new-title').focus();
@@ -804,6 +833,7 @@ $(function() {
 				currentListItems: '#current-list-items-region',
 				currentListHeader: '#current-list-header-region',
 				currentListCount: '#current-list-count-region',
+				currentListActions: '#current-list-actions-region',
 			}
 		});
 		

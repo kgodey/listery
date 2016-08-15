@@ -21,14 +21,16 @@
 			<div class="col-md-8" id="current-list-header-region">
 			</div>
 		</div>
+		<div class="row" style="margin-bottom: 10px;">
+			<div class="col-md-7" id="current-list-actions-region">
+			</div>
+			<div class="col-md-1" id="current-list-count-region">
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-8" id="current-list-items-region">
 			</div>
 			<div id="all-lists-region" class="col-md-4">
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-2 col-md-offset-6" id="current-list-count-region">
 			</div>
 		</div>
 	</div>
@@ -42,7 +44,7 @@
 	</script>
 
 	<script id="list-name-template" type="text/template">
-		<div style="width: 80%; display: inline-block;"><%- name %></div>
+		<div style="display: inline-block;"><%- name %></div>
 		<span class="pull-right">
 			<span class="hover-options hidden">
 				<span class="glyphicon glyphicon-save download-item" style="cursor: pointer;"></span>&nbsp;
@@ -52,30 +54,25 @@
 	</script>
 
 	<script id="list-header-template" type="text/template">
-		<div class="row">
-			<div class="col-md-8 edit-name">
-				<h1 class="toggle-on-name-edit" style="margin-top: 10px;"><%- name %></h1>
-				<span class="toggle-on-name-edit hidden">
-					<input type="text" class="name-input" style="width: 75%; color: black;" maxlength=255 placeholder="Name">
-				</span>
-			</div>
-		</div>
-		<div class="row" style="margin-bottom: 10px;">
-			<div class="col-md-8">
-					<button class="btn btn-default btn-sm quick-sort"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Quick Sort</button>
-					<button class="btn btn-default btn-sm check-all"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Check All</button>
-					<button class="btn btn-default btn-sm uncheck-all"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> Uncheck All</button>
-					<% if (owner === userID) { %>
-						<button class="btn btn-default btn-sm toggle-private"><% if (private) { %><span class="glyphicon glyphicon-share" aria-hidden="true"></span> Share<% } else { %><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Unshare<% } %></button>
-					<% } %>
-			</div>
+		<div class="edit-name">
+			<h1 class="toggle-on-name-edit" style="margin-top: 10px;"><%- name %></h1>
+			<span class="toggle-on-name-edit hidden">
+				<input type="text" class="name-input" style="width: 75%; color: black;" maxlength=255 placeholder="Name">
+			</span>
 		</div>
 	</script>
 	
+	<script id="list-actions-template" type="text/template">
+		<button class="btn btn-default btn-sm quick-sort"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Quick Sort</button>
+		<button class="btn btn-default btn-sm check-all"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Check All</button>
+		<button class="btn btn-default btn-sm uncheck-all"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> Uncheck All</button>
+		<% if (owner === userID) { %>
+			<button class="btn btn-default btn-sm toggle-private"><% if (private) { %><span class="glyphicon glyphicon-share" aria-hidden="true"></span> Share<% } else { %><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Unshare<% } %></button>
+		<% } %>
+	</script>
+	
 	<script id="list-count-template" type="text/template">
-		<!-- <div class="alert alert-info"> -->
-			<p class="text-right"><span class="glyphicon glyphicon-check"></span>&nbsp;<%= checked_item_count %> / <%= item_count %></p>
-		<!-- </div> -->
+		<p class="text-right" style="line-height: 30px; margin-bottom: 0px;"><span class="glyphicon glyphicon-check"></span>&nbsp;<%= checked_item_count %> / <%= item_count %></p>
 	</script>
 	
 	<script id="list-items-template" type="text/template">
