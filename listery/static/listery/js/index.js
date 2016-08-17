@@ -206,6 +206,7 @@ $(function() {
 							success: function(model, response, options) {
 								oldList.fetch();
 								self.model.fetch();
+								ListManager.CurrentListCount.fetch();
 							},
 							error: function(model, response, options) {
 								self.model.errorState = true;
