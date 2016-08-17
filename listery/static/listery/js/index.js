@@ -739,14 +739,18 @@ $(function() {
 		},
 		listTransform(transformURL) {
 			var self = this;
+			$('.overlay').show();
 			$.post(this.model.url() + transformURL + '/', {
 				csrfmiddlewaretoken: $.cookie('csrftoken'),
 			}).done(function() {
-				self.model.fetch({});
+				self.model.fetch().always(function(){
+					$('.overlay').hide();
+				});
 			}).fail(function() {
 				self.model.errorState = true;
 				self.model.errorAttribute = 'name';
 				self.model.errorMessage = 'This operation cannot be performed at this time. Please refresh the page if this continues to be an issue.';
+				$('.overlay').hide();
 				self.$el.trigger('handle-potential-error');
 			});
 		},
