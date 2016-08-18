@@ -16,6 +16,14 @@ Backbone.NestedModel.prototype.url = function() {
 	return origUrl + (origUrl.charAt(origUrl.length - 1) == '/' ? '' : '/');
 }
 
+/** GENERAL UTILITIES **/
+
+var htmlSafeWithURLs = function(text) {
+	return linkifyHtml(text.split('<').join('&lt;').split('>').join('&gt;'));
+}
+
+/** MODELS & VIEWS **/
+
 $(function() {
 		
 	ListManager = new Marionette.Application();
@@ -33,7 +41,15 @@ $(function() {
 		urlRoot: '/api/v1/listitems/',
 		errorState: false,
 		errorMessage: 'An unknown error has occured. Please refresh the page.',
-		errorAttribute: null
+		errorAttribute: null,
+		toJSON: function() {
+			var attributes = this.attributes;
+			if (attributes.description) {
+				attributes.descriptionToDisplay = htmlSafeWithURLs(attributes.description);
+			}
+			attributes.titleToDisplay = htmlSafeWithURLs(attributes.title);
+			return attributes;
+		}
 	});
 	
 	ListManager.ListCount = Backbone.NestedModel.extend({
