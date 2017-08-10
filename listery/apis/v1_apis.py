@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from listery.models import List, ListItem
-from listery.serializers import UserSerializer, ListSerializer, ListCountSerializer, ListItemSerializer
+from listery.serializers.v1_serializers import UserSerializer, ListSerializer, ListCountSerializer, ListItemSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

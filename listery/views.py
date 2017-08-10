@@ -8,3 +8,9 @@ from listery.models import List
 def index(request):
 	lists = List.objects.all()
 	return render(request, 'listery/index.html', {'lists': lists})
+
+
+@login_required
+def new_index(request):
+	lists = List.objects.all()
+	return render(request, 'listery/new/index.html', {'lists': lists})

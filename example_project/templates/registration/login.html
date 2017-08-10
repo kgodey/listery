@@ -20,7 +20,7 @@
 					{{ form.password.errors }}
 				</div>
 			{% endif %}
-			<form action="{% url 'django.contrib.auth.views.login' %}" method="post" class="form-horizontal" role="form">
+			<form action="{% url 'login' %}" method="post" class="form-horizontal" role="form">
 				{% csrf_token %}
 				<div class="form-group">
 					<label for="id_username">Username</label>
