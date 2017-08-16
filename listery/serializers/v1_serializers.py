@@ -15,6 +15,7 @@ class ListItemSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = ListItem
+		fields = '__all__'
 
 
 class ListSerializer(serializers.ModelSerializer):
@@ -24,6 +25,7 @@ class ListSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = List
+		fields = '__all__'
 	
 	def validate(self, data):
 		owner = self.context['request'].user
