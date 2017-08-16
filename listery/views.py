@@ -13,4 +13,4 @@ def index(request):
 @login_required
 def new_index(request):
 	lists = List.objects.all()
-	return render(request, 'listery/new/index.html', {'lists': lists})
+	return render(request, 'listery/listery_v2/index.html', {'lists': lists})
