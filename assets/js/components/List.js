@@ -11,10 +11,7 @@ export class List extends React.Component {
 					<h1>{this.props.title}</h1>
 					<div className='list-group'>
 						{items.map(item =>
-							<ListItem
-								key={item.id}
-								{...item}
-							/>
+							<ListItem key={item.id} {...item}/>
 						)}
 					</div>
 				</div>

@@ -1,0 +1,10 @@
+# 4 space indentation
+[*]
+indent_style = tab
+indent_size = 4
+
+# set end of file newlines and trim whitespace
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
