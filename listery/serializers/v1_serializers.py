@@ -5,14 +5,14 @@ from listery.models import List, ListItem
 
 
 class UserSerializer(serializers.ModelSerializer):
-	
+
 	class Meta:
 		model = User
 		fields = ('id', 'username', 'email')
 
 
 class ListItemSerializer(serializers.ModelSerializer):
-	
+
 	class Meta:
 		model = ListItem
 		fields = '__all__'
@@ -22,11 +22,11 @@ class ListSerializer(serializers.ModelSerializer):
 	items = ListItemSerializer(many=True, read_only=True)
 	item_count = serializers.ReadOnlyField()
 	checked_item_count = serializers.ReadOnlyField()
-	
+
 	class Meta:
 		model = List
 		fields = '__all__'
-	
+
 	def validate(self, data):
 		owner = self.context['request'].user
 		if 'name' in data:
@@ -39,7 +39,7 @@ class ListSerializer(serializers.ModelSerializer):
 class ListCountSerializer(serializers.ModelSerializer):
 	item_count = serializers.ReadOnlyField()
 	checked_item_count = serializers.ReadOnlyField()
-	
+
 	class Meta:
 		model = List
 		fields = ('id', 'item_count', 'checked_item_count')

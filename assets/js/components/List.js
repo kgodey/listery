@@ -8,7 +8,7 @@ export class List extends React.Component {
 		if (items) {
 			return (
 				<div>
-					<h1>{this.props.title}</h1>
+					<h1>{this.props.name}</h1>
 					<div className='list-group'>
 						{items.map(item =>
 							<ListItem key={item.id} {...item}/>
