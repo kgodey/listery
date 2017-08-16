@@ -4,9 +4,9 @@ Listery is a simple single-page list management application built with Django an
 
 ## Demo
 
-A Listery demo is available at https://dry-scrubland-6661.herokuapp.com/. There are two user accounts available:  
-Username: `demo1`, password: `demo1`  
-Username: `demo2`, password: `demo2`  
+A Listery demo is available at https://dry-scrubland-6661.herokuapp.com/. There are two user accounts available:
+Username: `demo1`, password: `demo1`
+Username: `demo2`, password: `demo2`
 
 ## Local setup
 
@@ -18,6 +18,7 @@ You should be able to run Listery locally using the example project provided.
 
 ```
 'ordered_model',
+'django_filters',
 'rest_framework',
 'rest_framework.authtoken',
 'listery',
@@ -29,13 +30,16 @@ You should be able to run Listery locally using the example project provided.
 'listery.context_processors.listery_info'
 ```
 
-* Make sure your Django REST framework setup has session authentication and token authentication enabled. The settings are:
+* Make sure your Django REST framework setup has session authentication and token authentication enabled and includes the `django-filter` backend as one of the default filter backends. The settings are:
 
 ```
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': (
-		'rest_framework.authentication.TokenAuthentication',
 		'rest_framework.authentication.SessionAuthentication',
+		'rest_framework.authentication.TokenAuthentication',
+	),
+	'DEFAULT_FILTER_BACKENDS': (
+		'django_filters.rest_framework.DjangoFilterBackend',
 	)
 }
 ```
