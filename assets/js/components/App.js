@@ -1,23 +1,44 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { List } from './List'
+import { ActiveList } from './ActiveList'
 import { store } from '../store'
-import { fetchList } from '../actions/api'
+import { fetchActiveList, fetchAllLists } from '../actions/api'
+import { ListNav } from './ListNav'
 
 
 export class App extends React.Component {
 	componentDidMount() {
-		this.props.store.dispatch(fetchList())
+		this.props.store.dispatch(fetchActiveList())
+		this.props.store.dispatch(fetchAllLists())
 	}
 
 	render() {
-		const list = this.props.store.getState();
+		const list = this.props.store.getState().activeList;
+		const allLists = this.props.store.getState().allLists;
 		return (
-			<div>
-				<List
-					key={list.id}
-					{...list}
-				/>
+			<div className="container-fluid col-md-8">
+				<div className="row">
+					<div className="col-md-8" id="current-list-header-region">
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-md-6" id="current-list-actions-region">
+					</div>
+					<div className="col-md-2" id="current-list-count-region">
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-md-8" id="current-list-items-region">
+						<ActiveList
+							{...list}
+						/>
+					</div>
+					<div id="all-lists-region" className="col-md-4">
+						<ListNav
+							allLists={allLists}
+						/>
+					</div>
+				</div>
 			</div>
 		);
 	}

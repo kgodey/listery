@@ -2,7 +2,7 @@ import React from 'react'
 import { ListItem } from './ListItem'
 
 
-export class List extends React.Component {
+export class ActiveList extends React.Component {
 	render() {
 		const items = this.props.items ? this.props.items : []
 		if (items) {

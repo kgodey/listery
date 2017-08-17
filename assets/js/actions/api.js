@@ -1,56 +1,78 @@
 import fetch from 'isomorphic-fetch'
-
-export const REQUEST_LIST = 'REQUEST_LIST'
-export const RECEIVE_LIST = 'RECEIVE_LIST'
+import Cookie from 'js-cookie'
 
 
-const getCookie = (name) => {
-	var cookieValue = null;
-	if (document.cookie && document.cookie != '') {
-		var cookies = document.cookie.split(';');
-		for (var i = 0; i < cookies.length; i++) {
-			var cookie = jQuery.trim(cookies[i]);
-			// Does this cookie string begin with the name we want?
-			if (cookie.substring(0, name.length + 1) == (name + '=')) {
-				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-				break;
-			}
-		}
+export const REQUEST_ACTIVE_LIST = 'REQUEST_ACTIVE_LIST'
+export const RECEIVE_ACTIVE_LIST = 'RECEIVE_ACTIVE_LIST'
+export const REQUEST_ALL_LISTS = 'REQUEST_ALL_LISTS'
+export const RECEIVE_ALL_LISTS = 'RECEIVE_ALL_LISTS'
+
+
+const fetchFromServer = (url, params = {}) => {
+	// Wraps fetch to add the parameters that DRF expects
+	params.credentials = 'same-origin'
+	params.headers = {
+		...params.headers,
+		'X-CSRFToken': Cookie.get('csrftoken')
 	}
-	return cookieValue;
+	return fetch(url, params)
 }
 
 
-const requestList = (id) => {
+const requestActiveList = (id) => {
 	return {
-		type: REQUEST_LIST,
+		type: REQUEST_ACTIVE_LIST,
 		id
 	}
 }
 
-const receiveList = (id, json) => {
+
+const receiveActiveList = (id, json) => {
 	return {
-		type: RECEIVE_LIST,
+		type: RECEIVE_ACTIVE_LIST,
 		id,
 		json
 	}
 }
 
-// TODO: remove hardcoded ID
-export const fetchList = (id = 6) => {
+
+const requestAllLists = () => {
+	return {
+		type: REQUEST_ALL_LISTS,
+	}
+}
+
+
+const receiveAllLists = (json) => {
+	return {
+		type: RECEIVE_ALL_LISTS,
+		json
+	}
+}
+
+
+// TODO: remove hardcoded ID and move to v2 list_items API
+export const fetchActiveList = (id = 6) => {
 	return function (dispatch) {
-		dispatch(requestList('id'));
-		return fetch(
-			'/api/v1/lists/' + id + '/', {
-				credentials: 'same-origin',
-				headers: {
-					'X-CSRFToken': getCookie('csrftoken')
-				}
-			}
-		).then(
-			response => response.json()
-		).then(
-			json => dispatch(receiveList(id, json))
+		dispatch(requestActiveList('id'));
+		return fetchFromServer('/api/v1/lists/' + id + '/')
+		.then(
+			response => response.json())
+		.then(
+			json => dispatch(receiveActiveList(id, json))
+		)
+	}
+}
+
+
+export const fetchAllLists = () => {
+	return function (dispatch) {
+		dispatch(requestAllLists());
+		return fetchFromServer('/api/v2/lists/')
+		.then(
+			response => response.json())
+		.then(
+			json => dispatch(receiveAllLists(json))
 		)
 	}
 }
