@@ -1,12 +1,31 @@
 import { combineReducers } from 'redux';
-import { REQUEST_LIST, RECEIVE_LIST } from '../actions/api'
+import { RECEIVE_ACTIVE_LIST, RECEIVE_ALL_LISTS } from '../actions/api'
 
 
-export const list = (state={}, action) => {
+const setActiveList = (state={}, action) => {
 	switch(action.type) {
-		case RECEIVE_LIST:
+		case RECEIVE_ACTIVE_LIST:
 			return action.json
 		default:
 			return state
 	}
 }
+
+
+const setAllLists = (state=[], action) => {
+	console.log('state', state)
+	console.log('action', action.json)
+	switch(action.type) {
+		case RECEIVE_ALL_LISTS:
+			return action.json
+		default:
+			return state
+	}
+}
+
+
+
+export const listeryApp = combineReducers({
+  activeList: setActiveList,
+  allLists: setAllLists
+});
