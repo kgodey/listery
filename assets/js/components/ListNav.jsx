@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListLink } from './ListLink'
+import { ListLink } from './ListLink.jsx'
 
 
 export class ListNav extends React.Component {

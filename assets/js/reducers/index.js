@@ -5,7 +5,7 @@ import { RECEIVE_ACTIVE_LIST, RECEIVE_ALL_LISTS } from '../actions/api'
 const setActiveList = (state={}, action) => {
 	switch(action.type) {
 		case RECEIVE_ACTIVE_LIST:
-			return action.json
+			return action.json.length == 1 ? action.json[0] : state
 		default:
 			return state
 	}

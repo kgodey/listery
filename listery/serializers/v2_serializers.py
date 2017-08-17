@@ -9,7 +9,7 @@ class ListItemSerializer(serializers.ModelSerializer):
 		fields = ['id', 'title', 'description', 'created_at', 'completed', 'list_id', 'order']
 
 
-class ListSerializer(serializers.ModelSerializer):
+class MinimalListSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = List
@@ -22,3 +22,11 @@ class ListSerializer(serializers.ModelSerializer):
 			if same_name_lists.exists():
 				raise serializers.ValidationError('An active list with that name already exists.')
 		return data
+
+
+class ListSerializer(MinimalListSerializer):
+	items = ListItemSerializer(many=True, read_only=True)
+
+	class Meta:
+		model = List
+		fields = ['id', 'name', 'order', 'private', 'created_at', 'owner_id', 'items']
