@@ -1,9 +1,9 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ActiveList } from './ActiveList'
+import { ActiveList } from './ActiveList.jsx'
 import { store } from '../store'
 import { fetchActiveList, fetchAllLists } from '../actions/api'
-import { ListNav } from './ListNav'
+import { ListNav } from './ListNav.jsx'
 
 
 export class App extends React.Component {

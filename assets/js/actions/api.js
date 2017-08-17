@@ -19,18 +19,16 @@ const fetchFromServer = (url, params = {}) => {
 }
 
 
-const requestActiveList = (id) => {
+const requestActiveList = () => {
 	return {
 		type: REQUEST_ACTIVE_LIST,
-		id
 	}
 }
 
 
-const receiveActiveList = (id, json) => {
+const receiveActiveList = (json) => {
 	return {
 		type: RECEIVE_ACTIVE_LIST,
-		id,
 		json
 	}
 }
@@ -51,15 +49,14 @@ const receiveAllLists = (json) => {
 }
 
 
-// TODO: remove hardcoded ID and move to v2 list_items API
-export const fetchActiveList = (id = 6) => {
+export const fetchActiveList = () => {
 	return function (dispatch) {
-		dispatch(requestActiveList('id'));
-		return fetchFromServer('/api/v1/lists/' + id + '/')
+		dispatch(requestActiveList());
+		return fetchFromServer('/api/v2/lists/?first=true')
 		.then(
 			response => response.json())
 		.then(
-			json => dispatch(receiveActiveList(id, json))
+			json => dispatch(receiveActiveList(json))
 		)
 	}
 }
