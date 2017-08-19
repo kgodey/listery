@@ -13,8 +13,8 @@ export class App extends React.Component {
 	}
 
 	render() {
-		const activeList = this.props.store.getState().activeList;
-		const allLists = this.props.store.getState().allLists;
+		const activeList = this.props.store.getState().activeList
+		const allLists = this.props.store.getState().allLists
 		return (
 			<div className="container-fluid col-md-8">
 				<div className="row">
@@ -41,6 +41,6 @@ export class App extends React.Component {
 					</div>
 				</div>
 			</div>
-		);
+		)
 	}
 }

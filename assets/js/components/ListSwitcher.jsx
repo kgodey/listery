@@ -16,8 +16,8 @@ export class ListSwitcher extends React.Component {
 						<ListLink key={list.id} {...list} activeList={list.id == activeListId ? true : false} onListClick={ switchActiveList }/>
 					)}
 				</div>
-			);
+			)
 		}
-		return null;
+		return null
 	}
 }

@@ -1,22 +1,29 @@
-import { combineReducers } from 'redux';
-import { RECEIVE_ACTIVE_LIST, RECEIVE_ALL_LISTS, RECEIVE_NEW_LIST_ITEM, RECEIVE_NEW_LIST } from '../actions/api'
+import { combineReducers } from 'redux'
+import * as apiActions from '../actions/api'
 import { switchActiveList } from '../actions/ui'
 
 
 const updateActiveList = (state={}, action) => {
 	switch(action.type) {
-		case RECEIVE_ACTIVE_LIST:
-		case RECEIVE_NEW_LIST:
+		case apiActions.RECEIVE_ACTIVE_LIST:
+		case apiActions.RECEIVE_NEW_LIST:
 			return action.data
-		case RECEIVE_NEW_LIST_ITEM:
+		case apiActions.RECEIVE_NEW_LIST_ITEM:
 			if (state) {
-				let newState = {
-					...state
+				let oldItems = state.items
+				oldItems.unshift(action.data)
+				return {
+					...state,
+					items: oldItems
 				}
-				newState.items.unshift(action.data)
-				return newState
 			} else {
 				return state
+			}
+		case apiActions.RECEIVE_UPDATED_LIST_ITEM:
+			return {
+				...state,
+				// transform the one with a matching ID, otherwise return original item
+				items: state.items.map(item => item.id === action.data.id ? action.data : item)
 			}
 		default:
 			return state
@@ -26,9 +33,9 @@ const updateActiveList = (state={}, action) => {
 
 const updateAllLists = (state=[], action) => {
 	switch(action.type) {
-		case RECEIVE_ALL_LISTS:
+		case apiActions.RECEIVE_ALL_LISTS:
 			return action.data
-		case RECEIVE_NEW_LIST:
+		case apiActions.RECEIVE_NEW_LIST:
 			if (state) {
 				let newState = [...state]
 				newState.unshift(action.data)
@@ -45,4 +52,4 @@ const updateAllLists = (state=[], action) => {
 export const listeryApp = combineReducers({
   activeList: updateActiveList,
   allLists: updateAllLists
-});
+})
