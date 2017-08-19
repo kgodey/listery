@@ -10,6 +10,12 @@ export const ADD_NEW_LIST_ITEM = 'ADD_NEW_LIST_ITEM'
 export const RECEIVE_NEW_LIST_ITEM = 'RECEIVE_NEW_LIST_ITEM'
 export const ADD_NEW_LIST = 'ADD_NEW_LIST'
 export const RECEIVE_NEW_LIST = 'RECEIVE_NEW_LIST'
+export const UPDATE_LIST_ITEM = 'UPDATE_LIST_ITEM'
+export const RECEIVE_UPDATED_LIST_ITEM = 'RECEIVE_UPDATED_LIST_ITEM'
+
+
+const LIST_API_URL = '/api/v2/lists/'
+const LIST_ITEM_API_URL = '/api/v2/list_items/'
 
 
 const fetchFromServer = (url, params = {}) => {
@@ -84,11 +90,27 @@ const receiveNewList = (data) => {
 	}
 }
 
+const updateListItem = (id, data) => {
+	return {
+		type: UPDATE_LIST_ITEM,
+		id,
+		data
+	}
+}
+
+
+const receiveUpdatedListItem = (data) => {
+	return {
+		type: RECEIVE_UPDATED_LIST_ITEM,
+		data
+	}
+}
+
 
 export const fetchActiveList = (id = firstListId) => {
 	return function (dispatch) {
-		dispatch(requestActiveList());
-		return fetchFromServer('/api/v2/lists/' + id + '/')
+		dispatch(requestActiveList())
+		return fetchFromServer(LIST_API_URL + id + '/')
 		.then(
 			response => response.json())
 		.then(
@@ -100,8 +122,8 @@ export const fetchActiveList = (id = firstListId) => {
 
 export const fetchAllLists = () => {
 	return function (dispatch) {
-		dispatch(requestAllLists());
-		return fetchFromServer('/api/v2/lists/')
+		dispatch(requestAllLists())
+		return fetchFromServer(LIST_API_URL)
 		.then(
 			response => response.json())
 		.then(
@@ -117,8 +139,8 @@ export const createNewListItem = (title, listId) => {
 		list_id: listId
 	}
 	return function(dispatch) {
-		dispatch(addNewListItem(itemData));
-		return fetchFromServer('/api/v2/list_items/', {
+		dispatch(addNewListItem(itemData))
+		return fetchFromServer(LIST_ITEM_API_URL, {
 			method: 'POST',
 			body: JSON.stringify(itemData)
 		})
@@ -136,8 +158,8 @@ export const createNewList = (listName) => {
 		name: listName
 	}
 	return function(dispatch) {
-		dispatch(addNewList(listData));
-		return fetchFromServer('/api/v2/lists/', {
+		dispatch(addNewList(listData))
+		return fetchFromServer(LIST_API_URL, {
 			method: 'POST',
 			body: JSON.stringify(listData)
 		})
@@ -145,6 +167,25 @@ export const createNewList = (listName) => {
 			response => response.json())
 		.then(
 			data => dispatch(receiveNewList(data))
+		)
+	}
+}
+
+
+export const toggleListItemCompleted = (id, value) => {
+	let completedData = {
+		completed: value
+	}
+	return function(dispatch) {
+		dispatch(updateListItem(id, completedData))
+		return fetchFromServer(LIST_ITEM_API_URL + id + '/', {
+			method: 'PATCH',
+			body: JSON.stringify(completedData)
+		})
+		.then(
+			response => response.json())
+		.then(
+			data => dispatch(receiveUpdatedListItem(data))
 		)
 	}
 }

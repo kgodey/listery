@@ -10,13 +10,13 @@ const inputStyle = {
 export class AddList extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {value: ''};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleKeyUp = this.handleKeyUp.bind(this);
+		this.state = {value: ''}
+		this.handleChange = this.handleChange.bind(this)
+		this.handleKeyUp = this.handleKeyUp.bind(this)
 	}
 
 	handleChange(event) {
-		this.setState({value: event.target.value});
+		this.setState({value: event.target.value})
 	}
 
 	handleKeyUp(event) {
@@ -39,6 +39,6 @@ export class AddList extends React.Component {
 					onKeyUp={this.handleKeyUp}
 				/>
 			</div>
-		);
+		)
 	}
 }

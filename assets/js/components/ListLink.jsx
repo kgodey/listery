@@ -16,7 +16,7 @@ export class ListLink extends React.Component {
 			<div className={className} onClick={() => this.props.onListClick(this.props.id)}>
 				<div style={nameStyle}>{this.props.name}</div>
 			</div>
-		);
+		)
 	}
 }
 

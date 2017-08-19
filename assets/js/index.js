@@ -5,8 +5,8 @@ import store from './store'
 
 
 const render = () => {
-	ReactDOM.render(<App store={store} />, document.getElementById('app'));
+	ReactDOM.render(<App store={store} />, document.getElementById('app'))
 }
 
-store.subscribe(render);
-render();
+store.subscribe(render)
+render()

@@ -10,13 +10,13 @@ const inputStyle = {
 export class AddListItem extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {value: ''};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleKeyUp = this.handleKeyUp.bind(this);
+		this.state = {value: ''}
+		this.handleChange = this.handleChange.bind(this)
+		this.handleKeyUp = this.handleKeyUp.bind(this)
 	}
 
 	handleChange(event) {
-		this.setState({value: event.target.value});
+		this.setState({value: event.target.value})
 	}
 
 	handleKeyUp(event) {
@@ -34,11 +34,11 @@ export class AddListItem extends React.Component {
 					value={this.state.value}
 					style={inputStyle}
 					placeholder='Add new item'
-					maxlength='255'
+					maxLength='255'
 					onChange={this.handleChange}
 					onKeyUp={this.handleKeyUp}
 				/>
 			</div>
-		);
+		)
 	}
 }
