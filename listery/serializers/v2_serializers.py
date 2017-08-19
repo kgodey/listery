@@ -4,6 +4,8 @@ from listery.models import List, ListItem
 
 
 class ListItemSerializer(serializers.ModelSerializer):
+	list_id = serializers.PrimaryKeyRelatedField(source='list', queryset=List.objects.all())
+
 	class Meta:
 		model = ListItem
 		fields = ['id', 'title', 'description', 'created_at', 'completed', 'list_id', 'order']
