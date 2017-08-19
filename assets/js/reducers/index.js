@@ -1,29 +1,48 @@
 import { combineReducers } from 'redux';
-import { RECEIVE_ACTIVE_LIST, RECEIVE_ALL_LISTS } from '../actions/api'
+import { RECEIVE_ACTIVE_LIST, RECEIVE_ALL_LISTS, RECEIVE_NEW_LIST_ITEM, RECEIVE_NEW_LIST } from '../actions/api'
+import { switchActiveList } from '../actions/ui'
 
 
-const setActiveList = (state={}, action) => {
+const updateActiveList = (state={}, action) => {
 	switch(action.type) {
 		case RECEIVE_ACTIVE_LIST:
-			return action.json
+		case RECEIVE_NEW_LIST:
+			return action.data
+		case RECEIVE_NEW_LIST_ITEM:
+			if (state) {
+				let newState = {
+					...state
+				}
+				newState.items.unshift(action.data)
+				return newState
+			} else {
+				return state
+			}
 		default:
 			return state
 	}
 }
 
 
-const setAllLists = (state=[], action) => {
+const updateAllLists = (state=[], action) => {
 	switch(action.type) {
 		case RECEIVE_ALL_LISTS:
-			return action.json
+			return action.data
+		case RECEIVE_NEW_LIST:
+			if (state) {
+				let newState = [...state]
+				newState.unshift(action.data)
+				return newState
+			} else {
+				return state
+			}
 		default:
 			return state
 	}
 }
-
 
 
 export const listeryApp = combineReducers({
-  activeList: setActiveList,
-  allLists: setAllLists
+  activeList: updateActiveList,
+  allLists: updateAllLists
 });

@@ -19,6 +19,11 @@ class ListViewSet(viewsets.ModelViewSet):
 	def get_queryset(self):
 		return self.queryset.all_for_user(self.request.user)
 
+	def get_serializer_class(self):
+		if self.action == 'list':
+			return MinimalListSerializer
+		return ListSerializer
+
 
 class ListItemViewSet(viewsets.ModelViewSet):
 	queryset = ListItem.objects.order_by('order')
@@ -28,8 +33,3 @@ class ListItemViewSet(viewsets.ModelViewSet):
 
 	def get_queryset(self):
 		return self.queryset.all_for_user(self.request.user)
-
-	def get_serializer_class(self):
-		if self.action == 'list':
-			return MinimalListSerializer
-		return ListSerializer
