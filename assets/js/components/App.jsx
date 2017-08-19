@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import { ActiveList } from './ActiveList.jsx'
 import { store } from '../store'
 import { fetchActiveList, fetchAllLists } from '../actions/api'
-import { ListNav } from './ListNav.jsx'
+import { ListSwitcher } from './ListSwitcher.jsx'
 
 
 export class App extends React.Component {
@@ -34,7 +34,7 @@ export class App extends React.Component {
 						/>
 					</div>
 					<div id="all-lists-region" className="col-md-4">
-						<ListNav
+						<ListSwitcher
 							allLists={allLists}
 						/>
 					</div>

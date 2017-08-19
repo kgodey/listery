@@ -13,8 +13,6 @@ const setActiveList = (state={}, action) => {
 
 
 const setAllLists = (state=[], action) => {
-	console.log('state', state)
-	console.log('action', action.json)
 	switch(action.type) {
 		case RECEIVE_ALL_LISTS:
 			return action.json

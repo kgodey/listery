@@ -2,11 +2,10 @@ import React from 'react'
 import { ListLink } from './ListLink.jsx'
 
 
-export class ListNav extends React.Component {
+export class ListSwitcher extends React.Component {
 	render() {
 		const allLists = this.props.allLists ? this.props.allLists : []
 		if (allLists.length > 0) {
-			console.log(allLists)
 			return (
 				<div className='list-group'>
 					{allLists.map(list =>
