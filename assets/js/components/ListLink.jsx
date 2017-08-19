@@ -8,8 +8,12 @@ const nameStyle = {
 
 export class ListLink extends React.Component {
 	render() {
+		let className = 'list-group-item'
+		if (this.props.activeList === true) {
+			 className = className + ' active'
+		}
 		return (
-			<div className="list-group-item">
+			<div className={className}>
 				<div style={nameStyle}>{this.props.name}</div>
 			</div>
 		);

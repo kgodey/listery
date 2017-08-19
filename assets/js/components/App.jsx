@@ -13,7 +13,7 @@ export class App extends React.Component {
 	}
 
 	render() {
-		const list = this.props.store.getState().activeList;
+		const activeList = this.props.store.getState().activeList;
 		const allLists = this.props.store.getState().allLists;
 		return (
 			<div className="container-fluid col-md-8">
@@ -30,12 +30,13 @@ export class App extends React.Component {
 				<div className="row">
 					<div className="col-md-8" id="current-list-items-region">
 						<ActiveList
-							{...list}
+							{...activeList}
 						/>
 					</div>
 					<div id="all-lists-region" className="col-md-4">
 						<ListSwitcher
 							allLists={allLists}
+							activeListId={activeList.id}
 						/>
 					</div>
 				</div>
