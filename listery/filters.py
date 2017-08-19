@@ -4,17 +4,9 @@ from listery.models import List, ListItem
 
 
 class ListFilter(filters.FilterSet):
-	first = filters.BooleanFilter(method='filter_first')
-
 	class Meta:
 		model = List
 		fields = ['owner_id']
-
-	def filter_first(self, queryset, name, value):
-		first_list = queryset.order_by('order').first()
-		return queryset.filter(**{
-			'id': first_list.id if first_list else None
-		})
 
 
 class ListItemFilter(filters.FilterSet):

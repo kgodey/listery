@@ -52,7 +52,7 @@ const receiveAllLists = (json) => {
 export const fetchActiveList = () => {
 	return function (dispatch) {
 		dispatch(requestActiveList());
-		return fetchFromServer('/api/v2/lists/?first=true')
+		return fetchFromServer('/api/v2/lists/' + firstListID + '/')
 		.then(
 			response => response.json())
 		.then(
