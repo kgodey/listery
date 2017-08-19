@@ -17,7 +17,7 @@ class ListViewSet(viewsets.ModelViewSet):
 		serializer.save(owner=self.request.user)
 
 	def get_queryset(self):
-		return self.queryset.filter(Q(owner=self.request.user) | Q(private=False))
+		return self.queryset.all_for_user(self.request.user)
 
 
 class ListItemViewSet(viewsets.ModelViewSet):
@@ -27,4 +27,4 @@ class ListItemViewSet(viewsets.ModelViewSet):
 	filter_class = ListItemFilter
 
 	def get_queryset(self):
-		return self.queryset.filter(Q(list__owner=self.request.user) | Q(list__private=False))
+		return self.queryset.all_for_user(self.request.user)
