@@ -1,5 +1,6 @@
 import React from 'react'
 import { ListLink } from './ListLink.jsx'
+import { switchActiveList } from '../actions/ui'
 
 
 export class ListSwitcher extends React.Component {
@@ -10,7 +11,7 @@ export class ListSwitcher extends React.Component {
 			return (
 				<div className='list-group'>
 					{allLists.map(list =>
-						<ListLink key={list.id} {...list} activeList={list.id == activeListId ? true : false}/>
+						<ListLink key={list.id} {...list} activeList={list.id == activeListId ? true : false} onListClick={ switchActiveList }/>
 					)}
 				</div>
 			);

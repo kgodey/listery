@@ -49,10 +49,10 @@ const receiveAllLists = (json) => {
 }
 
 
-export const fetchActiveList = () => {
+export const fetchActiveList = (id = firstListID) => {
 	return function (dispatch) {
 		dispatch(requestActiveList());
-		return fetchFromServer('/api/v2/lists/' + firstListID + '/')
+		return fetchFromServer('/api/v2/lists/' + id + '/')
 		.then(
 			response => response.json())
 		.then(
