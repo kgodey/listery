@@ -172,15 +172,12 @@ export const createNewList = (listName) => {
 }
 
 
-export const toggleListItemCompleted = (id, value) => {
-	let completedData = {
-		completed: value
-	}
+export const patchListItem = (id, data) => {
 	return function(dispatch) {
-		dispatch(updateListItem(id, completedData))
+		dispatch(updateListItem(id, data))
 		return fetchFromServer(LIST_ITEM_API_URL + id + '/', {
 			method: 'PATCH',
-			body: JSON.stringify(completedData)
+			body: JSON.stringify(data)
 		})
 		.then(
 			response => response.json())
