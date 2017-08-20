@@ -31,10 +31,10 @@ export class AddList extends React.Component {
 			<div className='list-group-item'>
 				<input
 					type='text'
-					value={this.state.value}
-					style={inputStyle}
 					placeholder='Add new list'
 					maxLength='255'
+					value={this.state.value}
+					style={inputStyle}
 					onChange={this.handleChange}
 					onKeyUp={this.handleKeyUp}
 				/>

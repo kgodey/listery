@@ -18,5 +18,10 @@ export const addNewList = (listName) => {
 
 
 export const toggleCompleted = (id, value) => {
-	store.dispatch(apiActions.toggleListItemCompleted(id, value))
+	store.dispatch(apiActions.patchListItem(id, {completed: value}))
+}
+
+
+export const saveTitle = (id, value) => {
+	store.dispatch(apiActions.patchListItem(id, {title: value}))
 }
