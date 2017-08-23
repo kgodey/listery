@@ -1,5 +1,5 @@
 import React from 'react'
-import { toggleCompleted, saveTitle } from '../actions/ui.js'
+import { toggleListItemCompletion, saveListItemTitle } from '../actions/ui.js'
 
 
 const titleStyle = {
@@ -38,10 +38,16 @@ export class ListItem extends React.Component {
 		this.handleDoubleClick = this.handleDoubleClick.bind(this)
 		this.handleTitleChange = this.handleTitleChange.bind(this)
 		this.handleTitleKeyUp = this.handleTitleKeyUp.bind(this)
+		this.handleTitleBlur = this.handleTitleBlur.bind(this)
+		this.saveListItemTitle = this.saveListItemTitle.bind(this)
 	}
 
 	handleClick(event) {
-		toggleCompleted(this.props.id, event.target.checked)
+		toggleListItemCompletion(this.props.id, event.target.checked)
+	}
+
+	handleDoubleClick(event) {
+		this.setState({currentlyEditing: true})
 	}
 
 	handleTitleChange(event) {
@@ -54,13 +60,17 @@ export class ListItem extends React.Component {
 
 	handleTitleKeyUp(event) {
 		if (event.key == 'Enter'){
-			saveTitle(this.props.id, this.state.data.title)
-			this.setState({currentlyEditing: false})
+			this.saveListItemTitle()
 		}
 	}
 
-	handleDoubleClick(event) {
-		this.setState({currentlyEditing: true})
+	handleTitleBlur(event) {
+		this.saveListItemTitle()
+	}
+
+	saveListItemTitle() {
+		saveListItemTitle(this.props.id, this.state.data.title)
+		this.setState({currentlyEditing: false})
 	}
 
 	render() {
@@ -78,6 +88,7 @@ export class ListItem extends React.Component {
 						value={this.state.data.title}
 						onChange={this.handleTitleChange}
 						onKeyUp={this.handleTitleKeyUp}
+						onBlur={this.handleTitleBlur}
 					/>
 				</div>
 			)
