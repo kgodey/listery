@@ -12,6 +12,8 @@ export const ADD_NEW_LIST = 'ADD_NEW_LIST'
 export const RECEIVE_NEW_LIST = 'RECEIVE_NEW_LIST'
 export const UPDATE_LIST_ITEM = 'UPDATE_LIST_ITEM'
 export const RECEIVE_UPDATED_LIST_ITEM = 'RECEIVE_UPDATED_LIST_ITEM'
+export const UPDATE_LIST = 'UPDATE_LIST'
+export const RECEIVE_UPDATED_LIST = 'RECEIVE_UPDATED_LIST'
 
 
 const LIST_API_URL = '/api/v2/lists/'
@@ -107,6 +109,23 @@ const receiveUpdatedListItem = (data) => {
 }
 
 
+const updateList = (id, data) => {
+	return {
+		type: UPDATE_LIST,
+		id,
+		data
+	}
+}
+
+
+const receiveUpdatedList = (data) => {
+	return {
+		type: RECEIVE_UPDATED_LIST,
+		data
+	}
+}
+
+
 export const fetchActiveList = (id = firstListId) => {
 	return function (dispatch) {
 		dispatch(requestActiveList())
@@ -183,6 +202,22 @@ export const patchListItem = (id, data) => {
 			response => response.json())
 		.then(
 			data => dispatch(receiveUpdatedListItem(data))
+		)
+	}
+}
+
+
+export const patchList = (id, data) => {
+	return function(dispatch) {
+		dispatch(updateList(id, data))
+		return fetchFromServer(LIST_API_URL + id + '/', {
+			method: 'PATCH',
+			body: JSON.stringify(data)
+		})
+		.then(
+			response => response.json())
+		.then(
+			data => dispatch(receiveUpdatedList(data))
 		)
 	}
 }

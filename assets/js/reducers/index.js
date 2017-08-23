@@ -7,6 +7,7 @@ const updateActiveList = (state={}, action) => {
 	switch(action.type) {
 		case apiActions.RECEIVE_ACTIVE_LIST:
 		case apiActions.RECEIVE_NEW_LIST:
+		case apiActions.RECEIVE_UPDATED_LIST:
 			return action.data
 		case apiActions.RECEIVE_NEW_LIST_ITEM:
 			if (state) {
@@ -43,6 +44,9 @@ const updateAllLists = (state=[], action) => {
 			} else {
 				return state
 			}
+		case apiActions.RECEIVE_UPDATED_LIST:
+			// transform the one with a matching ID, otherwise return original item
+			return state.map(item => item.id === action.data.id ? action.data : item)
 		default:
 			return state
 	}

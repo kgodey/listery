@@ -21,6 +21,8 @@ class MinimalListSerializer(serializers.ModelSerializer):
 		owner = self.context['request'].user
 		if 'name' in data:
 			same_name_lists = List.objects.filter(owner=owner, archived=False, name__iexact=data['name'])
+			if self.instance and self.instance.id:
+				same_name_lists = same_name_lists.exclude(id=self.instance.id)
 			if same_name_lists.exists():
 				raise serializers.ValidationError('An active list with that name already exists.')
 		return data
