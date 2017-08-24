@@ -2,7 +2,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { ActiveList } from './ActiveList.jsx'
 import { store } from '../store'
-import { fetchActiveList, fetchAllLists } from '../actions/api'
+import { fetchActiveList, fetchAllLists } from '../actions/api/list'
 import { ListSwitcher } from './ListSwitcher.jsx'
 
 
