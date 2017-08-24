@@ -1,5 +1,5 @@
 import React from 'react'
-import { addNewList } from '../actions/ui.js'
+import { addNewList } from '../../../actions/ui.js'
 
 
 const inputStyle = {

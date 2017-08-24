@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { toggleListItemCompletion, saveListItemTitle, removeListItem } from '../../actions/ui.js'
-import { Checkbox } from './Checkbox.jsx'
-import { Title } from './Title.jsx'
-import { Description } from './Description.jsx'
-import { DeleteIcon } from './Icons.jsx'
+import { toggleListItemCompletion, saveListItemTitle, removeListItem } from '../../../actions/ui.js'
+import { Checkbox } from './ListItem/Checkbox.jsx'
+import { Title } from './ListItem/Title.jsx'
+import { Description } from './ListItem/Description.jsx'
+import { DeleteIcon } from './ListItem/Icons.jsx'
 
 
 export class ListItem extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react'
-import { ListLink } from './ListLink.jsx'
-import { switchActiveList } from '../actions/ui'
-import { AddList } from './AddList.jsx'
+import { ListLink } from './ListSwitcher/ListLink.jsx'
+import { AddList } from './ListSwitcher/AddList.jsx'
+import { switchActiveList } from '../../actions/ui'
 
 
 export class ListSwitcher extends React.Component {
