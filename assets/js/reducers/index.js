@@ -26,6 +26,11 @@ const updateActiveList = (state={}, action) => {
 				// transform the one with a matching ID, otherwise return original item
 				items: state.items.map(item => item.id === action.data.id ? action.data : item)
 			}
+		case apiActions.RECEIVE_REMOVED_LIST_ITEM:
+			return {
+				...state,
+				items: state.items.filter(item => item.id !== action.id)
+			}
 		default:
 			return state
 	}

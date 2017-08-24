@@ -14,6 +14,8 @@ export const UPDATE_LIST_ITEM = 'UPDATE_LIST_ITEM'
 export const RECEIVE_UPDATED_LIST_ITEM = 'RECEIVE_UPDATED_LIST_ITEM'
 export const UPDATE_LIST = 'UPDATE_LIST'
 export const RECEIVE_UPDATED_LIST = 'RECEIVE_UPDATED_LIST'
+export const REMOVE_LIST_ITEM = 'REMOVE_LIST_ITEM'
+export const RECEIVE_REMOVED_LIST_ITEM = 'RECEIVE_REMOVED_LIST_ITEM'
 
 
 const LIST_API_URL = '/api/v2/lists/'
@@ -126,7 +128,23 @@ const receiveUpdatedList = (data) => {
 }
 
 
-export const fetchActiveList = (id = firstListId) => {
+const removeListItem = (id) => {
+	return {
+		type: REMOVE_LIST_ITEM,
+		id
+	}
+}
+
+
+const receiveRemovedListItem = (id) => {
+	return {
+		type: RECEIVE_REMOVED_LIST_ITEM,
+		id
+	}
+}
+
+
+export const fetchActiveList = (id = firstListID) => {
 	return function (dispatch) {
 		dispatch(requestActiveList())
 		return fetchFromServer(LIST_API_URL + id + '/')
@@ -152,10 +170,10 @@ export const fetchAllLists = () => {
 }
 
 
-export const createNewListItem = (title, listId) => {
+export const createNewListItem = (title, listID) => {
 	let itemData = {
 		title: title,
-		list_id: listId
+		list_id: listID
 	}
 	return function(dispatch) {
 		dispatch(addNewListItem(itemData))
@@ -218,6 +236,19 @@ export const patchList = (id, data) => {
 			response => response.json())
 		.then(
 			data => dispatch(receiveUpdatedList(data))
+		)
+	}
+}
+
+
+export const deleteListItem = (id) => {
+	return function(dispatch) {
+		dispatch(removeListItem(id))
+		return fetchFromServer(LIST_ITEM_API_URL + id + '/', {
+			method: 'DELETE'
+		})
+		.then(
+			data => dispatch(receiveRemovedListItem(id))
 		)
 	}
 }

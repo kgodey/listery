@@ -7,13 +7,13 @@ import { AddList } from './AddList.jsx'
 export class ListSwitcher extends React.Component {
 	render() {
 		const allLists = this.props.allLists ? this.props.allLists : []
-		const activeListId = this.props.activeListId
+		const activeListID = this.props.activeListID
 		if (allLists.length > 0) {
 			return (
 				<div className='list-group'>
 					<AddList />
 					{allLists.map(list =>
-						<ListLink key={list.id} {...list} activeList={list.id == activeListId ? true : false} onListClick={ switchActiveList }/>
+						<ListLink key={list.id} {...list} activeList={list.id == activeListID ? true : false} onListClick={ switchActiveList }/>
 					)}
 				</div>
 			)

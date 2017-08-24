@@ -21,7 +21,7 @@ export class AddListItem extends React.Component {
 
 	handleKeyUp(event) {
 		if (event.key == 'Enter'){
-			addNewListItem(this.state.value, this.props.listId)
+			addNewListItem(this.state.value, this.props.listID)
 			this.setState({value: ''})
 		}
 	}
