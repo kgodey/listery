@@ -1,8 +1,8 @@
 import React from 'react'
-import { ListHeader } from './ListHeader.jsx'
-import { AddListItem } from './AddListItem.jsx'
-import { ListItem } from './ListItem/ListItem.jsx'
-import { saveListName } from '../actions/ui.js'
+import { ListHeader } from './ActiveList/ListHeader.jsx'
+import { AddListItem } from './ActiveList/AddListItem.jsx'
+import { ListItem } from './ActiveList/ListItem.jsx'
+import { saveListName } from '../../actions/ui.js'
 
 
 export class ActiveList extends React.Component {
