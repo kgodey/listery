@@ -13,6 +13,11 @@ export const saveListName = (id, value) => {
 }
 
 
+export const saveListPrivacy = (id, value) => {
+	store.dispatch(listAPIActions.patchList(id, {private: value}))
+}
+
+
 export const addNewList = (listName) => {
 	store.dispatch(listAPIActions.createNewList(listName))
 }
