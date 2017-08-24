@@ -1,11 +1,11 @@
 import React from 'react'
-import GoX from 'react-icons/lib/go/x'
+import FaTrashO from 'react-icons/lib/fa/trash-o'
 
 
 export const DeleteIcon = (props) => {
 	if (props.currentlyHovering) {
 		return (
-			<GoX onClick={props.onClick} />
+			<FaTrashO onClick={props.onClick} />
 		)
 	}
 	return (null)
