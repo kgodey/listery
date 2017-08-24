@@ -1,7 +1,7 @@
 import React from 'react'
 import { ListHeader } from './ListHeader.jsx'
 import { AddListItem } from './AddListItem.jsx'
-import { ListItem } from './ListItem.jsx'
+import { ListItem } from './ListItem/ListItem.jsx'
 import { saveListName } from '../actions/ui.js'
 
 
@@ -23,7 +23,6 @@ export class ActiveList extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		// You don't have to do this check first, but it can help prevent an unneeded render
 		if (nextProps.name !== this.state.data.name) {
 			this.setState({
 				data: {
@@ -74,7 +73,7 @@ export class ActiveList extends React.Component {
 					onDoubleClick={this.handleDoubleClick}
 				/>
 				<div className='list-group'>
-					<AddListItem listId={this.props.id} />
+					<AddListItem listID={this.props.id} />
 					{items.map(item =>
 						<ListItem key={item.id} {...item}/>
 					)}

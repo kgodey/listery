@@ -4,7 +4,7 @@
 	"description": "List management app",
 	"main": "assets/js/index.js",
 	"scripts": {
-		"build": "webpack && cp node_modules/bootstrap/dist/css/bootstrap.min.css* listery/static/listery_v2/css/",
+		"build": "./build.sh",
 		"watch": "watch 'npm run build' assets"
 	},
 	"repository": {
@@ -24,6 +24,7 @@
 		"js-cookie": "^2.1.4",
 		"react": "^15.6.1",
 		"react-dom": "^15.6.1",
+		"react-icons": "^2.2.5",
 		"react-redux": "^5.0.6",
 		"redux": "^3.7.2",
 		"redux-logger": "^3.0.6",

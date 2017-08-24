@@ -7,8 +7,12 @@ export const switchActiveList = (id) => {
 }
 
 
-export const addNewListItem = (title, listId) => {
-	store.dispatch(apiActions.createNewListItem(title, listId))
+export const addNewListItem = (title, listID) => {
+	store.dispatch(apiActions.createNewListItem(title, listID))
+}
+
+export const removeListItem = (listID) => {
+	store.dispatch(apiActions.deleteListItem(listID))
 }
 
 

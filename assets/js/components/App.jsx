@@ -36,7 +36,7 @@ export class App extends React.Component {
 					<div id="all-lists-region" className="col-md-4">
 						<ListSwitcher
 							allLists={allLists}
-							activeListId={activeList.id}
+							activeListID={activeList.id}
 						/>
 					</div>
 				</div>

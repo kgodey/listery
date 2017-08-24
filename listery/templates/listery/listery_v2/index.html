@@ -9,9 +9,9 @@
 {% block scripts %}
 	<script>
 		{% if first_list_id %}
-			var firstListId = {{ first_list_id }};
+			var firstListID = {{ first_list_id }};
 		{% else %}
-			var firstListId = null;
+			var firstListID = null;
 		{% endif %}
 	</script>
 	<script src="{% static 'listery_v2/js/bundle.js' %}"></script>
