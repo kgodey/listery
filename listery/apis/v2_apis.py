@@ -1,6 +1,8 @@
 from django.db.models import Q
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from listery.filters import ListFilter, ListItemFilter
 from listery.models import List, ListItem
@@ -23,6 +25,27 @@ class ListViewSet(viewsets.ModelViewSet):
 		if self.action == 'list':
 			return MinimalListSerializer
 		return ListSerializer
+
+	@detail_route(methods=['post'], url_path='actions/quick_sort')
+	def quick_sort(self, request, pk=None):
+		item = self.get_object()
+		item.quick_sort()
+		serializer = self.get_serializer_class()(item)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+	@detail_route(methods=['post'], url_path='actions/complete_all')
+	def complete_all(self, request, pk=None):
+		item = self.get_object()
+		item.check_all()
+		serializer = self.get_serializer_class()(item)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+	@detail_route(methods=['post'], url_path='actions/uncomplete_all')
+	def uncomplete_all(self, request, pk=None):
+		item = self.get_object()
+		item.uncheck_all()
+		serializer = self.get_serializer_class()(item)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ListItemViewSet(viewsets.ModelViewSet):

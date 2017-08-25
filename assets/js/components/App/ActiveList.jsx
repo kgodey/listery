@@ -5,7 +5,6 @@ import { ListItem } from './ActiveList/ListItem.jsx'
 
 
 export class ActiveList extends React.Component {
-
 	render() {
 		const items = this.props.items ? this.props.items : []
 		return (
