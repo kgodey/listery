@@ -7,7 +7,8 @@ import FaCheckSqaureO from 'react-icons/lib/fa/check-square-o'
 
 
 const buttonStyle = {
-	marginRight: '10px'
+	marginRight: '10px',
+	marginTop: '5px'
 }
 
 

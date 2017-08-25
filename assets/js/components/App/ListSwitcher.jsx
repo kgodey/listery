@@ -10,7 +10,7 @@ export class ListSwitcher extends React.Component {
 		const activeListID = this.props.activeListID
 		if (allLists.length > 0) {
 			return (
-				<div className='list-group'>
+				<div className="col-md-4 list-group">
 					<AddList />
 					{allLists.map(list =>
 						<ListLink key={list.id} {...list} activeList={list.id == activeListID ? true : false} onListClick={ switchActiveList }/>
