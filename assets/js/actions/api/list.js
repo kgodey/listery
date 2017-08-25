@@ -11,6 +11,9 @@ export const UPDATE_LIST = 'UPDATE_LIST'
 export const RECEIVE_UPDATED_LIST = 'RECEIVE_UPDATED_LIST'
 
 const LIST_API_URL = '/api/v2/lists/'
+export const QUICK_SORT = '/actions/quick_sort/'
+export const CHECK_ALL = '/actions/complete_all/'
+export const UNCHECK_ALL = '/actions/uncomplete_all/'
 
 
 const requestActiveList = () => {
@@ -128,6 +131,21 @@ export const patchList = (id, data) => {
 		return sync(LIST_API_URL + id + '/', {
 			method: 'PATCH',
 			body: JSON.stringify(data)
+		})
+		.then(
+			response => response.json())
+		.then(
+			data => dispatch(receiveUpdatedList(data))
+		)
+	}
+}
+
+
+export const performActionOnList = (id, actionURL) => {
+	return function(dispatch) {
+		dispatch(updateList(id, {}))
+		return sync(LIST_API_URL + id + actionURL, {
+			method: 'POST',
 		})
 		.then(
 			response => response.json())

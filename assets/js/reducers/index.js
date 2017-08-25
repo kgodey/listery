@@ -60,6 +60,6 @@ const updateAllLists = (state=[], action) => {
 
 
 export const listeryApp = combineReducers({
-  activeList: updateActiveList,
-  allLists: updateAllLists
+	activeList: updateActiveList,
+	allLists: updateAllLists
 })

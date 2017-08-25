@@ -23,9 +23,17 @@ export const addNewList = (listName) => {
 }
 
 
+export const performActionOnList = (id, actionURL) => {
+	if ([listAPIActions.QUICK_SORT, listAPIActions.CHECK_ALL, listAPIActions.UNCHECK_ALL].includes(actionURL)) {
+		store.dispatch(listAPIActions.performActionOnList(id, actionURL))
+	}
+}
+
+
 export const addNewListItem = (title, listID) => {
 	store.dispatch(listItemAPIActions.createNewListItem(title, listID))
 }
+
 
 export const removeListItem = (listID) => {
 	store.dispatch(listItemAPIActions.deleteListItem(listID))
