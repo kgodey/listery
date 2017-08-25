@@ -16,29 +16,15 @@ export class App extends React.Component {
 		const activeList = this.props.store.getState().activeList
 		const allLists = this.props.store.getState().allLists
 		return (
-			<div className="container-fluid col-md-8">
+			<div className="container-fluid col-md-10">
 				<div className="row">
-					<div className="col-md-8" id="current-list-header-region">
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-md-6" id="current-list-actions-region">
-					</div>
-					<div className="col-md-2" id="current-list-count-region">
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-md-8" id="current-list-items-region">
-						<ActiveList
-							{...activeList}
-						/>
-					</div>
-					<div id="all-lists-region" className="col-md-4">
-						<ListSwitcher
-							allLists={allLists}
-							activeListID={activeList.id}
-						/>
-					</div>
+					<ActiveList
+						{...activeList}
+					/>
+					<ListSwitcher
+						allLists={allLists}
+						activeListID={activeList.id}
+					/>
 				</div>
 			</div>
 		)

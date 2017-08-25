@@ -8,7 +8,7 @@ export class ActiveList extends React.Component {
 	render() {
 		const items = this.props.items ? this.props.items : []
 		return (
-			<div>
+			<div className="col-md-8">
 				<ListHeader {...this.props} />
 				<div className='list-group'>
 					<AddListItem listID={this.props.id} />
