@@ -60,7 +60,7 @@ const receiveRemovedListItem = (id) => {
 }
 
 
-export const createNewListItem = (title, listID) => {
+export const createListItem = (title, listID) => {
 	let itemData = {
 		title: title,
 		list_id: listID

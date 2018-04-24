@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
 import { SharingButton, QuickSortButton, CheckAllButton, UncheckAllButton } from './ListActions/Buttons.jsx'
 
 
@@ -7,7 +9,7 @@ const divStyle = {
 }
 
 
-export const ListActions = (props) => {
+let ListActions = (props) => {
 	return (
 		<div style={divStyle}>
 			<QuickSortButton
@@ -26,3 +28,14 @@ export const ListActions = (props) => {
 		</div>
 	)
 }
+
+
+const mapStateToProps = (state) => {
+	return {
+		private: state.allLists[state.activeListID].private,
+	}
+}
+
+ListActions = connect(mapStateToProps, null)(ListActions)
+
+export default ListActions

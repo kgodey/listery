@@ -1,5 +1,7 @@
 import React from 'react'
-import { addNewList } from '../../../actions/ui.js'
+import { connect } from 'react-redux'
+
+import { createNewList } from '../../../actions/list.js'
 
 
 const inputStyle = {
@@ -7,7 +9,7 @@ const inputStyle = {
 }
 
 
-export class AddList extends React.Component {
+class AddList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {value: ''}
@@ -21,7 +23,7 @@ export class AddList extends React.Component {
 
 	handleKeyUp(event) {
 		if (event.key == 'Enter'){
-			addNewList(this.state.value)
+			this.props.createList(this.state.value)
 			this.setState({value: ''})
 		}
 	}
@@ -42,3 +44,14 @@ export class AddList extends React.Component {
 		)
 	}
 }
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		createList: (value) => {
+			dispatch(createNewList(value))
+		}
+	}
+}
+
+AddList = connect(null, mapDispatchToProps)(AddList)
+export default AddList

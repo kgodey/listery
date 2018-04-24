@@ -1,23 +1,32 @@
 import React from 'react'
-import { ListLink } from './ListSwitcher/ListLink.jsx'
-import { AddList } from './ListSwitcher/AddList.jsx'
-import { switchActiveList } from '../../actions/ui'
+import { connect } from 'react-redux'
+
+import { getSortedLists } from '../../reducers/index'
+import ListLink from './ListSwitcher/ListLink.jsx'
+import AddList from './ListSwitcher/AddList.jsx'
 
 
-export class ListSwitcher extends React.Component {
-	render() {
-		const allLists = this.props.allLists ? this.props.allLists : []
-		const activeListID = this.props.activeListID
-		if (allLists.length > 0) {
-			return (
-				<div className="col-md-4 list-group">
-					<AddList />
-					{allLists.map(list =>
-						<ListLink key={list.id} {...list} activeList={list.id == activeListID ? true : false} onListClick={ switchActiveList }/>
-					)}
-				</div>
-			)
-		}
-		return null
+let ListSwitcher = (props) => {
+	return (
+		<div className="col-md-4 list-group">
+			<AddList />
+			{Object.keys(props.allLists).map(item =>
+				<ListLink
+					key={item}
+					id={item}
+					activeList={item == props.activeListID ? true : false}
+				/>
+			)}
+		</div>
+	)
+}
+
+const mapStateToProps = (state) => {
+	return {
+		allLists: getSortedLists(state),
+		activeListID: state.activeListID
 	}
 }
+
+ListSwitcher = connect(mapStateToProps, null)(ListSwitcher)
+export default ListSwitcher
