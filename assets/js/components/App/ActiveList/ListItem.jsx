@@ -1,13 +1,14 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
-import { toggleListItemCompletion, saveListItemTitle, removeListItem } from '../../../actions/ui.js'
+import { deleteListItem, patchListItem } from '../../../actions/list-item'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
 import { DeleteIcon } from './ListItem/Icons.jsx'
 
 
-export class ListItem extends React.Component {
+class ListItem extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -39,7 +40,7 @@ export class ListItem extends React.Component {
 	}
 
 	handleCheckboxClick(event) {
-		toggleListItemCompletion(this.props.id, event.target.checked)
+		this.props.updateListItem(this.props.id, {completed: event.target.checked})
 	}
 
 	handleDoubleClick(event) {
@@ -65,11 +66,11 @@ export class ListItem extends React.Component {
 	}
 
 	handleDeleteClick(event) {
-		removeListItem(this.props.id)
+		this.props.removeListItem(this.props.id)
 	}
 
 	saveListItemTitle() {
-		saveListItemTitle(this.props.id, this.state.data.title)
+		this.props.updateListItem(this.props.id, {title: this.state.data.title})
 		this.setState({currentlyEditing: false})
 	}
 
@@ -91,3 +92,27 @@ export class ListItem extends React.Component {
 		)
 	}
 }
+
+const mapStateToProps = (state, ownProps) => {
+	const itemData = state.activeListItems[ownProps.id]
+	return {
+		completed: itemData.completed,
+		title: itemData.title,
+		description: itemData.description,
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		updateListItem: (id, data) => {
+			dispatch(patchListItem(id, data))
+		},
+		removeListItem: (id) => {
+			dispatch(deleteListItem(id))
+		}
+	}
+}
+
+ListItem = connect(mapStateToProps, mapDispatchToProps)(ListItem)
+
+export default ListItem

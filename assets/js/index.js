@@ -1,12 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { App } from './components/App.jsx'
-import store from './store'
+import { Provider } from 'react-redux'
+
+import App from './components/App.jsx'
+import configureStore from './store'
 
 
-const render = () => {
-	ReactDOM.render(<App store={store} />, document.getElementById('app'))
-}
+const store = configureStore()
 
-store.subscribe(render)
-render()
+ReactDOM.render(
+	<Provider store={store}>
+		<App />
+	</Provider>,
+	document.getElementById('app')
+)

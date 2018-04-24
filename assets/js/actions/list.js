@@ -143,6 +143,9 @@ export const patchList = (id, data) => {
 
 export const performActionOnList = (id, actionURL) => {
 	return function(dispatch) {
+		if (![QUICK_SORT, CHECK_ALL, UNCHECK_ALL].includes(actionURL)) {
+			return Promise.resolve()
+		}
 		dispatch(updateList(id, {}))
 		return sync(LIST_API_URL + id + actionURL, {
 			method: 'POST',

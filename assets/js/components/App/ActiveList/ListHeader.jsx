@@ -1,11 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import { ListTitle } from './ListHeader/ListTitle.jsx'
-import { ListActions } from './ListHeader/ListActions.jsx'
-import { QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions/api/list.js'
-import { saveListName, saveListPrivacy, performActionOnList } from '../../../actions/ui.js'
+import ListActions from './ListHeader/ListActions.jsx'
+import { patchList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions//list.js'
 
-export class ListHeader extends React.Component {
+
+class ListHeader extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -43,19 +44,23 @@ export class ListHeader extends React.Component {
 	}
 
 	handlePrivacyClick(event) {
-		saveListPrivacy(this.props.id, !this.props.private)
+		this.props.updateList(id, { private: !this.props.private })
+	}
+
+	updateListUsingAction(actionURL) {
+		this.props.updateListViaAction(this.props.id, actionURL)
 	}
 
 	handleQuickSortClick(event) {
-		performActionOnList(this.props.id, QUICK_SORT)
+		this.updateListUsingAction(QUICK_SORT)
 	}
 
 	handleCheckAllClick(event) {
-		performActionOnList(this.props.id, CHECK_ALL)
+		this.updateListUsingAction(CHECK_ALL)
 	}
 
 	handleUncheckAllClick(event) {
-		performActionOnList(this.props.id, UNCHECK_ALL)
+		this.updateListUsingAction(UNCHECK_ALL)
 	}
 
 	handleNameDoubleClick(event) {
@@ -73,7 +78,7 @@ export class ListHeader extends React.Component {
 	}
 
 	saveListName() {
-		saveListName(this.props.id, this.state.data.name)
+		this.props.updateList(this.props.id, { name: this.state.data.name })
 		this.setState({currentlyEditing: false})
 	}
 
@@ -81,7 +86,6 @@ export class ListHeader extends React.Component {
 		return (
 			<div>
 				<ListTitle
-					id={this.props.id}
 					name={this.state.data.name}
 					currentlyEditing={this.state.currentlyEditing}
 					onChange={this.handleNameChange}
@@ -90,7 +94,6 @@ export class ListHeader extends React.Component {
 					onDoubleClick={this.handleNameDoubleClick}
 				/>
 				<ListActions
-					private={this.props.private}
 					onPrivacyClick={this.handlePrivacyClick}
 					onQuickSortClick={this.handleQuickSortClick}
 					onCheckAllClick={this.handleCheckAllClick}
@@ -100,3 +103,27 @@ export class ListHeader extends React.Component {
 		)
 	}
 }
+
+
+const mapStateToProps = (state) => {
+	return {
+		id: state.activeListID,
+		name: state.allLists[state.activeListID].name,
+		private: state.allLists[state.activeListID].private
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		updateList: (id, data) => {
+			dispatch(patchList(id, data))
+		},
+		updateListViaAction: (id, actionURL) => {
+			dispatch(performActionOnList(id, actionURL))
+		}
+	}
+}
+
+ListHeader = connect(mapStateToProps, mapDispatchToProps)(ListHeader)
+
+export default ListHeader

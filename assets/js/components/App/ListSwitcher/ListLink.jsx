@@ -1,22 +1,39 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
+import { fetchActiveList } from '../../../actions//list'
 
 
 const nameStyle = {
 	display: 'inline-block'
 }
 
+let ListLink = (props) => {
+	let className = 'list-group-item'
+	if (props.activeList) {
+		 className = className + ' active'
+	}
+	return (
+		<div className={className} style={nameStyle} onClick={props.onClick}>
+			{props.name}
+		</div>
+	)
+}
 
-export class ListLink extends React.Component {
-	render() {
-		let className = 'list-group-item'
-		if (this.props.activeList === true) {
-			 className = className + ' active'
-		}
-		return (
-			<div className={className} onClick={() => this.props.onListClick(this.props.id)}>
-				<div style={nameStyle}>{this.props.name}</div>
-			</div>
-		)
+const mapStateToProps = (state, ownProps) => {
+	return {
+		name: state.allLists[ownProps.id].name,
 	}
 }
 
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		onClick: (id) => {
+			dispatch(fetchActiveList(ownProps.id))
+		}
+	}
+}
+
+ListLink = connect(mapStateToProps, mapDispatchToProps)(ListLink)
+
+export default ListLink
