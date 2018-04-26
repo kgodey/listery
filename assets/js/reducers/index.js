@@ -18,7 +18,11 @@ const updateActiveListItems = (state={}, action) => {
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
 		case listAPIActions.RECEIVE_NEW_LIST:
 		case listAPIActions.RECEIVE_UPDATED_LIST:
-			return Object.assign(...action.data.items.map(item => ({[item.id]: item})))
+			if (action.data.items != undefined && action.data.items.length > 0) {
+				return Object.assign(...action.data.items.map(item => ({[item.id]: item})))
+			} else {
+				return state
+			}
 		case listItemAPIActions.RECEIVE_NEW_LIST_ITEM:
 		case listItemAPIActions.RECEIVE_UPDATED_LIST_ITEM:
 			newState = {...state}

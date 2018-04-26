@@ -27,8 +27,11 @@ class ListItem extends React.Component {
 		this.handleTitleChange = this.handleTitleChange.bind(this)
 		this.handleTitleKeyUp = this.handleTitleKeyUp.bind(this)
 		this.handleTitleBlur = this.handleTitleBlur.bind(this)
+		this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
+		this.handleDescriptionKeyUp = this.handleDescriptionKeyUp.bind(this)
+		this.handleDescriptionBlur = this.handleDescriptionBlur.bind(this)
 		this.handleDeleteClick = this.handleDeleteClick.bind(this)
-		this.saveListItemTitle = this.saveListItemTitle.bind(this)
+		this.saveListItemTitleAndDescription = this.saveListItemTitleAndDescription.bind(this)
 	}
 
 	handleMouseEnter(event) {
@@ -48,29 +51,46 @@ class ListItem extends React.Component {
 	}
 
 	handleTitleChange(event) {
-		this.setState({
-			data: {
-				title: event.target.value
-			}
-		})
+		let newState = {...this.state}
+		newState['data']['title'] = event.target.value
+		this.setState(newState)
 	}
 
 	handleTitleKeyUp(event) {
 		if (event.key == 'Enter'){
-			this.saveListItemTitle()
+			this.saveListItemTitleAndDescription()
 		}
 	}
 
 	handleTitleBlur(event) {
-		this.saveListItemTitle()
+		this.saveListItemTitleAndDescription()
+	}
+
+	handleDescriptionChange(event) {
+		let newState = {...this.state}
+		newState['data']['description'] = event.target.value
+		this.setState(newState)
+	}
+
+	handleDescriptionKeyUp(event) {
+		if (event.key == 'Enter'){
+			this.saveListItemTitleAndDescription()
+		}
+	}
+
+	handleDescriptionBlur(event) {
+		this.saveListItemTitleAndDescription()
 	}
 
 	handleDeleteClick(event) {
 		this.props.removeListItem(this.props.id)
 	}
 
-	saveListItemTitle() {
-		this.props.updateListItem(this.props.id, {title: this.state.data.title})
+	saveListItemTitleAndDescription() {
+		this.props.updateListItem(this.props.id, {
+			title: this.state.data.title,
+			description: this.state.data.description
+		})
 		this.setState({currentlyEditing: false})
 	}
 
@@ -86,7 +106,14 @@ class ListItem extends React.Component {
 					onBlur={this.handleTitleBlur}
 					onDoubleClick={this.handleDoubleClick}
 				/>
-				<Description description={this.state.data.description} />
+				<Description
+					currentlyEditing={this.state.currentlyEditing}
+					description={this.state.data.description}
+					onChange={this.handleDescriptionChange}
+					onKeyUp={this.handleDescriptionKeyUp}
+					onBlur={this.handleDescriptionBlur}
+					onDoubleClick={this.handleDoubleClick}
+				/>
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 			</div>
 		)
