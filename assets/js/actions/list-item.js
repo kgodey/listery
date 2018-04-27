@@ -1,5 +1,5 @@
 import { sync } from './base'
-
+import { fetchActiveList } from './list'
 
 export const ADD_NEW_LIST_ITEM = 'ADD_NEW_LIST_ITEM'
 export const RECEIVE_NEW_LIST_ITEM = 'RECEIVE_NEW_LIST_ITEM'
@@ -44,10 +44,11 @@ const receiveUpdatedListItem = (data) => {
 }
 
 
-const removeListItem = (id) => {
+const removeListItem = (id, listID) => {
 	return {
 		type: REMOVE_LIST_ITEM,
-		id
+		id,
+		listID
 	}
 }
 
@@ -74,7 +75,9 @@ export const createListItem = (title, listID) => {
 		.then(
 			response => response.json())
 		.then(
-			data => dispatch(receiveNewListItem(data))
+			data => dispatch(receiveNewListItem(data)))
+		.then(
+			dispatch(fetchActiveList(listID))
 		)
 	}
 }
@@ -90,20 +93,24 @@ export const patchListItem = (id, data) => {
 		.then(
 			response => response.json())
 		.then(
-			data => dispatch(receiveUpdatedListItem(data))
+			data => dispatch(receiveUpdatedListItem(data)))
+		.then(
+			dispatch(fetchActiveList(data.list_id))
 		)
 	}
 }
 
 
-export const deleteListItem = (id) => {
+export const deleteListItem = (id, listID) => {
 	return function(dispatch) {
-		dispatch(removeListItem(id))
+		dispatch(removeListItem(id, listID))
 		return sync(LIST_ITEM_API_URL + id + '/', {
 			method: 'DELETE'
 		})
 		.then(
-			data => dispatch(receiveRemovedListItem(id))
+			data => dispatch(receiveRemovedListItem(id)))
+		.then(
+			dispatch(fetchActiveList(listID))
 		)
 	}
 }

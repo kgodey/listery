@@ -12,10 +12,12 @@ class ListItemSerializer(serializers.ModelSerializer):
 
 
 class MinimalListSerializer(serializers.ModelSerializer):
+	item_count = serializers.ReadOnlyField()
+	completed_item_count = serializers.ReadOnlyField(source='checked_item_count')
 
 	class Meta:
 		model = List
-		fields = ['id', 'name', 'order', 'private', 'created_at', 'owner_id']
+		fields = ['id', 'name', 'order', 'private', 'created_at', 'owner_id', 'item_count', 'completed_item_count']
 
 	def validate(self, data):
 		owner = self.context['request'].user
@@ -33,4 +35,4 @@ class ListSerializer(MinimalListSerializer):
 
 	class Meta:
 		model = List
-		fields = ['id', 'name', 'order', 'private', 'created_at', 'owner_id', 'items']
+		fields = ['id', 'name', 'order', 'private', 'created_at', 'owner_id', 'items', 'item_count', 'completed_item_count']
