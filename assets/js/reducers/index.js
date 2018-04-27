@@ -13,6 +13,8 @@ const compareByOrder = (a, b) => {
 
 
 const updateActiveListItems = (state={}, action) => {
+	console.log('hello')
+	console.log(action)
 	let newState
 	switch(action.type) {
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
@@ -30,7 +32,7 @@ const updateActiveListItems = (state={}, action) => {
 			return newState
 		case listItemAPIActions.RECEIVE_REMOVED_LIST_ITEM:
 			newState = {...state}
-			delete newState[action.data.id]
+			delete newState[action.id]
 			return newState
 		default:
 			return state

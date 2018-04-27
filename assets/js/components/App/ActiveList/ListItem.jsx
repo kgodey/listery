@@ -83,7 +83,7 @@ class ListItem extends React.Component {
 	}
 
 	handleDeleteClick(event) {
-		this.props.removeListItem(this.props.id)
+		this.props.removeListItem(this.props.id, this.props.list_id)
 	}
 
 	saveListItemTitleAndDescription() {
@@ -134,8 +134,8 @@ const mapDispatchToProps = (dispatch) => {
 		updateListItem: (id, data) => {
 			dispatch(patchListItem(id, data))
 		},
-		removeListItem: (id) => {
-			dispatch(deleteListItem(id))
+		removeListItem: (id, listID) => {
+			dispatch(deleteListItem(id, listID))
 		}
 	}
 }

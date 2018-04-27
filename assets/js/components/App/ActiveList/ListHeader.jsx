@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { ListTitle } from './ListHeader/ListTitle.jsx'
 import ListActions from './ListHeader/ListActions.jsx'
+import ListItemCount from './ListHeader/ListItemCount.jsx'
 import { patchList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions//list.js'
 
 
@@ -99,6 +100,7 @@ class ListHeader extends React.Component {
 					onCheckAllClick={this.handleCheckAllClick}
 					onUncheckAllClick={this.handleUncheckAllClick}
 				/>
+				<ListItemCount />
 			</div>
 		)
 	}
