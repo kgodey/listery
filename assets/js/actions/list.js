@@ -9,6 +9,8 @@ export const ADD_NEW_LIST = 'ADD_NEW_LIST'
 export const RECEIVE_NEW_LIST = 'RECEIVE_NEW_LIST'
 export const UPDATE_LIST = 'UPDATE_LIST'
 export const RECEIVE_UPDATED_LIST = 'RECEIVE_UPDATED_LIST'
+export const REMOVE_LIST = 'REMOVE_LIST'
+export const RECEIVE_REMOVED_LIST = 'RECEIVE_REMOVED_LIST'
 
 const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
@@ -78,6 +80,25 @@ const receiveUpdatedList = (data) => {
 	}
 }
 
+
+const removeList = (id, data, nextListID) => {
+	return {
+		type: REMOVE_LIST,
+		id,
+		data,
+		nextListID
+	}
+}
+
+
+const receiveRemovedList = (id, data, nextListID) => {
+	return {
+		type: RECEIVE_REMOVED_LIST,
+		id,
+		data,
+		nextListID
+	}
+}
 
 
 export const fetchActiveList = (id = firstListID) => {
@@ -154,6 +175,18 @@ export const performActionOnList = (id, actionURL) => {
 			response => response.json())
 		.then(
 			data => dispatch(receiveUpdatedList(data))
+		)
+	}
+}
+
+export const archiveList = (id, data, nextListID) => {
+	return function(dispatch) {
+		dispatch(removeList(id, data, nextListID))
+		return sync(LIST_API_URL + id + '/', {
+			method: 'DELETE'
+		})
+		.then(
+			data => dispatch(receiveRemovedList(id, data, nextListID))
 		)
 	}
 }

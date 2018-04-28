@@ -9,7 +9,7 @@ from listery.signals import *
 
 class ListQuerySet(models.QuerySet):
 	def all_for_user(self, user):
-		return self.filter(Q(owner=user) | Q(private=False))
+		return self.filter((Q(owner=user) | Q(private=False)) & Q(archived=False))
 
 	def all(self):
 		return super(ListQuerySet, self).all().order_by('order')
