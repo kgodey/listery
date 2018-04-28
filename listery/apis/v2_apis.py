@@ -10,7 +10,7 @@ from listery.serializers.v2_serializers import ListSerializer, ListItemSerialize
 
 
 class ListViewSet(viewsets.ModelViewSet):
-	queryset = List.objects.filter(archived=False).order_by('order')
+	queryset = List.objects.filter(archived=False).order_by('-order')
 	serializer_class = ListSerializer
 	permission_classes = (IsAuthenticated,)
 	filter_class = ListFilter
@@ -25,6 +25,12 @@ class ListViewSet(viewsets.ModelViewSet):
 		if self.action == 'list':
 			return MinimalListSerializer
 		return ListSerializer
+
+	def destroy(self, request, *args, **kwargs):
+		item = self.get_object()
+		item.archived = True
+		item.save()
+		return Response(status=status.HTTP_204_NO_CONTENT)
 
 	@detail_route(methods=['post'], url_path='actions/quick_sort')
 	def quick_sort(self, request, pk=None):

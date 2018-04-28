@@ -5,7 +5,7 @@ import { deleteListItem, patchListItem } from '../../../actions/list-item'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
-import { DeleteIcon } from './ListItem/Icons.jsx'
+import { DeleteIcon } from '../Shared/Icons.jsx'
 
 
 class ListItem extends React.Component {

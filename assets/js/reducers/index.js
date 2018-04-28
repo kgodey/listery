@@ -13,18 +13,15 @@ const compareByOrder = (a, b) => {
 
 
 const updateActiveListItems = (state={}, action) => {
-	console.log('hello')
-	console.log(action)
 	let newState
 	switch(action.type) {
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
 		case listAPIActions.RECEIVE_NEW_LIST:
 		case listAPIActions.RECEIVE_UPDATED_LIST:
-			if (action.data.items != undefined && action.data.items.length > 0) {
+			if (action.data.items && action.data.items.length > 0) {
 				return Object.assign(...action.data.items.map(item => ({[item.id]: item})))
-			} else {
-				return state
 			}
+			return {}
 		case listItemAPIActions.RECEIVE_NEW_LIST_ITEM:
 		case listItemAPIActions.RECEIVE_UPDATED_LIST_ITEM:
 			newState = {...state}
@@ -42,6 +39,12 @@ const updateActiveListItems = (state={}, action) => {
 
 const updateActiveListID = (state=firstListID, action) => {
 	switch(action.type) {
+		case listAPIActions.RECEIVE_REMOVED_LIST:
+			// if the current list has been deleted, load the default list
+			if (state == action.id) {
+				return action.nextListID
+			}
+			return state
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
 		case listAPIActions.RECEIVE_NEW_LIST:
 		case listAPIActions.RECEIVE_UPDATED_LIST:
@@ -63,6 +66,10 @@ const updateAllLists = (state, action) => {
 	switch(action.type) {
 		case listAPIActions.RECEIVE_ALL_LISTS:
 			return Object.assign(...action.data.map(item => ({[item.id]: item})))
+		case listAPIActions.RECEIVE_REMOVED_LIST:
+			newState = {...state}
+			delete newState[action.id]
+			return newState
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
 		case listAPIActions.RECEIVE_NEW_LIST:
 		case listAPIActions.RECEIVE_UPDATED_LIST:
@@ -93,4 +100,24 @@ export const getSortedListItems = (state) => {
 
 export const getSortedLists = (state) => {
 	return state.allLists
+}
+
+export const getNextList = (state, listID) => {
+	var listIDs = Object.keys(state.allLists)
+	// if there are no lists, return null
+	if (listIDs.length == 0) {
+		return null
+	}
+	// if the list ID passed in is the same as the first list on the page...
+	if (listID == state.allLists[listIDs[listIDs.length - 1]].id) {
+		// if there's only one list and it's the current one, return null
+		if (listIDs.length == 1) {
+			return null
+		// if there's more than one list, return the second list
+		} else {
+			return state.allLists[listIDs[listIDs.length - 2]].id
+		}
+	}
+	// return the active list ID by default
+	return state.activeListID
 }
