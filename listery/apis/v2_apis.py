@@ -1,4 +1,6 @@
 from django.db.models import Q
+from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
@@ -53,6 +55,12 @@ class ListViewSet(viewsets.ModelViewSet):
 		serializer = self.get_serializer_class()(item)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
+	@detail_route(methods=['post'])
+	def plaintext(self, request, pk=None):
+		item = self.get_object()
+		response = HttpResponse(item.plaintext, content_type='text/plain')
+		response['Content-Disposition'] = 'attachment; filename="%s-%s.txt"' % (item.name, timezone.now())
+		return response
 
 class ListItemViewSet(viewsets.ModelViewSet):
 	queryset = ListItem.objects.order_by('order')
