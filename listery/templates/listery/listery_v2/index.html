@@ -8,6 +8,7 @@
 
 {% block scripts %}
 	<script>
+		var csrfTokenInput = "{% csrf_token %}";
 		{% if first_list_id %}
 			var firstListID = {{ first_list_id }};
 		{% else %}

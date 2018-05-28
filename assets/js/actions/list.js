@@ -11,6 +11,7 @@ export const UPDATE_LIST = 'UPDATE_LIST'
 export const RECEIVE_UPDATED_LIST = 'RECEIVE_UPDATED_LIST'
 export const REMOVE_LIST = 'REMOVE_LIST'
 export const RECEIVE_REMOVED_LIST = 'RECEIVE_REMOVED_LIST'
+export const DOWNLOAD_LIST = 'DOWNLOAD_LIST'
 
 const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
@@ -78,6 +79,13 @@ const receiveRemovedList = (id, data, nextListID) => ({
 	id,
 	data,
 	nextListID
+})
+
+
+const downloadList = (id, downloadFormID) => ({
+	type: DOWNLOAD_LIST,
+	id,
+	downloadFormID
 })
 
 
@@ -168,5 +176,14 @@ export const archiveList = (id, data, nextListID) => {
 		.then(
 			data => dispatch(receiveRemovedList(id, data, nextListID))
 		)
+	}
+}
+
+export const downloadPlaintextList = (id, downloadFormID) => {
+	var jQueryFormID = '#' + downloadFormID
+	return function(dispatch) {
+		$(jQueryFormID).attr('action', LIST_API_URL + id + '/plaintext/');
+		$(jQueryFormID).submit();
+		dispatch(downloadList(id, downloadFormID))
 	}
 }

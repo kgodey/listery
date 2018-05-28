@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { getNextList } from '../../../reducers/index'
-import { fetchActiveList, archiveList } from '../../../actions//list'
+import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions//list'
 import { DeleteIcon } from '../Shared/Icons.jsx'
+import { DownloadIcon } from './ListLink/DownloadIcon.jsx'
 
 
 const nameStyle = {
@@ -18,6 +19,7 @@ class ListLink extends React.Component {
 		}
 		this.handleMouseEnter = this.handleMouseEnter.bind(this)
 		this.handleMouseLeave = this.handleMouseLeave.bind(this)
+		this.handleDownloadClick = this.handleDownloadClick.bind(this)
 		this.handleArchiveClick = this.handleArchiveClick.bind(this)
 	}
 
@@ -27,6 +29,10 @@ class ListLink extends React.Component {
 
 	handleMouseLeave(event) {
 		this.setState({currentlyHovering: false})
+	}
+
+	handleDownloadClick(event) {
+		this.props.downloadList(this.props.id, this.props.downloadFormID)
 	}
 
 	handleArchiveClick(event) {
@@ -41,7 +47,9 @@ class ListLink extends React.Component {
 		return (
 			<div className={className} style={nameStyle} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
 				<span onClick={this.props.onClick}>{this.props.name}</span>
+				<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
+				<form id={this.props.downloadFormID} method="POST" className="hidden"><span dangerouslySetInnerHTML={{__html: csrfTokenInput}}></span></form>
 			</div>
 		)
 	}
@@ -51,7 +59,8 @@ class ListLink extends React.Component {
 const mapStateToProps = (state, ownProps) => {
 	return {
 		name: state.allLists[ownProps.id].name,
-		nextListID: getNextList(state, ownProps.id)
+		nextListID: getNextList(state, ownProps.id),
+		downloadFormID: 'download-form-' + ownProps.id
 	}
 }
 
@@ -65,6 +74,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 			if (ownProps.activeList) {
 				dispatch(fetchActiveList(nextListID))
 			}
+		},
+		downloadList: (id, downloadFormID) => {
+			dispatch(downloadPlaintextList(id, downloadFormID))
 		}
 	}
 }
