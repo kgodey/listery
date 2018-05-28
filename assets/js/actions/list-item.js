@@ -11,54 +11,42 @@ export const RECEIVE_REMOVED_LIST_ITEM = 'RECEIVE_REMOVED_LIST_ITEM'
 const LIST_ITEM_API_URL = '/api/v2/list_items/'
 
 
-const addNewListItem = (data) => {
-	return {
-		type: ADD_NEW_LIST_ITEM,
-		data
-	}
-}
+const addNewListItem = (data) => ({
+	type: ADD_NEW_LIST_ITEM,
+	data
+})
 
 
-const receiveNewListItem = (data) => {
-	return {
-		type: RECEIVE_NEW_LIST_ITEM,
-		data
-	}
-}
+const receiveNewListItem = (data) => ({
+	type: RECEIVE_NEW_LIST_ITEM,
+	data
+})
 
 
-const updateListItem = (id, data) => {
-	return {
-		type: UPDATE_LIST_ITEM,
-		id,
-		data
-	}
-}
+const updateListItem = (id, data) => ({
+	type: UPDATE_LIST_ITEM,
+	id,
+	data
+})
 
 
-const receiveUpdatedListItem = (data) => {
-	return {
-		type: RECEIVE_UPDATED_LIST_ITEM,
-		data
-	}
-}
+const receiveUpdatedListItem = (data) => ({
+	type: RECEIVE_UPDATED_LIST_ITEM,
+	data
+})
 
 
-const removeListItem = (id, listID) => {
-	return {
-		type: REMOVE_LIST_ITEM,
-		id,
-		listID
-	}
-}
+const removeListItem = (id, listID) => ({
+	type: REMOVE_LIST_ITEM,
+	id,
+	listID
+})
 
 
-const receiveRemovedListItem = (id) => {
-	return {
-		type: RECEIVE_REMOVED_LIST_ITEM,
-		id
-	}
-}
+const receiveRemovedListItem = (id) => ({
+	type: RECEIVE_REMOVED_LIST_ITEM,
+	id
+})
 
 
 export const createListItem = (title, listID) => {
