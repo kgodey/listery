@@ -18,87 +18,67 @@ export const CHECK_ALL = '/actions/complete_all/'
 export const UNCHECK_ALL = '/actions/uncomplete_all/'
 
 
-const requestActiveList = () => {
-	return {
-		type: REQUEST_ACTIVE_LIST,
-	}
-}
+const requestActiveList = () => ({
+	type: REQUEST_ACTIVE_LIST,
+})
 
 
-const receiveActiveList = (data) => {
-	return {
-		type: RECEIVE_ACTIVE_LIST,
-		data
-	}
-}
+const receiveActiveList = (data) => ({
+	type: RECEIVE_ACTIVE_LIST,
+	data
+})
 
 
-const requestAllLists = () => {
-	return {
-		type: REQUEST_ALL_LISTS,
-	}
-}
+const requestAllLists = () => ({
+	type: REQUEST_ALL_LISTS
+})
 
 
-const receiveAllLists = (data) => {
-	return {
-		type: RECEIVE_ALL_LISTS,
-		data
-	}
-}
+const receiveAllLists = (data) => ({
+	type: RECEIVE_ALL_LISTS,
+	data
+})
 
 
-const addNewList = (data) => {
-	return {
-		type: ADD_NEW_LIST,
-		data
-	}
-}
+const addNewList = (data) => ({
+	type: ADD_NEW_LIST,
+	data
+})
 
 
-const receiveNewList = (data) => {
-	return {
-		type: RECEIVE_NEW_LIST,
-		data
-	}
-}
+const receiveNewList = (data) => ({
+	type: RECEIVE_NEW_LIST,
+	data
+})
 
 
-const updateList = (id, data) => {
-	return {
-		type: UPDATE_LIST,
-		id,
-		data
-	}
-}
+const updateList = (id, data) => ({
+	type: UPDATE_LIST,
+	id,
+	data
+})
 
 
-const receiveUpdatedList = (data) => {
-	return {
-		type: RECEIVE_UPDATED_LIST,
-		data
-	}
-}
+const receiveUpdatedList = (data) => ({
+	type: RECEIVE_UPDATED_LIST,
+	data
+})
 
 
-const removeList = (id, data, nextListID) => {
-	return {
-		type: REMOVE_LIST,
-		id,
-		data,
-		nextListID
-	}
-}
+const removeList = (id, data, nextListID) => ({
+	type: REMOVE_LIST,
+	id,
+	data,
+	nextListID
+})
 
 
-const receiveRemovedList = (id, data, nextListID) => {
-	return {
-		type: RECEIVE_REMOVED_LIST,
-		id,
-		data,
-		nextListID
-	}
-}
+const receiveRemovedList = (id, data, nextListID) => ({
+	type: RECEIVE_REMOVED_LIST,
+	id,
+	data,
+	nextListID
+})
 
 
 export const fetchActiveList = (id = firstListID) => {
