@@ -3,10 +3,10 @@ import * as listAPIActions from '../actions//list'
 import * as listItemAPIActions from '../actions//list-item'
 
 
-const compareByOrder = (a, b) => {
-	if (a.order < b.order)
+const compareByOrder = (listA, listB) => {
+	if (listA.order < listB.order)
 		return -1;
-	if (a.order > b.order)
+	if (listA.order > listB.order)
 		return 1;
 	return 0;
 }
