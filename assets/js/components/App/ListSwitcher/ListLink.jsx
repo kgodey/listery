@@ -58,7 +58,7 @@ class ListLink extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		name: state.allLists[ownProps.id].name,
+		name: state.listsByID[ownProps.id].name,
 		nextListID: getNextList(state, ownProps.id),
 		downloadFormID: 'download-form-' + ownProps.id
 	}

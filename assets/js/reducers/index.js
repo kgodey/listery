@@ -88,7 +88,7 @@ const updateAllLists = (state, action) => {
 export const listeryApp = combineReducers({
 	activeListID: updateActiveListID,
 	activeListItems: updateActiveListItems,
-	allLists: updateAllLists
+	listsByID: updateAllLists
 })
 
 
@@ -97,25 +97,30 @@ export const getSortedListItems = (state) => {
 	return items.sort(compareByOrder)
 }
 
-
 export const getSortedLists = (state) => {
-	return state.allLists
+	if (state.listsByID) {
+		let items = Object.keys(state.listsByID).map(item => state.listsByID[item])
+		// Remove empty objects from items
+		items = items.filter((item) => { return Object.keys(item).length > 0 });
+		return items.sort(compareByOrder)
+	}
+	return []
 }
 
 export const getNextList = (state, listID) => {
-	var listIDs = Object.keys(state.allLists)
+	var listIDs = Object.keys(state.listsByID)
 	// if there are no lists, return null
 	if (listIDs.length == 0) {
 		return null
 	}
 	// if the list ID passed in is the same as the first list on the page...
-	if (listID == state.allLists[listIDs[listIDs.length - 1]].id) {
+	if (listID == state.listsByID[listIDs[listIDs.length - 1]].id) {
 		// if there's only one list and it's the current one, return null
 		if (listIDs.length == 1) {
 			return null
 		// if there's more than one list, return the second list
 		} else {
-			return state.allLists[listIDs[listIDs.length - 2]].id
+			return state.listsByID[listIDs[listIDs.length - 2]].id
 		}
 	}
 	// return the active list ID by default

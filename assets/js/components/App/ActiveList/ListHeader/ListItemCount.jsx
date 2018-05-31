@@ -20,8 +20,8 @@ let ListItemCount = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		numItems: state.allLists[state.activeListID].item_count,
-		numCompletedItems: state.allLists[state.activeListID].completed_item_count
+		numItems: state.listsByID[state.activeListID].item_count,
+		numCompletedItems: state.listsByID[state.activeListID].completed_item_count
 	}
 }
 
