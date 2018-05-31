@@ -110,8 +110,8 @@ class ListHeader extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		id: state.activeListID,
-		name: state.allLists[state.activeListID].name,
-		private: state.allLists[state.activeListID].private
+		name: state.listsByID[state.activeListID].name,
+		private: state.listsByID[state.activeListID].private
 	}
 }
 

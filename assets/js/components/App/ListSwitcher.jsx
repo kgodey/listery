@@ -10,11 +10,11 @@ let ListSwitcher = (props) => {
 	return (
 		<div className="col-md-4 list-group">
 			<AddList />
-			{Object.keys(props.allLists).map(item =>
+			{props.sortedLists.map(item =>
 				<ListLink
-					key={item}
-					id={item}
-					activeList={item == props.activeListID ? true : false}
+					key={item.id}
+					id={item.id}
+					activeList={item.id == props.activeListID ? true : false}
 				/>
 			)}
 		</div>
@@ -23,7 +23,8 @@ let ListSwitcher = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		allLists: getSortedLists(state),
+		sortedLists: getSortedLists(state),
+		listsByID: state.listsByID,
 		activeListID: state.activeListID
 	}
 }

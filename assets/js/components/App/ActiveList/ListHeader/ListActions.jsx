@@ -32,7 +32,7 @@ let ListActions = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		private: state.allLists[state.activeListID].private,
+		private: state.listsByID[state.activeListID].private,
 	}
 }
 
