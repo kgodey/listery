@@ -62,6 +62,7 @@ class ListViewSet(viewsets.ModelViewSet):
 		response['Content-Disposition'] = 'attachment; filename="%s-%s.txt"' % (item.name, timezone.now())
 		return response
 
+
 class ListItemViewSet(viewsets.ModelViewSet):
 	queryset = ListItem.objects.order_by('order')
 	serializer_class = ListItemSerializer
@@ -70,3 +71,14 @@ class ListItemViewSet(viewsets.ModelViewSet):
 
 	def get_queryset(self):
 		return self.queryset.all_for_user(self.request.user)
+
+	@detail_route(methods=['post'])
+	def reorder(self, request, pk=None):
+		item = self.get_object()
+		position = request.data.get('order', None)
+		if position is not None:
+			item.to(int(position))
+			serializer = ListItemSerializer(item)
+			return Response(serializer.data, status=status.HTTP_200_OK)
+		else:
+			return Response({'order': ['Please specify an order.']}, status=status.HTTP_400_BAD_REQUEST)

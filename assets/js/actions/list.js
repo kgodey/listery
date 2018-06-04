@@ -182,8 +182,8 @@ export const archiveList = (id, data, nextListID) => {
 export const downloadPlaintextList = (id, downloadFormID) => {
 	var jQueryFormID = '#' + downloadFormID
 	return function(dispatch) {
-		$(jQueryFormID).attr('action', LIST_API_URL + id + '/plaintext/');
-		$(jQueryFormID).submit();
+		$(jQueryFormID).attr('action', LIST_API_URL + id + '/plaintext/')
+		$(jQueryFormID).submit()
 		dispatch(downloadList(id, downloadFormID))
 	}
 }

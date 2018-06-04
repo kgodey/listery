@@ -5,10 +5,10 @@ import * as listItemAPIActions from '../actions//list-item'
 
 const compareByOrder = (listA, listB) => {
 	if (listA.order < listB.order)
-		return -1;
+		return -1
 	if (listA.order > listB.order)
-		return 1;
-	return 0;
+		return 1
+	return 0
 }
 
 
@@ -26,6 +26,16 @@ const updateActiveListItems = (state={}, action) => {
 		case listItemAPIActions.RECEIVE_UPDATED_LIST_ITEM:
 			newState = {...state}
 			newState[action.data.id] = action.data
+			return newState
+		case listItemAPIActions.RECEIVE_REORDERED_LIST_ITEM:
+			// Update the order of all affected objects.
+			newState = {...state}
+			newState[action.id].order = action.order
+			for (var key in newState) {
+				if (newState[key].order >= action.order && newState[key].id != action.id) {
+					newState[key].order = newState[key].order + 1
+				}
+			}
 			return newState
 		case listItemAPIActions.RECEIVE_REMOVED_LIST_ITEM:
 			newState = {...state}
@@ -101,7 +111,7 @@ export const getSortedLists = (state) => {
 	if (state.listsByID) {
 		let items = Object.keys(state.listsByID).map(item => state.listsByID[item])
 		// Remove empty objects from items
-		items = items.filter((item) => { return Object.keys(item).length > 0 });
+		items = items.filter((item) => { return Object.keys(item).length > 0 })
 		return items.sort(compareByOrder)
 	}
 	return []
