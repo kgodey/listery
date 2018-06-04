@@ -1,3 +1,4 @@
 export const ItemTypes = {
-  LISTITEM: 'item'
+	LIST_ITEM: 'item',
+	LIST: 'list'
 }

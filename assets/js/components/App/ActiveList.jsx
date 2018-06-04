@@ -1,6 +1,4 @@
 import React from 'react'
-import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 import { connect } from 'react-redux'
 
 import { updateListItemOrder } from '../../actions/list-item'
@@ -37,7 +35,7 @@ class ActiveList extends React.Component {
 	}
 
 	setListItemOrder(id, order, listID) {
-		this.props.moveListItem(id, order, listID)
+		this.props.reorderListItem(id, order, listID)
 	}
 }
 
@@ -49,11 +47,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		moveListItem: (id, order, listID) => {
+		reorderListItem: (id, order, listID) => {
 			dispatch(updateListItemOrder(id, order, listID))
 		}
 	}
 }
 
 ActiveList = connect(mapStateToProps, mapDispatchToProps)(ActiveList)
-export default DragDropContext(HTML5Backend)(ActiveList)
+export default ActiveList

@@ -1,15 +1,61 @@
+import flow from 'lodash/flow'
+import PropTypes from 'prop-types'
 import React from 'react'
+import { DragSource, DropTarget } from 'react-dnd'
+import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 
 import { getNextList } from '../../../reducers/index'
 import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions//list'
 import { DeleteIcon } from '../Shared/Icons.jsx'
 import { DownloadIcon } from './ListLink/DownloadIcon.jsx'
+import { ItemTypes } from '../Shared/ItemTypes.jsx'
 
 
 const nameStyle = {
 	display: 'inline-block'
 }
+
+
+const listSource = {
+	beginDrag(props) {
+		return {
+			id: props.id,
+			order: props.order
+		}
+	}
+}
+
+
+const listTarget = {
+	drop(props, monitor, component) {
+		const dragID = monitor.getItem().id
+		const dropID = props.id
+		const dropOrder = props.order
+
+		// Don't replace items with themselves
+		if (dragID == dropID) {
+			return
+		}
+
+		props.setListOrder(dragID, dropOrder)
+	}
+}
+
+
+const dragCollect = (connect, monitor) => {
+	return {
+		connectDragSource: connect.dragSource()
+	}
+}
+
+
+const dropCollect = (connect) => {
+	return {
+		connectDropTarget: connect.dropTarget()
+	}
+}
+
 
 class ListLink extends React.Component {
 	constructor(props) {
@@ -44,14 +90,15 @@ class ListLink extends React.Component {
 		if (this.props.activeList) {
 			 className = className + ' active'
 		}
-		return (
+		const { connectDragSource, connectDropTarget } = this.props
+		return connectDragSource(connectDropTarget(
 			<div className={className} style={nameStyle} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
 				<span onClick={this.props.onClick}>{this.props.name}</span>
 				<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
 				<form id={this.props.downloadFormID} method="POST" className="hidden"><span dangerouslySetInnerHTML={{__html: csrfTokenInput}}></span></form>
 			</div>
-		)
+		))
 	}
 
 }
@@ -81,6 +128,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 	}
 }
 
+
+ListLink.propTypes = {
+	connectDragSource: PropTypes.func.isRequired,
+	connectDropTarget: PropTypes.func.isRequired
+}
+
+
 ListLink = connect(mapStateToProps, mapDispatchToProps)(ListLink)
 
-export default ListLink
+
+export default flow(
+	DragSource(ItemTypes.LIST, listSource, dragCollect),
+	DropTarget(ItemTypes.LIST, listTarget, dropCollect)
+)(ListLink)

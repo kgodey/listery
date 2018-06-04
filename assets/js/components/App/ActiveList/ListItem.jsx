@@ -194,6 +194,6 @@ ListItem.propTypes = {
 ListItem = connect(mapStateToProps, mapDispatchToProps)(ListItem)
 
 export default flow(
-	DragSource(ItemTypes.LISTITEM, listItemSource, dragCollect),
-	DropTarget(ItemTypes.LISTITEM, listItemTarget, dropCollect)
+	DragSource(ItemTypes.LIST_ITEM, listItemSource, dragCollect),
+	DropTarget(ItemTypes.LIST_ITEM, listItemTarget, dropCollect)
 )(ListItem)
