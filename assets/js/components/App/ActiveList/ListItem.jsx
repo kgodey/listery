@@ -22,6 +22,7 @@ const listItemSource = {
 	}
 }
 
+
 const listItemTarget = {
 	drop(props, monitor, component) {
 		const dragID = monitor.getItem().id
