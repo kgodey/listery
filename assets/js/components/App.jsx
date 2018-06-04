@@ -1,4 +1,6 @@
 import React from 'react'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import { connect } from 'react-redux'
 
 import { fetchActiveList, fetchAllLists } from '../actions//list'
@@ -46,4 +48,4 @@ const mapDispatchToProps = (dispatch) => {
 
 App = connect(null, mapDispatchToProps)(App)
 
-export default App
+export default DragDropContext(HTML5Backend)(App)

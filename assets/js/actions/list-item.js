@@ -57,7 +57,8 @@ const reorderListItem = (id, order) => ({
 	order
 })
 
-const receiveReorderedListItem = (id, order, data) => ({
+
+const receiveReorderedListItem = (id, order) => ({
 	type: RECEIVE_REORDERED_LIST_ITEM,
 	id,
 	order
@@ -127,9 +128,7 @@ export const updateListItemOrder = (id, order, listID) => {
 			body: JSON.stringify({order: order})
 		})
 		.then(
-			data => dispatch(receiveReorderedListItem(id, order)))
-		.then(
-			dispatch(fetchActiveList(listID))
+			data => dispatch(receiveReorderedListItem(id, order))
 		)
 	}
 }

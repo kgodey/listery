@@ -12,6 +12,8 @@ export const RECEIVE_UPDATED_LIST = 'RECEIVE_UPDATED_LIST'
 export const REMOVE_LIST = 'REMOVE_LIST'
 export const RECEIVE_REMOVED_LIST = 'RECEIVE_REMOVED_LIST'
 export const DOWNLOAD_LIST = 'DOWNLOAD_LIST'
+export const REORDER_LIST = 'REORDER_LIST'
+export const RECEIVE_REORDERED_LIST = 'RECEIVE_REORDERED_LIST'
 
 const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
@@ -86,6 +88,20 @@ const downloadList = (id, downloadFormID) => ({
 	type: DOWNLOAD_LIST,
 	id,
 	downloadFormID
+})
+
+
+const reorderList = (id, order) => ({
+	type: REORDER_LIST,
+	id,
+	order
+})
+
+
+const receiveReorderedList = (id, order) => ({
+	type: RECEIVE_REORDERED_LIST,
+	id,
+	order
 })
 
 
@@ -187,3 +203,18 @@ export const downloadPlaintextList = (id, downloadFormID) => {
 		dispatch(downloadList(id, downloadFormID))
 	}
 }
+
+
+export const updateListOrder = (id, order) => {
+	return function(dispatch) {
+		dispatch(reorderList(id, order))
+		return sync(LIST_API_URL + id + '/reorder/', {
+			method: 'POST',
+			body: JSON.stringify({order: order})
+		})
+		.then(
+			data => dispatch(receiveReorderedList(id, order))
+		)
+	}
+}
+

@@ -89,6 +89,16 @@ const updateAllLists = (state, action) => {
 				return newState
 			}
 			return newState
+		case listAPIActions.RECEIVE_REORDERED_LIST:
+			// Update the order of all affected objects.
+			newState = {...state}
+			newState[action.id].order = action.order
+			for (var key in newState) {
+				if (newState[key].order >= action.order && newState[key].id != action.id) {
+					newState[key].order = newState[key].order + 1
+				}
+			}
+			return newState
 		default:
 			return newState
 	}
