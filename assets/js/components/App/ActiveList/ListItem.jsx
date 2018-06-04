@@ -1,4 +1,8 @@
+import flow from 'lodash/flow'
+import PropTypes from 'prop-types'
 import React from 'react'
+import { DragSource, DropTarget } from 'react-dnd'
+import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 
 import { deleteListItem, patchListItem } from '../../../actions/list-item'
@@ -6,6 +10,47 @@ import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
 import { DeleteIcon } from '../Shared/Icons.jsx'
+import { ItemTypes } from '../Shared/ItemTypes.jsx'
+
+
+const listItemSource = {
+	beginDrag(props) {
+		return {
+			id: props.id,
+			order: props.order
+		}
+	}
+}
+
+const listItemTarget = {
+	drop(props, monitor, component) {
+		const dragID = monitor.getItem().id
+		const dropID = props.id
+		const dropOrder = props.order
+		const listID = props.listID
+
+		// Don't replace items with themselves
+		if (dragID == dropID) {
+			return
+		}
+
+		props.setListItemOrder(dragID, dropOrder, listID)
+	}
+}
+
+
+const dragCollect = (connect, monitor) => {
+	return {
+		connectDragSource: connect.dragSource()
+	}
+}
+
+
+const dropCollect = (connect) => {
+	return {
+		connectDropTarget: connect.dropTarget()
+	}
+}
 
 
 class ListItem extends React.Component {
@@ -95,7 +140,8 @@ class ListItem extends React.Component {
 	}
 
 	render() {
-		return (
+		const { connectDragSource, connectDropTarget } = this.props
+		return connectDragSource(connectDropTarget(
 			<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
 				<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />
 				<Title
@@ -116,7 +162,7 @@ class ListItem extends React.Component {
 				/>
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 			</div>
-		)
+		))
 	}
 }
 
@@ -140,6 +186,14 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
+ListItem.propTypes = {
+	connectDragSource: PropTypes.func.isRequired,
+	connectDropTarget: PropTypes.func.isRequired
+}
+
 ListItem = connect(mapStateToProps, mapDispatchToProps)(ListItem)
 
-export default ListItem
+export default flow(
+	DragSource(ItemTypes.LISTITEM, listItemSource, dragCollect),
+	DropTarget(ItemTypes.LISTITEM, listItemTarget, dropCollect)
+)(ListItem)

@@ -7,6 +7,8 @@ export const UPDATE_LIST_ITEM = 'UPDATE_LIST_ITEM'
 export const RECEIVE_UPDATED_LIST_ITEM = 'RECEIVE_UPDATED_LIST_ITEM'
 export const REMOVE_LIST_ITEM = 'REMOVE_LIST_ITEM'
 export const RECEIVE_REMOVED_LIST_ITEM = 'RECEIVE_REMOVED_LIST_ITEM'
+export const REORDER_LIST_ITEM = 'REORDER_LIST_ITEM'
+export const RECEIVE_REORDERED_LIST_ITEM = 'RECEIVE_REORDERED_LIST_ITEM'
 
 const LIST_ITEM_API_URL = '/api/v2/list_items/'
 
@@ -46,6 +48,19 @@ const removeListItem = (id, listID) => ({
 const receiveRemovedListItem = (id) => ({
 	type: RECEIVE_REMOVED_LIST_ITEM,
 	id
+})
+
+
+const reorderListItem = (id, order) => ({
+	type: REORDER_LIST_ITEM,
+	id,
+	order
+})
+
+const receiveReorderedListItem = (id, order, data) => ({
+	type: RECEIVE_REORDERED_LIST_ITEM,
+	id,
+	order
 })
 
 
@@ -97,6 +112,22 @@ export const deleteListItem = (id, listID) => {
 		})
 		.then(
 			data => dispatch(receiveRemovedListItem(id)))
+		.then(
+			dispatch(fetchActiveList(listID))
+		)
+	}
+}
+
+
+export const updateListItemOrder = (id, order, listID) => {
+	return function(dispatch) {
+		dispatch(reorderListItem(id, order))
+		return sync(LIST_ITEM_API_URL + id + '/reorder/', {
+			method: 'POST',
+			body: JSON.stringify({order: order})
+		})
+		.then(
+			data => dispatch(receiveReorderedListItem(id, order)))
 		.then(
 			dispatch(fetchActiveList(listID))
 		)

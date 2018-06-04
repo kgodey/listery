@@ -33,7 +33,7 @@ class ListHeader extends React.Component {
 			data: {
 				name: nextProps.name
 			}
-		});
+		})
 	}
 
 	handleNameChange(event) {
