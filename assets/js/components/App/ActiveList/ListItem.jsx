@@ -26,6 +26,12 @@ const listItemSource = {
 
 
 const listItemTarget = {
+	hover(props, monitor, component) {
+		const dragID = monitor.getItem().id
+		const dropOrder = props.order
+		props.showNewOrder(dragID, dropOrder)
+	},
+
 	drop(props, monitor, component) {
 		const dragID = monitor.getItem().id
 		const dropID = props.id

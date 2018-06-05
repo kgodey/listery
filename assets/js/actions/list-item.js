@@ -132,3 +132,10 @@ export const updateListItemOrder = (id, order, listID) => {
 		)
 	}
 }
+
+
+export const changeUIListOrder = (dragID, dropOrder) => {
+	return function(dispatch) {
+		return dispatch(receiveReorderedListItem(dragID, dropOrder))
+	}
+}

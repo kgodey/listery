@@ -217,4 +217,3 @@ export const updateListOrder = (id, order) => {
 		)
 	}
 }
-

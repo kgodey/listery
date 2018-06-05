@@ -77,21 +77,18 @@ const updateAllLists = (state, action) => {
 		case listAPIActions.RECEIVE_ALL_LISTS:
 			return Object.assign(...action.data.map(item => ({[item.id]: item})))
 		case listAPIActions.RECEIVE_REMOVED_LIST:
-			newState = {...state}
 			delete newState[action.id]
 			return newState
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
 		case listAPIActions.RECEIVE_NEW_LIST:
 		case listAPIActions.RECEIVE_UPDATED_LIST:
 			if (action.data.id) {
-				newState = {...state}
 				newState[action.data.id] = action.data
 				return newState
 			}
 			return newState
 		case listAPIActions.RECEIVE_REORDERED_LIST:
 			// Update the order of all affected objects.
-			newState = {...state}
 			newState[action.id].order = action.order
 			for (var key in newState) {
 				if (newState[key].order >= action.order && newState[key].id != action.id) {
