@@ -17,7 +17,9 @@ const listItemSource = {
 	beginDrag(props) {
 		return {
 			id: props.id,
-			order: props.order
+			order: props.order,
+			listID: props.listID,
+			type: ItemTypes.LIST_ITEM
 		}
 	}
 }
