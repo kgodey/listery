@@ -21,7 +21,8 @@ const listSource = {
 	beginDrag(props) {
 		return {
 			id: props.id,
-			order: props.order
+			order: props.order,
+			type: ItemTypes.LIST
 		}
 	}
 }
@@ -29,16 +30,27 @@ const listSource = {
 
 const listTarget = {
 	drop(props, monitor, component) {
-		const dragID = monitor.getItem().id
-		const dropID = props.id
-		const dropOrder = props.order
-
-		// Don't replace items with themselves
-		if (dragID == dropID) {
-			return
+		const item = monitor.getItem()
+		if (item.type == ItemTypes.LIST) {
+			const dragID = item.id
+			const dropID = props.id
+			const dropOrder = props.order
+			// Don't replace items with themselves
+			if (dragID == dropID) {
+				return
+			}
+			// Update list order
+			props.setListOrder(dragID, dropOrder)
+		} else if (item.type == ItemTypes.LIST_ITEM) {
+			const dragID = item.id
+			const dragListID = item.listID
+			const dropID = props.id
+			// Don't make any updates if the item is already in the list
+			if (dragListID == dropID) {
+				return
+			}
+			props.setListID(dragID, {list_id: dropID})
 		}
-
-		props.setListOrder(dragID, dropOrder)
 	}
 }
 
@@ -140,5 +152,5 @@ ListLink = connect(mapStateToProps, mapDispatchToProps)(ListLink)
 
 export default flow(
 	DragSource(ItemTypes.LIST, listSource, dragCollect),
-	DropTarget(ItemTypes.LIST, listTarget, dropCollect)
+	DropTarget([ItemTypes.LIST, ItemTypes.LIST_ITEM], listTarget, dropCollect)
 )(ListLink)
