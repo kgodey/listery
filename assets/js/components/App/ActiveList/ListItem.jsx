@@ -18,8 +18,7 @@ const listItemSource = {
 		return {
 			id: props.id,
 			order: props.order,
-			listID: props.listID,
-			type: ItemTypes.LIST_ITEM
+			listID: props.listID
 		}
 	}
 }
