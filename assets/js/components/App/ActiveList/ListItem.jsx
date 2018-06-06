@@ -50,7 +50,8 @@ const listItemTarget = {
 
 const dragCollect = (connect, monitor) => {
 	return {
-		connectDragSource: connect.dragSource()
+		connectDragSource: connect.dragSource(),
+		isDragging: monitor.isDragging()
 	}
 }
 
@@ -149,9 +150,10 @@ class ListItem extends React.Component {
 	}
 
 	render() {
-		const { connectDragSource, connectDropTarget } = this.props
+		const { connectDragSource, isDragging, connectDropTarget } = this.props
+		const style = {opacity: isDragging ? 0 : 1}
 		return connectDragSource(connectDropTarget(
-			<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+			<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} style={style}>
 				<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />
 				<Title
 					currentlyEditing={this.state.currentlyEditing}
@@ -197,6 +199,7 @@ const mapDispatchToProps = (dispatch) => {
 
 ListItem.propTypes = {
 	connectDragSource: PropTypes.func.isRequired,
+	isDragging: PropTypes.bool.isRequired,
 	connectDropTarget: PropTypes.func.isRequired
 }
 
