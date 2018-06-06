@@ -34,14 +34,8 @@ const listItemTarget = {
 
 	drop(props, monitor, component) {
 		const dragID = monitor.getItem().id
-		const dropID = props.id
 		const dropOrder = props.order
 		const listID = props.listID
-
-		// Don't replace items with themselves
-		if (dragID == dropID) {
-			return
-		}
 
 		props.setListItemOrder(dragID, dropOrder, listID)
 	}
