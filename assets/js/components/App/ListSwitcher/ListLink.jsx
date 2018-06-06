@@ -21,8 +21,7 @@ const listSource = {
 	beginDrag(props) {
 		return {
 			id: props.id,
-			order: props.order,
-			type: ItemTypes.LIST
+			order: props.order
 		}
 	}
 }
@@ -31,7 +30,8 @@ const listSource = {
 const listTarget = {
 	drop(props, monitor, component) {
 		const item = monitor.getItem()
-		if (item.type == ItemTypes.LIST) {
+		const itemType = monitor.getItemType()
+		if (itemType == ItemTypes.LIST) {
 			const dragID = item.id
 			const dropID = props.id
 			const dropOrder = props.order
@@ -41,7 +41,7 @@ const listTarget = {
 			}
 			// Update list order
 			props.setListOrder(dragID, dropOrder)
-		} else if (item.type == ItemTypes.LIST_ITEM) {
+		} else if (itemType == ItemTypes.LIST_ITEM) {
 			const dragID = item.id
 			const dragListID = item.listID
 			const dropID = props.id
