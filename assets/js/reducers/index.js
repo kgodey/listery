@@ -41,13 +41,13 @@ const updateActiveListItems = (state={}, action) => {
 			switch(orderChangeType) {
 				case 'INCREASE':
 					for (var key in newState) {
-						if (newState[key].order <= action.order && newState[key].id != action.id) {
+						if (newState[key].order <= action.order && newState[key].order > oldOrder && newState[key].id != action.id) {
 							newState[key].order = newState[key].order - 1
 						}
 					}
 				case 'DECREASE':
 					for (var key in newState) {
-						if (newState[key].order <= action.order && newState[key].id != action.id) {
+						if (newState[key].order >= action.order && newState[key].order < oldOrder && newState[key].id != action.id) {
 							newState[key].order = newState[key].order + 1
 						}
 					}
