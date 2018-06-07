@@ -108,7 +108,6 @@ class ListLink extends React.Component {
 				<span onClick={this.props.onClick}>{this.props.name}</span>
 				<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
-				<form id={this.props.downloadFormID} method="POST" className="hidden"><span dangerouslySetInnerHTML={{__html: csrfTokenInput}}></span></form>
 			</div>
 		))
 	}
@@ -119,7 +118,7 @@ const mapStateToProps = (state, ownProps) => {
 	return {
 		name: state.listsByID[ownProps.id].name,
 		nextListID: getNextList(state, ownProps.id),
-		downloadFormID: 'download-form-' + ownProps.id
+		downloadFormID: 'download-form'
 	}
 }
 

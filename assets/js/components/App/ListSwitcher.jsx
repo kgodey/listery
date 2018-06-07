@@ -29,6 +29,7 @@ class ListSwitcher extends React.Component {
 						setListID={this.setListID}
 					/>
 				)}
+				<form id="download-form" method="POST" className="hidden"><span dangerouslySetInnerHTML={{__html: csrfTokenInput}}></span></form>
 			</div>
 		)
 	}
