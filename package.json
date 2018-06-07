@@ -24,13 +24,13 @@
 		"js-cookie": "^2.2.0",
 		"lodash": "^4.17.10",
 		"prop-types": "^15.6.1",
-		"react": "^15.6.2",
-		"react-dnd": "^3.0.2",
-		"react-dnd-html5-backend": "^3.0.2",
-		"react-dom": "^15.6.2",
+		"react": "^16.4.0",
+		"react-dnd": "^4.0.4",
+		"react-dnd-html5-backend": "^4.0.4",
+		"react-dom": "^16.4.0",
 		"react-icons": "^2.2.7",
 		"react-redux": "^5.0.7",
-		"redux": "^3.7.2",
+		"redux": "^4.0.0",
 		"redux-logger": "^3.0.6",
 		"redux-thunk": "^2.3.0"
 	},
@@ -42,6 +42,7 @@
 		"babel-preset-react": "^6.24.1",
 		"jquery": "^3.3.1",
 		"watch": "^1.0.2",
-		"webpack": "^3.12.0"
+		"webpack": "^4.11.1",
+		"webpack-cli": "^3.0.3"
 	}
 }
