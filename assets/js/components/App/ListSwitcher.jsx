@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { updateListOrder } from '../../actions/list'
+import { updateListOrder, changeUIListSwitcherOrder } from '../../actions/list'
 import { patchListItem } from '../../actions/list-item'
 import { getSortedLists } from '../../reducers/index'
 import ListLink from './ListSwitcher/ListLink.jsx'
@@ -13,6 +13,7 @@ class ListSwitcher extends React.Component {
 		super(props)
 		this.setListOrder = this.setListOrder.bind(this)
 		this.setListID = this.setListID.bind(this)
+		this.showNewOrder = this.showNewOrder.bind(this)
 	}
 
 	render() {
@@ -26,6 +27,7 @@ class ListSwitcher extends React.Component {
 						order={item.order}
 						activeList={item.id == this.props.activeListID ? true : false}
 						setListOrder={this.setListOrder}
+						showNewOrder={this.showNewOrder}
 						setListID={this.setListID}
 					/>
 				)}
@@ -41,6 +43,11 @@ class ListSwitcher extends React.Component {
 	setListID(id, data) {
 		this.props.updateListID(id, data)
 	}
+
+	showNewOrder(dragID, dropOrder) {
+		this.props.previewListSwitcherReorder(dragID, dropOrder)
+	}
+
 }
 
 
@@ -59,6 +66,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		updateListID: (id, data) => {
 			dispatch(patchListItem(id, data))
+		},
+		previewListSwitcherReorder: (dragID, dropOrder) => {
+			dispatch(changeUIListSwitcherOrder(dragID, dropOrder))
 		}
 	}
 }

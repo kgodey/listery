@@ -217,3 +217,9 @@ export const updateListOrder = (id, order) => {
 		)
 	}
 }
+
+export const changeUIListSwitcherOrder = (dragID, dropOrder) => {
+	return function(dispatch) {
+		return dispatch(receiveReorderedList(dragID, dropOrder))
+	}
+}
