@@ -28,18 +28,21 @@ const listSource = {
 
 
 const listTarget = {
+	hover(props, monitor, component) {
+		const itemType = monitor.getItemType()
+		if (itemType == ItemTypes.LIST) {
+			const dragID = monitor.getItem().id
+			const dropOrder = props.order
+			props.showNewOrder(dragID, dropOrder)
+		}
+	},
+
 	drop(props, monitor, component) {
 		const item = monitor.getItem()
 		const itemType = monitor.getItemType()
 		if (itemType == ItemTypes.LIST) {
 			const dragID = item.id
-			const dropID = props.id
 			const dropOrder = props.order
-			// Don't replace items with themselves
-			if (dragID == dropID) {
-				return
-			}
-			// Update list order
 			props.setListOrder(dragID, dropOrder)
 		} else if (itemType == ItemTypes.LIST_ITEM) {
 			const dragID = item.id
@@ -57,7 +60,8 @@ const listTarget = {
 
 const dragCollect = (connect, monitor) => {
 	return {
-		connectDragSource: connect.dragSource()
+		connectDragSource: connect.dragSource(),
+		isDragging: monitor.isDragging()
 	}
 }
 
@@ -102,9 +106,10 @@ class ListLink extends React.Component {
 		if (this.props.activeList) {
 			 className = className + ' active'
 		}
-		const { connectDragSource, connectDropTarget } = this.props
+		const { connectDragSource, isDragging, connectDropTarget } = this.props
+		const style = {opacity: isDragging ? 0 : 1}
 		return connectDragSource(connectDropTarget(
-			<div className={className} style={nameStyle} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+			<div className={className} style={nameStyle} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} style={style}>
 				<span onClick={this.props.onClick}>{this.props.name}</span>
 				<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
@@ -142,6 +147,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 ListLink.propTypes = {
 	connectDragSource: PropTypes.func.isRequired,
+	isDragging: PropTypes.bool.isRequired,
 	connectDropTarget: PropTypes.func.isRequired
 }
 

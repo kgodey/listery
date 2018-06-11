@@ -12,6 +12,34 @@ const compareByOrder = (listA, listB) => {
 }
 
 
+const getReorderedItems = (state, action) => {
+	let newState = {...state}
+	let oldOrder = newState[action.id].order
+	let orderChangeType
+	if (action.order > oldOrder) {
+		orderChangeType = 'INCREASE'
+	} else if (action.order < oldOrder) {
+		orderChangeType = 'DECREASE'
+	}
+	newState[action.id].order = action.order
+	switch(orderChangeType) {
+		case 'INCREASE':
+			for (var key in newState) {
+				if (newState[key].order <= action.order && newState[key].order > oldOrder && newState[key].id != action.id) {
+					newState[key].order = newState[key].order - 1
+				}
+			}
+		case 'DECREASE':
+			for (var key in newState) {
+				if (newState[key].order >= action.order && newState[key].order < oldOrder && newState[key].id != action.id) {
+					newState[key].order = newState[key].order + 1
+				}
+			}
+	}
+	return newState
+}
+
+
 const updateActiveListItems = (state={}, action) => {
 	let newState
 	switch(action.type) {
@@ -29,30 +57,7 @@ const updateActiveListItems = (state={}, action) => {
 			return newState
 		case listItemAPIActions.RECEIVE_REORDERED_LIST_ITEM:
 			// Update the order of all affected objects.
-			newState = {...state}
-			let oldOrder = newState[action.id].order
-			let orderChangeType
-			if (action.order > oldOrder) {
-				orderChangeType = 'INCREASE'
-			} else if (action.order < oldOrder) {
-				orderChangeType = 'DECREASE'
-			}
-			newState[action.id].order = action.order
-			switch(orderChangeType) {
-				case 'INCREASE':
-					for (var key in newState) {
-						if (newState[key].order <= action.order && newState[key].order > oldOrder && newState[key].id != action.id) {
-							newState[key].order = newState[key].order - 1
-						}
-					}
-				case 'DECREASE':
-					for (var key in newState) {
-						if (newState[key].order >= action.order && newState[key].order < oldOrder && newState[key].id != action.id) {
-							newState[key].order = newState[key].order + 1
-						}
-					}
-			}
-			return newState
+			return getReorderedItems(state, action)
 		case listItemAPIActions.RECEIVE_REMOVED_LIST_ITEM:
 			newState = {...state}
 			delete newState[action.id]
@@ -104,14 +109,7 @@ const updateAllLists = (state, action) => {
 			}
 			return newState
 		case listAPIActions.RECEIVE_REORDERED_LIST:
-			// Update the order of all affected objects.
-			newState[action.id].order = action.order
-			for (var key in newState) {
-				if (newState[key].order >= action.order && newState[key].id != action.id) {
-					newState[key].order = newState[key].order + 1
-				}
-			}
-			return newState
+			return getReorderedItems(state, action)
 		default:
 			return newState
 	}
