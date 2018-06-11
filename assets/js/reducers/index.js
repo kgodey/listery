@@ -15,26 +15,19 @@ const compareByOrder = (listA, listB) => {
 const getReorderedItems = (state, action) => {
 	let newState = {...state}
 	let oldOrder = newState[action.id].order
-	let orderChangeType
-	if (action.order > oldOrder) {
-		orderChangeType = 'INCREASE'
-	} else if (action.order < oldOrder) {
-		orderChangeType = 'DECREASE'
-	}
 	newState[action.id].order = action.order
-	switch(orderChangeType) {
-		case 'INCREASE':
-			for (var key in newState) {
-				if (newState[key].order <= action.order && newState[key].order > oldOrder && newState[key].id != action.id) {
-					newState[key].order = newState[key].order - 1
-				}
+	if (action.order > oldOrder) {
+		for (var key in newState) {
+			if (newState[key].order <= action.order && newState[key].order > oldOrder && newState[key].id != action.id) {
+				newState[key].order = newState[key].order - 1
 			}
-		case 'DECREASE':
-			for (var key in newState) {
-				if (newState[key].order >= action.order && newState[key].order < oldOrder && newState[key].id != action.id) {
-					newState[key].order = newState[key].order + 1
-				}
+		}
+	} else if (action.order < oldOrder) {
+		for (var key in newState) {
+			if (newState[key].order >= action.order && newState[key].order < oldOrder && newState[key].id != action.id) {
+				newState[key].order = newState[key].order + 1
 			}
+		}
 	}
 	return newState
 }
