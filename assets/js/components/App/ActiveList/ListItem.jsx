@@ -82,6 +82,16 @@ class ListItem extends React.Component {
 		this.saveListItemTitleAndDescription = this.saveListItemTitleAndDescription.bind(this)
 	}
 
+	static getDerivedStateFromProps(props, state) {
+		let newState = {...state}
+		newState.data = {
+			completed: props.completed,
+			title: props.title,
+			description: props.description
+		}
+		return newState
+	}
+
 	handleMouseEnter(event) {
 		this.setState({currentlyHovering: true})
 	}
