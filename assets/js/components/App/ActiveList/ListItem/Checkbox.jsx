@@ -11,7 +11,7 @@ const checkboxStyle = {
 export const Checkbox = (props) => {
 	return (
 		<span style={checkboxStyle} className='pull-left'>
-			<input type='checkbox' checked={props.checked} defaultChecked={props.checked} onClick={props.onClick} />
+			<input type='checkbox' checked={props.checked} onClick={props.onClick} />
 		</span>
 	)
 }

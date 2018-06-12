@@ -83,13 +83,12 @@ class ListItem extends React.Component {
 	}
 
 	static getDerivedStateFromProps(props, state) {
-		let newState = {...state}
-		newState.data = {
-			completed: props.completed,
-			title: props.title,
-			description: props.description
+		let data = {...state.data}
+		if (data.completed != props.completed) {
+			data.completed = props.completed
+			return {data: data}
 		}
-		return newState
+		return null
 	}
 
 	handleMouseEnter(event) {
