@@ -34,15 +34,6 @@ const listSource = {
 				const dragID = item.id
 				const dropOrder = props.order
 				props.setListOrder(dragID, dropOrder)
-			} else if (itemType == ItemTypes.LIST_ITEM) {
-				const dragID = item.id
-				const dragListID = item.listID
-				const dropID = props.id
-				// Don't make any updates if the item is already in the list
-				if (dragListID == dropID) {
-					return
-				}
-				props.setListID(dragID, {list_id: dropID})
 			}
 		}
 	}
@@ -59,8 +50,28 @@ const listTarget = {
 		}
 	},
 
-	canDrop() {
-		return false
+	drop(props, monitor, component) {
+		const item = monitor.getItem()
+		const itemType = monitor.getItemType()
+		if (itemType == ItemTypes.LIST_ITEM) {
+			const dragID = item.id
+			const dragListID = item.listID
+			const dropID = props.id
+			// Don't make any updates if the item is already in the list
+			if (dragListID == dropID) {
+				return
+			}
+			props.setListID(dragID, {list_id: dropID})
+		}
+	},
+
+	canDrop(props, monitor) {
+		const item = monitor.getItem()
+		const itemType = monitor.getItemType()
+		if (itemType == ItemTypes.LIST) {
+			return false
+		}
+		return true
 	}
 }
 
@@ -116,8 +127,8 @@ class ListLink extends React.Component {
 		const { connectDragSource, isDragging, connectDropTarget } = this.props
 		const style = {opacity: isDragging ? 0 : 1}
 		return connectDragSource(connectDropTarget(
-			<div className={className} style={nameStyle} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} style={style}>
-				<span onClick={this.props.onClick}>{this.props.name}</span>
+			<div className={className} style={nameStyle} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.props.onClick} style={style}>
+				<span >{this.props.name}</span>
 				<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
 			</div>
