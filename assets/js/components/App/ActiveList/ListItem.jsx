@@ -20,6 +20,17 @@ const listItemSource = {
 			order: props.order,
 			listID: props.listID
 		}
+	},
+
+	endDrag(props, monitor) {
+		const didDrop = monitor.didDrop()
+		if (!didDrop) {
+			const dragID = monitor.getItem().id
+			const dropOrder = props.order
+			const listID = props.listID
+
+			props.setListItemOrder(dragID, dropOrder, listID)
+		}
 	}
 }
 
@@ -31,12 +42,8 @@ const listItemTarget = {
 		props.showNewOrder(dragID, dropOrder)
 	},
 
-	drop(props, monitor, component) {
-		const dragID = monitor.getItem().id
-		const dropOrder = props.order
-		const listID = props.listID
-
-		props.setListItemOrder(dragID, dropOrder, listID)
+	canDrop() {
+		return false
 	}
 }
 

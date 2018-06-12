@@ -23,6 +23,28 @@ const listSource = {
 			id: props.id,
 			order: props.order
 		}
+	},
+
+	endDrag(props, monitor) {
+		const didDrop = monitor.didDrop()
+		if (!didDrop) {
+			const item = monitor.getItem()
+			const itemType = monitor.getItemType()
+			if (itemType == ItemTypes.LIST) {
+				const dragID = item.id
+				const dropOrder = props.order
+				props.setListOrder(dragID, dropOrder)
+			} else if (itemType == ItemTypes.LIST_ITEM) {
+				const dragID = item.id
+				const dragListID = item.listID
+				const dropID = props.id
+				// Don't make any updates if the item is already in the list
+				if (dragListID == dropID) {
+					return
+				}
+				props.setListID(dragID, {list_id: dropID})
+			}
+		}
 	}
 }
 
@@ -37,23 +59,8 @@ const listTarget = {
 		}
 	},
 
-	drop(props, monitor, component) {
-		const item = monitor.getItem()
-		const itemType = monitor.getItemType()
-		if (itemType == ItemTypes.LIST) {
-			const dragID = item.id
-			const dropOrder = props.order
-			props.setListOrder(dragID, dropOrder)
-		} else if (itemType == ItemTypes.LIST_ITEM) {
-			const dragID = item.id
-			const dragListID = item.listID
-			const dropID = props.id
-			// Don't make any updates if the item is already in the list
-			if (dragListID == dropID) {
-				return
-			}
-			props.setListID(dragID, {list_id: dropID})
-		}
+	canDrop() {
+		return false
 	}
 }
 
