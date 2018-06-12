@@ -162,7 +162,7 @@ class ListItem extends React.Component {
 		const { connectDragSource, isDragging, connectDropTarget } = this.props
 		const style = {opacity: isDragging ? 0 : 1}
 		return connectDragSource(connectDropTarget(
-			<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} style={style}>
+			<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
 				<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />
 				<Title
 					currentlyEditing={this.state.currentlyEditing}
@@ -170,7 +170,6 @@ class ListItem extends React.Component {
 					onChange={this.handleTitleChange}
 					onKeyUp={this.handleTitleKeyUp}
 					onBlur={this.handleTitleBlur}
-					onDoubleClick={this.handleDoubleClick}
 				/>
 				<Description
 					currentlyEditing={this.state.currentlyEditing}
@@ -178,7 +177,6 @@ class ListItem extends React.Component {
 					onChange={this.handleDescriptionChange}
 					onKeyUp={this.handleDescriptionKeyUp}
 					onBlur={this.handleDescriptionBlur}
-					onDoubleClick={this.handleDoubleClick}
 				/>
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 			</div>
