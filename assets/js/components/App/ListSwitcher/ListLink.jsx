@@ -61,7 +61,7 @@ const listTarget = {
 			if (dragListID == dropID) {
 				return
 			}
-			props.setListID(dragID, {list_id: dropID})
+			props.setListID(dragID, dropID)
 		}
 	},
 
