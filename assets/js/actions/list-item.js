@@ -77,9 +77,9 @@ export const createListItem = (title, listID) => {
 			body: JSON.stringify(itemData)
 		})
 		.then(
-			response => dispatch(fetchActiveList(listID)))
+			data => dispatch(receiveNewListItem(data)))
 		.then(
-			data => dispatch(receiveNewListItem(data))
+			response => dispatch(fetchActiveList(listID))
 		)
 	}
 }
@@ -93,9 +93,9 @@ export const patchListItem = (id, data) => {
 			body: JSON.stringify(data)
 		})
 		.then(
-			response => dispatch(fetchActiveList(data.list_id)))
+			data => dispatch(receiveUpdatedListItem(data)))
 		.then(
-			data => dispatch(receiveUpdatedListItem(data))
+			response => dispatch(fetchActiveList(data.list_id))
 		)
 	}
 }
