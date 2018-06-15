@@ -9,6 +9,7 @@ export const REMOVE_LIST_ITEM = 'REMOVE_LIST_ITEM'
 export const RECEIVE_REMOVED_LIST_ITEM = 'RECEIVE_REMOVED_LIST_ITEM'
 export const REORDER_LIST_ITEM = 'REORDER_LIST_ITEM'
 export const RECEIVE_REORDERED_LIST_ITEM = 'RECEIVE_REORDERED_LIST_ITEM'
+export const RECEIVE_MOVED_LIST_ITEM = 'RECEIVE_MOVED_LIST_ITEM'
 
 const LIST_ITEM_API_URL = '/api/v2/list_items/'
 
@@ -65,6 +66,13 @@ const receiveReorderedListItem = (id, order) => ({
 })
 
 
+const receiveMovedListItem = (id, data) => ({
+	type: RECEIVE_MOVED_LIST_ITEM,
+	id,
+	data
+})
+
+
 export const createListItem = (title, listID) => {
 	let itemData = {
 		title: title,
@@ -94,6 +102,23 @@ export const patchListItem = (id, data) => {
 		})
 		.then(
 			data => dispatch(receiveUpdatedListItem(data)))
+		.then(
+			response => dispatch(fetchActiveList(data.list_id))
+		)
+	}
+}
+
+
+export const moveListItem = (id, listID) => {
+	return function(dispatch) {
+		let data = {list_id: listID}
+		dispatch(updateListItem(id, data))
+		return sync(LIST_ITEM_API_URL + id + '/', {
+			method: 'PATCH',
+			body: JSON.stringify(data)
+		})
+		.then(
+			data => dispatch(receiveMovedListItem(data)))
 		.then(
 			response => dispatch(fetchActiveList(data.list_id))
 		)
