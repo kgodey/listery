@@ -111,10 +111,11 @@ export const deleteListItem = (id, listID) => {
 		return sync(LIST_ITEM_API_URL + id + '/', {
 			method: 'DELETE'
 		})
-		.then(
-			data => dispatch(receiveRemovedListItem(id)))
-		.then(
+		.then((response) => {
 			dispatch(fetchActiveList(listID))
+		})
+		.then(
+			data => dispatch(receiveRemovedListItem(id))
 		)
 	}
 }
