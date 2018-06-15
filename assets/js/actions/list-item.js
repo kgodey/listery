@@ -77,11 +77,9 @@ export const createListItem = (title, listID) => {
 			body: JSON.stringify(itemData)
 		})
 		.then(
-			response => response.json())
+			response => dispatch(fetchActiveList(listID)))
 		.then(
-			data => dispatch(receiveNewListItem(data)))
-		.then(
-			dispatch(fetchActiveList(listID))
+			data => dispatch(receiveNewListItem(data))
 		)
 	}
 }
@@ -95,11 +93,9 @@ export const patchListItem = (id, data) => {
 			body: JSON.stringify(data)
 		})
 		.then(
-			response => response.json())
+			response => dispatch(fetchActiveList(data.list_id)))
 		.then(
-			data => dispatch(receiveUpdatedListItem(data)))
-		.then(
-			dispatch(fetchActiveList(data.list_id))
+			data => dispatch(receiveUpdatedListItem(data))
 		)
 	}
 }
@@ -111,9 +107,8 @@ export const deleteListItem = (id, listID) => {
 		return sync(LIST_ITEM_API_URL + id + '/', {
 			method: 'DELETE'
 		})
-		.then((response) => {
-			dispatch(fetchActiveList(listID))
-		})
+		.then(
+			response => dispatch(fetchActiveList(listID)))
 		.then(
 			data => dispatch(receiveRemovedListItem(id))
 		)
