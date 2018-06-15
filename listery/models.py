@@ -56,6 +56,7 @@ class List(OrderedModel):
 	def __unicode__(self):
 		return self.name
 
+	@atomic
 	def save(self, *args, **kwargs):
 		move_to_top = False
 		if not self.pk:
@@ -120,6 +121,7 @@ class ListItem(OrderedModel):
 	def __unicode__(self):
 		return '%s (%s)' % (self.title, self.list.name)
 
+	@atomic
 	def save(self, *args, **kwargs):
 		move_to_top = False
 		old_list = None

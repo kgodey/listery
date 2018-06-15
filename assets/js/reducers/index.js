@@ -32,9 +32,19 @@ const getReorderedItems = (state, action) => {
 	return newState
 }
 
+const addItemToTop = (newState, itemID) => {
+	newState[itemID].order == 1
+	for (var key in newState) {
+		if (key != itemID) {
+			newState[key].order++
+		}
+	}
+	return newState
+}
+
 
 const updateActiveListItems = (state={}, action) => {
-	let newState
+	let newState = {...state}
 	switch(action.type) {
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
 		case listAPIActions.RECEIVE_NEW_LIST:
@@ -44,15 +54,15 @@ const updateActiveListItems = (state={}, action) => {
 			}
 			return {}
 		case listItemAPIActions.RECEIVE_NEW_LIST_ITEM:
+			newState[action.data.id] = action.data
+			return addItemToTop(newState, action.data.id)
 		case listItemAPIActions.RECEIVE_UPDATED_LIST_ITEM:
-			newState = {...state}
 			newState[action.data.id] = action.data
 			return newState
 		case listItemAPIActions.RECEIVE_REORDERED_LIST_ITEM:
 			// Update the order of all affected objects.
 			return getReorderedItems(state, action)
 		case listItemAPIActions.RECEIVE_REMOVED_LIST_ITEM:
-			newState = {...state}
 			delete newState[action.id]
 			return newState
 		default:
@@ -93,8 +103,10 @@ const updateAllLists = (state, action) => {
 		case listAPIActions.RECEIVE_REMOVED_LIST:
 			delete newState[action.id]
 			return newState
-		case listAPIActions.RECEIVE_ACTIVE_LIST:
 		case listAPIActions.RECEIVE_NEW_LIST:
+			newState[action.data.id] = action.data
+			return addItemToTop(newState, action.data.id)
+		case listAPIActions.RECEIVE_ACTIVE_LIST:
 		case listAPIActions.RECEIVE_UPDATED_LIST:
 			if (action.data.id) {
 				newState[action.data.id] = action.data
