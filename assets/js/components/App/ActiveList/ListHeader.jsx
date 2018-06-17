@@ -1,4 +1,5 @@
 import React from 'react'
+import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
 
 import { ListTitle } from './ListHeader/ListTitle.jsx'
@@ -22,6 +23,7 @@ class ListHeader extends React.Component {
 		this.handleCheckAllClick = this.handleCheckAllClick.bind(this)
 		this.handleUncheckAllClick = this.handleUncheckAllClick.bind(this)
 		this.handleNameDoubleClick = this.handleNameDoubleClick.bind(this)
+		this.handleClickOutside = this.handleClickOutside.bind(this)
 		this.handleNameChange = this.handleNameChange.bind(this)
 		this.handleNameKeyUp = this.handleNameKeyUp.bind(this)
 		this.handleNameBlur = this.handleNameBlur.bind(this)
@@ -66,6 +68,12 @@ class ListHeader extends React.Component {
 
 	handleNameDoubleClick(event) {
 		this.setState({currentlyEditing: true})
+	}
+
+	handleClickOutside(event) {
+		if (this.state.currentlyEditing === true) {
+			this.setState({currentlyEditing: false})
+		}
 	}
 
 	handleNameKeyUp(event) {
@@ -126,6 +134,7 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
+ListHeader = onClickOutside(ListHeader)
 ListHeader = connect(mapStateToProps, mapDispatchToProps)(ListHeader)
 
 export default ListHeader
