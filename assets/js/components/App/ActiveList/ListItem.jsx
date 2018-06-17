@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { DragSource, DropTarget } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
+import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
 
 import { deleteListItem, patchListItem } from '../../../actions/list-item'
@@ -79,6 +80,7 @@ class ListItem extends React.Component {
 		this.handleMouseLeave = this.handleMouseLeave.bind(this)
 		this.handleCheckboxClick = this.handleCheckboxClick.bind(this)
 		this.handleDoubleClick = this.handleDoubleClick.bind(this)
+		this.handleClickOutside = this.handleClickOutside.bind(this)
 		this.handleTitleChange = this.handleTitleChange.bind(this)
 		this.handleTitleKeyUp = this.handleTitleKeyUp.bind(this)
 		this.handleTitleBlur = this.handleTitleBlur.bind(this)
@@ -112,6 +114,12 @@ class ListItem extends React.Component {
 
 	handleDoubleClick(event) {
 		this.setState({currentlyEditing: true})
+	}
+
+	handleClickOutside(event) {
+		if (this.state.currentlyEditing === true) {
+			this.setState({currentlyEditing: false})
+		}
 	}
 
 	handleTitleChange(event) {
@@ -210,6 +218,7 @@ ListItem.propTypes = {
 	connectDropTarget: PropTypes.func.isRequired
 }
 
+ListItem = onClickOutside(ListItem)
 ListItem = connect(mapStateToProps, mapDispatchToProps)(ListItem)
 
 export default flow(
