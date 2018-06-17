@@ -26,7 +26,6 @@ class ListHeader extends React.Component {
 		this.handleClickOutside = this.handleClickOutside.bind(this)
 		this.handleNameChange = this.handleNameChange.bind(this)
 		this.handleNameKeyUp = this.handleNameKeyUp.bind(this)
-		this.handleNameBlur = this.handleNameBlur.bind(this)
 		this.saveListName = this.saveListName.bind(this)
 	}
 
@@ -72,12 +71,7 @@ class ListHeader extends React.Component {
 
 	handleClickOutside(event) {
 		if (this.state.currentlyEditing === true) {
-			this.setState({
-				currentlyEditing: false,
-				data: {
-					name: this.props.name
-				}
-			})
+			this.saveListName()
 		}
 	}
 
@@ -88,10 +82,6 @@ class ListHeader extends React.Component {
 			// cancel editing
 			this.handleClickOutside()
 		}
-	}
-
-	handleNameBlur(event) {
-		this.saveListName()
 	}
 
 	saveListName() {
@@ -107,7 +97,6 @@ class ListHeader extends React.Component {
 					currentlyEditing={this.state.currentlyEditing}
 					onChange={this.handleNameChange}
 					onKeyUp={this.handleNameKeyUp}
-					onBlur={this.handleNameBlur}
 					onDoubleClick={this.handleNameDoubleClick}
 				/>
 				<ListActions

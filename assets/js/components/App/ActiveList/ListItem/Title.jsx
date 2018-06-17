@@ -24,7 +24,6 @@ export const Title = (props) => {
 				value={props.title}
 				onChange={props.onChange}
 				onKeyUp={props.onKeyUp}
-				onBlur={props.onBlur}
 			/>
 		)
 	} else {

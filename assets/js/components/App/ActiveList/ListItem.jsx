@@ -83,10 +83,8 @@ class ListItem extends React.Component {
 		this.handleClickOutside = this.handleClickOutside.bind(this)
 		this.handleTitleChange = this.handleTitleChange.bind(this)
 		this.handleTitleKeyUp = this.handleTitleKeyUp.bind(this)
-		this.handleTitleBlur = this.handleTitleBlur.bind(this)
 		this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
 		this.handleDescriptionKeyUp = this.handleDescriptionKeyUp.bind(this)
-		this.handleDescriptionBlur = this.handleDescriptionBlur.bind(this)
 		this.handleDeleteClick = this.handleDeleteClick.bind(this)
 		this.saveListItemTitleAndDescription = this.saveListItemTitleAndDescription.bind(this)
 	}
@@ -118,14 +116,7 @@ class ListItem extends React.Component {
 
 	handleClickOutside(event) {
 		if (this.state.currentlyEditing === true) {
-			this.setState({
-				currentlyEditing: false,
-				data: {
-					title: this.props.title,
-					description: this.props.description,
-					completed: this.props.completed
-				}
-			})
+			this.saveListItemTitleAndDescription()
 		}
 	}
 
@@ -144,10 +135,6 @@ class ListItem extends React.Component {
 		}
 	}
 
-	handleTitleBlur(event) {
-		this.saveListItemTitleAndDescription()
-	}
-
 	handleDescriptionChange(event) {
 		let newState = {...this.state}
 		newState['data']['description'] = event.target.value
@@ -161,10 +148,6 @@ class ListItem extends React.Component {
 			// cancel editing
 			this.handleClickOutside()
 		}
-	}
-
-	handleDescriptionBlur(event) {
-		this.saveListItemTitleAndDescription()
 	}
 
 	handleDeleteClick(event) {
@@ -190,14 +173,12 @@ class ListItem extends React.Component {
 					title={this.state.data.title}
 					onChange={this.handleTitleChange}
 					onKeyUp={this.handleTitleKeyUp}
-					onBlur={this.handleTitleBlur}
 				/>
 				<Description
 					currentlyEditing={this.state.currentlyEditing}
 					description={this.state.data.description}
 					onChange={this.handleDescriptionChange}
 					onKeyUp={this.handleDescriptionKeyUp}
-					onBlur={this.handleDescriptionBlur}
 				/>
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 			</div>

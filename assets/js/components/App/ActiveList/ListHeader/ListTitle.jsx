@@ -11,7 +11,6 @@ export const ListTitle = (props) => {
 				value={props.name}
 				onChange={props.onChange}
 				onKeyUp={props.onKeyUp}
-				onBlur={props.onBlur}
 			/>
 		)
 	} else {
