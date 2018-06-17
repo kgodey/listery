@@ -84,9 +84,10 @@ const dragCollect = (connect, monitor) => {
 }
 
 
-const dropCollect = (connect) => {
+const dropCollect = (connect, monitor) => {
 	return {
-		connectDropTarget: connect.dropTarget()
+		connectDropTarget: connect.dropTarget(),
+		isOver: monitor.isOver()
 	}
 }
 
@@ -120,11 +121,13 @@ class ListLink extends React.Component {
 	}
 
 	render() {
+		const { connectDragSource, isDragging, isOver, connectDropTarget } = this.props
 		let className = 'list-group-item'
 		if (this.props.activeList) {
 			 className = className + ' active'
+		} else if (isOver) {
+			className = className + ' list-group-item-info'
 		}
-		const { connectDragSource, isDragging, connectDropTarget } = this.props
 		const style = {opacity: isDragging ? 0 : 1}
 		return connectDragSource(connectDropTarget(
 			<div className={className} style={nameStyle} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.props.onClick} style={style}>
@@ -166,6 +169,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 ListLink.propTypes = {
 	connectDragSource: PropTypes.func.isRequired,
 	isDragging: PropTypes.bool.isRequired,
+	isOver: PropTypes.bool.isRequired,
 	connectDropTarget: PropTypes.func.isRequired
 }
 
