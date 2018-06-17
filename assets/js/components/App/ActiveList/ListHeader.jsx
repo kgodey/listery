@@ -72,7 +72,12 @@ class ListHeader extends React.Component {
 
 	handleClickOutside(event) {
 		if (this.state.currentlyEditing === true) {
-			this.setState({currentlyEditing: false})
+			this.setState({
+				currentlyEditing: false,
+				data: {
+					name: this.props.name
+				}
+			})
 		}
 	}
 
