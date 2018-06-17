@@ -82,8 +82,11 @@ class ListHeader extends React.Component {
 	}
 
 	handleNameKeyUp(event) {
-		if (event.key == 'Enter'){
+		if (event.key == 'Enter') {
 			this.saveListName()
+		} else if (event.key == 'Escape') {
+			// cancel editing
+			this.handleClickOutside()
 		}
 	}
 

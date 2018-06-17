@@ -138,6 +138,9 @@ class ListItem extends React.Component {
 	handleTitleKeyUp(event) {
 		if (event.key == 'Enter'){
 			this.saveListItemTitleAndDescription()
+		} else if (event.key == 'Escape') {
+			// cancel editing
+			this.handleClickOutside()
 		}
 	}
 
@@ -154,6 +157,9 @@ class ListItem extends React.Component {
 	handleDescriptionKeyUp(event) {
 		if (event.key == 'Enter'){
 			this.saveListItemTitleAndDescription()
+		} else if (event.key == 'Escape') {
+			// cancel editing
+			this.handleClickOutside()
 		}
 	}
 
