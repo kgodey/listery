@@ -1,4 +1,5 @@
 import React from 'react'
+import Linkify from 'react-linkify'
 
 
 const titleDisplayStyle = {
@@ -28,7 +29,9 @@ export const Title = (props) => {
 		)
 	} else {
 		return (
-			<div style={titleDisplayStyle} onDoubleClick={props.onDoubleClick}>{props.title}</div>
+			<Linkify>
+				<div style={titleDisplayStyle} onDoubleClick={props.onDoubleClick}>{props.title}</div>
+			</Linkify>
 		)
 	}
 }

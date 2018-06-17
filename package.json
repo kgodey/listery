@@ -29,6 +29,7 @@
 		"react-dnd-html5-backend": "^4.0.4",
 		"react-dom": "^16.4.0",
 		"react-icons": "^2.2.7",
+		"react-linkify": "^0.2.2",
 		"react-redux": "^5.0.7",
 		"redux": "^4.0.0",
 		"redux-logger": "^3.0.6",
