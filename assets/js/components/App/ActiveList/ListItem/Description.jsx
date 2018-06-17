@@ -1,4 +1,5 @@
 import React from 'react'
+import Linkify from 'react-linkify'
 
 
 const descriptionStyle = {
@@ -29,7 +30,9 @@ export const Description = (props) => {
 		)
 	} else {
 		return (
-			<small><i><span style={descriptionStyle}>{props.description}</span></i></small>
+			<Linkify>
+				<small><i><span style={descriptionStyle}>{props.description}</span></i></small>
+			</Linkify>
 		)
 	}
 }
