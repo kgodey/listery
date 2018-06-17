@@ -109,7 +109,7 @@ export const patchListItem = (id, data) => {
 }
 
 
-export const moveListItem = (id, listID) => {
+export const moveListItem = (id, listID, oldListID) => {
 	return function(dispatch) {
 		let data = {list_id: listID}
 		dispatch(updateListItem(id, data))
@@ -120,7 +120,7 @@ export const moveListItem = (id, listID) => {
 		.then(
 			data => dispatch(receiveMovedListItem(data)))
 		.then(
-			response => dispatch(fetchActiveList(data.list_id))
+			response => dispatch(fetchActiveList(oldListID))
 		)
 	}
 }

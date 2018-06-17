@@ -55,13 +55,13 @@ const listTarget = {
 		const itemType = monitor.getItemType()
 		if (itemType == ItemTypes.LIST_ITEM) {
 			const dragID = item.id
-			const dragListID = item.listID
+			const oldListID = item.listID
 			const dropID = props.id
 			// Don't make any updates if the item is already in the list
-			if (dragListID == dropID) {
+			if (oldListID == dropID) {
 				return
 			}
-			props.setListID(dragID, dropID)
+			props.setListID(dragID, dropID, oldListID)
 		}
 	},
 

@@ -40,8 +40,8 @@ class ListSwitcher extends React.Component {
 		this.props.reorderList(id, order)
 	}
 
-	setListID(id, listID) {
-		this.props.updateListID(id, listID)
+	setListID(id, listID, oldListID) {
+		this.props.updateListID(id, listID, oldListID)
 	}
 
 	showNewOrder(dragID, dropOrder) {
@@ -64,8 +64,8 @@ const mapDispatchToProps = (dispatch) => {
 		reorderList: (id, order) => {
 			dispatch(updateListOrder(id, order))
 		},
-		updateListID: (id, listID) => {
-			dispatch(moveListItem(id, listID))
+		updateListID: (id, listID, oldListID) => {
+			dispatch(moveListItem(id, listID, oldListID))
 		},
 		previewListSwitcherReorder: (dragID, dropOrder) => {
 			dispatch(changeUIListSwitcherOrder(dragID, dropOrder))
