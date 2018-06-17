@@ -118,7 +118,14 @@ class ListItem extends React.Component {
 
 	handleClickOutside(event) {
 		if (this.state.currentlyEditing === true) {
-			this.setState({currentlyEditing: false})
+			this.setState({
+				currentlyEditing: false,
+				data: {
+					title: this.props.title,
+					description: this.props.description,
+					completed: this.props.completed
+				}
+			})
 		}
 	}
 
