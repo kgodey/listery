@@ -14,6 +14,8 @@ export const RECEIVE_REMOVED_LIST = 'RECEIVE_REMOVED_LIST'
 export const DOWNLOAD_LIST = 'DOWNLOAD_LIST'
 export const REORDER_LIST = 'REORDER_LIST'
 export const RECEIVE_REORDERED_LIST = 'RECEIVE_REORDERED_LIST'
+export const REQUEST_ACTIVE_LIST_CHANGE = 'REQUEST_ACTIVE_LIST_CHANGE'
+export const RECEIVE_ACTIVE_LIST_CHANGE = 'RECEIVE_ACTIVE_LIST_CHANGE'
 
 const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
@@ -105,14 +107,35 @@ const receiveReorderedList = (id, order) => ({
 })
 
 
-export const fetchActiveList = (id = firstListID) => {
+const requestActiveListChange = (id) => ({
+	type: REQUEST_ACTIVE_LIST_CHANGE,
+	id
+})
+
+
+const receiveActiveListChange = (id) => ({
+	type: RECEIVE_ACTIVE_LIST_CHANGE,
+	id
+})
+
+
+export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 	return function (dispatch) {
 		dispatch(requestActiveList())
+		if (oldActiveListID != id) {
+			dispatch(requestActiveListChange(id))
+		}
 		return sync(LIST_API_URL + id + '/')
 		.then(
 			response => response.json())
 		.then(
-			data => dispatch(receiveActiveList(data))
+			data => dispatch(receiveActiveList(data)))
+		.then(
+			data => {
+				if (oldActiveListID != data.id) {
+					dispatch(receiveActiveListChange(data.id))
+				}
+			}
 		)
 	}
 }

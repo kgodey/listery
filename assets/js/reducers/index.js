@@ -124,15 +124,11 @@ const updateAllLists = (state, action) => {
 const updateFetching = (state, action) => {
 	let newState = {...state}
 	switch(action.type) {
-		case listAPIActions.REQUEST_ACTIVE_LIST:
-		case listAPIActions.REQUEST_NEW_LIST:
-		case listAPIActions.REQUEST_UPDATED_LIST:
+		case listAPIActions.REQUEST_ACTIVE_LIST_CHANGE:
 			newState.fetchingActiveList = true
 			return newState
 		return newState
-		case listAPIActions.RECEIVE_ACTIVE_LIST:
-		case listAPIActions.RECEIVE_NEW_LIST:
-		case listAPIActions.RECEIVE_UPDATED_LIST:
+		case listAPIActions.RECEIVE_ACTIVE_LIST_CHANGE:
 			newState.fetchingActiveList = false
 			return newState
 		case listAPIActions.REQUEST_ALL_LISTS:
@@ -143,10 +139,27 @@ const updateFetching = (state, action) => {
 		case listAPIActions.RECEIVE_REMOVED_LIST:
 			newState.fetchingListSwitcher = false
 			return newState
+		case listItemAPIActions.UPDATE_LIST_ITEM:
+			let listItems = newState.fetchingListItems
+			listItems[action.id] = true
+			newState.fetchingListItems = listItems
+			return newState
+		case listItemAPIActions.REORDER_LIST_ITEM:
+			let listItems = newState.fetchingListItems
+			listItems[action.id] = true
+			newState.fetchingListItems = listItems
+			return newState
+		case listItemAPIActions.RECEIVE_UPDATED_LIST_ITEM:
+			newState.fetchingListItems[action.data.id] = false
+			return newState
+		case listItemAPIActions.RECEIVE_REORDERED_LIST_ITEM:
+			newState.fetchingListItems[action.id] = false
+			return newState
 		default:
 			return {
 				fetchingActiveList: false,
-				fetchingListSwitcher: false
+				fetchingListSwitcher: false,
+				fetchingListItems: {}
 			}
 	}
 }
@@ -202,4 +215,12 @@ export const getActiveListFetchStatus = (state) => {
 
 export const getListSwitcherFetchStatus = (state) => {
 	return state.fetchStatus.fetchingListSwitcher
+}
+
+
+export const getListItemFetchStatus = (state, id) => {
+	if (state.fetchingListItems && id in state.fetchingListItems) {
+		return state.fetchingListItems.id
+	}
+	return false
 }
