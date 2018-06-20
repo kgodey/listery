@@ -1,11 +1,18 @@
 import React from 'react'
+import ReactLoading from 'react-loading'
 import { connect } from 'react-redux'
 
 import { updateListItemOrder, changeUIListOrder } from '../../actions/list-item'
-import { getSortedListItems } from '../../reducers/index'
+import { getSortedListItems, getActiveListFetchStatus } from '../../reducers/index'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
+
+
+const loadingStyle = {
+	paddingTop: '10%',
+	color: '#ccc'
+}
 
 
 class ActiveList extends React.Component {
@@ -16,24 +23,33 @@ class ActiveList extends React.Component {
 	}
 
 	render() {
-		return (
-			<div className="col-md-8">
-				<ListHeader />
-				<div className='list-group'>
-					<AddListItem />
-					{this.props.sortedListItems.map(item =>
-						<ListItem
-							key={item.id}
-							id={item.id}
-							order={item.order}
-							listID={item.list_id}
-							setListItemOrder={this.setListItemOrder}
-							showNewOrder={this.showNewOrder}
-						/>
-					)}
+		if (this.props.isFetching === false) {
+			return (
+				<div className="col-md-8">
+					<ListHeader />
+					<div className='list-group'>
+						<AddListItem />
+						{this.props.sortedListItems.map(item =>
+							<ListItem
+								key={item.id}
+								id={item.id}
+								order={item.order}
+								listID={item.list_id}
+								setListItemOrder={this.setListItemOrder}
+								showNewOrder={this.showNewOrder}
+							/>
+						)}
+					</div>
 				</div>
-			</div>
-		)
+			)
+		} else {
+			return (
+				<div className="col-md-8" style={loadingStyle}>
+					<ReactLoading type='bars' color={loadingStyle.color} height={'10%'} width={'10%'} className='mx-auto d-block' />
+				</div>
+			)
+		}
+
 	}
 
 	setListItemOrder(id, order, listID) {
@@ -47,7 +63,8 @@ class ActiveList extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		sortedListItems: getSortedListItems(state)
+		sortedListItems: getSortedListItems(state),
+		isFetching: getActiveListFetchStatus(state)
 	}
 }
 

@@ -121,10 +121,42 @@ const updateAllLists = (state, action) => {
 }
 
 
+const updateFetching = (state, action) => {
+	let newState = {...state}
+	switch(action.type) {
+		case listAPIActions.REQUEST_ACTIVE_LIST:
+		case listAPIActions.REQUEST_NEW_LIST:
+		case listAPIActions.REQUEST_UPDATED_LIST:
+			newState.fetchingActiveList = true
+			return newState
+		return newState
+		case listAPIActions.RECEIVE_ACTIVE_LIST:
+		case listAPIActions.RECEIVE_NEW_LIST:
+		case listAPIActions.RECEIVE_UPDATED_LIST:
+			newState.fetchingActiveList = false
+			return newState
+		case listAPIActions.REQUEST_ALL_LISTS:
+		case listAPIActions.REQUEST_REMOVED_LIST:
+			newState.fetchingListSwitcher = true
+			return newState
+		case listAPIActions.RECEIVE_ALL_LISTS:
+		case listAPIActions.RECEIVE_REMOVED_LIST:
+			newState.fetchingListSwitcher = false
+			return newState
+		default:
+			return {
+				fetchingActiveList: false,
+				fetchingListSwitcher: false
+			}
+	}
+}
+
+
 export const listeryApp = combineReducers({
 	activeListID: updateActiveListID,
 	activeListItems: updateActiveListItems,
-	listsByID: updateAllLists
+	listsByID: updateAllLists,
+	fetchStatus: updateFetching
 })
 
 
@@ -161,4 +193,13 @@ export const getNextList = (state, listID) => {
 	}
 	// return the active list ID by default
 	return state.activeListID
+}
+
+export const getActiveListFetchStatus = (state) => {
+	return state.fetchStatus.fetchingActiveList
+}
+
+
+export const getListSwitcherFetchStatus = (state) => {
+	return state.fetchStatus.fetchingListSwitcher
 }
