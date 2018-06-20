@@ -7,11 +7,13 @@ import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
 
 import { deleteListItem, patchListItem } from '../../../actions/list-item'
+import { getListItemFetchStatus } from '../../../reducers/index'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
 import { DeleteIcon } from '../Shared/Icons.jsx'
 import { ItemTypes } from '../Shared/ItemTypes.jsx'
+import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
 
 
 const listItemSource = {
@@ -163,7 +165,7 @@ class ListItem extends React.Component {
 	}
 
 	render() {
-		const { connectDragSource, isDragging, connectDropTarget } = this.props
+		const { connectDragSource, isDragging, connectDropTarget, isFetching } = this.props
 		const style = {opacity: isDragging ? 0 : 1}
 		return connectDragSource(connectDropTarget(
 			<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
@@ -181,6 +183,13 @@ class ListItem extends React.Component {
 					onKeyUp={this.handleDescriptionKeyUp}
 				/>
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
+				<LoadingIndicator
+					isFetching={this.props.isFetching}
+					type='bars'
+					height='80%'
+					width='10%'
+					className=''
+				/>
 			</div>
 		))
 	}
@@ -192,6 +201,7 @@ const mapStateToProps = (state, ownProps) => {
 		completed: itemData.completed,
 		title: itemData.title,
 		description: itemData.description,
+		isFetching: getListItemFetchStatus(state, ownProps.id)
 	}
 }
 

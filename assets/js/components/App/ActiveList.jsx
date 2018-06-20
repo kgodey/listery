@@ -1,17 +1,16 @@
 import React from 'react'
-import ReactLoading from 'react-loading'
 import { connect } from 'react-redux'
 
 import { updateListItemOrder, changeUIListOrder } from '../../actions/list-item'
 import { getSortedListItems, getActiveListFetchStatus } from '../../reducers/index'
+import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
 
 
 const loadingStyle = {
-	paddingTop: '10%',
-	color: '#ccc'
+	paddingTop: '10%'
 }
 
 
@@ -45,7 +44,7 @@ class ActiveList extends React.Component {
 		} else {
 			return (
 				<div className="col-md-8" style={loadingStyle}>
-					<ReactLoading type='bars' color={loadingStyle.color} height={'10%'} width={'10%'} className='mx-auto d-block' />
+					<LoadingIndicator isFetching={this.props.isFetching} type='bars' height='10%' width='10%' className='mx-auto d-block' />
 				</div>
 			)
 		}

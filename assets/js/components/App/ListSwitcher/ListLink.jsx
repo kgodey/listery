@@ -143,6 +143,7 @@ class ListLink extends React.Component {
 const mapStateToProps = (state, ownProps) => {
 	return {
 		name: state.listsByID[ownProps.id].name,
+		activeListID: state.activeListID,
 		nextListID: getNextList(state, ownProps.id),
 		downloadFormID: 'download-form'
 	}
@@ -151,12 +152,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
 		onClick: (id) => {
-			dispatch(fetchActiveList(ownProps.id))
+			dispatch(fetchActiveList(ownProps.id, ownProps.activeListID))
 		},
 		hideList: (id, data, nextListID) => {
 			dispatch(archiveList(id, data, nextListID))
 			if (ownProps.activeList) {
-				dispatch(fetchActiveList(nextListID))
+				dispatch(fetchActiveList(nextListID, ownProps.id))
 			}
 		},
 		downloadList: (id, downloadFormID) => {

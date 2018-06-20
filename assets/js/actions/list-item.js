@@ -85,9 +85,11 @@ export const createListItem = (title, listID) => {
 			body: JSON.stringify(itemData)
 		})
 		.then(
+			response => response.json())
+		.then(
 			data => dispatch(receiveNewListItem(data)))
 		.then(
-			response => dispatch(fetchActiveList(listID))
+			response => dispatch(fetchActiveList(listID, listID))
 		)
 	}
 }
@@ -101,9 +103,14 @@ export const patchListItem = (id, data) => {
 			body: JSON.stringify(data)
 		})
 		.then(
+			response => response.json())
+		.then(
 			data => dispatch(receiveUpdatedListItem(data)))
 		.then(
-			response => dispatch(fetchActiveList(data.list_id))
+			response => {
+				let listID = response.data.list_id
+				dispatch(fetchActiveList(listID, listID))
+			}
 		)
 	}
 }
@@ -118,9 +125,11 @@ export const moveListItem = (id, listID, oldListID) => {
 			body: JSON.stringify(data)
 		})
 		.then(
+			response => response.json())
+		.then(
 			data => dispatch(receiveMovedListItem(data)))
 		.then(
-			response => dispatch(fetchActiveList(oldListID))
+			response => dispatch(fetchActiveList(oldListID, oldListID))
 		)
 	}
 }
@@ -133,7 +142,7 @@ export const deleteListItem = (id, listID) => {
 			method: 'DELETE'
 		})
 		.then(
-			response => dispatch(fetchActiveList(listID)))
+			response => dispatch(fetchActiveList(listID, listID)))
 		.then(
 			data => dispatch(receiveRemovedListItem(id))
 		)
@@ -148,6 +157,8 @@ export const updateListItemOrder = (id, order, listID) => {
 			method: 'POST',
 			body: JSON.stringify({order: order})
 		})
+		.then(
+			response => response.json())
 		.then(
 			data => dispatch(receiveReorderedListItem(id, order))
 		)
