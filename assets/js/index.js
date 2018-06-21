@@ -9,10 +9,11 @@ import configureStore from './store'
 
 const store = configureStore()
 
+
 ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>
-			<Route path='/' component={App}/>
+			<Route path='/:id?' component={App} />
 		 </BrowserRouter>
 	</Provider>,
 	document.getElementById('app')
