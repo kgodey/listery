@@ -13,7 +13,7 @@ const store = configureStore()
 ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>
-			<Route path='/:id?' component={App} />
+			<Route path='/new/:id?' component={App} />
 		 </BrowserRouter>
 	</Provider>,
 	document.getElementById('app')

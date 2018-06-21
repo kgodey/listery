@@ -35,10 +35,14 @@ class App extends React.Component {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+	let activeListID
+	if (ownProps.match.params.id !== undefined) {
+		activeListID = ownProps.match.params.id
+	}
 	return {
 		getActiveList: () => {
-			dispatch(fetchActiveList())
+			dispatch(fetchActiveList(activeListID))
 		},
 		getAllLists: () => {
 			dispatch(fetchAllLists())
