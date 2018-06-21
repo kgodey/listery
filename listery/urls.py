@@ -22,7 +22,7 @@ v2_router.register(r'list_items', v2_apis.ListItemViewSet)
 
 urlpatterns = [
 	url(r'^$', views.index, name='index'),
-	url(r'^new/$', views.new_index, name='new_index'),
+	url(r'^new/', views.new_index, name='new_index'),
 	url(r'^login/$', auth_views.LoginView.as_view(template_name='registration/login.html')),
 	url(r'^logout/$', auth_views.LogoutView.as_view(template_name='registration/login.html')),
 	url(r'^api/v1/', include(rest_framework_urls, namespace='rest_framework')),
