@@ -186,9 +186,8 @@ class ListItem extends React.Component {
 				<LoadingIndicator
 					isFetching={this.props.isFetching}
 					type='bars'
-					height='80%'
-					width='10%'
-					className=''
+					height='10px'
+					width='20px'
 				/>
 			</div>
 		))

@@ -22,33 +22,38 @@ class ActiveList extends React.Component {
 	}
 
 	render() {
-		if (this.props.isFetching === false) {
+		if (this.props.isFetching) {
 			return (
 				<div className="col-md-8">
-					<ListHeader />
-					<div className='list-group'>
-						<AddListItem />
-						{this.props.sortedListItems.map(item =>
-							<ListItem
-								key={item.id}
-								id={item.id}
-								order={item.order}
-								listID={item.list_id}
-								setListItemOrder={this.setListItemOrder}
-								showNewOrder={this.showNewOrder}
-							/>
-						)}
-					</div>
-				</div>
-			)
-		} else {
-			return (
-				<div className="col-md-8" style={loadingStyle}>
-					<LoadingIndicator isFetching={this.props.isFetching} type='bars' height='10%' width='10%' className='mx-auto d-block' />
+					<LoadingIndicator
+						isFetching={this.props.isFetching}
+						type='bars'
+						height='10%'
+						width='10%'
+						className='mx-auto d-block'
+						style={loadingStyle}
+					/>
 				</div>
 			)
 		}
-
+		return (
+			<div className="col-md-8">
+				<ListHeader />
+				<div className='list-group'>
+					<AddListItem />
+					{this.props.sortedListItems.map(item =>
+						<ListItem
+							key={item.id}
+							id={item.id}
+							order={item.order}
+							listID={item.list_id}
+							setListItemOrder={this.setListItemOrder}
+							showNewOrder={this.showNewOrder}
+						/>
+					)}
+				</div>
+			</div>
+		)
 	}
 
 	setListItemOrder(id, order, listID) {
