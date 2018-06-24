@@ -5,7 +5,7 @@ import { DragSource, DropTarget } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-
+import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { getNextList } from '../../../reducers/index'
 import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions//list'
@@ -93,12 +93,15 @@ class ListLink extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			currentlyHovering: false
+			currentlyHovering: false,
+			showAlert: false
 		}
 		this.handleMouseEnter = this.handleMouseEnter.bind(this)
 		this.handleMouseLeave = this.handleMouseLeave.bind(this)
 		this.handleDownloadClick = this.handleDownloadClick.bind(this)
 		this.handleArchiveClick = this.handleArchiveClick.bind(this)
+		this.handleArchiveConfirm = this.handleArchiveConfirm.bind(this)
+		this.handleArchiveCancel = this.handleArchiveCancel.bind(this)
 	}
 
 	handleMouseEnter(event) {
@@ -114,7 +117,16 @@ class ListLink extends React.Component {
 	}
 
 	handleArchiveClick(event) {
+		this.setState({showAlert: true})
+	}
+
+	handleArchiveConfirm(event) {
+		this.setState({showAlert: false})
 		this.props.hideList(this.props.id, {}, this.props.nextListID)
+	}
+
+	handleArchiveCancel(event) {
+		this.setState({showAlert: false})
 	}
 
 	render() {
@@ -133,13 +145,26 @@ class ListLink extends React.Component {
 		const linkURL = '/new/' + this.props.id
 		return connectDragSource(connectDropTarget(
 			<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.props.onClick} style={divStyle}>
-			<Link to={linkURL} style={linkStyle}>
-				<div>
-					<span>{this.props.name}</span>
-					<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
-					<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
-				</div>
-			</Link>
+				<Link to={linkURL} style={linkStyle}>
+					<div>
+						<span>{this.props.name}</span>
+						<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
+						<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
+					</div>
+				</Link>
+				<SweetAlert
+					warning
+					showCancel
+					show={this.state.showAlert}
+					confirmBtnText="Yes, archive it!"
+					cancelBtnText="Cancel"
+					confirmBtnBsStyle="danger"
+					cancelBtnBsStyle="default"
+					onConfirm={this.handleArchiveConfirm}
+					onCancel={this.handleArchiveCancel}
+				>
+					Are you sure you want to archive "{this.props.name}"? You will not be able to access it in the UI once you archive it.
+				</SweetAlert>
 			</div>
 		))
 	}
