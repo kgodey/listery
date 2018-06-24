@@ -162,7 +162,7 @@ class ListItem extends React.Component {
 
 	handleDeleteConfirm(event) {
 		this.setState({showAlert: false})
-		this.props.removeListItem(this.props.id, this.props.list_id)
+		this.props.removeListItem(this.props.id, this.props.listID)
 	}
 
 	handleDeleteCancel(event) {
