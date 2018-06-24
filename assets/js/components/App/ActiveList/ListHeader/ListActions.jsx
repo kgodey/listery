@@ -11,7 +11,7 @@ const divStyle = {
 
 let ListActions = (props) => {
 	return (
-		<div style={divStyle}>
+		<div style={divStyle} className="col">
 			<QuickSortButton
 				onClick={props.onQuickSortClick}
 			/>

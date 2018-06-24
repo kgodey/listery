@@ -86,26 +86,32 @@ class ListHeader extends React.Component {
 
 	saveListName() {
 		this.props.updateList(this.props.id, { name: this.state.data.name })
-		this.setState({currentlyEditing: false})
+		this.setState({ currentlyEditing: false })
 	}
 
 	render() {
 		return (
 			<div>
-				<ListTitle
-					name={this.state.data.name}
-					currentlyEditing={this.state.currentlyEditing}
-					onChange={this.handleNameChange}
-					onKeyUp={this.handleNameKeyUp}
-					onDoubleClick={this.handleNameDoubleClick}
-				/>
-				<ListActions
-					onPrivacyClick={this.handlePrivacyClick}
-					onQuickSortClick={this.handleQuickSortClick}
-					onCheckAllClick={this.handleCheckAllClick}
-					onUncheckAllClick={this.handleUncheckAllClick}
-				/>
-				<ListItemCount />
+				<div className="row">
+					<div className="col-md-8">
+						<ListTitle
+							name={this.state.data.name}
+							currentlyEditing={this.state.currentlyEditing}
+							onChange={this.handleNameChange}
+							onKeyUp={this.handleNameKeyUp}
+							onDoubleClick={this.handleNameDoubleClick}
+						/>
+					</div>
+				</div>
+				<div className="row align-items-end">
+					<ListActions
+						onPrivacyClick={this.handlePrivacyClick}
+						onQuickSortClick={this.handleQuickSortClick}
+						onCheckAllClick={this.handleCheckAllClick}
+						onUncheckAllClick={this.handleUncheckAllClick}
+					/>
+					<ListItemCount />
+				</div>
 			</div>
 		)
 	}
