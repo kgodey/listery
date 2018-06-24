@@ -4,17 +4,14 @@ import React from 'react'
 import { DragSource, DropTarget } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+
 
 import { getNextList } from '../../../reducers/index'
 import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions//list'
 import { DeleteIcon } from '../Shared/Icons.jsx'
 import { DownloadIcon } from './ListLink/DownloadIcon.jsx'
 import { ItemTypes } from '../Shared/ItemTypes.jsx'
-
-
-const nameStyle = {
-	display: 'inline-block'
-}
 
 
 const listSource = {
@@ -121,19 +118,28 @@ class ListLink extends React.Component {
 	}
 
 	render() {
-		const { connectDragSource, isDragging, isOver, connectDropTarget } = this.props
+		const { connectDragSource, isDragging, isOver, connectDropTarget, activeList } = this.props
 		let className = 'list-group-item'
-		if (this.props.activeList) {
+		if (activeList) {
 			 className = className + ' active'
 		} else if (isOver) {
 			className = className + ' list-group-item-info'
 		}
-		const style = {opacity: isDragging ? 0 : 1}
+		const divStyle = {opacity: isDragging ? 0 : 1}
+		const linkStyle = {
+			textDecoration: 'none',
+			color: activeList ? '#FFFFFF' : '#212529'
+		}
+		const linkURL = '/new/' + this.props.id
 		return connectDragSource(connectDropTarget(
-			<div className={className} style={nameStyle} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.props.onClick} style={style}>
-				<span >{this.props.name}</span>
-				<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
-				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
+			<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.props.onClick} style={divStyle}>
+			<Link to={linkURL} style={linkStyle}>
+				<div>
+					<span>{this.props.name}</span>
+					<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
+					<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
+				</div>
+			</Link>
 			</div>
 		))
 	}
