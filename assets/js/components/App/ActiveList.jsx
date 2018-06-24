@@ -39,7 +39,7 @@ class ActiveList extends React.Component {
 		return (
 			<div className="col-md-8">
 				<ListHeader />
-				<div className='list-group'>
+				<div className='list-group list-group-flush'>
 					<AddListItem />
 					{this.props.sortedListItems.map(item =>
 						<ListItem

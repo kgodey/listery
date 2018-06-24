@@ -4,13 +4,17 @@ import Linkify from 'react-linkify'
 
 const descriptionStyle = {
 	marginTop: 0,
-	paddingTop: 0
+	paddingTop: 0,
+	display: 'block',
+	marginLeft: '35px',
+	width: '90%'
 }
 
 const descriptionEditStyle = {
-	width: '84%',
+	width: '90%',
 	marginTop: '0.5em',
-	fontSize: '0.8em'
+	fontSize: '0.8em',
+	marginLeft: '35px',
 }
 
 

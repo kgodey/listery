@@ -182,32 +182,40 @@ class ListItem extends React.Component {
 		const style = {opacity: isDragging ? 0 : 1}
 		return connectDragSource(connectDropTarget(
 			<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
-				<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />
-				<Title
-					currentlyEditing={this.state.currentlyEditing}
-					title={this.state.data.title}
-					onChange={this.handleTitleChange}
-					onKeyUp={this.handleTitleKeyUp}
-				/>
-				<Description
-					currentlyEditing={this.state.currentlyEditing}
-					description={this.state.data.description}
-					onChange={this.handleDescriptionChange}
-					onKeyUp={this.handleDescriptionKeyUp}
-				/>
-				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
+				<div className="row">
+					<div className="col">
+						<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />
+						<Title
+							currentlyEditing={this.state.currentlyEditing}
+							title={this.state.data.title}
+							onChange={this.handleTitleChange}
+							onKeyUp={this.handleTitleKeyUp}
+						/>
+						<Description
+							currentlyEditing={this.state.currentlyEditing}
+							description={this.state.data.description}
+							onChange={this.handleDescriptionChange}
+							onKeyUp={this.handleDescriptionKeyUp}
+						/>
+					</div>
+					<div className="col-1">
+						<span class="float-right">
+							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
+						</span>
+					</div>
+				</div>
 				<SweetAlert
 					warning
 					showCancel
 					show={this.state.showAlert}
-					confirmBtnText="Yes, delete it!"
-					cancelBtnText="Cancel"
-					confirmBtnBsStyle="danger"
-					cancelBtnBsStyle="default"
+					confirmBtnText='Yes, delete it!'
+					cancelBtnText='Cancel'
+					confirmBtnBsStyle='danger'
+					cancelBtnBsStyle='default'
 					onConfirm={this.handleDeleteConfirm}
 					onCancel={this.handleDeleteCancel}
 				>
-					Are you sure you want to permanently delete "{this.state.data.title}"?
+					Are you sure you want to permanently delete <em>{this.state.data.title}</em>?
 				</SweetAlert>
 				<LoadingIndicator
 					isFetching={this.props.isFetching}

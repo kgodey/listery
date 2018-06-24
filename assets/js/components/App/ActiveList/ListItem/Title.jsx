@@ -9,7 +9,7 @@ const titleDisplayStyle = {
 
 
 const titleEditStyle = {
-	width: '80%'
+	width: '90%'
 }
 
 

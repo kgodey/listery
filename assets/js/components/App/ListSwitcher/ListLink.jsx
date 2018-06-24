@@ -137,7 +137,9 @@ class ListLink extends React.Component {
 		} else if (isOver) {
 			className = className + ' list-group-item-info'
 		}
-		const divStyle = {opacity: isDragging ? 0 : 1}
+		const divStyle = {
+			opacity: isDragging ? 0 : 1
+		}
 		const linkStyle = {
 			textDecoration: 'none',
 			color: activeList ? '#FFFFFF' : '#212529'
@@ -148,22 +150,24 @@ class ListLink extends React.Component {
 				<Link to={linkURL} style={linkStyle}>
 					<div>
 						<span>{this.props.name}</span>
-						<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
-						<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
+						<span className='float-right'>
+							<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
+							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
+						</span>
 					</div>
 				</Link>
 				<SweetAlert
 					warning
 					showCancel
 					show={this.state.showAlert}
-					confirmBtnText="Yes, archive it!"
-					cancelBtnText="Cancel"
-					confirmBtnBsStyle="danger"
-					cancelBtnBsStyle="default"
+					confirmBtnText='Yes, archive it!'
+					cancelBtnText='Cancel'
+					confirmBtnBsStyle='danger'
+					cancelBtnBsStyle='default'
 					onConfirm={this.handleArchiveConfirm}
 					onCancel={this.handleArchiveCancel}
 				>
-					Are you sure you want to archive "{this.props.name}"? You will not be able to access it in the UI once you archive it.
+					Are you sure you want to archive <em>{this.props.name}</em>? You will not be able to access it in the UI once you archive it.
 				</SweetAlert>
 			</div>
 		))
