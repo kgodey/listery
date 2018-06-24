@@ -198,10 +198,14 @@ class ListItem extends React.Component {
 							onKeyUp={this.handleDescriptionKeyUp}
 						/>
 					</div>
-					<div className="col-1">
-						<span class="float-right">
-							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
-						</span>
+					<div className="col-1 float-right">
+						<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
+						<LoadingIndicator
+							isFetching={this.props.isFetching}
+							type='bars'
+							height='10px'
+							width='20px'
+						/>
 					</div>
 				</div>
 				<SweetAlert
@@ -217,12 +221,6 @@ class ListItem extends React.Component {
 				>
 					Are you sure you want to permanently delete <em>{this.state.data.title}</em>?
 				</SweetAlert>
-				<LoadingIndicator
-					isFetching={this.props.isFetching}
-					type='bars'
-					height='10px'
-					width='20px'
-				/>
 			</div>
 		))
 	}
