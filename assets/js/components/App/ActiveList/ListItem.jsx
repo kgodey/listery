@@ -5,6 +5,7 @@ import { DragSource, DropTarget } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
+import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { deleteListItem, patchListItem } from '../../../actions/list-item'
 import { getListItemFetchStatus } from '../../../reducers/index'
@@ -76,7 +77,8 @@ class ListItem extends React.Component {
 				description: props.description
 			},
 			currentlyEditing: false,
-			currentlyHovering: false
+			currentlyHovering: false,
+			showAlert: false
 		}
 		this.handleMouseEnter = this.handleMouseEnter.bind(this)
 		this.handleMouseLeave = this.handleMouseLeave.bind(this)
@@ -88,6 +90,8 @@ class ListItem extends React.Component {
 		this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
 		this.handleDescriptionKeyUp = this.handleDescriptionKeyUp.bind(this)
 		this.handleDeleteClick = this.handleDeleteClick.bind(this)
+		this.handleDeleteConfirm = this.handleDeleteConfirm.bind(this)
+		this.handleDeleteCancel = this.handleDeleteCancel.bind(this)
 		this.saveListItemTitleAndDescription = this.saveListItemTitleAndDescription.bind(this)
 	}
 
@@ -153,7 +157,16 @@ class ListItem extends React.Component {
 	}
 
 	handleDeleteClick(event) {
+		this.setState({showAlert: true})
+	}
+
+	handleDeleteConfirm(event) {
+		this.setState({showAlert: false})
 		this.props.removeListItem(this.props.id, this.props.list_id)
+	}
+
+	handleDeleteCancel(event) {
+		this.setState({showAlert: false})
 	}
 
 	saveListItemTitleAndDescription() {
@@ -183,6 +196,19 @@ class ListItem extends React.Component {
 					onKeyUp={this.handleDescriptionKeyUp}
 				/>
 				<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
+				<SweetAlert
+					warning
+					showCancel
+					show={this.state.showAlert}
+					confirmBtnText="Yes, delete it!"
+					cancelBtnText="Cancel"
+					confirmBtnBsStyle="danger"
+					cancelBtnBsStyle="default"
+					onConfirm={this.handleDeleteConfirm}
+					onCancel={this.handleDeleteCancel}
+				>
+					Are you sure you want to permanently delete "{this.state.data.title}"?
+				</SweetAlert>
 				<LoadingIndicator
 					isFetching={this.props.isFetching}
 					type='bars'
