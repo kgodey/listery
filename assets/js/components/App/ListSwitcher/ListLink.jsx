@@ -9,8 +9,7 @@ import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { getNextList } from '../../../reducers/index'
 import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions//list'
-import { DeleteIcon } from '../Shared/Icons.jsx'
-import { DownloadIcon } from './ListLink/DownloadIcon.jsx'
+import { DeleteIcon, DownloadIcon } from '../Shared/Icons.jsx'
 import { ItemTypes } from '../Shared/ItemTypes.jsx'
 
 
