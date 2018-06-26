@@ -24,6 +24,9 @@ export const CHECK_ALL = '/actions/complete_all/'
 export const UNCHECK_ALL = '/actions/uncomplete_all/'
 
 
+const history = createHistory()
+
+
 const requestActiveList = (id) => ({
 	type: REQUEST_ACTIVE_LIST,
 	id
@@ -127,7 +130,6 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 		.then(
 			data => {
 				dispatch(receiveActiveList(data))
-				const history = createHistory()
 				history.push('/new/' + data.id)
 			})
 	}
@@ -160,7 +162,10 @@ export const createNewList = (listName) => {
 		.then(
 			response => response.json())
 		.then(
-			data => dispatch(receiveNewList(data))
+			data => {
+				dispatch(receiveNewList(data))
+				history.push('/new/' + data.id)
+			}
 		)
 	}
 }
