@@ -4,7 +4,7 @@ import React from 'react'
 import { DragSource, DropTarget } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { getNextList } from '../../../reducers/index'
@@ -209,7 +209,7 @@ ListLink.propTypes = {
 }
 
 
-ListLink = withRouter(connect(mapStateToProps, mapDispatchToProps)(ListLink))
+ListLink = connect(mapStateToProps, mapDispatchToProps)(ListLink)
 
 
 export default flow(
