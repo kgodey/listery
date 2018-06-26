@@ -1,3 +1,5 @@
+import createHistory from 'history/createBrowserHistory'
+
 import { sync } from './base'
 
 
@@ -22,8 +24,9 @@ export const CHECK_ALL = '/actions/complete_all/'
 export const UNCHECK_ALL = '/actions/uncomplete_all/'
 
 
-const requestActiveList = () => ({
+const requestActiveList = (id) => ({
 	type: REQUEST_ACTIVE_LIST,
+	id
 })
 
 
@@ -114,7 +117,7 @@ const requestActiveListChange = (id) => ({
 
 export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 	return function (dispatch) {
-		dispatch(requestActiveList())
+		dispatch(requestActiveList(id))
 		if (oldActiveListID != id) {
 			dispatch(requestActiveListChange(id))
 		}
@@ -122,7 +125,11 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 		.then(
 			response => response.json())
 		.then(
-			data => dispatch(receiveActiveList(data)))
+			data => {
+				dispatch(receiveActiveList(data))
+				const history = createHistory()
+				history.push('/new/' + data.id)
+			})
 	}
 }
 

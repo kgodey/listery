@@ -31,6 +31,7 @@ class ListSwitcher extends React.Component {
 						id={item.id}
 						order={item.order}
 						activeList={item.id == this.props.activeListID ? true : false}
+						activeListID={this.props.activeListID}
 						setListOrder={this.setListOrder}
 						showNewOrder={this.showNewOrder}
 						setListID={this.setListID}

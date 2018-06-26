@@ -4,7 +4,7 @@ import React from 'react'
 import { DragSource, DropTarget } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { getNextList } from '../../../reducers/index'
@@ -129,9 +129,10 @@ class ListLink extends React.Component {
 	}
 
 	render() {
-		const { connectDragSource, isDragging, isOver, connectDropTarget, activeList } = this.props
+		const { connectDragSource, isDragging, isOver, connectDropTarget, activeListID } = this.props
+		let isActiveList = activeListID == this.props.id
 		let className = 'list-group-item'
-		if (activeList) {
+		if (isActiveList) {
 			 className = className + ' active'
 		} else if (isOver) {
 			className = className + ' list-group-item-info'
@@ -141,7 +142,7 @@ class ListLink extends React.Component {
 		}
 		const linkStyle = {
 			textDecoration: 'none',
-			color: activeList ? '#FFFFFF' : '#212529'
+			color: isActiveList ? '#FFFFFF' : '#212529'
 		}
 		const linkURL = '/new/' + this.props.id
 		return connectDragSource(connectDropTarget(
@@ -177,7 +178,6 @@ class ListLink extends React.Component {
 const mapStateToProps = (state, ownProps) => {
 	return {
 		name: state.listsByID[ownProps.id].name,
-		activeListID: state.activeListID,
 		nextListID: getNextList(state, ownProps.id),
 		downloadFormID: 'download-form'
 	}
@@ -190,7 +190,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		},
 		hideList: (id, data, nextListID) => {
 			dispatch(archiveList(id, data, nextListID))
-			if (ownProps.activeList) {
+			if (ownProps.activeListID == ownProps.id) {
 				dispatch(fetchActiveList(nextListID, ownProps.id))
 			}
 		},
@@ -209,7 +209,7 @@ ListLink.propTypes = {
 }
 
 
-ListLink = connect(mapStateToProps, mapDispatchToProps)(ListLink)
+ListLink = withRouter(connect(mapStateToProps, mapDispatchToProps)(ListLink))
 
 
 export default flow(
