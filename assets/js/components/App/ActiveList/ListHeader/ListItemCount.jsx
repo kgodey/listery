@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import FaCheckSquare from 'react-icons/lib/fa/check-square'
+import FaCheck from 'react-icons/lib/fa/check'
 
 
 let ListItemCount = (props) => {
 	return (
 		<div className="col-2">
 			<p className="text-right">
-				<FaCheckSquare/>
+				<FaCheck/>
 				&nbsp;  {props.numCompletedItems} / {props.numItems}
 			</p>
 		</div>

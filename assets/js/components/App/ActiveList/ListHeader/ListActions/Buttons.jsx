@@ -14,7 +14,7 @@ const buttonStyle = {
 
 const Button = (props) => {
 	return (
-		<button type="button" className="btn btn-outline-secondary btn-sm" onClick={props.onClick} style={buttonStyle}>
+		<button type="button" className="btn btn-outline-dark btn-sm" onClick={props.onClick} style={buttonStyle}>
 			{props.icon}
 			<span className="align-middle">&nbsp;{props.text}</span>
 		</button>
