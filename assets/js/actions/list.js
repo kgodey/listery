@@ -17,6 +17,7 @@ export const DOWNLOAD_LIST = 'DOWNLOAD_LIST'
 export const REORDER_LIST = 'REORDER_LIST'
 export const RECEIVE_REORDERED_LIST = 'RECEIVE_REORDERED_LIST'
 export const REQUEST_ACTIVE_LIST_CHANGE = 'REQUEST_ACTIVE_LIST_CHANGE'
+export const ACTIVE_LIST_ERROR = 'ACTIVE_LIST_ERROR'
 
 const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
@@ -36,6 +37,12 @@ const requestActiveList = (id) => ({
 const receiveActiveList = (data) => ({
 	type: RECEIVE_ACTIVE_LIST,
 	data
+})
+
+
+const activeListError = (errorData) => ({
+	type: ACTIVE_LIST_ERROR,
+	errorData
 })
 
 
@@ -126,12 +133,22 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 		}
 		return sync(LIST_API_URL + id + '/')
 		.then(
-			response => response.json())
-		.then(
-			data => {
-				dispatch(receiveActiveList(data))
-				history.push('/new/' + data.id)
+			response => response.json().then(json => ({
+				status: response.status,
+				json
 			})
+		))
+		.then(
+			({ status, json }) => {
+				console.log('status', status, 'json', json)
+				if (status == 200) {
+					dispatch(receiveActiveList(json))
+					history.push('/new/' + json.id)
+				} else {
+					dispatch(activeListError(json))
+				}
+			}
+		)
 	}
 }
 
@@ -141,9 +158,15 @@ export const fetchAllLists = () => {
 		dispatch(requestAllLists())
 		return sync(LIST_API_URL)
 		.then(
-			response => response.json())
+			response => response.json().then(json => ({
+				status: response.status,
+				json
+			})
+		))
 		.then(
-			data => dispatch(receiveAllLists(data))
+			({ status, json }) => {
+				dispatch(receiveAllLists(json))
+			}
 		)
 	}
 }

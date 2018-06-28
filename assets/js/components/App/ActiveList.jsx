@@ -24,7 +24,7 @@ class ActiveList extends React.Component {
 	render() {
 		if (this.props.isFetching) {
 			return (
-				<div className="col-md-8">
+				<div className="col-md-8 mt-3">
 					<LoadingIndicator
 						isFetching={this.props.isFetching}
 						type='bars'

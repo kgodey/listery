@@ -134,6 +134,26 @@ const updateFetchingActiveList = (state, action) => {
 }
 
 
+const updateActiveListError = (state, action) => {
+	let defaultState = {
+		isError: false,
+		errorMessage: null
+	}
+	let newState = state !== undefined ? state : defaultState
+	switch(action.type) {
+		case listAPIActions.ACTIVE_LIST_ERROR:
+			return {
+				isError: true,
+				errorMessage: action.errorData.detail
+			}
+		case listAPIActions.RECEIVE_ACTIVE_LIST:
+			return defaultState
+		default:
+			return newState
+	}
+}
+
+
 const updateFetchingListItems = (state, action) => {
 	let newState = {...state}
 	switch(action.type) {
@@ -159,7 +179,8 @@ export const listeryApp = combineReducers({
 	activeListItems: updateActiveListItems,
 	listsByID: updateAllLists,
 	fetchingActiveList: updateFetchingActiveList,
-	fetchingListItems: updateFetchingListItems
+	fetchingListItems: updateFetchingListItems,
+	activeListError: updateActiveListError
 })
 
 
@@ -198,6 +219,7 @@ export const getNextList = (state, listID) => {
 	return sortedLists.length > 1 ? sortedLists[0].id : null
 }
 
+
 export const getActiveListFetchStatus = (state) => {
 	return state.fetchingActiveList
 }
@@ -209,3 +231,8 @@ export const getListItemFetchStatus = (state, id) => {
 	}
 	return false
 }
+
+export const getActiveListErrorStatus = (state) => {
+	return state.activeListError
+}
+
