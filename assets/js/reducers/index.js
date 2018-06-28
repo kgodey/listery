@@ -194,8 +194,8 @@ export const getNextList = (state, listID) => {
 			}
 		}
 	}
-	// return null by default
-	return null
+	// return first list by default if it exists
+	return sortedLists.length > 1 ? sortedLists[0].id : null
 }
 
 export const getActiveListFetchStatus = (state) => {
