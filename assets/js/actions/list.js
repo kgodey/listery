@@ -140,7 +140,6 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 		))
 		.then(
 			({ status, json }) => {
-				console.log('status', status, 'json', json)
 				if (status == 200) {
 					dispatch(receiveActiveList(json))
 					history.push('/new/' + json.id)
