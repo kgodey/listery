@@ -86,6 +86,8 @@ const updateActiveListID = (state=firstListID, action) => {
 				return action.data.id
 			}
 			return state
+		case listAPIActions.ACTIVE_LIST_ERROR:
+			return null
 		default:
 			return state
 	}
