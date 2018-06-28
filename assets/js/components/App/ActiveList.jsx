@@ -1,4 +1,5 @@
 import React from 'react'
+import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
 import { connect } from 'react-redux'
 
 import { updateListItemOrder, changeUIListOrder } from '../../actions/list-item'
@@ -22,36 +23,53 @@ class ActiveList extends React.Component {
 	}
 
 	render() {
-		if (this.props.isFetching) {
-			return (
-				<div className="col-md-8 mt-3">
-					<LoadingIndicator
-						isFetching={this.props.isFetching}
-						type='bars'
-						height='10%'
-						width='10%'
-						className='mx-auto d-block'
-						style={loadingStyle}
-					/>
+		let divContents
+		if (this.props.error.isError) {
+			divContents = (
+				<div className="card border-danger">
+					<div className="card-header bg-danger text-white">
+						<FaExclamationTriangle style={{marginRight: '0.5em'}} className="align-middle" />
+						<span className="align-middle">Error!</span>
+					</div>
+					<div className="card-body">
+						This list could not be retrieved. Error message: <em>{this.props.error.errorMessage}</em>
+					</div>
+				</div>
+			)
+		} else if (this.props.isFetching) {
+			divContents = (
+				<LoadingIndicator
+					isFetching={this.props.isFetching}
+					type='bars'
+					height='10%'
+					width='10%'
+					className='mx-auto d-block'
+					style={loadingStyle}
+				/>
+			)
+		} else {
+			divContents = (
+				<div>
+					<ListHeader />
+					<div className='list-group list-group-flush'>
+						<AddListItem />
+						{this.props.sortedListItems.map(item =>
+							<ListItem
+								key={item.id}
+								id={item.id}
+								order={item.order}
+								listID={item.list_id}
+								setListItemOrder={this.setListItemOrder}
+								showNewOrder={this.showNewOrder}
+							/>
+						)}
+					</div>
 				</div>
 			)
 		}
 		return (
 			<div className="col-md-8 mt-3">
-				<ListHeader />
-				<div className='list-group list-group-flush'>
-					<AddListItem />
-					{this.props.sortedListItems.map(item =>
-						<ListItem
-							key={item.id}
-							id={item.id}
-							order={item.order}
-							listID={item.list_id}
-							setListItemOrder={this.setListItemOrder}
-							showNewOrder={this.showNewOrder}
-						/>
-					)}
-				</div>
+				{divContents}
 			</div>
 		)
 	}

@@ -127,6 +127,7 @@ const updateFetchingActiveList = (state, action) => {
 		case listAPIActions.REQUEST_ACTIVE_LIST_CHANGE:
 			return true
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
+		case listAPIActions.ACTIVE_LIST_ERROR:
 			return false
 		default:
 			return newState
