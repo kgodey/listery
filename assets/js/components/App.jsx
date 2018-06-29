@@ -4,7 +4,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { connect } from 'react-redux'
 
 import { fetchActiveList, fetchAllLists } from '../actions//list'
-import { getActiveListErrorStatus, getAllListsErrorStatus } from '../reducers/index'
+import { getActiveListErrorStatus } from '../reducers/index'
 import ActiveList from './App/ActiveList.jsx'
 import ListSwitcher from './App/ListSwitcher.jsx'
 
@@ -29,7 +29,7 @@ class App extends React.Component {
 			<div className="container-fluid col-md-10">
 				<div className="row">
 					<ActiveList error={this.props.activeListError} />
-					<ListSwitcher error={this.props.allListsError} />
+					<ListSwitcher />
 				</div>
 			</div>
 		)
@@ -39,8 +39,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		activeListError: getActiveListErrorStatus(state),
-		allListsError: getAllListsErrorStatus(state)
+		activeListError: getActiveListErrorStatus(state)
 	}
 }
 
