@@ -117,6 +117,8 @@ const updateAllLists = (state, action) => {
 			return newState
 		case listAPIActions.RECEIVE_REORDERED_LIST:
 			return getReorderedItems(state, action)
+		case listAPIActions.ALL_LISTS_ERROR:
+			return {}
 		default:
 			return newState
 	}
@@ -157,6 +159,26 @@ const updateActiveListError = (state, action) => {
 }
 
 
+const updateAllListsError = (state, action) => {
+	let defaultState = {
+		isError: false,
+		errorMessage: null
+	}
+	let newState = state !== undefined ? state : defaultState
+	switch(action.type) {
+		case listAPIActions.ALL_LISTs_ERROR:
+			return {
+				isError: true,
+				errorMessage: action.errorData.detail
+			}
+		case listAPIActions.RECEIVE_ALL_LISTS:
+			return defaultState
+		default:
+			return newState
+	}
+}
+
+
 const updateFetchingListItems = (state, action) => {
 	let newState = {...state}
 	switch(action.type) {
@@ -183,7 +205,8 @@ export const listeryApp = combineReducers({
 	listsByID: updateAllLists,
 	fetchingActiveList: updateFetchingActiveList,
 	fetchingListItems: updateFetchingListItems,
-	activeListError: updateActiveListError
+	activeListError: updateActiveListError,
+	allListsError: updateAllListsError
 })
 
 
@@ -235,7 +258,13 @@ export const getListItemFetchStatus = (state, id) => {
 	return false
 }
 
+
 export const getActiveListErrorStatus = (state) => {
 	return state.activeListError
+}
+
+
+export const getAllListsErrorStatus = (state) => {
+	return state.allListsError
 }
 

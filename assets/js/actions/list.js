@@ -18,6 +18,7 @@ export const REORDER_LIST = 'REORDER_LIST'
 export const RECEIVE_REORDERED_LIST = 'RECEIVE_REORDERED_LIST'
 export const REQUEST_ACTIVE_LIST_CHANGE = 'REQUEST_ACTIVE_LIST_CHANGE'
 export const ACTIVE_LIST_ERROR = 'ACTIVE_LIST_ERROR'
+export const ALL_LISTS_ERROR = 'ALL_LISTS_ERROR'
 
 const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
@@ -55,6 +56,13 @@ const receiveAllLists = (data) => ({
 	type: RECEIVE_ALL_LISTS,
 	data
 })
+
+
+const allListsError = (errorData) => ({
+	type: ALL_LISTS_ERROR,
+	errorData
+})
+
 
 
 const addNewList = (data) => ({
@@ -164,7 +172,11 @@ export const fetchAllLists = () => {
 		))
 		.then(
 			({ status, json }) => {
-				dispatch(receiveAllLists(json))
+				if (status == 200) {
+					dispatch(receiveAllLists(json))
+				} else {
+					dispatch(allListsError(json))
+				}
 			}
 		)
 	}
