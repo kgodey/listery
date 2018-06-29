@@ -25,6 +25,7 @@
 		"lodash": "^4.17.10",
 		"prop-types": "^15.6.1",
 		"react": "^16.4.0",
+		"react-bootstrap-sweetalert": "^4.4.1",
 		"react-dnd": "^4.0.4",
 		"react-dnd-html5-backend": "^4.0.4",
 		"react-dom": "^16.4.0",
