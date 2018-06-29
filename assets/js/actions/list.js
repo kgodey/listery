@@ -182,11 +182,19 @@ export const createNewList = (listName) => {
 			body: JSON.stringify(listData)
 		})
 		.then(
-			response => response.json())
+			response => response.json().then(json => ({
+				status: response.status,
+				json
+			})
+		))
 		.then(
-			data => {
-				dispatch(receiveNewList(data))
-				history.push('/new/' + data.id)
+			({ status, json }) => {
+				if (status == 201) {
+					dispatch(receiveNewList(json))
+					history.push('/new/' + json.id)
+				} else {
+					console.log('handle me!')
+				}
 			}
 		)
 	}
