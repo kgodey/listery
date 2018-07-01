@@ -23,7 +23,7 @@ class ListSwitcher extends React.Component {
 
 	render() {
 		return (
-			<div className="col-md-4 list-group mt-3" style={groupStyle}>
+			<div className="col-sm-4 list-group mt-3" style={groupStyle}>
 				<AddList />
 				{this.props.sortedLists.map(item =>
 					<ListLink

@@ -4,7 +4,7 @@ import Linkify from 'react-linkify'
 
 const titleDisplayStyle = {
 	width: '90%',
-	display: 'inline-block'
+	display: 'inline'
 }
 
 

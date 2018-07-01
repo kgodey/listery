@@ -26,7 +26,7 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<div className="container-fluid col-md-10">
+			<div className="container-fluid col-sm-10">
 				<div className="row">
 					<ActiveList error={this.props.activeListError} />
 					<ListSwitcher />

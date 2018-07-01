@@ -68,7 +68,7 @@ class ActiveList extends React.Component {
 			)
 		}
 		return (
-			<div className="col-md-8 mt-3">
+			<div className="col-sm-8 mt-3">
 				{divContents}
 			</div>
 		)
