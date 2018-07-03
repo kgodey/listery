@@ -10,11 +10,8 @@ import ListSwitcher from './App/ListSwitcher.jsx'
 
 
 class App extends React.Component {
-	constructor(props) {
-		super(props)
-	}
-
 	componentDidMount() {
+		// Load initial data from backend once components mounts.
 		this.props.getActiveList()
 		this.props.getAllLists()
 	}
