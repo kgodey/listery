@@ -82,18 +82,16 @@ const receiveUpdatedList = (data) => ({
 })
 
 
-const removeList = (id, data, nextListID) => ({
+const removeList = (id, nextListID) => ({
 	type: REMOVE_LIST,
 	id,
-	data,
 	nextListID
 })
 
 
-const receiveRemovedList = (id, data, nextListID) => ({
+const receiveRemovedList = (id, nextListID) => ({
 	type: RECEIVE_REMOVED_LIST,
 	id,
-	data,
 	nextListID
 })
 
@@ -234,14 +232,14 @@ export const performActionOnList = (id, actionURL) => {
 	}
 }
 
-export const archiveList = (id, data, nextListID) => {
+export const archiveList = (id, nextListID) => {
 	return function(dispatch) {
-		dispatch(removeList(id, data, nextListID))
+		dispatch(removeList(id, nextListID))
 		return sync(LIST_API_URL + id + '/', {
 			method: 'DELETE'
 		})
 		.then(
-			data => dispatch(receiveRemovedList(id, data, nextListID))
+			data => dispatch(receiveRemovedList(id, nextListID))
 		)
 	}
 }

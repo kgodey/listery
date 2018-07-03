@@ -121,7 +121,7 @@ class ListLink extends React.Component {
 
 	handleArchiveConfirm(event) {
 		this.setState({showAlert: false})
-		this.props.hideList(this.props.id, {}, this.props.nextListID)
+		this.props.hideList({}, this.props.nextListID)
 	}
 
 	handleArchiveCancel(event) {
@@ -185,11 +185,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
-		onClick: (id) => {
+		onClick: () => {
 			dispatch(fetchActiveList(ownProps.id, ownProps.activeListID))
 		},
-		hideList: (id, data, nextListID) => {
-			dispatch(archiveList(id, data, nextListID))
+		hideList: (data, nextListID) => {
+			dispatch(archiveList(ownProps.id, nextListID))
 			if (ownProps.activeListID == ownProps.id) {
 				dispatch(fetchActiveList(nextListID, ownProps.id))
 			}

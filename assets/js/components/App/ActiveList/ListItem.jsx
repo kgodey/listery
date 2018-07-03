@@ -162,7 +162,7 @@ class ListItem extends React.Component {
 
 	handleDeleteConfirm(event) {
 		this.setState({showAlert: false})
-		this.props.removeListItem(this.props.id, this.props.listID)
+		this.props.removeListItem()
 	}
 
 	handleDeleteCancel(event) {
@@ -170,7 +170,7 @@ class ListItem extends React.Component {
 	}
 
 	saveListItemTitleAndDescription() {
-		this.props.updateListItem(this.props.id, {
+		this.props.updateListItem({
 			title: this.state.data.title,
 			description: this.state.data.description
 		})
@@ -236,13 +236,13 @@ const mapStateToProps = (state, ownProps) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
-		updateListItem: (id, data) => {
-			dispatch(patchListItem(id, data))
+		updateListItem: (data) => {
+			dispatch(patchListItem(ownProps.id, data))
 		},
-		removeListItem: (id, listID) => {
-			dispatch(deleteListItem(id, listID))
+		removeListItem: () => {
+			dispatch(deleteListItem(ownProps.id, ownProps.listID))
 		}
 	}
 }
