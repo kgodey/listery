@@ -22,16 +22,17 @@ class ListSwitcher extends React.Component {
 	}
 
 	render() {
+		const { sortedLists, activeListID } = this.props
 		return (
 			<div className="col-sm-4 list-group mt-3" style={groupStyle}>
 				<AddList />
-				{this.props.sortedLists.map(item =>
+				{sortedLists.map(item =>
 					<ListLink
 						key={item.id}
 						id={item.id}
 						order={item.order}
-						activeList={item.id == this.props.activeListID ? true : false}
-						activeListID={this.props.activeListID}
+						activeList={item.id == activeListID ? true : false}
+						activeListID={activeListID}
 						setListOrder={this.setListOrder}
 						showNewOrder={this.showNewOrder}
 						setListID={this.setListID}
