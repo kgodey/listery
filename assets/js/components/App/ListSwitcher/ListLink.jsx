@@ -112,7 +112,7 @@ class ListLink extends React.Component {
 	}
 
 	handleDownloadClick(event) {
-		this.props.downloadList(this.props.id, this.props.downloadFormID)
+		this.props.downloadList()
 	}
 
 	handleArchiveClick(event) {
@@ -121,7 +121,7 @@ class ListLink extends React.Component {
 
 	handleArchiveConfirm(event) {
 		this.setState({showAlert: false})
-		this.props.hideList({}, this.props.nextListID)
+		this.props.hideList(this.props.nextListID)
 	}
 
 	handleArchiveCancel(event) {
@@ -129,8 +129,17 @@ class ListLink extends React.Component {
 	}
 
 	render() {
-		const { connectDragSource, isDragging, isOver, connectDropTarget, activeListID } = this.props
-		let isActiveList = activeListID == this.props.id
+		const {
+			connectDragSource,
+			isDragging,
+			isOver,
+			connectDropTarget,
+			activeListID,
+			id,
+			name,
+			onClick
+		} = this.props
+		let isActiveList = activeListID == id
 		let className = 'list-group-item'
 		if (isActiveList) {
 			 className = className + ' active'
@@ -144,12 +153,12 @@ class ListLink extends React.Component {
 			textDecoration: 'none',
 			color: isActiveList ? '#FFFFFF' : '#212529'
 		}
-		const linkURL = '/new/' + this.props.id
+		const linkURL = '/new/' + id
 		return connectDragSource(connectDropTarget(
-			<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.props.onClick} style={divStyle}>
+			<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={onClick} style={divStyle}>
 				<Link to={linkURL} style={linkStyle}>
 					<div>
-						<span>{this.props.name}</span>
+						<span>{name}</span>
 						<span className='float-right'>
 							<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
 							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
@@ -167,7 +176,7 @@ class ListLink extends React.Component {
 					onConfirm={this.handleArchiveConfirm}
 					onCancel={this.handleArchiveCancel}
 				>
-					Are you sure you want to archive <em>{this.props.name}</em>? You will not be able to access it in the UI once you archive it.
+					Are you sure you want to archive <em>{name}</em>? You will not be able to access it in the UI once you archive it.
 				</SweetAlert>
 			</div>
 		))
@@ -188,14 +197,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		onClick: () => {
 			dispatch(fetchActiveList(ownProps.id, ownProps.activeListID))
 		},
-		hideList: (data, nextListID) => {
+		hideList: (nextListID) => {
 			dispatch(archiveList(ownProps.id, nextListID))
 			if (ownProps.activeListID == ownProps.id) {
 				dispatch(fetchActiveList(nextListID, ownProps.id))
 			}
 		},
-		downloadList: (id, downloadFormID) => {
-			dispatch(downloadPlaintextList(id, downloadFormID))
+		downloadList: () => {
+			dispatch(downloadPlaintextList(ownProps.id, ownProps.downloadFormID))
 		}
 	}
 }
