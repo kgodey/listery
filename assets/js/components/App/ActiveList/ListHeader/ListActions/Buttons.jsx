@@ -12,7 +12,7 @@ const buttonStyle = {
 }
 
 
-const Button = ({ onClick, icon, text}) => {
+const Button = ({ onClick, icon, text }) => {
 	return (
 		<button type="button" className="btn btn-outline-dark btn-sm" onClick={onClick} style={buttonStyle}>
 			{icon}
