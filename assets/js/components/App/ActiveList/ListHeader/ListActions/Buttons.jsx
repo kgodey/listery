@@ -12,19 +12,19 @@ const buttonStyle = {
 }
 
 
-const Button = (props) => {
+const Button = ({ onClick, icon, text}) => {
 	return (
-		<button type="button" className="btn btn-outline-dark btn-sm" onClick={props.onClick} style={buttonStyle}>
-			{props.icon}
-			<span className="align-middle">&nbsp;{props.text}</span>
+		<button type="button" className="btn btn-outline-dark btn-sm" onClick={onClick} style={buttonStyle}>
+			{icon}
+			<span className="align-middle">&nbsp;{text}</span>
 		</button>
 	)
 }
 
 
-export const SharingButton = (props) => {
+export const SharingButton = ({ isPrivate, onClick }) => {
 	let icon, text
-	if (props.private) {
+	if (isPrivate) {
 		icon = <FaShareAlt className="align-middle" />
 		text = 'Share'
 	} else {
@@ -35,43 +35,43 @@ export const SharingButton = (props) => {
 		<Button
 			icon={icon}
 			text={text}
-			onClick={props.onClick}
+			onClick={onClick}
 		/>
 	)
 }
 
 
-export const QuickSortButton = (props) => {
+export const QuickSortButton = ({ onClick }) => {
 	let icon = <FaSortAlphaAsc className="align-middle" />
 	return (
 		<Button
 			icon={icon}
 			text={'Quick Sort'}
-			onClick={props.onClick}
+			onClick={onClick}
 		/>
 	)
 }
 
 
-export const CheckAllButton = (props) => {
+export const CheckAllButton = ({ onClick }) => {
 	let icon = <FaCheckSqaureO className="align-middle" />
 	return (
 		<Button
 			icon={icon}
 			text={'Check All'}
-			onClick={props.onClick}
+			onClick={onClick}
 		/>
 	)
 }
 
 
-export const UncheckAllButton = (props) => {
+export const UncheckAllButton = ({ onClick }) => {
 	let icon = <FaSqaureO className="align-middle" />
 	return (
 		<Button
 			icon={icon}
 			text={'Uncheck All'}
-			onClick={props.onClick}
+			onClick={onClick}
 		/>
 	)
 }

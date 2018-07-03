@@ -22,7 +22,7 @@ let ListActions = (props) => {
 				onClick={props.onUncheckAllClick}
 			/>
 			<SharingButton
-				private={props.private}
+				isPrivate={props.private}
 				onClick={props.onPrivacyClick}
 			/>
 		</div>
