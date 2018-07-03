@@ -24,7 +24,8 @@ class ActiveList extends React.Component {
 
 	render() {
 		let divContents
-		if (this.props.error.isError) {
+		const { error, isFetching, sortedListItems } = this.props
+		if (error.isError) {
 			divContents = (
 				<div className="card border-danger">
 					<div className="card-header bg-danger text-white">
@@ -32,14 +33,14 @@ class ActiveList extends React.Component {
 						<span className="align-middle">Error!</span>
 					</div>
 					<div className="card-body">
-						This list could not be retrieved. Error message: <em>{this.props.error.errorMessage}</em>
+						This list could not be retrieved. Error message: <em>{error.errorMessage}</em>
 					</div>
 				</div>
 			)
-		} else if (this.props.isFetching) {
+		} else if (isFetching) {
 			divContents = (
 				<LoadingIndicator
-					isFetching={this.props.isFetching}
+					isFetching={isFetching}
 					type='bars'
 					height='10%'
 					width='10%'
@@ -53,7 +54,7 @@ class ActiveList extends React.Component {
 					<ListHeader />
 					<div className='list-group list-group-flush'>
 						<AddListItem />
-						{this.props.sortedListItems.map(item =>
+						{sortedListItems.map(item =>
 							<ListItem
 								key={item.id}
 								id={item.id}
