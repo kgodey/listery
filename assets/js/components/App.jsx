@@ -12,14 +12,9 @@ import ListSwitcher from './App/ListSwitcher.jsx'
 class App extends React.Component {
 	constructor(props) {
 		super(props)
-		this.fetchData = this.fetchData.bind(this)
 	}
 
 	componentDidMount() {
-		this.fetchData()
-	}
-
-	fetchData() {
 		this.props.getActiveList()
 		this.props.getAllLists()
 	}
