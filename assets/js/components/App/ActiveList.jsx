@@ -1,13 +1,13 @@
 import React from 'react'
-import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
 import { connect } from 'react-redux'
 
 import { updateListItemOrder, changeUIListOrder } from '../../actions/list-item'
 import { getSortedListItems, getActiveListFetchStatus } from '../../reducers/index'
-import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
+import { ErrorPanel } from './Shared/ErrorPanel.jsx'
+import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
 
 
 const loadingStyle = {
@@ -26,15 +26,9 @@ class ActiveList extends React.Component {
 		const { error, isFetching, sortedListItems } = this.props
 		if (error.isError) {
 			return (
-				<div className="card border-danger">
-					<div className="card-header bg-danger text-white">
-						<FaExclamationTriangle style={{marginRight: '0.5em'}} className="align-middle" />
-						<span className="align-middle">Error!</span>
-					</div>
-					<div className="card-body">
-						This list could not be retrieved. Error message: <em>{error.errorMessage}</em>
-					</div>
-				</div>
+				<ErrorPanel>
+					This list could not be retrieved. Error message: <em>{error.errorMessage}</em>
+				</ErrorPanel>
 			)
 		} else if (isFetching) {
 			return (
