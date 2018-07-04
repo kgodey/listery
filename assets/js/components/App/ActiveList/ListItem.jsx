@@ -115,7 +115,7 @@ class ListItem extends React.Component {
 
 	handleCheckboxClick(event) {
 		const { updateListItem, id } = this.props
-		updateListItem(id, {completed: event.target.checked})
+		updateListItem({completed: event.target.checked})
 	}
 
 	handleDoubleClick(event) {
