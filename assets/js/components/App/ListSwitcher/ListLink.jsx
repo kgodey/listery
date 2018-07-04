@@ -14,22 +14,22 @@ import { ItemTypes } from '../Shared/ItemTypes.jsx'
 
 
 const listSource = {
-	beginDrag(props) {
+	beginDrag({ id, order}) {
 		return {
-			id: props.id,
-			order: props.order
+			id,
+			order
 		}
 	},
 
-	endDrag(props, monitor) {
+	endDrag({ order, setListOrder }, monitor) {
 		const didDrop = monitor.didDrop()
 		if (!didDrop) {
 			const item = monitor.getItem()
 			const itemType = monitor.getItemType()
 			if (itemType == ItemTypes.LIST) {
 				const dragID = item.id
-				const dropOrder = props.order
-				props.setListOrder(dragID, dropOrder)
+				const dropOrder = order
+				setListOrder(dragID, dropOrder)
 			}
 		}
 	}
@@ -37,27 +37,27 @@ const listSource = {
 
 
 const listTarget = {
-	hover(props, monitor, component) {
+	hover({ order, showNewOrder }, monitor, component) {
 		const itemType = monitor.getItemType()
 		if (itemType == ItemTypes.LIST) {
 			const dragID = monitor.getItem().id
-			const dropOrder = props.order
-			props.showNewOrder(dragID, dropOrder)
+			const dropOrder = order
+			showNewOrder(dragID, dropOrder)
 		}
 	},
 
-	drop(props, monitor, component) {
+	drop({ id, setListID}, monitor, component) {
 		const item = monitor.getItem()
 		const itemType = monitor.getItemType()
 		if (itemType == ItemTypes.LIST_ITEM) {
 			const dragID = item.id
 			const oldListID = item.listID
-			const dropID = props.id
+			const dropID = id
 			// Don't make any updates if the item is already in the list
 			if (oldListID == dropID) {
 				return
 			}
-			props.setListID(dragID, dropID, oldListID)
+			setListID(dragID, dropID, oldListID)
 		}
 	},
 
