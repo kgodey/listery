@@ -76,11 +76,13 @@ class ActiveList extends React.Component {
 	}
 
 	setListItemOrder(id, order, listID) {
-		this.props.reorderListItem(id, order, listID)
+		const { reorderListItem } = this.props
+		reorderListItem(id, order, listID)
 	}
 
 	showNewOrder(dragID, dropOrder) {
-		this.props.previewListReorder(dragID, dropOrder)
+		const { previewListReorder } = this.props
+		previewListReorder(dragID, dropOrder)
 	}
 }
 

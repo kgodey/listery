@@ -13,23 +13,23 @@ const titleEditStyle = {
 }
 
 
-export const Title = (props) => {
-	if (props.currentlyEditing) {
+export const Title = ({ currentlyEditing, title, onChange, onKeyUp, onDoubleClick }) => {
+	if (currentlyEditing) {
 		return (
 			<input
 				type='text'
 				maxLength='255'
 				placeholder='Title'
 				style={titleEditStyle}
-				value={props.title}
-				onChange={props.onChange}
-				onKeyUp={props.onKeyUp}
+				value={title}
+				onChange={onChange}
+				onKeyUp={onKeyUp}
 			/>
 		)
 	} else {
 		return (
 			<Linkify>
-				<div style={titleDisplayStyle} onDoubleClick={props.onDoubleClick}>{props.title}</div>
+				<div style={titleDisplayStyle} onDoubleClick={onDoubleClick}>{title}</div>
 			</Linkify>
 		)
 	}

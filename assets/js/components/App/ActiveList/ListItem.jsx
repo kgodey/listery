@@ -18,32 +18,32 @@ import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
 
 
 const listItemSource = {
-	beginDrag(props) {
+	beginDrag({ id, order, listID }) {
 		return {
-			id: props.id,
-			order: props.order,
-			listID: props.listID
+			id: id,
+			order: order,
+			listID: listID
 		}
 	},
 
-	endDrag(props, monitor) {
+	endDrag({ order, listID, setListItemOrder } , monitor) {
 		const didDrop = monitor.didDrop()
 		if (!didDrop) {
 			const dragID = monitor.getItem().id
-			const dropOrder = props.order
-			const listID = props.listID
+			const dropOrder = order
+			const listID = listID
 
-			props.setListItemOrder(dragID, dropOrder, listID)
+			setListItemOrder(dragID, dropOrder, listID)
 		}
 	}
 }
 
 
 const listItemTarget = {
-	hover(props, monitor, component) {
+	hover({ order, showNewOrder }, monitor, component) {
 		const dragID = monitor.getItem().id
-		const dropOrder = props.order
-		props.showNewOrder(dragID, dropOrder)
+		const dropOrder = order
+		showNewOrder(dragID, dropOrder)
 	},
 
 	canDrop() {
@@ -70,11 +70,12 @@ const dropCollect = (connect) => {
 class ListItem extends React.Component {
 	constructor(props) {
 		super(props)
+		const { completed, title, description } = props
 		this.state = {
 			data: {
-				completed: props.completed,
-				title: props.title,
-				description: props.description
+				completed: completed,
+				title: title,
+				description: description
 			},
 			currentlyEditing: false,
 			currentlyHovering: false,
@@ -95,10 +96,10 @@ class ListItem extends React.Component {
 		this.saveListItemTitleAndDescription = this.saveListItemTitleAndDescription.bind(this)
 	}
 
-	static getDerivedStateFromProps(props, state) {
+	static getDerivedStateFromProps({ completed }, state) {
 		let data = {...state.data}
-		if (data.completed != props.completed) {
-			data.completed = props.completed
+		if (data.completed != completed) {
+			data.completed = completed
 			return {data: data}
 		}
 		return null
@@ -113,7 +114,8 @@ class ListItem extends React.Component {
 	}
 
 	handleCheckboxClick(event) {
-		this.props.updateListItem(this.props.id, {completed: event.target.checked})
+		const { updateListItem, id } = this.props
+		updateListItem(id, {completed: event.target.checked})
 	}
 
 	handleDoubleClick(event) {
@@ -161,8 +163,9 @@ class ListItem extends React.Component {
 	}
 
 	handleDeleteConfirm(event) {
+		const { removeListItem } = this.props
 		this.setState({showAlert: false})
-		this.props.removeListItem()
+		removeListItem()
 	}
 
 	handleDeleteCancel(event) {
@@ -170,7 +173,8 @@ class ListItem extends React.Component {
 	}
 
 	saveListItemTitleAndDescription() {
-		this.props.updateListItem({
+		const { updateListItem } = this.props
+		updateListItem({
 			title: this.state.data.title,
 			description: this.state.data.description
 		})
@@ -201,7 +205,7 @@ class ListItem extends React.Component {
 					<div className="col-1 float-right">
 						<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 						<LoadingIndicator
-							isFetching={this.props.isFetching}
+							isFetching={isFetching}
 							type='bars'
 							height='10px'
 							width='20px'

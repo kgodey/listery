@@ -8,10 +8,10 @@ const checkboxStyle = {
 }
 
 
-export const Checkbox = (props) => {
+export const Checkbox = ({ checked, onClick }) => {
 	return (
 		<span style={checkboxStyle} className='pull-left'>
-			<input type='checkbox' checked={props.checked} onClick={props.onClick} />
+			<input type='checkbox' checked={checked} onClick={onClick} />
 		</span>
 	)
 }

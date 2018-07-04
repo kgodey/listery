@@ -112,7 +112,8 @@ class ListLink extends React.Component {
 	}
 
 	handleDownloadClick(event) {
-		this.props.downloadList()
+		const { downloadList } = this.props
+		downloadList()
 	}
 
 	handleArchiveClick(event) {
@@ -120,8 +121,9 @@ class ListLink extends React.Component {
 	}
 
 	handleArchiveConfirm(event) {
+		const { hideList, nextListID } = this.props
 		this.setState({showAlert: false})
-		this.props.hideList(this.props.nextListID)
+		hideList(nextListID)
 	}
 
 	handleArchiveCancel(event) {

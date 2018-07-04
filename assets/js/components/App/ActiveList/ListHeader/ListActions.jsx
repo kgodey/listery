@@ -9,21 +9,21 @@ const divStyle = {
 }
 
 
-let ListActions = (props) => {
+let ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onPrivacyClick, isPrivate }) => {
 	return (
 		<div style={divStyle} className="col">
 			<QuickSortButton
-				onClick={props.onQuickSortClick}
+				onClick={onQuickSortClick}
 			/>
 			<CheckAllButton
-				onClick={props.onCheckAllClick}
+				onClick={onCheckAllClick}
 			/>
 			<UncheckAllButton
-				onClick={props.onUncheckAllClick}
+				onClick={onUncheckAllClick}
 			/>
 			<SharingButton
-				isPrivate={props.private}
-				onClick={props.onPrivacyClick}
+				isPrivate={isPrivate}
+				onClick={onPrivacyClick}
 			/>
 		</div>
 	)
@@ -32,7 +32,7 @@ let ListActions = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		private: state.listsByID[state.activeListID].private,
+		isPrivate: state.listsByID[state.activeListID].private
 	}
 }
 

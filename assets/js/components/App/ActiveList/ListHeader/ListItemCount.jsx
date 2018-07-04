@@ -4,12 +4,12 @@ import { connect } from 'react-redux'
 import FaCheck from 'react-icons/lib/fa/check'
 
 
-let ListItemCount = (props) => {
+let ListItemCount = ({ numCompletedItems, numItems }) => {
 	return (
 		<div className="col-2">
 			<p className="text-right">
 				<FaCheck/>
-				&nbsp;  {props.numCompletedItems} / {props.numItems}
+				&nbsp;  {numCompletedItems} / {numItems}
 			</p>
 		</div>
 	)

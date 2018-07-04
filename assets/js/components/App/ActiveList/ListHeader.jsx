@@ -11,9 +11,10 @@ import { patchList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } fr
 class ListHeader extends React.Component {
 	constructor(props) {
 		super(props)
+		const { name } = props
 		this.state = {
 			data: {
-				name: props.name
+				name: name
 			},
 			currentlyEditing: false
 		}
@@ -46,11 +47,13 @@ class ListHeader extends React.Component {
 	}
 
 	handlePrivacyClick(event) {
-		this.props.updateList(id, { private: !this.props.private })
+		const { updateList, id, isPrivate } = this.props
+		updateList(id, { private: !isPrivate })
 	}
 
 	updateListUsingAction(actionURL) {
-		this.props.updateListViaAction(this.props.id, actionURL)
+		const { updateListViaAction, id, isPrivate } = this.props
+		updateListViaAction(id, actionURL)
 	}
 
 	handleQuickSortClick(event) {
@@ -85,7 +88,8 @@ class ListHeader extends React.Component {
 	}
 
 	saveListName() {
-		this.props.updateList(this.props.id, { name: this.state.data.name })
+		const { updateList, id, isPrivate } = this.props
+		updateList(id, { name: this.state.data.name })
 		this.setState({ currentlyEditing: false })
 	}
 
@@ -122,7 +126,7 @@ const mapStateToProps = (state) => {
 	return {
 		id: state.activeListID,
 		name: state.listsByID[state.activeListID].name,
-		private: state.listsByID[state.activeListID].private
+		isPrivate: state.listsByID[state.activeListID].private
 	}
 }
 

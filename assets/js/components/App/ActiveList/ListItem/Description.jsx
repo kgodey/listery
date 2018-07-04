@@ -18,23 +18,23 @@ const descriptionEditStyle = {
 }
 
 
-export const Description = (props) => {
-	if (props.currentlyEditing) {
+export const Description = ({ currentlyEditing, description, onChange, onKeyUp }) => {
+	if (currentlyEditing) {
 		return (
 			<input
 				type='text'
 				maxLength='255'
 				placeholder='Description'
 				style={descriptionEditStyle}
-				value={props.description}
-				onChange={props.onChange}
-				onKeyUp={props.onKeyUp}
+				value={description}
+				onChange={onChange}
+				onKeyUp={onKeyUp}
 			/>
 		)
 	} else {
 		return (
 			<Linkify>
-				<small><i><span style={descriptionStyle}>{props.description}</span></i></small>
+				<small><i><span style={descriptionStyle}>{description}</span></i></small>
 			</Linkify>
 		)
 	}

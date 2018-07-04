@@ -22,8 +22,9 @@ class AddList extends React.Component {
 	}
 
 	handleKeyUp(event) {
+		const { createList } = this.props
 		if (event.key == 'Enter'){
-			this.props.createList(this.state.value)
+			createList(this.state.value)
 			this.setState({value: ''})
 		}
 	}
