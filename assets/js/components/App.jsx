@@ -9,6 +9,11 @@ import ActiveList from './App/ActiveList.jsx'
 import ListSwitcher from './App/ListSwitcher.jsx'
 
 
+const switcherStyle = {
+	cursor: 'pointer'
+}
+
+
 class App extends React.Component {
 	componentDidMount() {
 		// Load initial data from backend once components mounts.
@@ -22,8 +27,12 @@ class App extends React.Component {
 		return (
 			<div className="container-fluid col-sm-10">
 				<div className="row">
-					<ActiveList error={activeListError} />
-					<ListSwitcher />
+					<div className="col-sm-8 mt-3">
+						<ActiveList error={activeListError} />
+					</div>
+					<div className="col-sm-4 list-group mt-3" style={switcherStyle}>
+						<ListSwitcher />
+					</div>
 				</div>
 			</div>
 		)

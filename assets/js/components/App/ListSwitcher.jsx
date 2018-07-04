@@ -8,11 +8,6 @@ import ListLink from './ListSwitcher/ListLink.jsx'
 import AddList from './ListSwitcher/AddList.jsx'
 
 
-const groupStyle = {
-	cursor: 'pointer'
-}
-
-
 class ListSwitcher extends React.Component {
 	constructor(props) {
 		super(props)
@@ -24,7 +19,7 @@ class ListSwitcher extends React.Component {
 	render() {
 		const { sortedLists, activeListID } = this.props
 		return (
-			<div className="col-sm-4 list-group mt-3" style={groupStyle}>
+			<div>
 				<AddList />
 				{sortedLists.map(item =>
 					<ListLink

@@ -23,10 +23,9 @@ class ActiveList extends React.Component {
 	}
 
 	render() {
-		let divContents
 		const { error, isFetching, sortedListItems } = this.props
 		if (error.isError) {
-			divContents = (
+			return (
 				<div className="card border-danger">
 					<div className="card-header bg-danger text-white">
 						<FaExclamationTriangle style={{marginRight: '0.5em'}} className="align-middle" />
@@ -38,7 +37,7 @@ class ActiveList extends React.Component {
 				</div>
 			)
 		} else if (isFetching) {
-			divContents = (
+			return (
 				<LoadingIndicator
 					isFetching={isFetching}
 					type='bars'
@@ -49,7 +48,7 @@ class ActiveList extends React.Component {
 				/>
 			)
 		} else {
-			divContents = (
+			return (
 				<div>
 					<ListHeader />
 					<div className='list-group list-group-flush'>
@@ -66,11 +65,6 @@ class ActiveList extends React.Component {
 				</div>
 			)
 		}
-		return (
-			<div className="col-sm-8 mt-3">
-				{divContents}
-			</div>
-		)
 	}
 
 	setListItemOrder(id, order, listID) {
