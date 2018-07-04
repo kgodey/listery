@@ -14,7 +14,7 @@ import { ItemTypes } from '../Shared/ItemTypes.jsx'
 
 
 const listSource = {
-	beginDrag({ id, order}) {
+	beginDrag({ id, order }) {
 		return {
 			id,
 			order
@@ -46,7 +46,7 @@ const listTarget = {
 		}
 	},
 
-	drop({ id, setListID}, monitor, component) {
+	drop({ id, setListID }, monitor, component) {
 		const item = monitor.getItem()
 		const itemType = monitor.getItemType()
 		if (itemType == ItemTypes.LIST_ITEM) {

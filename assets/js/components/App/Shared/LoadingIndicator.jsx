@@ -2,16 +2,16 @@ import React from 'react'
 import ReactLoading from 'react-loading'
 
 
-export const LoadingIndicator = (props) => {
-	if (props.isFetching) {
+export const LoadingIndicator = ({ isFetching, style, type, height, width, className }) => {
+	if (isFetching) {
 		return (
-			<div style={props.style}>
+			<div style={style}>
 				<ReactLoading
-					type={props.type}
+					type={type}
 					color='#ccc'
-					height={props.height}
-					width={props.width}
-					className={props.className}
+					height={height}
+					width={width}
+					className={className}
 				/>
 			</div>
 		)

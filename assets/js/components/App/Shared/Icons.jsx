@@ -10,10 +10,10 @@ const iconStyle = {
 }
 
 
-export const DownloadIcon = (props) => {
-	if (props.currentlyHovering) {
+export const DownloadIcon = ({ currentlyHovering, onClick }) => {
+	if (currentlyHovering) {
 		return (
-			<FaCloudDownload onClick={props.onClick} style={iconStyle} size='20' />
+			<FaCloudDownload onClick={onClick} style={iconStyle} size='20' />
 		)
 	}
 	return (null)
@@ -21,10 +21,10 @@ export const DownloadIcon = (props) => {
 
 
 
-export const DeleteIcon = (props) => {
-	if (props.currentlyHovering) {
+export const DeleteIcon = ({ currentlyHovering, onClick }) => {
+	if (currentlyHovering) {
 		return (
-			<FaTrashO onClick={props.onClick} style={iconStyle} size='20' />
+			<FaTrashO onClick={onClick} style={iconStyle} size='20' />
 		)
 	}
 	return (null)
