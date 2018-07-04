@@ -31,9 +31,10 @@ class ListHeader extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		const { name } = nextProps.list
 		this.setState({
 			data: {
-				name: nextProps.name
+				name: name
 			}
 		})
 	}

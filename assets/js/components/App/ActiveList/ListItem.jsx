@@ -231,11 +231,7 @@ class ListItem extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-	const itemData = state.activeListItems[ownProps.id]
 	return {
-		completed: itemData.completed,
-		title: itemData.title,
-		description: itemData.description,
 		isFetching: getListItemFetchStatus(state, ownProps.id)
 	}
 }
@@ -246,7 +242,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 			dispatch(patchListItem(ownProps.id, data))
 		},
 		removeListItem: () => {
-			dispatch(deleteListItem(ownProps.id, ownProps.listID))
+			dispatch(deleteListItem(ownProps.id, ownProps.list_id))
 		}
 	}
 }
