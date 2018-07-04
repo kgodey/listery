@@ -57,9 +57,7 @@ class ActiveList extends React.Component {
 						{sortedListItems.map(item =>
 							<ListItem
 								key={item.id}
-								id={item.id}
-								order={item.order}
-								listID={item.list_id}
+								{...item}
 								setListItemOrder={this.setListItemOrder}
 								showNewOrder={this.showNewOrder}
 							/>

@@ -29,8 +29,7 @@ class ListSwitcher extends React.Component {
 				{sortedLists.map(item =>
 					<ListLink
 						key={item.id}
-						id={item.id}
-						order={item.order}
+						{...item}
 						activeList={item.id == activeListID ? true : false}
 						activeListID={activeListID}
 						setListOrder={this.setListOrder}
