@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { updateListOrder, changeUIListSwitcherOrder } from '../../actions/list'
+import { reorderList, updateListOrder } from '../../actions/list'
 import { moveListItem } from '../../actions/list-item'
 import { getSortedLists } from '../../reducers/index'
 import ListLink from './ListSwitcher/ListLink.jsx'
@@ -48,8 +48,8 @@ class ListSwitcher extends React.Component {
 	}
 
 	showNewOrder(dragID, dropOrder) {
-		const { previewListSwitcherReorder } = this.props
-		previewListSwitcherReorder(dragID, dropOrder)
+		const { updateListOrder } = this.props
+		updateListOrder(dragID, dropOrder)
 	}
 
 }
@@ -66,13 +66,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		reorderList: (id, order) => {
-			dispatch(updateListOrder(id, order))
+			dispatch(reorderList(id, order))
 		},
 		updateListID: (id, listID, oldListID) => {
 			dispatch(moveListItem(id, listID, oldListID))
 		},
-		previewListSwitcherReorder: (dragID, dropOrder) => {
-			dispatch(changeUIListSwitcherOrder(dragID, dropOrder))
+		updateListOrder: (dragID, dropOrder) => {
+			dispatch(updateListOrder(dragID, dropOrder))
 		}
 	}
 }

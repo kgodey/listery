@@ -1,13 +1,13 @@
 import { sync } from './base'
 import { fetchActiveList } from './list'
 
-export const ADD_NEW_LIST_ITEM = 'ADD_NEW_LIST_ITEM'
+export const REQUEST_NEW_LIST_ITEM = 'REQUEST_NEW_LIST_ITEM'
 export const RECEIVE_NEW_LIST_ITEM = 'RECEIVE_NEW_LIST_ITEM'
-export const UPDATE_LIST_ITEM = 'UPDATE_LIST_ITEM'
+export const REQUEST_LIST_ITEM_UPDATE = 'REQUEST_LIST_ITEM_UPDATE'
 export const RECEIVE_UPDATED_LIST_ITEM = 'RECEIVE_UPDATED_LIST_ITEM'
-export const REMOVE_LIST_ITEM = 'REMOVE_LIST_ITEM'
-export const RECEIVE_REMOVED_LIST_ITEM = 'RECEIVE_REMOVED_LIST_ITEM'
-export const REORDER_LIST_ITEM = 'REORDER_LIST_ITEM'
+export const REQUEST_LIST_ITEM_DELETION = 'REQUEST_LIST_ITEM_DELETION'
+export const RECEIVE_DELETED_LIST_ITEM = 'RECEIVE_DELETED_LIST_ITEM'
+export const REQUEST_REORDERED_LIST_ITEM = 'REQUEST_REORDERED_LIST_ITEM'
 export const RECEIVE_REORDERED_LIST_ITEM = 'RECEIVE_REORDERED_LIST_ITEM'
 export const RECEIVE_MOVED_LIST_ITEM = 'RECEIVE_MOVED_LIST_ITEM'
 
@@ -15,7 +15,7 @@ const LIST_ITEM_API_URL = '/api/v2/list_items/'
 
 
 const addNewListItem = (data) => ({
-	type: ADD_NEW_LIST_ITEM,
+	type: REQUEST_NEW_LIST_ITEM,
 	data
 })
 
@@ -27,7 +27,7 @@ const receiveNewListItem = (data) => ({
 
 
 const updateListItem = (id, data) => ({
-	type: UPDATE_LIST_ITEM,
+	type: REQUEST_LIST_ITEM_UPDATE,
 	id,
 	data
 })
@@ -40,20 +40,20 @@ const receiveUpdatedListItem = (data) => ({
 
 
 const removeListItem = (id, listID) => ({
-	type: REMOVE_LIST_ITEM,
+	type: REQUEST_LIST_ITEM_DELETION,
 	id,
 	listID
 })
 
 
 const receiveRemovedListItem = (id) => ({
-	type: RECEIVE_REMOVED_LIST_ITEM,
+	type: RECEIVE_DELETED_LIST_ITEM,
 	id
 })
 
 
 const reorderListItem = (id, order) => ({
-	type: REORDER_LIST_ITEM,
+	type: REQUEST_REORDERED_LIST_ITEM,
 	id,
 	order
 })

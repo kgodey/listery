@@ -112,8 +112,8 @@ class ListLink extends React.Component {
 	}
 
 	handleDownloadClick(event) {
-		const { downloadList } = this.props
-		downloadList()
+		const { downloadPlaintextList } = this.props
+		downloadPlaintextList()
 	}
 
 	handleArchiveClick(event) {
@@ -121,9 +121,9 @@ class ListLink extends React.Component {
 	}
 
 	handleArchiveConfirm(event) {
-		const { hideList, nextListID } = this.props
+		const { archiveList, nextListID } = this.props
 		this.setState({showAlert: false})
-		hideList(nextListID)
+		archiveList(nextListID)
 	}
 
 	handleArchiveCancel(event) {
@@ -199,13 +199,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		onClick: () => {
 			dispatch(fetchActiveList(ownProps.id, ownProps.activeListID))
 		},
-		hideList: (nextListID) => {
+		archiveList: (nextListID) => {
 			dispatch(archiveList(ownProps.id, nextListID))
 			if (ownProps.activeListID == ownProps.id) {
 				dispatch(fetchActiveList(nextListID, ownProps.id))
 			}
 		},
-		downloadList: () => {
+		downloadPlaintextList: () => {
 			dispatch(downloadPlaintextList(ownProps.id, ownProps.downloadFormID))
 		}
 	}

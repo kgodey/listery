@@ -48,13 +48,13 @@ class ListHeader extends React.Component {
 	}
 
 	handlePrivacyClick(event) {
-		const { updateList, list } = this.props
-		updateList(list.id, { private: !list.private })
+		const { patchList, list } = this.props
+		patchList(list.id, { private: !list.private })
 	}
 
 	updateListUsingAction(actionURL) {
-		const { updateListViaAction, list } = this.props
-		updateListViaAction(list.id, actionURL)
+		const { performActionOnList, list } = this.props
+		performActionOnList(list.id, actionURL)
 	}
 
 	handleQuickSortClick(event) {
@@ -89,8 +89,8 @@ class ListHeader extends React.Component {
 	}
 
 	saveListName() {
-		const { updateList, list } = this.props
-		updateList(list.id, { name: this.state.data.name })
+		const { patchList, list } = this.props
+		patchList(list.id, { name: this.state.data.name })
 		this.setState({ currentlyEditing: false })
 	}
 
@@ -131,10 +131,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		updateList: (id, data) => {
+		patchList: (id, data) => {
 			dispatch(patchList(id, data))
 		},
-		updateListViaAction: (id, actionURL) => {
+		performActionOnList: (id, actionURL) => {
 			dispatch(performActionOnList(id, actionURL))
 		}
 	}

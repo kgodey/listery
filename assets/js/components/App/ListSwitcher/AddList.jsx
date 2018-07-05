@@ -22,9 +22,9 @@ class AddList extends React.Component {
 	}
 
 	handleKeyUp(event) {
-		const { createList } = this.props
+		const { createNewList } = this.props
 		if (event.key == 'Enter'){
-			createList(this.state.value)
+			createNewList(this.state.value)
 			this.setState({value: ''})
 		}
 	}
@@ -48,7 +48,7 @@ class AddList extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		createList: (value) => {
+		createNewList: (value) => {
 			dispatch(createNewList(value))
 		}
 	}
