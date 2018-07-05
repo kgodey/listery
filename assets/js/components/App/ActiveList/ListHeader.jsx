@@ -123,24 +123,21 @@ class ListHeader extends React.Component {
 }
 
 
-const mapStateToProps = (state) => {
-	return {
-		list: state.listsByID[state.activeListID],
-	}
-}
+const mapStateToProps = (state) => ({
+	list: state.listsByID[state.activeListID],
+})
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		updateList: (id, data) => {
-			dispatch(updateList(id, data))
-		},
-		performActionOnList: (id, actionURL) => {
-			dispatch(performActionOnList(id, actionURL))
-		}
+
+const mapDispatchToProps = (dispatch) => ({
+	updateList: (id, data) => {
+		dispatch(updateList(id, data))
+	},
+	performActionOnList: (id, actionURL) => {
+		dispatch(performActionOnList(id, actionURL))
 	}
-}
+})
+
 
 ListHeader = onClickOutside(ListHeader)
 ListHeader = connect(mapStateToProps, mapDispatchToProps)(ListHeader)
-
 export default ListHeader

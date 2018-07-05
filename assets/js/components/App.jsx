@@ -40,28 +40,24 @@ class App extends React.Component {
 }
 
 
-const mapStateToProps = (state) => {
-	return {
-		activeListError: getActiveListErrorStatus(state)
-	}
-}
+const mapStateToProps = (state) => ({
+	activeListError: getActiveListErrorStatus(state)
+})
 
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-	let activeListID
-	if (ownProps.match.params.id !== undefined) {
-		activeListID = ownProps.match.params.id
-	}
-	return {
-		fetchActiveList: () => {
-			dispatch(fetchActiveList(activeListID))
-		},
-		fetchAllLists: () => {
-			dispatch(fetchAllLists())
+const mapDispatchToProps = (dispatch, ownProps) => ({
+	fetchActiveList: () => {
+		let activeListID
+		if (ownProps.match.params.id !== undefined) {
+			activeListID = ownProps.match.params.id
 		}
+		dispatch(fetchActiveList(activeListID))
+	},
+	fetchAllLists: () => {
+		dispatch(fetchAllLists())
 	}
-}
+})
+
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)
-
 export default DragDropContext(HTML5Backend)(App)

@@ -47,20 +47,17 @@ class AddListItem extends React.Component {
 }
 
 
-const mapStateToProps = (state) => {
-	return {
-		activeListID: state.activeListID,
-	}
-}
+const mapStateToProps = (state) => ({
+	activeListID: state.activeListID,
+})
 
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		createListItem: (value, listID) => {
-			dispatch(createListItem(value, listID))
-		}
+const mapDispatchToProps = (dispatch) => ({
+	createListItem: (value, listID) => {
+		dispatch(createListItem(value, listID))
 	}
-}
+})
+
 
 AddListItem = connect(mapStateToProps, mapDispatchToProps)(AddListItem)
 export default AddListItem

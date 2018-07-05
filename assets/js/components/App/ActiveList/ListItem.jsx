@@ -52,19 +52,15 @@ const listItemTarget = {
 }
 
 
-const dragCollect = (connect, monitor) => {
-	return {
-		connectDragSource: connect.dragSource(),
-		isDragging: monitor.isDragging()
-	}
-}
+const dragCollect = (connect, monitor) => ({
+	connectDragSource: connect.dragSource(),
+	isDragging: monitor.isDragging()
+})
 
 
-const dropCollect = (connect) => {
-	return {
-		connectDropTarget: connect.dropTarget()
-	}
-}
+const dropCollect = (connect) => ({
+	connectDropTarget: connect.dropTarget()
+})
 
 
 class ListItem extends React.Component {
@@ -230,22 +226,21 @@ class ListItem extends React.Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-	return {
-		isFetching: getListItemFetchStatus(state, ownProps.id)
-	}
-}
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-	return {
-		updateListItem: (data) => {
-			dispatch(updateListItem(ownProps.id, data))
-		},
-		deleteListItem: () => {
-			dispatch(deleteListItem(ownProps.id, ownProps.list_id))
-		}
+const mapStateToProps = (state, ownProps) => ({
+	isFetching: getListItemFetchStatus(state, ownProps.id)
+})
+
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+	updateListItem: (data) => {
+		dispatch(updateListItem(ownProps.id, data))
+	},
+	deleteListItem: () => {
+		dispatch(deleteListItem(ownProps.id, ownProps.list_id))
 	}
-}
+})
+
 
 ListItem.propTypes = {
 	connectDragSource: PropTypes.func.isRequired,
@@ -253,9 +248,9 @@ ListItem.propTypes = {
 	connectDropTarget: PropTypes.func.isRequired
 }
 
+
 ListItem = onClickOutside(ListItem)
 ListItem = connect(mapStateToProps, mapDispatchToProps)(ListItem)
-
 export default flow(
 	DragSource(ItemTypes.LIST_ITEM, listItemSource, dragCollect),
 	DropTarget(ItemTypes.LIST_ITEM, listItemTarget, dropCollect)

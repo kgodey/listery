@@ -72,23 +72,22 @@ class ActiveList extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		sortedListItems: getSortedListItems(state),
-		isFetching: getActiveListFetchStatus(state)
-	}
-}
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		reorderListItem: (id, order, listID) => {
-			dispatch(reorderListItem(id, order, listID))
-		},
-		previewListItemOrder: (dragID, dropOrder) => {
-			dispatch(previewListItemOrder(dragID, dropOrder))
-		}
+const mapStateToProps = (state) => ({
+	sortedListItems: getSortedListItems(state),
+	isFetching: getActiveListFetchStatus(state)
+})
+
+
+const mapDispatchToProps = (dispatch) => ({
+	reorderListItem: (id, order, listID) => {
+		dispatch(reorderListItem(id, order, listID))
+	},
+	previewListItemOrder: (dragID, dropOrder) => {
+		dispatch(previewListItemOrder(dragID, dropOrder))
 	}
-}
+})
+
 
 ActiveList = connect(mapStateToProps, mapDispatchToProps)(ActiveList)
 export default ActiveList

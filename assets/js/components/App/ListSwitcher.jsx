@@ -55,27 +55,25 @@ class ListSwitcher extends React.Component {
 }
 
 
-const mapStateToProps = (state) => {
-	return {
-		sortedLists: getSortedLists(state),
-		listsByID: state.listsByID,
-		activeListID: state.activeListID
-	}
-}
+const mapStateToProps = (state) => ({
+	sortedLists: getSortedLists(state),
+	listsByID: state.listsByID,
+	activeListID: state.activeListID
+})
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		reorderList: (id, order) => {
-			dispatch(reorderList(id, order))
-		},
-		moveListItem: (id, listID, oldListID) => {
-			dispatch(moveListItem(id, listID, oldListID))
-		},
-		previewListOrder: (dragID, dropOrder) => {
-			dispatch(previewListOrder(dragID, dropOrder))
-		}
+
+const mapDispatchToProps = (dispatch) => ({
+	reorderList: (id, order) => {
+		dispatch(reorderList(id, order))
+	},
+	moveListItem: (id, listID, oldListID) => {
+		dispatch(moveListItem(id, listID, oldListID))
+	},
+	previewListOrder: (dragID, dropOrder) => {
+		dispatch(previewListOrder(dragID, dropOrder))
 	}
-}
+})
+
 
 ListSwitcher = connect(mapStateToProps, mapDispatchToProps)(ListSwitcher)
 export default ListSwitcher

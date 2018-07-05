@@ -15,12 +15,10 @@ let ListItemCount = ({ numCompletedItems, numItems }) => {
 	)
 }
 
-const mapStateToProps = (state) => {
-	return {
-		numItems: state.listsByID[state.activeListID].item_count,
-		numCompletedItems: state.listsByID[state.activeListID].completed_item_count
-	}
-}
+const mapStateToProps = (state) => ({
+	numItems: state.listsByID[state.activeListID].item_count,
+	numCompletedItems: state.listsByID[state.activeListID].completed_item_count
+})
 
 ListItemCount = connect(mapStateToProps, null)(ListItemCount)
 export default ListItemCount

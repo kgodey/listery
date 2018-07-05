@@ -30,12 +30,10 @@ let ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onPri
 }
 
 
-const mapStateToProps = (state) => {
-	return {
-		isPrivate: state.listsByID[state.activeListID].private
-	}
-}
+const mapStateToProps = (state) => ({
+	isPrivate: state.listsByID[state.activeListID].private
+})
+
 
 ListActions = connect(mapStateToProps, null)(ListActions)
-
 export default ListActions

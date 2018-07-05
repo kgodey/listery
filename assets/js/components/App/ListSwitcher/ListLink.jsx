@@ -72,20 +72,16 @@ const listTarget = {
 }
 
 
-const dragCollect = (connect, monitor) => {
-	return {
-		connectDragSource: connect.dragSource(),
-		isDragging: monitor.isDragging()
-	}
-}
+const dragCollect = (connect, monitor) => ({
+	connectDragSource: connect.dragSource(),
+	isDragging: monitor.isDragging()
+})
 
 
-const dropCollect = (connect, monitor) => {
-	return {
-		connectDropTarget: connect.dropTarget(),
-		isOver: monitor.isOver()
-	}
-}
+const dropCollect = (connect, monitor) => ({
+	connectDropTarget: connect.dropTarget(),
+	isOver: monitor.isOver()
+})
 
 
 class ListLink extends React.Component {
@@ -186,30 +182,28 @@ class ListLink extends React.Component {
 
 }
 
-const mapStateToProps = (state, ownProps) => {
-	return {
-		activeListID: state.activeListID,
-		nextListID: getNextList(state, ownProps.id),
-		downloadFormID: 'download-form'
-	}
-}
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-	return {
-		onClick: () => {
-			dispatch(fetchActiveList(ownProps.id, ownProps.activeListID))
-		},
-		archiveList: (nextListID) => {
-			dispatch(archiveList(ownProps.id, nextListID))
-			if (ownProps.activeListID == ownProps.id) {
-				dispatch(fetchActiveList(nextListID, ownProps.id))
-			}
-		},
-		downloadPlaintextList: () => {
-			dispatch(downloadPlaintextList(ownProps.id, ownProps.downloadFormID))
+const mapStateToProps = (state, ownProps) => ({
+	activeListID: state.activeListID,
+	nextListID: getNextList(state, ownProps.id),
+	downloadFormID: 'download-form'
+})
+
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+	onClick: () => {
+		dispatch(fetchActiveList(ownProps.id, ownProps.activeListID))
+	},
+	archiveList: (nextListID) => {
+		dispatch(archiveList(ownProps.id, nextListID))
+		if (ownProps.activeListID == ownProps.id) {
+			dispatch(fetchActiveList(nextListID, ownProps.id))
 		}
+	},
+	downloadPlaintextList: () => {
+		dispatch(downloadPlaintextList(ownProps.id, ownProps.downloadFormID))
 	}
-}
+})
 
 
 ListLink.propTypes = {
@@ -221,8 +215,6 @@ ListLink.propTypes = {
 
 
 ListLink = connect(mapStateToProps, mapDispatchToProps)(ListLink)
-
-
 export default flow(
 	DragSource(ItemTypes.LIST, listSource, dragCollect),
 	DropTarget([ItemTypes.LIST, ItemTypes.LIST_ITEM], listTarget, dropCollect)
