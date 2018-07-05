@@ -14,7 +14,7 @@ export const RECEIVE_UPDATED_LIST = 'RECEIVE_UPDATED_LIST'
 export const REQUEST_LIST_ARCHIVAL = 'REQUEST_LIST_ARCHIVAL'
 export const RECEIVE_ARCHIVED_LIST = 'RECEIVE_ARCHIVED_LIST'
 export const REQUEST_LIST_DOWNLOAD = 'REQUEST_LIST_DOWNLOAD'
-export const REQUEST_REORDERED_LIST = 'REQUEST_REORDERED_LIST'
+export const REQUEST_LIST_REORDER = 'REQUEST_LIST_REORDER'
 export const RECEIVE_REORDERED_LIST = 'RECEIVE_REORDERED_LIST'
 export const REQUEST_ACTIVE_LIST_CHANGE = 'REQUEST_ACTIVE_LIST_CHANGE'
 export const RECEIVE_ACTIVE_LIST_ERROR = 'RECEIVE_ACTIVE_LIST_ERROR'
@@ -102,8 +102,8 @@ const requestListDownload = (id, downloadFormID) => ({
 })
 
 
-const requestReorderedList = (id, order) => ({
-	type: REQUEST_REORDERED_LIST,
+const requestListReorder = (id, order) => ({
+	type: REQUEST_LIST_REORDER,
 	id,
 	order
 })
@@ -198,7 +198,7 @@ export const createNewList = (listName) => {
 }
 
 
-export const patchList = (id, data) => {
+export const updateList = (id, data) => {
 	return function(dispatch) {
 		dispatch(requestListUpdate(id, data))
 		return sync(LIST_API_URL + id + '/', {
@@ -255,7 +255,7 @@ export const downloadPlaintextList = (id, downloadFormID) => {
 
 export const reorderList = (id, order) => {
 	return function(dispatch) {
-		dispatch(requestReorderedList(id, order))
+		dispatch(requestListReorder(id, order))
 		return sync(LIST_API_URL + id + '/reorder/', {
 			method: 'POST',
 			body: JSON.stringify({order: order})
@@ -266,7 +266,7 @@ export const reorderList = (id, order) => {
 	}
 }
 
-export const updateListOrder = (dragID, dropOrder) => {
+export const previewListOrder = (dragID, dropOrder) => {
 	return function(dispatch) {
 		return dispatch(receiveReorderedList(dragID, dropOrder))
 	}

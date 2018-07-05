@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { ListTitle } from './ListHeader/ListTitle.jsx'
 import ListActions from './ListHeader/ListActions.jsx'
 import ListItemCount from './ListHeader/ListItemCount.jsx'
-import { patchList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions//list.js'
+import { updateList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions//list.js'
 
 
 class ListHeader extends React.Component {
@@ -48,8 +48,8 @@ class ListHeader extends React.Component {
 	}
 
 	handlePrivacyClick(event) {
-		const { patchList, list } = this.props
-		patchList(list.id, { private: !list.private })
+		const { updateList, list } = this.props
+		updateList(list.id, { private: !list.private })
 	}
 
 	updateListUsingAction(actionURL) {
@@ -89,8 +89,8 @@ class ListHeader extends React.Component {
 	}
 
 	saveListName() {
-		const { patchList, list } = this.props
-		patchList(list.id, { name: this.state.data.name })
+		const { updateList, list } = this.props
+		updateList(list.id, { name: this.state.data.name })
 		this.setState({ currentlyEditing: false })
 	}
 
@@ -131,8 +131,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		patchList: (id, data) => {
-			dispatch(patchList(id, data))
+		updateList: (id, data) => {
+			dispatch(updateList(id, data))
 		},
 		performActionOnList: (id, actionURL) => {
 			dispatch(performActionOnList(id, actionURL))

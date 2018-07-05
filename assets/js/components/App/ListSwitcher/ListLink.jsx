@@ -21,7 +21,7 @@ const listSource = {
 		}
 	},
 
-	endDrag({ order, setListOrder }, monitor) {
+	endDrag({ order, setNewOrder }, monitor) {
 		const didDrop = monitor.didDrop()
 		if (!didDrop) {
 			const item = monitor.getItem()
@@ -29,7 +29,7 @@ const listSource = {
 			if (itemType == ItemTypes.LIST) {
 				const dragID = item.id
 				const dropOrder = order
-				setListOrder(dragID, dropOrder)
+				setNewOrder(dragID, dropOrder)
 			}
 		}
 	}
@@ -37,12 +37,12 @@ const listSource = {
 
 
 const listTarget = {
-	hover({ order, showNewOrder }, monitor, component) {
+	hover({ order, previewNewOrder }, monitor, component) {
 		const itemType = monitor.getItemType()
 		if (itemType == ItemTypes.LIST) {
 			const dragID = monitor.getItem().id
 			const dropOrder = order
-			showNewOrder(dragID, dropOrder)
+			previewNewOrder(dragID, dropOrder)
 		}
 	},
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { updateListItemOrder, changeUIListOrder } from '../../actions/list-item'
+import { reorderListItem, previewListItemOrder } from '../../actions/list-item'
 import { getSortedListItems, getActiveListFetchStatus } from '../../reducers/index'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
@@ -18,8 +18,8 @@ const loadingStyle = {
 class ActiveList extends React.Component {
 	constructor(props) {
 		super(props)
-		this.setListItemOrder = this.setListItemOrder.bind(this)
-		this.showNewOrder = this.showNewOrder.bind(this)
+		this.setNewOrder = this.setNewOrder.bind(this)
+		this.previewNewOrder = this.previewNewOrder.bind(this)
 	}
 
 	render() {
@@ -51,8 +51,8 @@ class ActiveList extends React.Component {
 							<ListItem
 								key={item.id}
 								{...item}
-								setListItemOrder={this.setListItemOrder}
-								showNewOrder={this.showNewOrder}
+								setNewOrder={this.setNewOrder}
+								previewNewOrder={this.previewNewOrder}
 							/>
 						)}
 					</div>
@@ -61,14 +61,14 @@ class ActiveList extends React.Component {
 		}
 	}
 
-	setListItemOrder(id, order, listID) {
+	setNewOrder(id, order, listID) {
 		const { reorderListItem } = this.props
 		reorderListItem(id, order, listID)
 	}
 
-	showNewOrder(dragID, dropOrder) {
-		const { previewListReorder } = this.props
-		previewListReorder(dragID, dropOrder)
+	previewNewOrder(dragID, dropOrder) {
+		const { previewListItemOrder } = this.props
+		previewListItemOrder(dragID, dropOrder)
 	}
 }
 
@@ -82,10 +82,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		reorderListItem: (id, order, listID) => {
-			dispatch(updateListItemOrder(id, order, listID))
+			dispatch(reorderListItem(id, order, listID))
 		},
-		previewListReorder: (dragID, dropOrder) => {
-			dispatch(changeUIListOrder(dragID, dropOrder))
+		previewListItemOrder: (dragID, dropOrder) => {
+			dispatch(previewListItemOrder(dragID, dropOrder))
 		}
 	}
 }

@@ -144,7 +144,7 @@ const fetchingListItems = (state, action) => {
 		case listItemAPIActions.REQUEST_LIST_ITEM_UPDATE:
 			newState[action.id] = true
 			return newState
-		case listItemAPIActions.REQUEST_REORDERED_LIST_ITEM:
+		case listItemAPIActions.REQUEST_LIST_ITEM_REORDER:
 			newState[action.id] = true
 			return newState
 		case listItemAPIActions.RECEIVE_UPDATED_LIST_ITEM:

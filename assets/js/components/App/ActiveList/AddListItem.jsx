@@ -22,9 +22,9 @@ class AddListItem extends React.Component {
 	}
 
 	handleKeyUp(event) {
-		const { addListItem, activeListID } = this.props
+		const { createListItem, activeListID } = this.props
 		if (event.key == 'Enter'){
-			addListItem(this.state.value, activeListID)
+			createListItem(this.state.value, activeListID)
 			this.setState({value: ''})
 		}
 	}
@@ -56,7 +56,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addListItem: (value, listID) => {
+		createListItem: (value, listID) => {
 			dispatch(createListItem(value, listID))
 		}
 	}

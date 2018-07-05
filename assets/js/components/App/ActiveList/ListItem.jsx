@@ -7,7 +7,7 @@ import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
-import { deleteListItem, patchListItem } from '../../../actions/list-item'
+import { deleteListItem, updateListItem } from '../../../actions/list-item'
 import { getListItemFetchStatus } from '../../../reducers/index'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
@@ -26,24 +26,24 @@ const listItemSource = {
 		}
 	},
 
-	endDrag({ order, listID, setListItemOrder } , monitor) {
+	endDrag({ order, listID, setNewOrder } , monitor) {
 		const didDrop = monitor.didDrop()
 		if (!didDrop) {
 			const dragID = monitor.getItem().id
 			const dropOrder = order
 			const listID = listID
 
-			setListItemOrder(dragID, dropOrder, listID)
+			setNewOrder(dragID, dropOrder, listID)
 		}
 	}
 }
 
 
 const listItemTarget = {
-	hover({ order, showNewOrder }, monitor, component) {
+	hover({ order, previewNewOrder }, monitor, component) {
 		const dragID = monitor.getItem().id
 		const dropOrder = order
-		showNewOrder(dragID, dropOrder)
+		previewNewOrder(dragID, dropOrder)
 	},
 
 	canDrop() {
@@ -163,9 +163,9 @@ class ListItem extends React.Component {
 	}
 
 	handleDeleteConfirm(event) {
-		const { removeListItem } = this.props
+		const { deleteListItem } = this.props
 		this.setState({showAlert: false})
-		removeListItem()
+		deleteListItem()
 	}
 
 	handleDeleteCancel(event) {
@@ -239,9 +239,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
 		updateListItem: (data) => {
-			dispatch(patchListItem(ownProps.id, data))
+			dispatch(updateListItem(ownProps.id, data))
 		},
-		removeListItem: () => {
+		deleteListItem: () => {
 			dispatch(deleteListItem(ownProps.id, ownProps.list_id))
 		}
 	}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { reorderList, updateListOrder } from '../../actions/list'
+import { reorderList, previewListOrder } from '../../actions/list'
 import { moveListItem } from '../../actions/list-item'
 import { getSortedLists } from '../../reducers/index'
 import ListLink from './ListSwitcher/ListLink.jsx'
@@ -11,9 +11,9 @@ import AddList from './ListSwitcher/AddList.jsx'
 class ListSwitcher extends React.Component {
 	constructor(props) {
 		super(props)
-		this.setListOrder = this.setListOrder.bind(this)
+		this.setNewOrder = this.setNewOrder.bind(this)
 		this.setListID = this.setListID.bind(this)
-		this.showNewOrder = this.showNewOrder.bind(this)
+		this.previewNewOrder = this.previewNewOrder.bind(this)
 	}
 
 	render() {
@@ -27,8 +27,8 @@ class ListSwitcher extends React.Component {
 						{...item}
 						activeList={item.id == activeListID ? true : false}
 						activeListID={activeListID}
-						setListOrder={this.setListOrder}
-						showNewOrder={this.showNewOrder}
+						setNewOrder={this.setNewOrder}
+						previewNewOrder={this.previewNewOrder}
 						setListID={this.setListID}
 					/>
 				)}
@@ -37,19 +37,19 @@ class ListSwitcher extends React.Component {
 		)
 	}
 
-	setListOrder(id, order) {
+	setNewOrder(id, order) {
 		const { reorderList } = this.props
 		reorderList(id, order)
 	}
 
 	setListID(id, listID, oldListID) {
-		const { updateListID } = this.props
-		updateListID(id, listID, oldListID)
+		const { moveListItem } = this.props
+		moveListItem(id, listID, oldListID)
 	}
 
-	showNewOrder(dragID, dropOrder) {
-		const { updateListOrder } = this.props
-		updateListOrder(dragID, dropOrder)
+	previewNewOrder(dragID, dropOrder) {
+		const { previewListOrder } = this.props
+		previewListOrder(dragID, dropOrder)
 	}
 
 }
@@ -68,11 +68,11 @@ const mapDispatchToProps = (dispatch) => {
 		reorderList: (id, order) => {
 			dispatch(reorderList(id, order))
 		},
-		updateListID: (id, listID, oldListID) => {
+		moveListItem: (id, listID, oldListID) => {
 			dispatch(moveListItem(id, listID, oldListID))
 		},
-		updateListOrder: (dragID, dropOrder) => {
-			dispatch(updateListOrder(dragID, dropOrder))
+		previewListOrder: (dragID, dropOrder) => {
+			dispatch(previewListOrder(dragID, dropOrder))
 		}
 	}
 }

@@ -7,14 +7,14 @@ export const REQUEST_LIST_ITEM_UPDATE = 'REQUEST_LIST_ITEM_UPDATE'
 export const RECEIVE_UPDATED_LIST_ITEM = 'RECEIVE_UPDATED_LIST_ITEM'
 export const REQUEST_LIST_ITEM_DELETION = 'REQUEST_LIST_ITEM_DELETION'
 export const RECEIVE_DELETED_LIST_ITEM = 'RECEIVE_DELETED_LIST_ITEM'
-export const REQUEST_REORDERED_LIST_ITEM = 'REQUEST_REORDERED_LIST_ITEM'
+export const REQUEST_LIST_ITEM_REORDER = 'REQUEST_LIST_ITEM_REORDER'
 export const RECEIVE_REORDERED_LIST_ITEM = 'RECEIVE_REORDERED_LIST_ITEM'
 export const RECEIVE_MOVED_LIST_ITEM = 'RECEIVE_MOVED_LIST_ITEM'
 
 const LIST_ITEM_API_URL = '/api/v2/list_items/'
 
 
-const addNewListItem = (data) => ({
+const requestNewListItem = (data) => ({
 	type: REQUEST_NEW_LIST_ITEM,
 	data
 })
@@ -26,7 +26,7 @@ const receiveNewListItem = (data) => ({
 })
 
 
-const updateListItem = (id, data) => ({
+const requestListItemUpdate = (id, data) => ({
 	type: REQUEST_LIST_ITEM_UPDATE,
 	id,
 	data
@@ -39,21 +39,21 @@ const receiveUpdatedListItem = (data) => ({
 })
 
 
-const removeListItem = (id, listID) => ({
+const requestListItemDeletion = (id, listID) => ({
 	type: REQUEST_LIST_ITEM_DELETION,
 	id,
 	listID
 })
 
 
-const receiveRemovedListItem = (id) => ({
+const receiveDeletedListItem = (id) => ({
 	type: RECEIVE_DELETED_LIST_ITEM,
 	id
 })
 
 
-const reorderListItem = (id, order) => ({
-	type: REQUEST_REORDERED_LIST_ITEM,
+const requestListItemReorder = (id, order) => ({
+	type: REQUEST_LIST_ITEM_REORDER,
 	id,
 	order
 })
@@ -79,7 +79,7 @@ export const createListItem = (title, listID) => {
 		list_id: listID
 	}
 	return function(dispatch) {
-		dispatch(addNewListItem(itemData))
+		dispatch(requestNewListItem(itemData))
 		return sync(LIST_ITEM_API_URL, {
 			method: 'POST',
 			body: JSON.stringify(itemData)
@@ -95,9 +95,9 @@ export const createListItem = (title, listID) => {
 }
 
 
-export const patchListItem = (id, data) => {
+export const updateListItem = (id, data) => {
 	return function(dispatch) {
-		dispatch(updateListItem(id, data))
+		dispatch(requestListItemUpdate(id, data))
 		return sync(LIST_ITEM_API_URL + id + '/', {
 			method: 'PATCH',
 			body: JSON.stringify(data)
@@ -119,7 +119,7 @@ export const patchListItem = (id, data) => {
 export const moveListItem = (id, listID, oldListID) => {
 	return function(dispatch) {
 		let data = {list_id: listID}
-		dispatch(updateListItem(id, data))
+		dispatch(requestListItemUpdate(id, data))
 		return sync(LIST_ITEM_API_URL + id + '/', {
 			method: 'PATCH',
 			body: JSON.stringify(data)
@@ -137,22 +137,22 @@ export const moveListItem = (id, listID, oldListID) => {
 
 export const deleteListItem = (id, listID) => {
 	return function(dispatch) {
-		dispatch(removeListItem(id, listID))
+		dispatch(requestListItemDeletion(id, listID))
 		return sync(LIST_ITEM_API_URL + id + '/', {
 			method: 'DELETE'
 		})
 		.then(
 			response => dispatch(fetchActiveList(listID, listID)))
 		.then(
-			data => dispatch(receiveRemovedListItem(id))
+			data => dispatch(receiveDeletedListItem(id))
 		)
 	}
 }
 
 
-export const updateListItemOrder = (id, order, listID) => {
+export const reorderListItem = (id, order, listID) => {
 	return function(dispatch) {
-		dispatch(reorderListItem(id, order))
+		dispatch(requestListItemReorder(id, order))
 		return sync(LIST_ITEM_API_URL + id + '/reorder/', {
 			method: 'POST',
 			body: JSON.stringify({order: order})
@@ -166,7 +166,7 @@ export const updateListItemOrder = (id, order, listID) => {
 }
 
 
-export const changeUIListOrder = (dragID, dropOrder) => {
+export const previewListItemOrder = (dragID, dropOrder) => {
 	return function(dispatch) {
 		return dispatch(receiveReorderedListItem(dragID, dropOrder))
 	}
