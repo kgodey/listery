@@ -33,7 +33,7 @@ class ActiveList extends React.Component {
 		} else if (isFetching) {
 			return (
 				<LoadingIndicator
-					isFetching={isFetching}
+					isFetching={true}
 					type='bars'
 					height='10%'
 					width='10%'
