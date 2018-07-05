@@ -17,7 +17,7 @@ export const DOWNLOAD_LIST = 'DOWNLOAD_LIST'
 export const REORDER_LIST = 'REORDER_LIST'
 export const RECEIVE_REORDERED_LIST = 'RECEIVE_REORDERED_LIST'
 export const REQUEST_ACTIVE_LIST_CHANGE = 'REQUEST_ACTIVE_LIST_CHANGE'
-export const ACTIVE_LIST_ERROR = 'ACTIVE_LIST_ERROR'
+export const RECEIVE_ACTIVE_LIST_ERROR = 'RECEIVE_ACTIVE_LIST_ERROR'
 
 const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
@@ -40,8 +40,8 @@ const receiveActiveList = (data) => ({
 })
 
 
-const activeListError = (errorData) => ({
-	type: ACTIVE_LIST_ERROR,
+const receiveActiveListError = (errorData) => ({
+	type: RECEIVE_ACTIVE_LIST_ERROR,
 	errorData
 })
 
@@ -141,7 +141,7 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 					dispatch(receiveActiveList(json))
 					history.push('/new/' + json.id)
 				} else {
-					dispatch(activeListError(json))
+					dispatch(receiveActiveListError(json))
 				}
 			}
 		)

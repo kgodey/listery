@@ -59,7 +59,7 @@ const activeListID = (state=firstListID, action) => {
 				return action.data.id
 			}
 			return state
-		case listAPIActions.ACTIVE_LIST_ERROR:
+		case listAPIActions.RECEIVE_ACTIVE_LIST_ERROR:
 			return null
 		default:
 			return state
@@ -130,7 +130,7 @@ const fetchingActiveList = (state, action) => {
 		case listAPIActions.REQUEST_ACTIVE_LIST_CHANGE:
 			return true
 		case listAPIActions.RECEIVE_ACTIVE_LIST:
-		case listAPIActions.ACTIVE_LIST_ERROR:
+		case listAPIActions.RECEIVE_ACTIVE_LIST_ERROR:
 			return false
 		default:
 			return newState
@@ -165,7 +165,7 @@ const activeListError = (state, action) => {
 	}
 	let newState = state !== undefined ? state : defaultState
 	switch(action.type) {
-		case listAPIActions.ACTIVE_LIST_ERROR:
+		case listAPIActions.RECEIVE_ACTIVE_LIST_ERROR:
 			return {
 				isError: true,
 				errorMessage: action.errorData.detail
