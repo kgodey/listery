@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -57,6 +58,12 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 		dispatch(fetchAllLists())
 	}
 })
+
+
+App.propTypes = {
+	fetchActiveList: PropTypes.func.isRequired,
+	fetchAllLists: PropTypes.func.isRequired,
+}
 
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)

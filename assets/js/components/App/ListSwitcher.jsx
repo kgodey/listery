@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
@@ -57,7 +58,6 @@ class ListSwitcher extends React.Component {
 
 const mapStateToProps = (state) => ({
 	sortedLists: getSortedLists(state),
-	listsByID: state.listsByID,
 	activeListID: state.activeListID
 })
 
@@ -73,6 +73,15 @@ const mapDispatchToProps = (dispatch) => ({
 		dispatch(previewListOrder(dragID, dropOrder))
 	}
 })
+
+
+ListSwitcher.propTypes = {
+	sortedLists: PropTypes.array.isRequired,
+	activeListID: PropTypes.number,
+	reorderList: PropTypes.func.isRequired,
+	moveListItem: PropTypes.func.isRequired,
+	previewListOrder: PropTypes.func.isRequired
+}
 
 
 ListSwitcher = connect(mapStateToProps, mapDispatchToProps)(ListSwitcher)

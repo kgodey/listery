@@ -207,6 +207,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 
 ListLink.propTypes = {
+	id: PropTypes.number.isRequired,
+	name: PropTypes.string.isRequired,
+	downloadPlaintextList: PropTypes.func.isRequired,
+	archiveList: PropTypes.func.isRequired,
+	onClick: PropTypes.func.isRequired,
+	nextListID: PropTypes.number,
+	activeListID: PropTypes.number.isRequired,
 	connectDragSource: PropTypes.func.isRequired,
 	isDragging: PropTypes.bool.isRequired,
 	isOver: PropTypes.bool.isRequired,

@@ -243,6 +243,12 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 
 ListItem.propTypes = {
+	id: PropTypes.number.isRequired,
+	completed: PropTypes.bool.isRequired,
+	title: PropTypes.string.isRequired,
+	description: PropTypes.string.isRequired,
+	updateListItem: PropTypes.func.isRequired,
+	deleteListItem: PropTypes.func.isRequired,
 	connectDragSource: PropTypes.func.isRequired,
 	isDragging: PropTypes.bool.isRequired,
 	connectDropTarget: PropTypes.func.isRequired

@@ -193,6 +193,7 @@ export const getSortedListItems = (state) => {
 	return items.sort(compareByOrder)
 }
 
+
 export const getSortedLists = (state) => {
 	if (state.listsByID) {
 		let items = Object.keys(state.listsByID).map(item => state.listsByID[item])
@@ -202,6 +203,7 @@ export const getSortedLists = (state) => {
 	}
 	return []
 }
+
 
 export const getNextList = (state, listID) => {
 	let sortedLists = getSortedLists(state)
