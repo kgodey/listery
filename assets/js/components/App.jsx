@@ -17,9 +17,9 @@ const switcherStyle = {
 class App extends React.Component {
 	componentDidMount() {
 		// Load initial data from backend once components mounts.
-		const { getActiveList, getAllLists } = this.props
-		getActiveList()
-		getAllLists()
+		const { fetchActiveList, fetchAllLists } = this.props
+		fetchActiveList()
+		fetchAllLists()
 	}
 
 	render() {
@@ -53,10 +53,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		activeListID = ownProps.match.params.id
 	}
 	return {
-		getActiveList: () => {
+		fetchActiveList: () => {
 			dispatch(fetchActiveList(activeListID))
 		},
-		getAllLists: () => {
+		fetchAllLists: () => {
 			dispatch(fetchAllLists())
 		}
 	}
