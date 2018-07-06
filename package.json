@@ -5,7 +5,8 @@
 	"main": "assets/js/index.js",
 	"scripts": {
 		"build": "./build.sh",
-		"watch": "watch 'npm run build' assets"
+		"start": "./start.sh",
+		"watch": "watch 'npm run start' assets"
 	},
 	"repository": {
 		"type": "git",

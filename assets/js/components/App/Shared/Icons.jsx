@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import FaCloudDownload from 'react-icons/lib/fa/cloud-download'
 import FaTrashO from 'react-icons/lib/fa/trash-o'
@@ -10,7 +11,7 @@ const iconStyle = {
 }
 
 
-export const DownloadIcon = ({ currentlyHovering, onClick }) => {
+let DownloadIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
 			<FaCloudDownload onClick={onClick} style={iconStyle} size='20' />
@@ -20,8 +21,13 @@ export const DownloadIcon = ({ currentlyHovering, onClick }) => {
 }
 
 
+DownloadIcon.propTypes = {
+	currentlyHovering: PropTypes.bool.isRequired,
+	onClick: PropTypes.func.isRequired
+}
 
-export const DeleteIcon = ({ currentlyHovering, onClick }) => {
+
+let DeleteIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
 			<FaTrashO onClick={onClick} style={iconStyle} size='20' />
@@ -29,3 +35,12 @@ export const DeleteIcon = ({ currentlyHovering, onClick }) => {
 	}
 	return (null)
 }
+
+
+DeleteIcon.propTypes = {
+	currentlyHovering: PropTypes.bool.isRequired,
+	onClick: PropTypes.func.isRequired
+}
+
+
+export { DownloadIcon, DeleteIcon }

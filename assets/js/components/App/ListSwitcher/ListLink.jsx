@@ -166,6 +166,7 @@ class ListLink extends React.Component {
 				<SweetAlert
 					warning
 					showCancel
+					title='Confirm Archival'
 					show={this.state.showAlert}
 					confirmBtnText='Yes, archive it!'
 					cancelBtnText='Cancel'

@@ -61,6 +61,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 
 App.propTypes = {
+	activeListError: PropTypes.object.isRequired,
 	fetchActiveList: PropTypes.func.isRequired,
 	fetchAllLists: PropTypes.func.isRequired,
 }

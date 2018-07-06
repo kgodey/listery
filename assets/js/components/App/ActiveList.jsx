@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
@@ -7,7 +8,7 @@ import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
 import { ErrorPanel } from './Shared/ErrorPanel.jsx'
-import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
+import LoadingIndicator from './Shared/LoadingIndicator.jsx'
 
 
 const loadingStyle = {
@@ -87,6 +88,15 @@ const mapDispatchToProps = (dispatch) => ({
 		dispatch(previewListItemOrder(dragID, dropOrder))
 	}
 })
+
+
+ActiveList.propTypes = {
+	error: PropTypes.object.isRequired,
+	sortedListItems: PropTypes.array.isRequired,
+	isFetching: PropTypes.bool.isRequired,
+	reorderListItem: PropTypes.func.isRequired,
+	previewListItemOrder: PropTypes.func.isRequired
+}
 
 
 ActiveList = connect(mapStateToProps, mapDispatchToProps)(ActiveList)

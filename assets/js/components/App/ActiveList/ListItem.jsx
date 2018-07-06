@@ -14,7 +14,7 @@ import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
 import { DeleteIcon } from '../Shared/Icons.jsx'
 import { ItemTypes } from '../Shared/ItemTypes.jsx'
-import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
+import LoadingIndicator from '../Shared/LoadingIndicator.jsx'
 
 
 const listItemSource = {
@@ -211,6 +211,7 @@ class ListItem extends React.Component {
 				<SweetAlert
 					warning
 					showCancel
+					title='Confirm Deletion'
 					show={this.state.showAlert}
 					confirmBtnText='Yes, delete it!'
 					cancelBtnText='Cancel'

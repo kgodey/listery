@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import ReactLoading from 'react-loading'
 
 
-export const LoadingIndicator = ({ isFetching, style, type, height, width, className }) => {
+let LoadingIndicator = ({ isFetching, type, style, height, width, className }) => {
 	if (isFetching) {
 		return (
 			<div style={style}>
@@ -18,3 +19,16 @@ export const LoadingIndicator = ({ isFetching, style, type, height, width, class
 	}
 	return (null)
 }
+
+
+LoadingIndicator.propTypes = {
+	isFetching: PropTypes.bool.isRequired,
+	type: PropTypes.string.isRequired,
+	style: PropTypes.object,
+	height: PropTypes.string,
+	width: PropTypes.string,
+	className: PropTypes.string,
+}
+
+
+export default LoadingIndicator
