@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch) => ({
 AddListItem.propTypes = {
 	isFetching: PropTypes.bool.isRequired,
 	createListItem: PropTypes.func.isRequired,
-	activeListID: PropTypes.number.isRequired
+	activeListID: PropTypes.number
 }
 
 
