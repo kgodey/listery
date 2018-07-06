@@ -31,17 +31,20 @@ class ActiveList extends React.Component {
 					This list could not be retrieved. Error message: <em>{error.errorMessage}</em>
 				</ErrorPanel>
 			)
+		} else if (isFetching) {
+			return (
+				<LoadingIndicator
+					isFetching={true}
+					type='bars'
+					height='10%'
+					width='10%'
+					className='mx-auto d-block'
+					style={loadingStyle}
+				/>
+			)
 		} else {
 			return (
 				<div>
-					<LoadingIndicator
-						isFetching={isFetching}
-						type='bars'
-						height='10%'
-						width='10%'
-						className='mx-auto d-block'
-						style={loadingStyle}
-					/>
 					<ListHeader />
 					<div className='list-group list-group-flush'>
 						<AddListItem />

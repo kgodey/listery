@@ -24,5 +24,5 @@ export const ErrorPanel = ({ children }) => {
 
 
 ErrorPanel.propTypes = {
-	children: PropTypes.element.isRequired
+	children: PropTypes.string.isRequired
 }

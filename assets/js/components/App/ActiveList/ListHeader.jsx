@@ -97,42 +97,36 @@ class ListHeader extends React.Component {
 	}
 
 	render() {
-		const { isFetching } = this.props
-		if (!isFetching) {
-			return (
-				<div>
-					<div className="row">
-						<div className="col-md-8">
-							<ListTitle
-								name={this.state.data.name}
-								currentlyEditing={this.state.currentlyEditing}
-								onChange={this.handleNameChange}
-								onKeyUp={this.handleNameKeyUp}
-								onDoubleClick={this.handleNameDoubleClick}
-							/>
-						</div>
-					</div>
-					<div className="row align-items-end">
-						<ListActions
-							onShareClick={this.handlePrivacyClick}
-							onQuickSortClick={this.handleQuickSortClick}
-							onCheckAllClick={this.handleCheckAllClick}
-							onUncheckAllClick={this.handleUncheckAllClick}
+		return (
+			<div>
+				<div className="row">
+					<div className="col-md-8">
+						<ListTitle
+							name={this.state.data.name}
+							currentlyEditing={this.state.currentlyEditing}
+							onChange={this.handleNameChange}
+							onKeyUp={this.handleNameKeyUp}
+							onDoubleClick={this.handleNameDoubleClick}
 						/>
-						<ListItemCount />
 					</div>
 				</div>
-			)
-		}
-		// return null if there is no list
-		return (null)
+				<div className="row align-items-end">
+					<ListActions
+						onShareClick={this.handlePrivacyClick}
+						onQuickSortClick={this.handleQuickSortClick}
+						onCheckAllClick={this.handleCheckAllClick}
+						onUncheckAllClick={this.handleUncheckAllClick}
+					/>
+					<ListItemCount />
+				</div>
+			</div>
+		)
 	}
 }
 
 
 const mapStateToProps = (state) => ({
-	list: state.listsByID[state.activeListID],
-	isFetching: getActiveListFetchStatus(state)
+	list: state.listsByID[state.activeListID]
 })
 
 
@@ -148,7 +142,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 ListHeader.propTypes = {
 	list: PropTypes.object.isRequired,
-	isFetching: PropTypes.bool.isRequired,
 	updateList: PropTypes.func.isRequired,
 	performActionOnList: PropTypes.func.isRequired
 }
