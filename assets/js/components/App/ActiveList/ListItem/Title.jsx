@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import Linkify from 'react-linkify'
 
@@ -13,7 +14,7 @@ const titleEditStyle = {
 }
 
 
-export const Title = ({ currentlyEditing, title, onChange, onKeyUp, onDoubleClick }) => {
+export const Title = ({ currentlyEditing, title, onChange, onKeyUp }) => {
 	if (currentlyEditing) {
 		return (
 			<input
@@ -29,8 +30,16 @@ export const Title = ({ currentlyEditing, title, onChange, onKeyUp, onDoubleClic
 	} else {
 		return (
 			<Linkify>
-				<div style={titleDisplayStyle} onDoubleClick={onDoubleClick}>{title}</div>
+				<div style={titleDisplayStyle}>{title}</div>
 			</Linkify>
 		)
 	}
+}
+
+
+Title.propTypes = {
+	currentlyEditing: PropTypes.bool.isRequired,
+	title: PropTypes.string.isRequired,
+	onChange: PropTypes.func.isRequired,
+	onKeyUp: PropTypes.func.isRequired,
 }

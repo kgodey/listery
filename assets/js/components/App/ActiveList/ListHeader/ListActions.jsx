@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
@@ -9,7 +10,7 @@ const divStyle = {
 }
 
 
-let ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onPrivacyClick, isPrivate }) => {
+let ListActions = ({ isPrivate, onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick }) => {
 	return (
 		<div style={divStyle} className="col">
 			<QuickSortButton
@@ -23,7 +24,7 @@ let ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onPri
 			/>
 			<SharingButton
 				isPrivate={isPrivate}
-				onClick={onPrivacyClick}
+				onClick={onShareClick}
 			/>
 		</div>
 	)
@@ -33,6 +34,15 @@ let ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onPri
 const mapStateToProps = (state) => ({
 	isPrivate: state.listsByID[state.activeListID].private
 })
+
+
+ListActions.propTypes = {
+	isPrivate: PropTypes.bool.isRequired,
+	onQuickSortClick: PropTypes.func.isRequired,
+	onCheckAllClick: PropTypes.func.isRequired,
+	onUncheckAllClick: PropTypes.func.isRequired,
+	onShareClick: PropTypes.func.isRequired
+}
 
 
 ListActions = connect(mapStateToProps, null)(ListActions)

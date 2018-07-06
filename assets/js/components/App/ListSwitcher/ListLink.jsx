@@ -214,7 +214,7 @@ ListLink.propTypes = {
 	archiveList: PropTypes.func.isRequired,
 	onClick: PropTypes.func.isRequired,
 	nextListID: PropTypes.number,
-	activeListID: PropTypes.number.isRequired,
+	activeListID: PropTypes.number,
 	connectDragSource: PropTypes.func.isRequired,
 	isDragging: PropTypes.bool.isRequired,
 	isOver: PropTypes.bool.isRequired,

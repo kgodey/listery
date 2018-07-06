@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { createNewList } from '../../../actions/list.js'
+import { createList } from '../../../actions/list.js'
 
 
 const inputStyle = {
@@ -22,9 +23,9 @@ class AddList extends React.Component {
 	}
 
 	handleKeyUp(event) {
-		const { createNewList } = this.props
+		const { createList } = this.props
 		if (event.key == 'Enter'){
-			createNewList(this.state.value)
+			createList(this.state.value)
 			this.setState({value: ''})
 		}
 	}
@@ -47,10 +48,16 @@ class AddList extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-	createNewList: (value) => {
-		dispatch(createNewList(value))
+	createList: (value) => {
+		dispatch(createList(value))
 	}
 })
+
+
+AddList.propTypes = {
+	createList: PropTypes.func.isRequired
+}
+
 
 AddList = connect(null, mapDispatchToProps)(AddList)
 export default AddList

@@ -11,7 +11,7 @@ const iconStyle = {
 }
 
 
-let DownloadIcon = ({ currentlyHovering, onClick }) => {
+export const DownloadIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
 			<FaCloudDownload onClick={onClick} style={iconStyle} size='20' />
@@ -27,7 +27,7 @@ DownloadIcon.propTypes = {
 }
 
 
-let DeleteIcon = ({ currentlyHovering, onClick }) => {
+export const DeleteIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
 			<FaTrashO onClick={onClick} style={iconStyle} size='20' />
@@ -41,6 +41,3 @@ DeleteIcon.propTypes = {
 	currentlyHovering: PropTypes.bool.isRequired,
 	onClick: PropTypes.func.isRequired
 }
-
-
-export { DownloadIcon, DeleteIcon }

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
@@ -15,10 +16,18 @@ let ListItemCount = ({ numCompletedItems, numItems }) => {
 	)
 }
 
+
 const mapStateToProps = (state) => ({
 	numItems: state.listsByID[state.activeListID].item_count,
 	numCompletedItems: state.listsByID[state.activeListID].completed_item_count
 })
+
+
+ListItemCount.propTypes = {
+	numItems: PropTypes.number.isRequired,
+	numCompletedItems: PropTypes.number.isRequired
+}
+
 
 ListItemCount = connect(mapStateToProps, null)(ListItemCount)
 export default ListItemCount

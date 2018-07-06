@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
 import { createListItem } from '../../../actions/list-item.js'
+import { getActiveListFetchStatus } from '../../../reducers/index'
 
 
 const inputStyle = {
@@ -30,25 +32,30 @@ class AddListItem extends React.Component {
 	}
 
 	render() {
-		return (
-			<div className='list-group-item'>
-				<input
-					type='text'
-					value={this.state.value}
-					style={inputStyle}
-					placeholder='Add new item'
-					maxLength='255'
-					onChange={this.handleChange}
-					onKeyUp={this.handleKeyUp}
-				/>
-			</div>
-		)
+		const { isFetching} = this.props
+		if (!isFetching) {
+			return (
+				<div className='list-group-item'>
+					<input
+						type='text'
+						value={this.state.value}
+						style={inputStyle}
+						placeholder='Add new item'
+						maxLength='255'
+						onChange={this.handleChange}
+						onKeyUp={this.handleKeyUp}
+					/>
+				</div>
+			)
+		}
+		return (null)
 	}
 }
 
 
 const mapStateToProps = (state) => ({
 	activeListID: state.activeListID,
+	isFetching: getActiveListFetchStatus(state)
 })
 
 
@@ -57,6 +64,13 @@ const mapDispatchToProps = (dispatch) => ({
 		dispatch(createListItem(value, listID))
 	}
 })
+
+
+AddListItem.propTypes = {
+	isFetching: PropTypes.bool.isRequired,
+	createListItem: PropTypes.func.isRequired,
+	activeListID: PropTypes.number.isRequired
+}
 
 
 AddListItem = connect(mapStateToProps, mapDispatchToProps)(AddListItem)

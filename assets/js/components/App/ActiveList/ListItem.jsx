@@ -8,13 +8,13 @@ import { connect } from 'react-redux'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { deleteListItem, updateListItem } from '../../../actions/list-item'
-import { getListItemFetchStatus } from '../../../reducers/index'
+import { getListItemFetchStatus, getActiveListFetchStatus } from '../../../reducers/index'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
 import { DeleteIcon } from '../Shared/Icons.jsx'
 import { ItemTypes } from '../Shared/ItemTypes.jsx'
-import LoadingIndicator from '../Shared/LoadingIndicator.jsx'
+import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
 
 
 const listItemSource = {
@@ -178,57 +178,62 @@ class ListItem extends React.Component {
 	}
 
 	render() {
-		const { connectDragSource, isDragging, connectDropTarget, isFetching } = this.props
-		const style = {opacity: isDragging ? 0 : 1}
-		return connectDragSource(connectDropTarget(
-			<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
-				<div className="row">
-					<div className="col">
-						<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />
-						<Title
-							currentlyEditing={this.state.currentlyEditing}
-							title={this.state.data.title}
-							onChange={this.handleTitleChange}
-							onKeyUp={this.handleTitleKeyUp}
-						/>
-						<Description
-							currentlyEditing={this.state.currentlyEditing}
-							description={this.state.data.description}
-							onChange={this.handleDescriptionChange}
-							onKeyUp={this.handleDescriptionKeyUp}
-						/>
+		const { isFetchingList } = this.props
+		if (!isFetchingList) {
+			const { connectDragSource, isDragging, connectDropTarget, isFetching } = this.props
+			const style = {opacity: isDragging ? 0 : 1}
+			return connectDragSource(connectDropTarget(
+				<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
+					<div className="row">
+						<div className="col">
+							<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />
+							<Title
+								currentlyEditing={this.state.currentlyEditing}
+								title={this.state.data.title}
+								onChange={this.handleTitleChange}
+								onKeyUp={this.handleTitleKeyUp}
+							/>
+							<Description
+								currentlyEditing={this.state.currentlyEditing}
+								description={this.state.data.description}
+								onChange={this.handleDescriptionChange}
+								onKeyUp={this.handleDescriptionKeyUp}
+							/>
+						</div>
+						<div className="col-1 float-right">
+							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
+							<LoadingIndicator
+								isFetching={isFetching}
+								type='bars'
+								height='10px'
+								width='20px'
+							/>
+						</div>
 					</div>
-					<div className="col-1 float-right">
-						<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
-						<LoadingIndicator
-							isFetching={isFetching}
-							type='bars'
-							height='10px'
-							width='20px'
-						/>
-					</div>
+					<SweetAlert
+						warning
+						showCancel
+						title='Confirm Deletion'
+						show={this.state.showAlert}
+						confirmBtnText='Yes, delete it!'
+						cancelBtnText='Cancel'
+						confirmBtnBsStyle='danger'
+						cancelBtnBsStyle='default'
+						onConfirm={this.handleDeleteConfirm}
+						onCancel={this.handleDeleteCancel}
+					>
+						Are you sure you want to permanently delete <em>{this.state.data.title}</em>?
+					</SweetAlert>
 				</div>
-				<SweetAlert
-					warning
-					showCancel
-					title='Confirm Deletion'
-					show={this.state.showAlert}
-					confirmBtnText='Yes, delete it!'
-					cancelBtnText='Cancel'
-					confirmBtnBsStyle='danger'
-					cancelBtnBsStyle='default'
-					onConfirm={this.handleDeleteConfirm}
-					onCancel={this.handleDeleteCancel}
-				>
-					Are you sure you want to permanently delete <em>{this.state.data.title}</em>?
-				</SweetAlert>
-			</div>
-		))
+			))
+		}
+		return (null)
 	}
 }
 
 
 const mapStateToProps = (state, ownProps) => ({
+	isFetchingList: getActiveListFetchStatus(state),
 	isFetching: getListItemFetchStatus(state, ownProps.id)
 })
 
@@ -247,7 +252,9 @@ ListItem.propTypes = {
 	id: PropTypes.number.isRequired,
 	completed: PropTypes.bool.isRequired,
 	title: PropTypes.string.isRequired,
-	description: PropTypes.string.isRequired,
+	description: PropTypes.string,
+	isFetchingList: PropTypes.bool.required,
+	isFetching: PropTypes.bool.required,
 	updateListItem: PropTypes.func.isRequired,
 	deleteListItem: PropTypes.func.isRequired,
 	connectDragSource: PropTypes.func.isRequired,

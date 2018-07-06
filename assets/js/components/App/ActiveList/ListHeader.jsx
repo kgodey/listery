@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
 
+import { getActiveListFetchStatus } from '../../../reducers/index'
 import { ListTitle } from './ListHeader/ListTitle.jsx'
 import ListActions from './ListHeader/ListActions.jsx'
 import ListItemCount from './ListHeader/ListItemCount.jsx'
@@ -95,36 +97,42 @@ class ListHeader extends React.Component {
 	}
 
 	render() {
-		return (
-			<div>
-				<div className="row">
-					<div className="col-md-8">
-						<ListTitle
-							name={this.state.data.name}
-							currentlyEditing={this.state.currentlyEditing}
-							onChange={this.handleNameChange}
-							onKeyUp={this.handleNameKeyUp}
-							onDoubleClick={this.handleNameDoubleClick}
+		const { isFetching } = this.props
+		if (!isFetching) {
+			return (
+				<div>
+					<div className="row">
+						<div className="col-md-8">
+							<ListTitle
+								name={this.state.data.name}
+								currentlyEditing={this.state.currentlyEditing}
+								onChange={this.handleNameChange}
+								onKeyUp={this.handleNameKeyUp}
+								onDoubleClick={this.handleNameDoubleClick}
+							/>
+						</div>
+					</div>
+					<div className="row align-items-end">
+						<ListActions
+							onShareClick={this.handlePrivacyClick}
+							onQuickSortClick={this.handleQuickSortClick}
+							onCheckAllClick={this.handleCheckAllClick}
+							onUncheckAllClick={this.handleUncheckAllClick}
 						/>
+						<ListItemCount />
 					</div>
 				</div>
-				<div className="row align-items-end">
-					<ListActions
-						onPrivacyClick={this.handlePrivacyClick}
-						onQuickSortClick={this.handleQuickSortClick}
-						onCheckAllClick={this.handleCheckAllClick}
-						onUncheckAllClick={this.handleUncheckAllClick}
-					/>
-					<ListItemCount />
-				</div>
-			</div>
-		)
+			)
+		}
+		// return null if there is no list
+		return (null)
 	}
 }
 
 
 const mapStateToProps = (state) => ({
 	list: state.listsByID[state.activeListID],
+	isFetching: getActiveListFetchStatus(state)
 })
 
 
@@ -136,6 +144,14 @@ const mapDispatchToProps = (dispatch) => ({
 		dispatch(performActionOnList(id, actionURL))
 	}
 })
+
+
+ListHeader.propTypes = {
+	list: PropTypes.object.isRequired,
+	isFetching: PropTypes.bool.isRequired,
+	updateList: PropTypes.func.isRequired,
+	performActionOnList: PropTypes.func.isRequired
+}
 
 
 ListHeader = onClickOutside(ListHeader)

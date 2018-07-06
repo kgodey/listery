@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
 
-export const ListTitle = ({ currentlyEditing, onChange, onKeyUp, onDoubleClick, name }) => {
+export const ListTitle = ({ name, currentlyEditing, onChange, onKeyUp, onDoubleClick }) => {
 	if (currentlyEditing) {
 		return (
 			<input
@@ -18,4 +19,13 @@ export const ListTitle = ({ currentlyEditing, onChange, onKeyUp, onDoubleClick, 
 			<h1 onDoubleClick={onDoubleClick}>{name}</h1>
 		)
 	}
+}
+
+
+ListTitle.propTypes = {
+	name: PropTypes.string.isRequired,
+	currentlyEditing: PropTypes.bool.isRequired,
+	onChange: PropTypes.func.isRequired,
+	onKeyUp: PropTypes.func.isRequired,
+	onDoubleClick: PropTypes.func.isRequired
 }

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
 
@@ -19,4 +20,9 @@ export const ErrorPanel = ({ children }) => {
 			</div>
 		</div>
 	)
+}
+
+
+ErrorPanel.propTypes = {
+	children: PropTypes.element.isRequired
 }

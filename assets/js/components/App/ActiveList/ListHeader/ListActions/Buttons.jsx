@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import FaShareAlt from 'react-icons/lib/fa/share-alt'
 import FaLock from 'react-icons/lib/fa/lock'
@@ -22,6 +23,13 @@ const Button = ({ onClick, icon, text }) => {
 }
 
 
+Button.propTypes = {
+	icon: PropTypes.element.isRequired,
+	text: PropTypes.string.isRequired,
+	onClick: PropTypes.func.isRequired
+}
+
+
 export const SharingButton = ({ isPrivate, onClick }) => {
 	let icon, text
 	if (isPrivate) {
@@ -41,6 +49,12 @@ export const SharingButton = ({ isPrivate, onClick }) => {
 }
 
 
+SharingButton.propTypes = {
+	isPrivate: PropTypes.bool.isRequired,
+	onClick: PropTypes.func.isRequired
+}
+
+
 export const QuickSortButton = ({ onClick }) => {
 	let icon = <FaSortAlphaAsc className="align-middle" />
 	return (
@@ -50,6 +64,11 @@ export const QuickSortButton = ({ onClick }) => {
 			onClick={onClick}
 		/>
 	)
+}
+
+
+QuickSortButton.propTypes = {
+	onClick: PropTypes.func.isRequired
 }
 
 
@@ -65,6 +84,11 @@ export const CheckAllButton = ({ onClick }) => {
 }
 
 
+CheckAllButton.propTypes = {
+	onClick: PropTypes.func.isRequired
+}
+
+
 export const UncheckAllButton = ({ onClick }) => {
 	let icon = <FaSqaureO className="align-middle" />
 	return (
@@ -74,4 +98,9 @@ export const UncheckAllButton = ({ onClick }) => {
 			onClick={onClick}
 		/>
 	)
+}
+
+
+UncheckAllButton.propTypes = {
+	onClick: PropTypes.func.isRequired
 }

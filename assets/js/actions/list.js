@@ -168,7 +168,7 @@ export const fetchAllLists = () => {
 }
 
 
-export const createNewList = (listName) => {
+export const createList = (listName) => {
 	let listData = {
 		name: listName
 	}

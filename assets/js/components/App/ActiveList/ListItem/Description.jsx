@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import Linkify from 'react-linkify'
 
@@ -26,7 +27,7 @@ export const Description = ({ currentlyEditing, description, onChange, onKeyUp }
 				maxLength='255'
 				placeholder='Description'
 				style={descriptionEditStyle}
-				value={description}
+				value={description !== null ? description : ''}
 				onChange={onChange}
 				onKeyUp={onKeyUp}
 			/>
@@ -38,4 +39,12 @@ export const Description = ({ currentlyEditing, description, onChange, onKeyUp }
 			</Linkify>
 		)
 	}
+}
+
+
+Description.propTypes = {
+	currentlyEditing: PropTypes.bool.isRequired,
+	description: PropTypes.string,
+	onChange: PropTypes.func.isRequired,
+	onKeyUp: PropTypes.func.isRequired
 }

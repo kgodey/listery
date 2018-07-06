@@ -8,7 +8,7 @@ import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
 import { ErrorPanel } from './Shared/ErrorPanel.jsx'
-import LoadingIndicator from './Shared/LoadingIndicator.jsx'
+import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
 
 
 const loadingStyle = {
@@ -27,24 +27,21 @@ class ActiveList extends React.Component {
 		const { error, isFetching, sortedListItems } = this.props
 		if (error.isError) {
 			return (
-				<ErrorPanel>
+				<ErrorPanel show={error.isError}>
 					This list could not be retrieved. Error message: <em>{error.errorMessage}</em>
 				</ErrorPanel>
-			)
-		} else if (isFetching) {
-			return (
-				<LoadingIndicator
-					isFetching={true}
-					type='bars'
-					height='10%'
-					width='10%'
-					className='mx-auto d-block'
-					style={loadingStyle}
-				/>
 			)
 		} else {
 			return (
 				<div>
+					<LoadingIndicator
+						isFetching={isFetching}
+						type='bars'
+						height='10%'
+						width='10%'
+						className='mx-auto d-block'
+						style={loadingStyle}
+					/>
 					<ListHeader />
 					<div className='list-group list-group-flush'>
 						<AddListItem />
