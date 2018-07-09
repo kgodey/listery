@@ -23,7 +23,7 @@ export const ListTitle = ({ name, currentlyEditing, onChange, onKeyUp, onDoubleC
 
 
 ListTitle.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	currentlyEditing: PropTypes.bool.isRequired,
 	onChange: PropTypes.func.isRequired,
 	onKeyUp: PropTypes.func.isRequired,

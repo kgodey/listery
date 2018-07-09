@@ -24,8 +24,8 @@ const mapStateToProps = (state) => ({
 
 
 ListItemCount.propTypes = {
-	numItems: PropTypes.number.isRequired,
-	numCompletedItems: PropTypes.number.isRequired
+	numItems: PropTypes.number,
+	numCompletedItems: PropTypes.number
 }
 
 

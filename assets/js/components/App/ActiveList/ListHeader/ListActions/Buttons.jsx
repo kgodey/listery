@@ -50,7 +50,7 @@ export const SharingButton = ({ isPrivate, onClick }) => {
 
 
 SharingButton.propTypes = {
-	isPrivate: PropTypes.bool.isRequired,
+	isPrivate: PropTypes.bool,
 	onClick: PropTypes.func.isRequired
 }
 

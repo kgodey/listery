@@ -37,7 +37,7 @@ const mapStateToProps = (state) => ({
 
 
 ListActions.propTypes = {
-	isPrivate: PropTypes.bool.isRequired,
+	isPrivate: PropTypes.bool,
 	onQuickSortClick: PropTypes.func.isRequired,
 	onCheckAllClick: PropTypes.func.isRequired,
 	onUncheckAllClick: PropTypes.func.isRequired,
