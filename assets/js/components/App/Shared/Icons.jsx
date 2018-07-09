@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import FaArchive from 'react-icons/lib/fa/archive'
 import FaCloudDownload from 'react-icons/lib/fa/cloud-download'
-import FaTrashO from 'react-icons/lib/fa/trash-o'
+import FaTrash from 'react-icons/lib/fa/trash'
 
 
 const iconStyle = {
@@ -31,7 +31,7 @@ DownloadIcon.propTypes = {
 export const DeleteIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
-			<FaTrashO onClick={onClick} style={iconStyle} size='20' />
+			<FaTrash onClick={onClick} style={iconStyle} size='20' />
 		)
 	}
 	return (null)
