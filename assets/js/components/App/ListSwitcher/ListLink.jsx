@@ -9,7 +9,7 @@ import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { getNextList } from '../../../reducers/index'
 import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions//list'
-import { DeleteIcon, DownloadIcon } from '../Shared/Icons.jsx'
+import { ArchiveIcon, DownloadIcon } from '../Shared/Icons.jsx'
 import { ItemTypes } from '../Shared/ItemTypes.jsx'
 
 
@@ -159,7 +159,7 @@ class ListLink extends React.Component {
 						<span>{name}</span>
 						<span className='float-right'>
 							<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
-							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
+							<ArchiveIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
 						</span>
 					</div>
 				</Link>
