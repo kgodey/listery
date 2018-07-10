@@ -9,8 +9,8 @@ let ListItemCount = ({ numCompletedItems, numItems }) => {
 	return (
 		<div className="col-2">
 			<p className="text-right">
-				<FaCheck/>
-				&nbsp;  {numCompletedItems} / {numItems}
+				<FaCheck className="mr-2"/>
+				{numCompletedItems} / {numItems}
 			</p>
 		</div>
 	)
