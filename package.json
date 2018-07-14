@@ -6,7 +6,15 @@
 	"scripts": {
 		"build": "./build.sh",
 		"start": "./start.sh",
-		"watch": "watch 'npm run start' assets"
+		"watch": "watch 'npm run start' assets",
+		"test": "jest"
+	},
+	"jest": {
+		"testRegex": "assets/js/__tests__/.*\\.js$",
+		"transform": {
+			"^.+\\.jsx?$": "babel-jest"
+		},
+		"verbose": true
 	},
 	"repository": {
 		"type": "git",
@@ -32,7 +40,7 @@
 		"react-dom": "^16.4.0",
 		"react-icons": "^2.2.7",
 		"react-linkify": "^0.2.2",
-		"react-loading": "^2.0.2",
+		"react-loading": "^2.0.3",
 		"react-onclickoutside": "^6.7.1",
 		"react-redux": "^5.0.7",
 		"react-router-dom": "^4.3.1",
@@ -42,11 +50,14 @@
 	},
 	"devDependencies": {
 		"babel-core": "^6.26.3",
+		"babel-jest": "^23.4.0",
 		"babel-loader": "^7.1.4",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-preset-env": "^1.7.0",
 		"babel-preset-react": "^6.24.1",
+		"jest": "^23.4.1",
 		"jquery": "^3.3.1",
+		"react-test-renderer": "^16.4.1",
 		"watch": "^1.0.2",
 		"webpack": "^4.11.1",
 		"webpack-cli": "^3.0.3"

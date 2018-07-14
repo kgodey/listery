@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Checkbox renders correctly 1`] = `
+<span
+  className="pull-left"
+  style={
+    Object {
+      "display": "inline-block",
+      "textAlign": "center",
+      "width": "35px",
+    }
+  }
+>
+  <input
+    checked={true}
+    onClick={[MockFunction]}
+    type="checkbox"
+  />
+</span>
+`;
