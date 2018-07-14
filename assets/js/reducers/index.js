@@ -153,8 +153,9 @@ const fetchingListItems = (state, action) => {
 		case listItemAPIActions.RECEIVE_REORDERED_LIST_ITEM:
 			newState[action.id] = false
 			return newState
+		default:
+			return state
 	}
-	return newState
 }
 
 
