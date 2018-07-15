@@ -154,7 +154,7 @@ const fetchingListItems = (state, action) => {
 			newState[action.id] = false
 			return newState
 		default:
-			return state
+			return newState
 	}
 }
 
