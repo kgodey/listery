@@ -3,7 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { createListItem } from '../../../actions/list-item.js'
-import { getActiveListFetchStatus } from '../../../reducers/index'
+import { getActiveListFetchStatus } from '../../../reducers/fetchingActiveList'
 
 
 const inputStyle = {

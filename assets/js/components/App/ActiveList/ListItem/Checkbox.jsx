@@ -12,7 +12,7 @@ const checkboxStyle = {
 export const Checkbox = ({ checked, onClick }) => {
 	return (
 		<span style={checkboxStyle} className='pull-left'>
-			<input type='checkbox' checked={checked} onClick={onClick} />
+			<input type='checkbox' checked={checked} onClick={onClick} readOnly />
 		</span>
 	)
 }

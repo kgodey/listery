@@ -5,7 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { connect } from 'react-redux'
 
 import { fetchActiveList, fetchAllLists } from '../actions//list'
-import { getActiveListErrorStatus } from '../reducers/index'
+import { getActiveListErrorStatus } from '../reducers/activeListError'
 import ActiveList from './App/ActiveList.jsx'
 import ListSwitcher from './App/ListSwitcher.jsx'
 

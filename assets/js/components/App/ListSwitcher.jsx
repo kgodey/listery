@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { reorderList, previewListOrder } from '../../actions/list'
 import { moveListItem } from '../../actions/list-item'
-import { getSortedLists } from '../../reducers/index'
+import { getSortedLists } from '../../reducers/listsByID'
 import ListLink from './ListSwitcher/ListLink.jsx'
 import AddList from './ListSwitcher/AddList.jsx'
 
