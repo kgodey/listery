@@ -4,10 +4,10 @@ import * as listAPIActions from '../actions/list'
 export const fetchingActiveList = (state, action) => {
 	let newState = state !== undefined ? state : false
 	switch(action.type) {
-		case listAPIActions.REQUEST_ACTIVE_LIST_CHANGE:
+		case listAPIActions.ACTIVE_LIST_CHANGED:
 			return true
-		case listAPIActions.RECEIVE_ACTIVE_LIST:
-		case listAPIActions.RECEIVE_ACTIVE_LIST_ERROR:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.FETCH_ACTIVE_LIST_ERROR:
 			return false
 		default:
 			return newState

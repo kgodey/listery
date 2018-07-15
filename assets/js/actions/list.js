@@ -3,21 +3,20 @@ import createHistory from 'history/createBrowserHistory'
 import { sync } from './base'
 
 
-export const REQUEST_ACTIVE_LIST = 'REQUEST_ACTIVE_LIST'
-export const RECEIVE_ACTIVE_LIST = 'RECEIVE_ACTIVE_LIST'
-export const REQUEST_ALL_LISTS = 'REQUEST_ALL_LISTS'
-export const RECEIVE_ALL_LISTS = 'RECEIVE_ALL_LISTS'
-export const REQUEST_NEW_LIST = 'REQUEST_NEW_LIST'
-export const RECEIVE_NEW_LIST = 'RECEIVE_NEW_LIST'
-export const REQUEST_LIST_UPDATE = 'REQUEST_LIST_UPDATE'
-export const RECEIVE_UPDATED_LIST = 'RECEIVE_UPDATED_LIST'
-export const REQUEST_LIST_ARCHIVAL = 'REQUEST_LIST_ARCHIVAL'
-export const RECEIVE_ARCHIVED_LIST = 'RECEIVE_ARCHIVED_LIST'
-export const REQUEST_LIST_DOWNLOAD = 'REQUEST_LIST_DOWNLOAD'
-export const REQUEST_LIST_REORDER = 'REQUEST_LIST_REORDER'
-export const RECEIVE_REORDERED_LIST = 'RECEIVE_REORDERED_LIST'
-export const REQUEST_ACTIVE_LIST_CHANGE = 'REQUEST_ACTIVE_LIST_CHANGE'
-export const RECEIVE_ACTIVE_LIST_ERROR = 'RECEIVE_ACTIVE_LIST_ERROR'
+export const FETCH_ACTIVE_LIST_REQUEST = 'FETCH_ACTIVE_LIST_REQUEST'
+export const FETCH_ACTIVE_LIST_SUCCESS = 'FETCH_ACTIVE_LIST_SUCCESS'
+export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
+export const ACTIVE_LIST_CHANGED = 'ACTIVE_LIST_CHANGED'
+export const FETCH_ALL_LISTS_REQUEST = 'FETCH_ALL_LISTS_REQUEST'
+export const FETCH_ALL_LISTS_SUCCESS = 'FETCH_ALL_LISTS_SUCCESS'
+export const FETCH_LIST_REQUEST = 'FETCH_LIST_REQUEST'
+export const FETCH_LIST_SUCCESS = 'FETCH_LIST_SUCCESS'
+export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
+export const ARCHIVE_LIST_SUCCESS = 'ARCHIVE_LIST_SUCCESS'
+export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
+export const REORDER_LIST_REQUEST = 'REORDER_LIST_REQUEST'
+export const REORDER_LIST_SUCCESS = 'REORDER_LIST_SUCCESS'
+
 
 const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
@@ -28,105 +27,93 @@ export const UNCHECK_ALL = '/actions/uncomplete_all/'
 const history = createHistory()
 
 
-const requestActiveList = (id) => ({
-	type: REQUEST_ACTIVE_LIST,
+const fetchActiveListRequest = (id) => ({
+	type: FETCH_ACTIVE_LIST_REQUEST,
 	id
 })
 
 
-const receiveActiveList = (data) => ({
-	type: RECEIVE_ACTIVE_LIST,
+const fetchActiveListSuccess = (data) => ({
+	type: FETCH_ACTIVE_LIST_SUCCESS,
 	data
 })
 
 
-const receiveActiveListError = (errorData) => ({
-	type: RECEIVE_ACTIVE_LIST_ERROR,
+const fetchActiveListError = (errorData) => ({
+	type: FETCH_ACTIVE_LIST_ERROR,
 	errorData
 })
 
 
-const requestAllLists = () => ({
-	type: REQUEST_ALL_LISTS
+const fetchAllListsRequest = () => ({
+	type: FETCH_ALL_LISTS_REQUEST
 })
 
 
-const receiveAllLists = (data) => ({
-	type: RECEIVE_ALL_LISTS,
+const fetchAllListsSuccess = (data) => ({
+	type: FETCH_ALL_LISTS_SUCCESS,
 	data
 })
 
 
-const requestNewList = (data) => ({
-	type: REQUEST_NEW_LIST,
-	data
-})
-
-
-const receiveNewList = (data) => ({
-	type: RECEIVE_NEW_LIST,
-	data
-})
-
-
-const requestListUpdate = (id, data) => ({
-	type: REQUEST_LIST_UPDATE,
+const fetchListRequest = (id, data) => ({
+	type: FETCH_LIST_REQUEST,
 	id,
 	data
 })
 
 
-const receiveUpdatedList = (data) => ({
-	type: RECEIVE_UPDATED_LIST,
+const fetchListSuccess = (data) => ({
+	type: FETCH_LIST_SUCCESS,
 	data
 })
 
 
-const requestListArchival = (id) => ({
-	type: REQUEST_LIST_ARCHIVAL,
+const archiveListRequest = (id) => ({
+	type: ARCHIVE_LIST_REQUEST,
 	id
 })
 
 
-const receiveArchivedList = (id, nextListID) => ({
-	type: RECEIVE_ARCHIVED_LIST,
+const archiveListSuccess = (id, nextListID) => ({
+	type: ARCHIVE_LIST_SUCCESS,
 	id,
 	nextListID
 })
 
 
-const requestListDownload = (id, downloadFormID) => ({
-	type: REQUEST_LIST_DOWNLOAD,
+const downloadListRequest = (id, downloadFormID) => ({
+	type: DOWNLOAD_LIST_REQUEST,
 	id,
 	downloadFormID
 })
 
 
-const requestListReorder = (id, order) => ({
-	type: REQUEST_LIST_REORDER,
+const reorderListRequest = (id, order) => ({
+	type: REORDER_LIST_REQUEST,
 	id,
 	order
 })
 
 
-const receiveReorderedList = (id, order) => ({
-	type: RECEIVE_REORDERED_LIST,
+const reorderListSuccess = (id, order) => ({
+	type: REORDER_LIST_SUCCESS,
 	id,
 	order
 })
 
 
-const requestActiveListChange = (id) => ({
-	type: REQUEST_ACTIVE_LIST_CHANGE,
+const activeListChanged = (id) => ({
+	type: ACTIVE_LIST_CHANGED,
 	id
 })
 
 
 export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 	return function (dispatch) {
-		dispatch(requestActiveList(id))
+		dispatch(fetchActiveListRequest(id))
 		if (oldActiveListID != id) {
-			dispatch(requestActiveListChange(id))
+			dispatch(activeListChanged(id))
 		}
 		return sync(LIST_API_URL + id + '/')
 		.then(
@@ -138,10 +125,10 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 		.then(
 			({ status, json }) => {
 				if (status == 200) {
-					dispatch(receiveActiveList(json))
+					dispatch(fetchActiveListSuccess(json))
 					history.push('/new/' + json.id)
 				} else {
-					dispatch(receiveActiveListError(json))
+					dispatch(fetchActiveListError(json))
 				}
 			}
 		)
@@ -151,7 +138,7 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 
 export const fetchAllLists = () => {
 	return function (dispatch) {
-		dispatch(requestAllLists())
+		dispatch(fetchAllListsRequest())
 		return sync(LIST_API_URL)
 		.then(
 			response => response.json().then(json => ({
@@ -161,7 +148,7 @@ export const fetchAllLists = () => {
 		))
 		.then(
 			({ status, json }) => {
-				dispatch(receiveAllLists(json))
+				dispatch(fetchAllListsSuccess(json))
 			}
 		)
 	}
@@ -173,7 +160,7 @@ export const createList = (listName) => {
 		name: listName
 	}
 	return function(dispatch) {
-		dispatch(requestNewList(listData))
+		dispatch(requestUpdatedList(listData))
 		return sync(LIST_API_URL, {
 			method: 'POST',
 			body: JSON.stringify(listData)
@@ -187,7 +174,7 @@ export const createList = (listName) => {
 		.then(
 			({ status, json }) => {
 				if (status == 201) {
-					dispatch(receiveNewList(json))
+					dispatch(fetchListSuccess(json))
 					history.push('/new/' + json.id)
 				} else {
 					console.log('handle me!')
@@ -200,7 +187,7 @@ export const createList = (listName) => {
 
 export const updateList = (id, data) => {
 	return function(dispatch) {
-		dispatch(requestListUpdate(id, data))
+		dispatch(fetchListRequest(id, data))
 		return sync(LIST_API_URL + id + '/', {
 			method: 'PATCH',
 			body: JSON.stringify(data)
@@ -208,7 +195,7 @@ export const updateList = (id, data) => {
 		.then(
 			response => response.json())
 		.then(
-			data => dispatch(receiveUpdatedList(data))
+			data => dispatch(fetchListSuccess(data))
 		)
 	}
 }
@@ -219,26 +206,26 @@ export const performActionOnList = (id, actionURL) => {
 		if (![QUICK_SORT, CHECK_ALL, UNCHECK_ALL].includes(actionURL)) {
 			return Promise.resolve()
 		}
-		dispatch(requestListUpdate(id, {}))
+		dispatch(fetchListRequest(id, {}))
 		return sync(LIST_API_URL + id + actionURL, {
 			method: 'POST',
 		})
 		.then(
 			response => response.json())
 		.then(
-			data => dispatch(receiveUpdatedList(data))
+			data => dispatch(fetchListSuccess(data))
 		)
 	}
 }
 
 export const archiveList = (id, nextListID) => {
 	return function(dispatch) {
-		dispatch(requestListArchival(id))
+		dispatch(archiveListRequest(id))
 		return sync(LIST_API_URL + id + '/', {
 			method: 'DELETE'
 		})
 		.then(
-			data => dispatch(receiveArchivedList(id, nextListID))
+			data => dispatch(archiveListSuccess(id, nextListID))
 		)
 	}
 }
@@ -248,26 +235,26 @@ export const downloadPlaintextList = (id, downloadFormID) => {
 	return function(dispatch) {
 		$(jQueryFormID).attr('action', LIST_API_URL + id + '/plaintext/')
 		$(jQueryFormID).submit()
-		dispatch(requestListDownload(id, downloadFormID))
+		dispatch(downloadListRequest(id, downloadFormID))
 	}
 }
 
 
 export const reorderList = (id, order) => {
 	return function(dispatch) {
-		dispatch(requestListReorder(id, order))
+		dispatch(reorderListRequest(id, order))
 		return sync(LIST_API_URL + id + '/reorder/', {
 			method: 'POST',
 			body: JSON.stringify({order: order})
 		})
 		.then(
-			data => dispatch(receiveReorderedList(id, order))
+			data => dispatch(reorderListSuccess(id, order))
 		)
 	}
 }
 
 export const previewListOrder = (dragID, dropOrder) => {
 	return function(dispatch) {
-		return dispatch(receiveReorderedList(dragID, dropOrder))
+		return dispatch(reorderListSuccess(dragID, dropOrder))
 	}
 }

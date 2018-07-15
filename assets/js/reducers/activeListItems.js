@@ -6,23 +6,23 @@ import * as listItemAPIActions from '../actions/list-item'
 export const activeListItems = (state={}, action) => {
 	let newState = {...state}
 	switch(action.type) {
-		case listAPIActions.RECEIVE_ACTIVE_LIST:
-		case listAPIActions.RECEIVE_NEW_LIST:
-		case listAPIActions.RECEIVE_UPDATED_LIST:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.data.items && action.data.items.length > 0) {
 				return Object.assign(...action.data.items.map(item => ({[item.id]: item})))
 			}
 			return {}
-		case listItemAPIActions.RECEIVE_NEW_LIST_ITEM:
+		case listItemAPIActions.FETCH_LIST_ITEM_SUCCESS:
+			const created = (action.data.id in newState)
 			newState[action.data.id] = action.data
-			return addItemToTop(newState, action.data.id)
-		case listItemAPIActions.RECEIVE_UPDATED_LIST_ITEM:
-			newState[action.data.id] = action.data
+			if (created === true) {
+				addItemToTop(newState, action.data.id)
+			}
 			return newState
-		case listItemAPIActions.RECEIVE_REORDERED_LIST_ITEM:
+		case listItemAPIActions.REORDER_LIST_ITEM_SUCCESS:
 			// Update the order of all affected objects.
 			return getReorderedItems(state, action)
-		case listItemAPIActions.RECEIVE_DELETED_LIST_ITEM:
+		case listItemAPIActions.DELETE_LIST_ITEM_SUCCESS:
 			delete newState[action.id]
 			return newState
 		default:

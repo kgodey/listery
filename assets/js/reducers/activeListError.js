@@ -8,12 +8,12 @@ export const activeListError = (state, action) => {
 	}
 	let newState = state !== undefined ? state : defaultState
 	switch(action.type) {
-		case listAPIActions.RECEIVE_ACTIVE_LIST_ERROR:
+		case listAPIActions.FETCH_ACTIVE_LIST_ERROR:
 			return {
 				isError: true,
 				errorMessage: action.errorData.detail
 			}
-		case listAPIActions.RECEIVE_ACTIVE_LIST:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 			return defaultState
 		default:
 			return newState

@@ -4,16 +4,16 @@ import * as listItemAPIActions from '../actions/list-item'
 export const fetchingListItems = (state, action) => {
 	let newState = {...state}
 	switch(action.type) {
-		case listItemAPIActions.REQUEST_LIST_ITEM_UPDATE:
+		case listItemAPIActions.FETCH_UPDATED_LIST_ITEM_REQUEST:
 			newState[action.id] = true
 			return newState
-		case listItemAPIActions.REQUEST_LIST_ITEM_REORDER:
+		case listItemAPIActions.REORDER_LIST_ITEM_REQUEST:
 			newState[action.id] = true
 			return newState
-		case listItemAPIActions.RECEIVE_UPDATED_LIST_ITEM:
+		case listItemAPIActions.FETCH_UPDATED_LIST_ITEM_SUCCESS:
 			newState[action.data.id] = false
 			return newState
-		case listItemAPIActions.RECEIVE_REORDERED_LIST_ITEM:
+		case listItemAPIActions.REORDER_LIST_ITEM_SUCCESS:
 			newState[action.id] = false
 			return newState
 		default:

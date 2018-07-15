@@ -8,22 +8,23 @@ export const listsByID = (state, action) => {
 		newState[firstListID] = {}
 	}
 	switch(action.type) {
-		case listAPIActions.RECEIVE_ALL_LISTS:
+		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
 			return Object.assign(...action.data.map(item => ({[item.id]: item})))
-		case listAPIActions.RECEIVE_ARCHIVED_LIST:
+		case listAPIActions.ARCHIVE_LIST_SUCCESS:
 			delete newState[action.id]
 			return newState
-		case listAPIActions.RECEIVE_NEW_LIST:
-			newState[action.data.id] = action.data
-			return addItemToTop(newState, action.data.id)
-		case listAPIActions.RECEIVE_ACTIVE_LIST:
-		case listAPIActions.RECEIVE_UPDATED_LIST:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.data.id) {
+				const created = (action.data.id in action.data)
 				newState[action.data.id] = action.data
+				if (created) {
+					return addItemToTop(newState, action.data.id)
+				}
 				return newState
 			}
 			return newState
-		case listAPIActions.RECEIVE_REORDERED_LIST:
+		case listAPIActions.REORDER_LIST_SUCCESS:
 			return getReorderedItems(state, action)
 		default:
 			return newState
