@@ -43,9 +43,9 @@ class ListSwitcher extends React.Component {
 		reorderList(id, order)
 	}
 
-	setListID(id, listID, oldListID) {
+	setListID(id, listID) {
 		const { moveListItem } = this.props
-		moveListItem(id, listID, oldListID)
+		moveListItem(id, listID)
 	}
 
 	previewNewOrder(dragID, dropOrder) {

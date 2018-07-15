@@ -1,8 +1,8 @@
 import { sync } from './base'
 import { fetchActiveList } from './list'
 
-export const FETCH_LIST_ITEM_REQUEST = 'FETCH_CREATED_LIST_ITEM_REQUEST'
-export const FETCH_LIST_ITEM_SUCCESS = 'FETCH_CREATED_LIST_ITEM_SUCCESS'
+export const FETCH_LIST_ITEM_REQUEST = 'FETCH_LIST_ITEM_REQUEST'
+export const FETCH_LIST_ITEM_SUCCESS = 'FETCH_LIST_ITEM_SUCCESS'
 export const DELETE_LIST_ITEM_REQUEST = 'DELETE_LIST_ITEM_REQUEST'
 export const DELETE_LIST_ITEM_SUCCESS = 'DELETE_LIST_ITEM_SUCCESS'
 export const REORDER_LIST_ITEM_REQUEST = 'REORDER_LIST_ITEM_REQUEST'
@@ -95,7 +95,7 @@ export const updateListItem = (id, data) => {
 }
 
 
-export const moveListItem = (id, listID, oldListID) => {
+export const moveListItem = (id, listID) => {
 	return function(dispatch) {
 		let data = {list_id: listID}
 		dispatch(fetchListItemRequest(data, id))
@@ -106,7 +106,9 @@ export const moveListItem = (id, listID, oldListID) => {
 		.then(
 			response => response.json())
 		.then(
-			response => dispatch(fetchActiveList(oldListID, oldListID))
+			response => {
+				dispatch(deleteListItemSuccess(response.id))
+			}
 		)
 	}
 }
