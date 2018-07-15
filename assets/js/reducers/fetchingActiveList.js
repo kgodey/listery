@@ -6,7 +6,10 @@ export const fetchingActiveList = (state, action) => {
 	switch(action.type) {
 		case listAPIActions.ACTIVE_LIST_CHANGED:
 			return true
-		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.FETCH_LIST_SUCCESS:
+			if (action.isActive) {
+				return false
+			}
 		case listAPIActions.FETCH_ACTIVE_LIST_ERROR:
 			return false
 		default:

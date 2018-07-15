@@ -13,8 +13,10 @@ export const activeListError = (state, action) => {
 				isError: true,
 				errorMessage: action.errorData.detail
 			}
-		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
-			return defaultState
+		case listAPIActions.FETCH_LIST_SUCCESS:
+			if (action.isActive) {
+				return defaultState
+			}
 		default:
 			return newState
 	}

@@ -3,8 +3,6 @@ import createHistory from 'history/createBrowserHistory'
 import { sync } from './base'
 
 
-export const FETCH_ACTIVE_LIST_REQUEST = 'FETCH_ACTIVE_LIST_REQUEST'
-export const FETCH_ACTIVE_LIST_SUCCESS = 'FETCH_ACTIVE_LIST_SUCCESS'
 export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
 export const ACTIVE_LIST_CHANGED = 'ACTIVE_LIST_CHANGED'
 export const FETCH_ALL_LISTS_REQUEST = 'FETCH_ALL_LISTS_REQUEST'
@@ -25,18 +23,6 @@ export const UNCHECK_ALL = '/actions/uncomplete_all/'
 
 
 const history = createHistory()
-
-
-const fetchActiveListRequest = (id) => ({
-	type: FETCH_ACTIVE_LIST_REQUEST,
-	id
-})
-
-
-const fetchActiveListSuccess = (data) => ({
-	type: FETCH_ACTIVE_LIST_SUCCESS,
-	data
-})
 
 
 const fetchActiveListError = (errorData) => ({
@@ -63,9 +49,10 @@ const fetchListRequest = (id, data) => ({
 })
 
 
-const fetchListSuccess = (data) => ({
+const fetchListSuccess = (data, isActive) => ({
 	type: FETCH_LIST_SUCCESS,
-	data
+	data,
+	isActive
 })
 
 
@@ -111,7 +98,7 @@ const activeListChanged = (id) => ({
 
 export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 	return function (dispatch) {
-		dispatch(fetchActiveListRequest(id))
+		dispatch(fetchListRequest(id))
 		if (oldActiveListID != id) {
 			dispatch(activeListChanged(id))
 		}
@@ -125,7 +112,7 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => {
 		.then(
 			({ status, json }) => {
 				if (status == 200) {
-					dispatch(fetchActiveListSuccess(json))
+					dispatch(fetchListSuccess(json, true))
 					history.push('/new/' + json.id)
 				} else {
 					dispatch(fetchActiveListError(json))

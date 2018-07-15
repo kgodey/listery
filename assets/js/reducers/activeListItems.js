@@ -6,7 +6,6 @@ import * as listItemAPIActions from '../actions/list-item'
 export const activeListItems = (state={}, action) => {
 	let newState = {...state}
 	switch(action.type) {
-		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.data.items && action.data.items.length > 0) {
 				return Object.assign(...action.data.items.map(item => ({[item.id]: item})))

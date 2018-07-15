@@ -13,7 +13,6 @@ export const listsByID = (state, action) => {
 		case listAPIActions.ARCHIVE_LIST_SUCCESS:
 			delete newState[action.id]
 			return newState
-		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.data.id) {
 				const created = (action.data.id in action.data)

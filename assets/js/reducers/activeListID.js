@@ -9,7 +9,6 @@ export const activeListID = (state=firstListID, action) => {
 				return action.nextListID
 			}
 			return state
-		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.data.id) {
 				return action.data.id
