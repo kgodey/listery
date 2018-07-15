@@ -59,13 +59,6 @@ const mapStateToProps = (state) => ({
 })
 
 
-const mapDispatchToProps = (dispatch) => ({
-	createListItem: (value, listID) => {
-		dispatch(createListItem(value, listID))
-	}
-})
-
-
 AddListItem.propTypes = {
 	isFetching: PropTypes.bool.isRequired,
 	createListItem: PropTypes.func.isRequired,
@@ -73,5 +66,8 @@ AddListItem.propTypes = {
 }
 
 
-AddListItem = connect(mapStateToProps, mapDispatchToProps)(AddListItem)
+AddListItem = connect(
+	mapStateToProps,
+	{ createListItem }
+)(AddListItem)
 export default AddListItem

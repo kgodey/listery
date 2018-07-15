@@ -130,16 +130,6 @@ const mapStateToProps = (state) => ({
 })
 
 
-const mapDispatchToProps = (dispatch) => ({
-	updateList: (id, data) => {
-		dispatch(updateList(id, data))
-	},
-	performActionOnList: (id, actionURL) => {
-		dispatch(performActionOnList(id, actionURL))
-	}
-})
-
-
 ListHeader.propTypes = {
 	list: PropTypes.object.isRequired,
 	updateList: PropTypes.func.isRequired,
@@ -148,5 +138,8 @@ ListHeader.propTypes = {
 
 
 ListHeader = onClickOutside(ListHeader)
-ListHeader = connect(mapStateToProps, mapDispatchToProps)(ListHeader)
+ListHeader = connect(
+	mapStateToProps,
+	{ updateList, performActionOnList }
+)(ListHeader)
 export default ListHeader

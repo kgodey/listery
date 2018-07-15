@@ -62,19 +62,6 @@ const mapStateToProps = (state) => ({
 })
 
 
-const mapDispatchToProps = (dispatch) => ({
-	reorderList: (id, order) => {
-		dispatch(reorderList(id, order))
-	},
-	moveListItem: (id, listID, oldListID) => {
-		dispatch(moveListItem(id, listID, oldListID))
-	},
-	previewListOrder: (dragID, dropOrder) => {
-		dispatch(previewListOrder(dragID, dropOrder))
-	}
-})
-
-
 ListSwitcher.propTypes = {
 	sortedLists: PropTypes.array.isRequired,
 	activeListID: PropTypes.number,
@@ -84,5 +71,8 @@ ListSwitcher.propTypes = {
 }
 
 
-ListSwitcher = connect(mapStateToProps, mapDispatchToProps)(ListSwitcher)
+ListSwitcher = connect(
+	mapStateToProps,
+	{ reorderList, moveListItem, previewListOrder }
+)(ListSwitcher)
 export default ListSwitcher

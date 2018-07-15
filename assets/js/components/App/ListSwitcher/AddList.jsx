@@ -47,17 +47,14 @@ class AddList extends React.Component {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => ({
-	createList: (value) => {
-		dispatch(createList(value))
-	}
-})
-
 
 AddList.propTypes = {
 	createList: PropTypes.func.isRequired
 }
 
 
-AddList = connect(null, mapDispatchToProps)(AddList)
+AddList = connect(
+	null,
+	{ createList }
+)(AddList)
 export default AddList

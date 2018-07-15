@@ -80,16 +80,6 @@ const mapStateToProps = (state) => ({
 })
 
 
-const mapDispatchToProps = (dispatch) => ({
-	reorderListItem: (id, order, listID) => {
-		dispatch(reorderListItem(id, order, listID))
-	},
-	previewListItemOrder: (dragID, dropOrder) => {
-		dispatch(previewListItemOrder(dragID, dropOrder))
-	}
-})
-
-
 ActiveList.propTypes = {
 	error: PropTypes.object.isRequired,
 	sortedListItems: PropTypes.array.isRequired,
@@ -99,5 +89,8 @@ ActiveList.propTypes = {
 }
 
 
-ActiveList = connect(mapStateToProps, mapDispatchToProps)(ActiveList)
+ActiveList = connect(
+	mapStateToProps,
+	{ reorderListItem, previewListItemOrder }
+)(ActiveList)
 export default ActiveList

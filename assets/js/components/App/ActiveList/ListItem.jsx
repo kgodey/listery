@@ -111,7 +111,7 @@ class ListItem extends React.Component {
 
 	handleCheckboxClick(event) {
 		const { updateListItem, id } = this.props
-		updateListItem({completed: event.target.checked})
+		updateListItem(id, {completed: event.target.checked})
 	}
 
 	handleDoubleClick(event) {
@@ -159,9 +159,9 @@ class ListItem extends React.Component {
 	}
 
 	handleDeleteConfirm(event) {
-		const { deleteListItem } = this.props
+		const { deleteListItem, id, list_id } = this.props
 		this.setState({showAlert: false})
-		deleteListItem()
+		deleteListItem(id, list_id)
 	}
 
 	handleDeleteCancel(event) {
@@ -169,8 +169,8 @@ class ListItem extends React.Component {
 	}
 
 	saveListItemTitleAndDescription() {
-		const { updateListItem } = this.props
-		updateListItem({
+		const { updateListItem, id } = this.props
+		updateListItem(id, {
 			title: this.state.data.title,
 			description: this.state.data.description
 		})
@@ -238,16 +238,6 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-	updateListItem: (data) => {
-		dispatch(updateListItem(ownProps.id, data))
-	},
-	deleteListItem: () => {
-		dispatch(deleteListItem(ownProps.id, ownProps.list_id))
-	}
-})
-
-
 ListItem.propTypes = {
 	id: PropTypes.number.isRequired,
 	completed: PropTypes.bool.isRequired,
@@ -264,7 +254,10 @@ ListItem.propTypes = {
 
 
 ListItem = onClickOutside(ListItem)
-ListItem = connect(mapStateToProps, mapDispatchToProps)(ListItem)
+ListItem = connect(
+	mapStateToProps,
+	{ updateListItem, deleteListItem }
+)(ListItem)
 export default flow(
 	DragSource(ItemTypes.LIST_ITEM, listItemSource, dragCollect),
 	DropTarget(ItemTypes.LIST_ITEM, listItemTarget, dropCollect)

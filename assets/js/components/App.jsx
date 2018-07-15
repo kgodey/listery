@@ -18,8 +18,12 @@ const switcherStyle = {
 class App extends React.Component {
 	componentDidMount() {
 		// Load initial data from backend once components mounts.
-		const { fetchActiveList, fetchAllLists } = this.props
-		fetchActiveList()
+		const { fetchActiveList, fetchAllLists, match } = this.props
+		let activeListID
+		if (match.params.id !== undefined) {
+			activeListID = match.params.id
+		}
+		fetchActiveList(activeListID)
 		fetchAllLists()
 	}
 
@@ -46,20 +50,6 @@ const mapStateToProps = (state) => ({
 })
 
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-	fetchActiveList: () => {
-		let activeListID
-		if (ownProps.match.params.id !== undefined) {
-			activeListID = ownProps.match.params.id
-		}
-		dispatch(fetchActiveList(activeListID))
-	},
-	fetchAllLists: () => {
-		dispatch(fetchAllLists())
-	}
-})
-
-
 App.propTypes = {
 	activeListError: PropTypes.object.isRequired,
 	fetchActiveList: PropTypes.func.isRequired,
@@ -67,5 +57,8 @@ App.propTypes = {
 }
 
 
-App = connect(mapStateToProps, mapDispatchToProps)(App)
+App = connect(
+	mapStateToProps,
+	{ fetchActiveList, fetchAllLists }
+)(App)
 export default DragDropContext(HTML5Backend)(App)
