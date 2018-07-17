@@ -8,7 +8,8 @@ import FaTrash from 'react-icons/lib/fa/trash'
 const iconStyle = {
 	cursor: 'pointer',
 	marginLeft: '0.25em',
-	marginRight: '0.25em'
+	marginRight: '0.25em',
+	display: 'inline-block'
 }
 
 

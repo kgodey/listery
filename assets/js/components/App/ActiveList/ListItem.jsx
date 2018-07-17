@@ -186,7 +186,7 @@ class ListItem extends React.Component {
 			return connectDragSource(connectDropTarget(
 				<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
 					<div className="row">
-						<div className="col">
+						<div className="col-10 d-inline-block">
 							<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />
 							<Title
 								currentlyEditing={this.state.currentlyEditing}
@@ -201,14 +201,15 @@ class ListItem extends React.Component {
 								onKeyUp={this.handleDescriptionKeyUp}
 							/>
 						</div>
-						<div className="col-1 float-right">
-							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
+						<div className="col-2 d-inline-block text-right">
 							<LoadingIndicator
 								isFetching={isFetching}
 								type='bars'
-								height='10px'
+								height='20px'
 								width='20px'
+								className='d-inline-block mr-1 align-middle'
 							/>
+							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 						</div>
 					</div>
 					<SweetAlert

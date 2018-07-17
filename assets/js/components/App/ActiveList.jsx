@@ -12,11 +12,6 @@ import { ErrorPanel } from './Shared/ErrorPanel.jsx'
 import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
 
 
-const loadingStyle = {
-	paddingTop: '10%'
-}
-
-
 class ActiveList extends React.Component {
 	constructor(props) {
 		super(props)
@@ -39,8 +34,7 @@ class ActiveList extends React.Component {
 					type='bars'
 					height='10%'
 					width='10%'
-					className='mx-auto d-block'
-					style={loadingStyle}
+					className='mx-auto d-block pt-5'
 				/>
 			)
 		} else {
