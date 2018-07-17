@@ -4,7 +4,6 @@ import React from 'react'
 import { DragSource, DropTarget } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { getNextList } from '../../../reducers/listsByID'
@@ -108,8 +107,8 @@ class ListLink extends React.Component {
 	}
 
 	handleDownloadClick(event) {
-		const { downloadPlaintextList } = this.props
-		downloadPlaintextList()
+		const { id, downloadFormID, downloadPlaintextList } = this.props
+		downloadPlaintextList(id, downloadFormID)
 	}
 
 	handleArchiveClick(event) {
@@ -138,13 +137,13 @@ class ListLink extends React.Component {
 			onClick
 		} = this.props
 		let isActiveList = activeListID == id
-		let className = 'list-group-item'
+		let className = 'list-group-item row mx-0'
 		if (isActiveList) {
 			 className = className + ' active'
 		} else if (isOver) {
 			className = className + ' list-group-item-info'
 		}
-		const divStyle = {
+		const containerStyle = {
 			opacity: isDragging ? 0 : 1
 		}
 		const linkStyle = {
@@ -153,16 +152,14 @@ class ListLink extends React.Component {
 		}
 		const linkURL = '/new/' + id
 		return connectDragSource(connectDropTarget(
-			<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={onClick} style={divStyle}>
-				<Link to={linkURL} style={linkStyle}>
-					<div>
-						<span>{name}</span>
-						<span className='float-right'>
-							<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
-							<ArchiveIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
-						</span>
-					</div>
-				</Link>
+			<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} style={containerStyle}>
+				<div onClick={onClick} className='col-10 d-inline-block'>
+					{name}
+				</div>
+				<div className='col-2 d-inline-block px-0 text-right'>
+					<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
+					<ArchiveIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
+				</div>
 				<SweetAlert
 					warning
 					showCancel
@@ -185,7 +182,6 @@ class ListLink extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({
-	activeListID: state.activeListID,
 	nextListID: getNextList(state, ownProps.id),
 	downloadFormID: 'download-form'
 })
@@ -198,8 +194,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	archiveList: (nextListID) => {
 		dispatch(archiveList(ownProps.id, nextListID))
 	},
-	downloadPlaintextList: () => {
-		dispatch(downloadPlaintextList(ownProps.id, ownProps.downloadFormID))
+	downloadPlaintextList: (id, downloadFormID) => {
+		dispatch(downloadPlaintextList(id, downloadFormID))
 	}
 })
 
