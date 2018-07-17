@@ -197,9 +197,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	},
 	archiveList: (nextListID) => {
 		dispatch(archiveList(ownProps.id, nextListID))
-		if (ownProps.activeListID == ownProps.id) {
-			dispatch(fetchActiveList(nextListID, ownProps.id))
-		}
 	},
 	downloadPlaintextList: () => {
 		dispatch(downloadPlaintextList(ownProps.id, ownProps.downloadFormID))

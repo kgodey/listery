@@ -147,7 +147,7 @@ export const createList = (listName) => {
 		name: listName
 	}
 	return function(dispatch) {
-		dispatch(requestUpdatedList(listData))
+		dispatch(fetchListRequest(null, listData))
 		return sync(LIST_API_URL, {
 			method: 'POST',
 			body: JSON.stringify(listData)
@@ -212,7 +212,12 @@ export const archiveList = (id, nextListID) => {
 			method: 'DELETE'
 		})
 		.then(
-			data => dispatch(archiveListSuccess(id, nextListID))
+			data => {
+				dispatch(archiveListSuccess(id, nextListID))
+				if (id == nextListID) {
+					dispatch(fetchActiveList(nextListID, id))
+				}
+			}
 		)
 	}
 }
