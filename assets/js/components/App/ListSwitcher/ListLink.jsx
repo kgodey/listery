@@ -153,7 +153,7 @@ class ListLink extends React.Component {
 		const linkURL = '/new/' + id
 		return connectDragSource(connectDropTarget(
 			<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} style={containerStyle}>
-				<div onClick={onClick} className='col-10 d-inline-block'>
+				<div onClick={onClick} className='col-10 px-0 d-inline-block'>
 					{name}
 				</div>
 				<div className='col-2 d-inline-block px-0 text-right'>
