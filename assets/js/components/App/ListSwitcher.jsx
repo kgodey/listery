@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { reorderList, previewListOrder } from '../../actions/list'
+import { fetchAllLists, reorderList, previewListOrder } from '../../actions/list'
 import { moveListItem } from '../../actions/list-item'
 import { getSortedLists } from '../../reducers/listsByID'
 import ListLink from './ListSwitcher/ListLink.jsx'
@@ -15,6 +15,12 @@ class ListSwitcher extends React.Component {
 		this.setNewOrder = this.setNewOrder.bind(this)
 		this.setListID = this.setListID.bind(this)
 		this.previewNewOrder = this.previewNewOrder.bind(this)
+	}
+
+	componentDidMount() {
+		// Load initial data from backend once components mounts.
+		const { fetchAllLists } = this.props
+		fetchAllLists()
 	}
 
 	render() {
@@ -65,6 +71,7 @@ const mapStateToProps = (state) => ({
 ListSwitcher.propTypes = {
 	sortedLists: PropTypes.array.isRequired,
 	activeListID: PropTypes.number,
+	fetchAllLists: PropTypes.func.isRequired,
 	reorderList: PropTypes.func.isRequired,
 	moveListItem: PropTypes.func.isRequired,
 	previewListOrder: PropTypes.func.isRequired
@@ -73,6 +80,6 @@ ListSwitcher.propTypes = {
 
 ListSwitcher = connect(
 	mapStateToProps,
-	{ reorderList, moveListItem, previewListOrder }
+	{ fetchAllLists, reorderList, moveListItem, previewListOrder }
 )(ListSwitcher)
 export default ListSwitcher
