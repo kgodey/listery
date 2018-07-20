@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { createListItem } from '../../../actions/list-item.js'
+import { createListItem } from '../../../actions/list-item'
 import { getActiveListFetchStatus } from '../../../reducers/fetchingActiveList'
 
 

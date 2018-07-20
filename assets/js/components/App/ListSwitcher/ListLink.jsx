@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { getNextList } from '../../../reducers/listsByID'
-import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions//list'
+import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions/list'
 import { ArchiveIcon, DownloadIcon } from '../Shared/Icons.jsx'
 import { ItemTypes } from '../Shared/ItemTypes.jsx'
 

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { createList } from '../../../actions/list.js'
+import { createList } from '../../../actions/list'
 
 
 const inputStyle = {

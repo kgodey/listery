@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 
+import { fetchActiveList } from '../../actions/list'
 import { reorderListItem, previewListItemOrder } from '../../actions/list-item'
 import { getSortedListItems } from '../../reducers/activeListItems'
+import { getActiveListErrorStatus } from '../../reducers/activeListError'
 import { getActiveListFetchStatus } from '../../reducers/fetchingActiveList'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
@@ -19,12 +22,22 @@ class ActiveList extends React.Component {
 		this.previewNewOrder = this.previewNewOrder.bind(this)
 	}
 
+	componentDidMount() {
+		// Load initial data from backend once components mounts.
+		const { fetchActiveList, match } = this.props
+		let activeListID
+		if (match.params.id !== undefined) {
+			activeListID = match.params.id
+		}
+		fetchActiveList(activeListID)
+	}
+
 	render() {
-		const { error, isFetching, sortedListItems } = this.props
-		if (error.isError) {
+		const { activeListError, isFetching, sortedListItems } = this.props
+		if (activeListError.isError) {
 			return (
-				<ErrorPanel show={error.isError}>
-					This list could not be retrieved. Error message: <em>{error.errorMessage}</em>
+				<ErrorPanel show={activeListError.isError}>
+					This list could not be retrieved. Error message: <em>{activeListError.errorMessage}</em>
 				</ErrorPanel>
 			)
 		} else if (isFetching) {
@@ -71,21 +84,23 @@ class ActiveList extends React.Component {
 
 const mapStateToProps = (state) => ({
 	sortedListItems: getSortedListItems(state),
-	isFetching: getActiveListFetchStatus(state)
+	isFetching: getActiveListFetchStatus(state),
+	activeListError: getActiveListErrorStatus(state)
 })
 
 
 ActiveList.propTypes = {
-	error: PropTypes.object.isRequired,
 	sortedListItems: PropTypes.array.isRequired,
 	isFetching: PropTypes.bool.isRequired,
+	fetchActiveList: PropTypes.func.isRequired,
+	activeListError: PropTypes.object.isRequired,
 	reorderListItem: PropTypes.func.isRequired,
 	previewListItemOrder: PropTypes.func.isRequired
 }
 
 
-ActiveList = connect(
+ActiveList = withRouter(connect(
 	mapStateToProps,
-	{ reorderListItem, previewListItemOrder }
-)(ActiveList)
+	{ fetchActiveList, reorderListItem, previewListItemOrder }
+)(ActiveList))
 export default ActiveList
