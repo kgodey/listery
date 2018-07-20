@@ -13,7 +13,7 @@ exports[`Checkbox renders correctly 1`] = `
 >
   <input
     checked={true}
-    onClick={[MockFunction]}
+    onChange={[MockFunction]}
     type="checkbox"
   />
 </span>
