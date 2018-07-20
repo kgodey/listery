@@ -1,20 +1,12 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { render } from 'react-dom'
 
-import App from './components/App.jsx'
+import Root from './components/Root.jsx'
 import configureStore from './store'
 
 
 const store = configureStore()
-
-
-ReactDOM.render(
-	<Provider store={store}>
-		<BrowserRouter>
-			<Route path='/new/:id?' component={App} />
-		 </BrowserRouter>
-	</Provider>,
+render(
+	<Root store={store} />,
 	document.getElementById('app')
 )
