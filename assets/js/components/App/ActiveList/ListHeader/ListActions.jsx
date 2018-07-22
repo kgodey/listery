@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { getActiveList } from '../../../../reducers/activeList'
 import { SharingButton, QuickSortButton, CheckAllButton, UncheckAllButton } from './ListActions/Buttons.jsx'
 
 
@@ -32,7 +33,7 @@ let ListActions = ({ isPrivate, onQuickSortClick, onCheckAllClick, onUncheckAllC
 
 
 const mapStateToProps = (state) => ({
-	isPrivate: state.listsByID[state.activeListID].private
+	isPrivate: getActiveList(state).private
 })
 
 

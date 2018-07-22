@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import FaCheck from 'react-icons/lib/fa/check'
 import { connect } from 'react-redux'
 
-import FaCheck from 'react-icons/lib/fa/check'
+import { getActiveList } from '../../../../reducers/activeList'
 
 
 let ListItemCount = ({ numCompletedItems, numItems }) => {
@@ -18,8 +19,8 @@ let ListItemCount = ({ numCompletedItems, numItems }) => {
 
 
 const mapStateToProps = (state) => ({
-	numItems: state.listsByID[state.activeListID].item_count,
-	numCompletedItems: state.listsByID[state.activeListID].completed_item_count
+	numItems: getActiveList(state).item_count,
+	numCompletedItems: getActiveList(state).completed_item_count
 })
 
 

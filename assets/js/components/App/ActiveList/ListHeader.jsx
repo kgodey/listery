@@ -3,7 +3,7 @@ import React from 'react'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
 
-import { getActiveListFetchStatus } from '../../../reducers/fetchingActiveList'
+import { getActiveList, getActiveListFetchStatus } from '../../../reducers/activeList'
 import { ListTitle } from './ListHeader/ListTitle.jsx'
 import ListActions from './ListHeader/ListActions.jsx'
 import ListItemCount from './ListHeader/ListItemCount.jsx'
@@ -126,7 +126,7 @@ class ListHeader extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-	list: state.listsByID[state.activeListID]
+	list: getActiveList(state)
 })
 
 

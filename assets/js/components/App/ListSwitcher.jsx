@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 import { fetchAllLists, reorderList, previewListOrder } from '../../actions/list'
 import { moveListItem } from '../../actions/list-item'
-import { getSortedLists } from '../../reducers/listsByID'
+import { getActiveListID } from '../../reducers/activeList'
+import { getSortedLists } from '../../reducers/allLists'
 import ListLink from './ListSwitcher/ListLink.jsx'
 import AddList from './ListSwitcher/AddList.jsx'
 
@@ -64,7 +65,7 @@ class ListSwitcher extends React.Component {
 
 const mapStateToProps = (state) => ({
 	sortedLists: getSortedLists(state),
-	activeListID: state.activeListID
+	activeListID: getActiveListID(state)
 })
 
 

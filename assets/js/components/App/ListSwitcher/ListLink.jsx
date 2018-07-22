@@ -6,7 +6,7 @@ import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
-import { getNextList } from '../../../reducers/listsByID'
+import { getNextList } from '../../../reducers/allLists'
 import { fetchActiveList, archiveList, downloadPlaintextList } from '../../../actions/list'
 import { ArchiveIcon, DownloadIcon } from '../Shared/Icons.jsx'
 import { ItemTypes } from '../Shared/ItemTypes.jsx'

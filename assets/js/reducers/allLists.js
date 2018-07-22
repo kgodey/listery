@@ -2,7 +2,7 @@ import { compareByOrder, getReorderedItems, addItemToTop } from './utils'
 import * as listAPIActions from '../actions/list'
 
 
-export const listsByID = (state, action) => {
+export const allLists = (state, action) => {
 	let newState = {...state}
 	if (!(firstListID in newState)) {
 		newState[firstListID] = {}
@@ -32,8 +32,8 @@ export const listsByID = (state, action) => {
 
 
 export const getSortedLists = (state) => {
-	if (state.listsByID) {
-		let items = Object.keys(state.listsByID).map(item => state.listsByID[item])
+	if (state.allLists) {
+		let items = Object.keys(state.allLists).map(item => state.allLists[item])
 		// Remove empty objects from items
 		items = items.filter((item) => { return Object.keys(item).length > 0 })
 		return items.sort(compareByOrder)

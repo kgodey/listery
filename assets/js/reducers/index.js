@@ -1,11 +1,8 @@
 import { combineReducers } from 'redux'
 
-import { activeListID } from './activeListID'
-import { fetchingActiveList } from './fetchingActiveList'
-import { activeListError } from './activeListError'
-import { activeListItems } from './activeListItems'
-import { fetchingListItems } from './fetchingListItems'
-import { listsByID } from './listsByID'
+import { activeListID, fetchingActiveList, activeListError } from './activeList'
+import { activeListItems, fetchingListItems } from './activeListItems'
+import { allLists } from './allLists'
 
 
 export const listeryApp = combineReducers({
@@ -14,5 +11,5 @@ export const listeryApp = combineReducers({
 	activeListError,
 	activeListItems,
 	fetchingListItems,
-	listsByID,
+	allLists,
 })

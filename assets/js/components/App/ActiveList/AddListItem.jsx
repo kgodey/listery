@@ -3,7 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { createListItem } from '../../../actions/list-item'
-import { getActiveListFetchStatus } from '../../../reducers/fetchingActiveList'
+import { getActiveListID, getActiveListFetchStatus } from '../../../reducers/activeList'
 
 
 const inputStyle = {
@@ -54,7 +54,7 @@ class AddListItem extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-	activeListID: state.activeListID,
+	activeListID: getActiveListID(state),
 	isFetching: getActiveListFetchStatus(state)
 })
 
