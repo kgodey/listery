@@ -1,5 +1,7 @@
 import createHistory from 'history/createBrowserHistory'
 
+import { getActiveListFetchStatus } from '../reducers/activeList'
+import { getAllListsFetchStatus } from '../reducers/allLists'
 import { sync } from './base'
 
 
@@ -7,6 +9,7 @@ export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
 export const ACTIVE_LIST_CHANGED = 'ACTIVE_LIST_CHANGED'
 export const FETCH_ALL_LISTS_REQUEST = 'FETCH_ALL_LISTS_REQUEST'
 export const FETCH_ALL_LISTS_SUCCESS = 'FETCH_ALL_LISTS_SUCCESS'
+export const FETCH_ALL_LISTS_ERROR = 'FETCH_ALL_LISTS_ERROR'
 export const FETCH_LIST_REQUEST = 'FETCH_LIST_REQUEST'
 export const FETCH_LIST_SUCCESS = 'FETCH_LIST_SUCCESS'
 export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
@@ -39,6 +42,12 @@ const fetchAllListsRequest = () => ({
 const fetchAllListsSuccess = (data) => ({
 	type: FETCH_ALL_LISTS_SUCCESS,
 	data
+})
+
+
+const fetchAllListsError = (data) => ({
+	type: FETCH_ALL_LISTS_ERROR,
+	errorData
 })
 
 
@@ -96,7 +105,10 @@ const activeListChanged = (id) => ({
 })
 
 
-export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch) => {
+export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch, getState) => {
+	if (getActiveListFetchStatus(getState())) {
+		return Promise.resolve()
+	}
 	dispatch(fetchListRequest(id))
 	if (oldActiveListID != id) {
 		dispatch(activeListChanged(id))
@@ -121,7 +133,10 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch)
 }
 
 
-export const fetchAllLists = () => (dispatch) => {
+export const fetchAllLists = () => (dispatch, getState) => {
+	if (getAllListsFetchStatus(getState())) {
+		return Promise.resolve()
+	}
 	dispatch(fetchAllListsRequest())
 	return sync(LIST_API_URL)
 	.then(
@@ -132,7 +147,11 @@ export const fetchAllLists = () => (dispatch) => {
 	))
 	.then(
 		({ status, json }) => {
-			dispatch(fetchAllListsSuccess(json))
+			if (status == 200) {
+				dispatch(fetchAllListsSuccess(json))
+			} else {
+				dispatch(fetchAllListsError(json))
+			}
 		}
 	)
 }

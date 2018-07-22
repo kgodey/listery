@@ -31,6 +31,26 @@ export const allLists = (state, action) => {
 }
 
 
+export const fetchingAllLists = (state, action) => {
+	let newState = state !== undefined ? state : false
+	switch(action.type) {
+		case listAPIActions.FETCH_ALL_LISTS_REQUEST:
+			return true
+		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
+			return false
+		case listAPIActions.FETCH_ALL_LISTS_ERROR:
+			return false
+		default:
+			return newState
+	}
+}
+
+
+export const getAllListsFetchStatus = (state) => {
+	return state.fetchingAllLists
+}
+
+
 export const getSortedLists = (state) => {
 	if (state.allLists) {
 		let items = Object.keys(state.allLists).map(item => state.allLists[item])
