@@ -225,6 +225,7 @@ export const performActionOnList = (id, actionURL) => (dispatch) => {
 	)
 }
 
+
 export const archiveList = (id, nextListID) => (dispatch) => {
 	dispatch(archiveListRequest(id))
 	return sync(LIST_API_URL + id + '/', {
@@ -239,6 +240,7 @@ export const archiveList = (id, nextListID) => (dispatch) => {
 		}
 	)
 }
+
 
 export const downloadPlaintextList = (id, downloadFormID) => (dispatch) => {
 	var jQueryFormID = '#' + downloadFormID
@@ -258,6 +260,7 @@ export const reorderList = (id, order) => (dispatch) => {
 		data => dispatch(reorderListSuccess(id, order))
 	)
 }
+
 
 export const previewListOrder = (dragID, dropOrder) => (dispatch) => {
 	return dispatch(reorderListSuccess(dragID, dropOrder))
