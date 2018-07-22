@@ -2,14 +2,17 @@ import { compareByOrder, getReorderedItems, addItemToTop } from './utils'
 import * as listAPIActions from '../actions/list'
 
 
-export const allLists = (state, action) => {
+export const allLists = (state={}, action) => {
 	let newState = {...state}
 	if (!(firstListID in newState)) {
 		newState[firstListID] = {}
 	}
 	switch(action.type) {
 		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
-			return Object.assign(...action.data.map(item => ({[item.id]: item})))
+			if (action.data.length > 0) {
+				return Object.assign(...action.data.map(item => ({[item.id]: item})))
+			}
+			return newState
 		case listAPIActions.ARCHIVE_LIST_SUCCESS:
 			delete newState[action.id]
 			return newState

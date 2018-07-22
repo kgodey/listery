@@ -15,6 +15,7 @@ export const activeListID = (state=firstListID, action) => {
 			}
 			return state
 		case listAPIActions.FETCH_ACTIVE_LIST_ERROR:
+		case listAPIActions.NO_LIST_AVAILABLE:
 			return null
 		default:
 			return state

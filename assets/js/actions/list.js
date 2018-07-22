@@ -5,13 +5,14 @@ import { getAllListsFetchStatus } from '../reducers/allLists'
 import { sync } from './base'
 
 
-export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
 export const ACTIVE_LIST_CHANGED = 'ACTIVE_LIST_CHANGED'
 export const FETCH_ALL_LISTS_REQUEST = 'FETCH_ALL_LISTS_REQUEST'
 export const FETCH_ALL_LISTS_SUCCESS = 'FETCH_ALL_LISTS_SUCCESS'
 export const FETCH_ALL_LISTS_ERROR = 'FETCH_ALL_LISTS_ERROR'
 export const FETCH_LIST_REQUEST = 'FETCH_LIST_REQUEST'
 export const FETCH_LIST_SUCCESS = 'FETCH_LIST_SUCCESS'
+export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
+export const NO_LIST_AVAILABLE = 'NO_LIST_AVAILABLE'
 export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
 export const ARCHIVE_LIST_SUCCESS = 'ARCHIVE_LIST_SUCCESS'
 export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
@@ -26,12 +27,6 @@ export const UNCHECK_ALL = '/actions/uncomplete_all/'
 
 
 const history = createHistory()
-
-
-const fetchActiveListError = (errorData) => ({
-	type: FETCH_ACTIVE_LIST_ERROR,
-	errorData
-})
 
 
 const fetchAllListsRequest = () => ({
@@ -62,6 +57,17 @@ const fetchListSuccess = (data, isActive) => ({
 	type: FETCH_LIST_SUCCESS,
 	data,
 	isActive
+})
+
+
+const fetchActiveListError = (errorData) => ({
+	type: FETCH_ACTIVE_LIST_ERROR,
+	errorData
+})
+
+
+const noListAvailable = () => ({
+	type: NO_LIST_AVAILABLE
 })
 
 
@@ -107,6 +113,11 @@ const activeListChanged = (id) => ({
 
 export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch, getState) => {
 	if (getActiveListFetchStatus(getState())) {
+		return Promise.resolve()
+	}
+	if (!Boolean(id)) {
+		history.push('/new/')
+		dispatch(noListAvailable())
 		return Promise.resolve()
 	}
 	dispatch(fetchListRequest(id))

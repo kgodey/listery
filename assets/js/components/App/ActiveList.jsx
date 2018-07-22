@@ -6,10 +6,11 @@ import { withRouter } from 'react-router'
 import { fetchActiveList } from '../../actions/list'
 import { reorderListItem, previewListItemOrder } from '../../actions/list-item'
 import { getSortedListItems } from '../../reducers/activeListItems'
-import { getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
+import { getActiveListID, getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
+import { NoListPanel } from './ActiveList/NoListPanel.jsx'
 import { ErrorPanel } from './Shared/ErrorPanel.jsx'
 import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
 
@@ -24,22 +25,28 @@ class ActiveList extends React.Component {
 	componentDidMount() {
 		// Load initial data from backend once components mounts.
 		const { fetchActiveList, match } = this.props
-		let activeListID
+		let urlListID
 		if (match.params.id !== undefined) {
-			activeListID = match.params.id
+			urlListID = match.params.id
 		}
-		fetchActiveList(activeListID)
+		fetchActiveList(urlListID)
 	}
 
 	render() {
-		const { activeListError, isFetching, sortedListItems } = this.props
-		if (activeListError.isError) {
+		const { activeListID, activeListError, isFetching, sortedListItems } = this.props
+		if (activeListID === null) {
+			if (activeListError.isError) {
+				return (
+					<ErrorPanel show={activeListError.isError}>
+						This list could not be retrieved. Error message: <em>{activeListError.errorMessage}</em>
+					</ErrorPanel>
+				)
+			}
 			return (
-				<ErrorPanel show={activeListError.isError}>
-					This list could not be retrieved. Error message: <em>{activeListError.errorMessage}</em>
-				</ErrorPanel>
+				<NoListPanel />
 			)
-		} else if (isFetching) {
+		}
+		if (isFetching) {
 			return (
 				<LoadingIndicator
 					isFetching={true}
@@ -82,6 +89,7 @@ class ActiveList extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+	activeListID: getActiveListID(state),
 	sortedListItems: getSortedListItems(state),
 	isFetching: getActiveListFetchStatus(state),
 	activeListError: getActiveListErrorStatus(state)
@@ -89,6 +97,7 @@ const mapStateToProps = (state) => ({
 
 
 ActiveList.propTypes = {
+	activeListID: PropTypes.number,
 	sortedListItems: PropTypes.array.isRequired,
 	isFetching: PropTypes.bool.isRequired,
 	fetchActiveList: PropTypes.func.isRequired,
