@@ -233,7 +233,7 @@ export const archiveList = (id, nextListID) => (dispatch) => {
 	.then(
 		data => {
 			dispatch(archiveListSuccess(id, nextListID))
-			if (id == nextListID) {
+			if (id == nextListID || nextListID === null) {
 				dispatch(fetchActiveList(nextListID, id))
 			}
 		}
