@@ -16,9 +16,8 @@ export const REORDER_LIST_ITEM_SUCCESS = 'REORDER_LIST_ITEM_SUCCESS'
 const LIST_ITEM_API_URL = '/api/v2/list_items/'
 
 
-const fetchListItemRequest = (data, id) => ({
+const fetchListItemRequest = (id) => ({
 	type: FETCH_LIST_ITEM_REQUEST,
-	data,
 	id
 })
 
@@ -62,7 +61,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 		title: title,
 		list_id: listID
 	}
-	dispatch(fetchListItemRequest(itemData))
+	dispatch(fetchListItemRequest())
 	return sync(LIST_ITEM_API_URL, {
 		method: 'POST',
 		body: JSON.stringify(itemData)
@@ -78,7 +77,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 
 
 export const updateListItem = (id, data) => (dispatch) => {
-	dispatch(fetchListItemRequest(data, id))
+	dispatch(fetchListItemRequest(id))
 	return sync(LIST_ITEM_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
@@ -99,7 +98,7 @@ export const updateListItem = (id, data) => (dispatch) => {
 
 export const moveListItem = (id, listID) => (dispatch) => {
 	let data = {list_id: listID}
-	dispatch(fetchListItemRequest(data, id))
+	dispatch(fetchListItemRequest(id))
 	return sync(LIST_ITEM_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
