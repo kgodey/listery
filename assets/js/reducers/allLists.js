@@ -33,7 +33,6 @@ export const fetchingAllLists = (state, action) => {
 		case listAPIActions.FETCH_ALL_LISTS_REQUEST:
 			return true
 		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
-			return false
 		case listAPIActions.FETCH_ALL_LISTS_ERROR:
 			return false
 		default:

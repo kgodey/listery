@@ -23,9 +23,10 @@ const fetchListItemRequest = (data, id) => ({
 })
 
 
-const fetchListItemSuccess = (data) => ({
+const fetchListItemSuccess = (data, id) => ({
 	type: FETCH_LIST_ITEM_SUCCESS,
-	data: normalize(data, schema.listItemSchema)
+	data: normalize(data, schema.listItemSchema),
+	id
 })
 
 
@@ -69,7 +70,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 	.then(
 		response => response.json())
 	.then(
-		data => dispatch(fetchListItemSuccess(data)))
+		data => dispatch(fetchListItemSuccess(data, data.id)))
 	.then(
 		response => dispatch(fetchActiveList(listID, listID))
 	)
@@ -85,7 +86,7 @@ export const updateListItem = (id, data) => (dispatch) => {
 	.then(
 		response => response.json())
 	.then(
-		data => dispatch(fetchListItemSuccess(data)))
+		data => dispatch(fetchListItemSuccess(data, data.id)))
 	.then(
 		response => {
 			const id = response.data.result
