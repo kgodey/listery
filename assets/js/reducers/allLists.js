@@ -1,6 +1,3 @@
-import { normalize } from 'normalizr'
-import * as schema from '../actions/schema'
-
 import { compareByOrder, getReorderedItems, addItemToTop } from './utils'
 import * as listAPIActions from '../actions/list'
 

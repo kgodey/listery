@@ -13,12 +13,12 @@ export const activeListItems = (state={}, action) => {
 			}
 			return {}
 		case listItemAPIActions.FETCH_LIST_ITEM_SUCCESS:
-			const created = (action.data.id in newState)
-			newState[action.data.id] = action.data
-			if (created === true) {
-				addItemToTop(newState, action.data.id)
+			if (action.data) {
+				return {
+					...state,
+					...action.data.entities.listItems
+				}
 			}
-			return newState
 		case listItemAPIActions.REORDER_LIST_ITEM_SUCCESS:
 			// Update the order of all affected objects.
 			return getReorderedItems(state, action)

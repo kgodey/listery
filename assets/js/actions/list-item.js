@@ -1,5 +1,9 @@
+import { normalize } from 'normalizr'
+
 import { sync } from './base'
 import { fetchActiveList } from './list'
+import * as schema from './schema'
+
 
 export const FETCH_LIST_ITEM_REQUEST = 'FETCH_LIST_ITEM_REQUEST'
 export const FETCH_LIST_ITEM_SUCCESS = 'FETCH_LIST_ITEM_SUCCESS'
@@ -21,7 +25,7 @@ const fetchListItemRequest = (data, id) => ({
 
 const fetchListItemSuccess = (data) => ({
 	type: FETCH_LIST_ITEM_SUCCESS,
-	data
+	data: normalize(data, schema.listItemSchema)
 })
 
 
@@ -84,7 +88,8 @@ export const updateListItem = (id, data) => (dispatch) => {
 		data => dispatch(fetchListItemSuccess(data)))
 	.then(
 		response => {
-			let listID = response.data.list_id
+			const id = response.data.result
+			const listID = response.data.entities.listItems[id].list_id
 			dispatch(fetchActiveList(listID, listID))
 		}
 	)
