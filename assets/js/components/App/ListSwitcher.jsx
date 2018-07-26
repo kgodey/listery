@@ -5,9 +5,10 @@ import { connect } from 'react-redux'
 import { fetchAllLists, reorderList, previewListOrder } from '../../actions/list'
 import { moveListItem } from '../../actions/list-item'
 import { getActiveListID } from '../../reducers/activeList'
-import { getSortedLists } from '../../reducers/allLists'
+import { getSortedLists, getAllListsFetchStatus } from '../../reducers/allLists'
 import ListLink from './ListSwitcher/ListLink.jsx'
 import AddList from './ListSwitcher/AddList.jsx'
+import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
 
 
 class ListSwitcher extends React.Component {
@@ -25,24 +26,36 @@ class ListSwitcher extends React.Component {
 	}
 
 	render() {
-		const { sortedLists, activeListID } = this.props
-		return (
-			<div>
-				<AddList />
-				{sortedLists.map(item =>
-					<ListLink
-						key={item.id}
-						{...item}
-						activeList={item.id == activeListID ? true : false}
-						activeListID={activeListID}
-						setNewOrder={this.setNewOrder}
-						previewNewOrder={this.previewNewOrder}
-						setListID={this.setListID}
-					/>
-				)}
-				<form id="download-form" method="POST" className="hidden"><span dangerouslySetInnerHTML={{__html: csrfTokenInput}}></span></form>
-			</div>
-		)
+		const { isFetching, sortedLists, activeListID } = this.props
+		if (isFetching) {
+			return (
+				<LoadingIndicator
+					isFetching={true}
+					type='bars'
+					height='10%'
+					width='10%'
+					className='mx-auto d-block pt-5'
+				/>
+			)
+		} else {
+			return (
+				<div>
+					<AddList />
+					{sortedLists.map(item =>
+						<ListLink
+							key={item.id}
+							{...item}
+							activeList={item.id == activeListID ? true : false}
+							activeListID={activeListID}
+							setNewOrder={this.setNewOrder}
+							previewNewOrder={this.previewNewOrder}
+							setListID={this.setListID}
+						/>
+					)}
+					<form id="download-form" method="POST" className="hidden"><span dangerouslySetInnerHTML={{__html: csrfTokenInput}}></span></form>
+				</div>
+			)
+		}
 	}
 
 	setNewOrder(id, order) {
@@ -64,12 +77,14 @@ class ListSwitcher extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+	isFetching: getAllListsFetchStatus(state),
 	sortedLists: getSortedLists(state),
 	activeListID: getActiveListID(state)
 })
 
 
 ListSwitcher.propTypes = {
+	isFetching: PropTypes.bool.isRequired,
 	sortedLists: PropTypes.array.isRequired,
 	activeListID: PropTypes.number,
 	fetchAllLists: PropTypes.func.isRequired,
