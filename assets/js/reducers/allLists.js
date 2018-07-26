@@ -1,3 +1,6 @@
+import { normalize } from 'normalizr'
+import * as schema from '../actions/schema'
+
 import { compareByOrder, getReorderedItems, addItemToTop } from './utils'
 import * as listAPIActions from '../actions/list'
 
@@ -9,22 +12,15 @@ export const allLists = (state={}, action) => {
 	}
 	switch(action.type) {
 		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
-			if (action.data.length > 0) {
-				return Object.assign(...action.data.map(item => ({[item.id]: item})))
+		case listAPIActions.FETCH_LIST_SUCCESS:
+			if (action.data) {
+				return {
+					...state,
+					...action.data.entities.lists
+				}
 			}
-			return newState
 		case listAPIActions.ARCHIVE_LIST_SUCCESS:
 			delete newState[action.id]
-			return newState
-		case listAPIActions.FETCH_LIST_SUCCESS:
-			if (action.data.id) {
-				const created = (action.data.id in action.data)
-				newState[action.data.id] = action.data
-				if (created) {
-					return addItemToTop(newState, action.data.id)
-				}
-				return newState
-			}
 			return newState
 		case listAPIActions.REORDER_LIST_SUCCESS:
 			return getReorderedItems(state, action)

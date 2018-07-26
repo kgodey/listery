@@ -10,8 +10,8 @@ export const activeListID = (state=firstListID, action) => {
 			}
 			return state
 		case listAPIActions.FETCH_LIST_SUCCESS:
-			if (action.data.id) {
-				return action.data.id
+			if (action.data.result) {
+				return action.data.result
 			}
 			return state
 		case listAPIActions.FETCH_ACTIVE_LIST_ERROR:

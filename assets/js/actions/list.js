@@ -1,8 +1,10 @@
 import createHistory from 'history/createBrowserHistory'
+import { normalize } from 'normalizr'
 
 import { getActiveListFetchStatus } from '../reducers/activeList'
 import { getAllListsFetchStatus } from '../reducers/allLists'
 import { sync } from './base'
+import * as schema from './schema'
 
 
 export const ACTIVE_LIST_CHANGED = 'ACTIVE_LIST_CHANGED'
@@ -36,7 +38,7 @@ const fetchAllListsRequest = () => ({
 
 const fetchAllListsSuccess = (data) => ({
 	type: FETCH_ALL_LISTS_SUCCESS,
-	data
+	data: normalize(data, schema.listListSchema)
 })
 
 
@@ -55,7 +57,7 @@ const fetchListRequest = (id, data) => ({
 
 const fetchListSuccess = (data, isActive) => ({
 	type: FETCH_LIST_SUCCESS,
-	data,
+	data: normalize(data, schema.listSchema),
 	isActive
 })
 
