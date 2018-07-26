@@ -1,4 +1,4 @@
-import { compareByOrder, getReorderedItems, addItemToTop } from './utils'
+import { compareByOrder, getReorderedItems } from './utils'
 import * as listAPIActions from '../actions/list'
 import * as listItemAPIActions from '../actions/list-item'
 

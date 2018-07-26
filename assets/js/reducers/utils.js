@@ -26,14 +26,3 @@ export const getReorderedItems = (state, action) => {
 	}
 	return newState
 }
-
-
-export const addItemToTop = (newState, itemID) => {
-	newState[itemID].order == 1
-	for (var key in newState) {
-		if (key != itemID) {
-			newState[key].order++
-		}
-	}
-	return newState
-}
