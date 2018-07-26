@@ -7,11 +7,6 @@ export const activeListItems = (state={}, action) => {
 	let newState = {...state}
 	switch(action.type) {
 		case listAPIActions.FETCH_LIST_SUCCESS:
-			const items = action.data.entities.lists[action.data.result].items
-			if (items && items.length > 0) {
-				return Object.assign(...items.map(item => ({[item.id]: item})))
-			}
-			return {}
 		case listItemAPIActions.FETCH_LIST_ITEM_SUCCESS:
 			if (action.data) {
 				return {
