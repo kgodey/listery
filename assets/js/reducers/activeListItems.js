@@ -7,6 +7,9 @@ export const activeListItems = (state={}, action) => {
 	let newState = {...state}
 	switch(action.type) {
 		case listAPIActions.FETCH_LIST_SUCCESS:
+			if (action.data) {
+				return {...action.data.entities.listItems}
+			}
 		case listItemAPIActions.FETCH_LIST_ITEM_SUCCESS:
 			if (action.data) {
 				return {
