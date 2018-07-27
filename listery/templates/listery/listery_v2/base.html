@@ -22,6 +22,11 @@
 		</nav>
 		{% block content %}
 		{% endblock %}
+
+		<script>
+			var userID = {{ user.id }};
+			var frontendLogsEnabled = '{{ LISTERY_FRONTEND_LOGS_ENABLED }}' == 'True' ? true : false;
+		</script>
 		{% block scripts %}
 		{% endblock %}
 
@@ -33,9 +38,6 @@
 				<p>&nbsp;</p>
 			</div>
 		</div>
-		<script>
-			var userID = {{ user.id }};
-		</script>
 		{% endif %}
 	</body>
 </html>

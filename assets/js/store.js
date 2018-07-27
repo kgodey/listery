@@ -6,7 +6,10 @@ import { listeryApp } from './reducers/index'
 
 
 const configureStore = () => {
-	const middlewares = [thunk, createLogger()]
+	let middlewares = [thunk]
+	if (frontendLogsEnabled) {
+		middlewares.push(createLogger())
+	}
 	return createStore(
 		listeryApp,
 		applyMiddleware(...middlewares)

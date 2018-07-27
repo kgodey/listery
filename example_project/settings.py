@@ -131,7 +131,10 @@ REST_FRAMEWORK = {
 	)
 }
 
-LISTERY_TITLE = 'Listery Demo'
+LISTERY = {
+	'LISTERY_TITLE': 'Listery Demo',
+	'LISTERY_FRONTEND_LOGS_ENABLED': True
+}
 
 # Heroku settings
 
