@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import { getActiveList, getActiveListFetchStatus } from '../../../reducers/activeList'
 import { ListTitle } from './ListHeader/ListTitle.jsx'
-import ListActions from './ListHeader/ListActions.jsx'
+import { ListActions } from './ListHeader/ListActions.jsx'
 import ListItemCount from './ListHeader/ListItemCount.jsx'
 import { updateList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions/list'
 

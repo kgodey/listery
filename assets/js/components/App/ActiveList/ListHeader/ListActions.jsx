@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { connect } from 'react-redux'
 
-import { getActiveList } from '../../../../reducers/activeList'
-import { SharingButton, QuickSortButton, CheckAllButton, UncheckAllButton } from './ListActions/Buttons.jsx'
+import SharingButton from './ListActions/SharingButton.jsx'
+import { QuickSortButton } from './ListActions/QuickSortButton.jsx'
+import { CheckAllButton } from './ListActions/CheckAllButton.jsx'
+import { UncheckAllButton } from './ListActions/UncheckAllButton.jsx'
 
 
 const divStyle = {
@@ -11,7 +12,7 @@ const divStyle = {
 }
 
 
-let ListActions = ({ isPrivate, onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick }) => {
+export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick }) => {
 	return (
 		<div style={divStyle} className="col">
 			<QuickSortButton
@@ -24,7 +25,6 @@ let ListActions = ({ isPrivate, onQuickSortClick, onCheckAllClick, onUncheckAllC
 				onClick={onUncheckAllClick}
 			/>
 			<SharingButton
-				isPrivate={isPrivate}
 				onClick={onShareClick}
 			/>
 		</div>
@@ -32,19 +32,10 @@ let ListActions = ({ isPrivate, onQuickSortClick, onCheckAllClick, onUncheckAllC
 }
 
 
-const mapStateToProps = (state) => ({
-	isPrivate: getActiveList(state).private
-})
-
-
 ListActions.propTypes = {
-	isPrivate: PropTypes.bool,
 	onQuickSortClick: PropTypes.func.isRequired,
 	onCheckAllClick: PropTypes.func.isRequired,
 	onUncheckAllClick: PropTypes.func.isRequired,
 	onShareClick: PropTypes.func.isRequired
 }
 
-
-ListActions = connect(mapStateToProps, null)(ListActions)
-export default ListActions

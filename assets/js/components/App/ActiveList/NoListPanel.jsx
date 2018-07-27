@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 
 
-export const NoListPanel = ({ children }) => {
+export const NoListPanel = () => {
 	return (
 		<div className="card bg-secondary text-white">
 			<div className="card-body">
