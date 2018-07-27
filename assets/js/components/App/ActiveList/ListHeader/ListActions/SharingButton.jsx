@@ -17,7 +17,7 @@ let SharingButton = ({ listOwnerID, isPrivate, onClick }) => {
 		icon = <FaLock className="align-middle" />
 		text = 'Make Private'
 	}
-	if (listOwnerID === userID) {
+	if (listOwnerID === currentUserID) {
 		return (
 			<Button
 				icon={icon}

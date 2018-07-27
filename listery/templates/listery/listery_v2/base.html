@@ -24,7 +24,7 @@
 		{% endblock %}
 
 		<script>
-			var userID = {{ user.id }};
+			var currentUserID = {{ user.id }};
 			var frontendLogsEnabled = '{{ LISTERY_FRONTEND_LOGS_ENABLED }}' == 'True' ? true : false;
 		</script>
 		{% block scripts %}
