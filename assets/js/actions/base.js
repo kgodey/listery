@@ -12,6 +12,6 @@ export const sync = (url, params = {}) => {
 		'Content-Type': 'application/json'
 	}
 	// Add timestamp to URL for browser cache-busting
-	url = url + '?' + $.param({timestamp: Date.now()})
+	url = url + '?' + $.param({ timestamp: Date.now() })
 	return fetch(url, params)
 }
