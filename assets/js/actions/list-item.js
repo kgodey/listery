@@ -67,9 +67,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 		body: JSON.stringify(itemData)
 	})
 	.then(
-		response => response.json())
-	.then(
-		data => dispatch(fetchListItemSuccess(data, data.id)))
+		response => dispatch(fetchListItemSuccess(response, response.id)))
 	.then(
 		response => dispatch(fetchActiveList(listID, listID))
 	)
@@ -83,9 +81,7 @@ export const updateListItem = (id, data) => (dispatch) => {
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => response.json())
-	.then(
-		data => dispatch(fetchListItemSuccess(data, data.id)))
+		response => dispatch(fetchListItemSuccess(response, id)))
 	.then(
 		response => {
 			const id = response.data.result
@@ -104,8 +100,6 @@ export const moveListItem = (id, listID) => (dispatch) => {
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => response.json())
-	.then(
 		response => {
 			dispatch(deleteListItemSuccess(response.id))
 		}
@@ -121,7 +115,7 @@ export const deleteListItem = (id, listID) => (dispatch) => {
 	.then(
 		response => dispatch(fetchActiveList(listID, listID)))
 	.then(
-		data => dispatch(deleteListItemSuccess(id))
+		response => dispatch(deleteListItemSuccess(id))
 	)
 }
 
@@ -133,9 +127,7 @@ export const reorderListItem = (id, order, listID) => (dispatch) => {
 		body: JSON.stringify({order: order})
 	})
 	.then(
-		response => response.json())
-	.then(
-		data => dispatch(reorderListItemSuccess(id, order))
+		response => dispatch(reorderListItemSuccess(id, order))
 	)
 }
 

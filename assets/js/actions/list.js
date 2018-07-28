@@ -128,19 +128,12 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch,
 	}
 	return sync(LIST_API_URL + id + '/')
 	.then(
-		response => response.json().then(json => ({
-			status: response.status,
-			json
-		})
-	))
-	.then(
-		({ status, json }) => {
-			if (status == 200) {
-				dispatch(fetchListSuccess(json, true))
-				history.push('/new/' + json.id)
-			} else {
-				dispatch(fetchActiveListError(json))
-			}
+		response => {
+			dispatch(fetchListSuccess(response, true))
+			history.push('/new/' + response.id)
+		},
+		error => {
+			dispatch(fetchActiveListError(error.response))
 		}
 	)
 }
@@ -153,19 +146,8 @@ export const fetchAllLists = () => (dispatch, getState) => {
 	dispatch(fetchAllListsRequest())
 	return sync(LIST_API_URL)
 	.then(
-		response => response.json().then(json => ({
-			status: response.status,
-			json
-		})
-	))
-	.then(
-		({ status, json }) => {
-			if (status == 200) {
-				dispatch(fetchAllListsSuccess(json))
-			} else {
-				dispatch(fetchAllListsError(json))
-			}
-		}
+		response => dispatch(fetchAllListsSuccess(response)),
+		error => dispatch(fetchAllListsError(error.response))
 	)
 }
 
@@ -180,19 +162,9 @@ export const createList = (listName) => (dispatch) => {
 		body: JSON.stringify(listData)
 	})
 	.then(
-		response => response.json().then(json => ({
-			status: response.status,
-			json
-		})
-	))
-	.then(
-		({ status, json }) => {
-			if (status == 201) {
-				dispatch(fetchListSuccess(json))
-				history.push('/new/' + json.id)
-			} else {
-				console.log('handle me!')
-			}
+		response => {
+			dispatch(fetchListSuccess(response))
+			history.push('/new/' + response.id)
 		}
 	)
 }
@@ -205,9 +177,7 @@ export const updateList = (id, data) => (dispatch) => {
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => response.json())
-	.then(
-		data => dispatch(fetchListSuccess(data))
+		response => dispatch(fetchListSuccess(response))
 	)
 }
 
@@ -221,9 +191,7 @@ export const performActionOnList = (id, actionURL) => (dispatch) => {
 		method: 'POST',
 	})
 	.then(
-		response => response.json())
-	.then(
-		data => dispatch(fetchListSuccess(data))
+		response => dispatch(fetchListSuccess(response))
 	)
 }
 
@@ -234,7 +202,7 @@ export const archiveList = (id, nextListID) => (dispatch) => {
 		method: 'DELETE'
 	})
 	.then(
-		data => {
+		response => {
 			dispatch(archiveListSuccess(id, nextListID))
 			if (id == nextListID || nextListID === null) {
 				dispatch(fetchActiveList(nextListID, id))
@@ -259,7 +227,7 @@ export const reorderList = (id, order) => (dispatch) => {
 		body: JSON.stringify({order: order})
 	})
 	.then(
-		data => dispatch(reorderListSuccess(id, order))
+		response => dispatch(reorderListSuccess(id, order))
 	)
 }
 
