@@ -20,6 +20,7 @@ export const activeListItems = (state={}, action) => {
 		case listItemAPIActions.REORDER_LIST_ITEM_SUCCESS:
 			// Update the order of all affected objects.
 			return getReorderedItems(state, action)
+		case listItemAPIActions.MOVE_LIST_ITEM_SUCCESS:
 		case listItemAPIActions.DELETE_LIST_ITEM_SUCCESS:
 			delete newState[action.id]
 			return newState
@@ -34,10 +35,12 @@ export const fetchingListItems = (state, action) => {
 	switch(action.type) {
 		case listItemAPIActions.FETCH_LIST_ITEM_REQUEST:
 		case listItemAPIActions.REORDER_LIST_ITEM_REQUEST:
+		case listItemAPIActions.MOVE_LIST_ITEM_REQUEST:
 			newState[action.id] = true
 			return newState
 		case listItemAPIActions.FETCH_LIST_ITEM_SUCCESS:
 		case listItemAPIActions.REORDER_LIST_ITEM_SUCCESS:
+		case listItemAPIActions.MOVE_LIST_ITEM_SUCCESS:
 			newState[action.id] = false
 			return newState
 		default:

@@ -11,6 +11,8 @@ export const DELETE_LIST_ITEM_REQUEST = 'DELETE_LIST_ITEM_REQUEST'
 export const DELETE_LIST_ITEM_SUCCESS = 'DELETE_LIST_ITEM_SUCCESS'
 export const REORDER_LIST_ITEM_REQUEST = 'REORDER_LIST_ITEM_REQUEST'
 export const REORDER_LIST_ITEM_SUCCESS = 'REORDER_LIST_ITEM_SUCCESS'
+export const MOVE_LIST_ITEM_REQUEST = 'MOVE_LIST_ITEM_REQUEST'
+export const MOVE_LIST_ITEM_SUCCESS = 'MOVE_LIST_ITEM_SUCCESS'
 
 
 const LIST_ITEM_API_URL = '/api/v2/list_items/'
@@ -56,6 +58,20 @@ const reorderListItemSuccess = (id, order) => ({
 })
 
 
+const moveListItemRequest = (id, listID) => ({
+	type: MOVE_LIST_ITEM_REQUEST,
+	id,
+	listID
+})
+
+
+const moveListItemSuccess = (id, listID) => ({
+	type: MOVE_LIST_ITEM_SUCCESS,
+	id,
+	listID
+})
+
+
 export const createListItem = (title, listID) => (dispatch) => {
 	let itemData = {
 		title: title,
@@ -94,14 +110,14 @@ export const updateListItem = (id, data) => (dispatch) => {
 
 export const moveListItem = (id, listID) => (dispatch) => {
 	let data = {list_id: listID}
-	dispatch(fetchListItemRequest(id))
+	dispatch(moveListItemRequest(id, listID))
 	return sync(LIST_ITEM_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	})
 	.then(
 		response => {
-			dispatch(deleteListItemSuccess(response.id))
+			dispatch(moveListItemSuccess(response.id, response.list_id))
 		}
 	)
 }
