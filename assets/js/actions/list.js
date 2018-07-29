@@ -42,9 +42,9 @@ const fetchAllListsSuccess = (data) => ({
 })
 
 
-const fetchAllListsError = (data) => ({
+const fetchAllListsError = (errorMessage) => ({
 	type: FETCH_ALL_LISTS_ERROR,
-	errorData
+	errorMessage
 })
 
 
@@ -75,9 +75,9 @@ const createListSuccess = (data, id) => ({
 })
 
 
-const fetchActiveListError = (errorData) => ({
+const fetchActiveListError = (errorMessage) => ({
 	type: FETCH_ACTIVE_LIST_ERROR,
-	errorData
+	errorMessage
 })
 
 
@@ -145,7 +145,7 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch,
 			history.push('/new/' + response.id)
 		},
 		error => {
-			dispatch(fetchActiveListError(error.response))
+			dispatch(fetchActiveListError(error.message))
 		}
 	)
 }
@@ -159,7 +159,7 @@ export const fetchAllLists = () => (dispatch, getState) => {
 	return sync(LIST_API_URL)
 	.then(
 		response => dispatch(fetchAllListsSuccess(response)),
-		error => dispatch(fetchAllListsError(error.response))
+		error => dispatch(fetchAllListsError(error.message))
 	)
 }
 

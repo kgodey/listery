@@ -52,7 +52,7 @@ export const activeListError = (state, action) => {
 		case listAPIActions.FETCH_ACTIVE_LIST_ERROR:
 			return {
 				isError: true,
-				errorMessage: action.errorData.statusText
+				errorMessage: action.errorMessage
 			}
 		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.isActive) {
