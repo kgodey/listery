@@ -11,6 +11,8 @@ export const ACTIVE_LIST_CHANGED = 'ACTIVE_LIST_CHANGED'
 export const FETCH_ALL_LISTS_REQUEST = 'FETCH_ALL_LISTS_REQUEST'
 export const FETCH_ALL_LISTS_SUCCESS = 'FETCH_ALL_LISTS_SUCCESS'
 export const FETCH_ALL_LISTS_ERROR = 'FETCH_ALL_LISTS_ERROR'
+export const CREATE_LIST_REQUEST = 'CREATE_LIST_REQUEST'
+export const CREATE_LIST_SUCCESS = 'CREATE_LIST_SUCCESS'
 export const FETCH_LIST_REQUEST = 'FETCH_LIST_REQUEST'
 export const FETCH_LIST_SUCCESS = 'FETCH_LIST_SUCCESS'
 export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
@@ -57,6 +59,19 @@ const fetchListSuccess = (data, isActive) => ({
 	type: FETCH_LIST_SUCCESS,
 	data: normalize(data, schema.listSchema),
 	isActive
+})
+
+
+const createListRequest = (data) => ({
+	type: CREATE_LIST_REQUEST,
+	data
+})
+
+
+const createListSuccess = (data, id) => ({
+	type: CREATE_LIST_SUCCESS,
+	data: normalize(data, schema.listSchema),
+	id
 })
 
 
@@ -153,14 +168,14 @@ export const createList = (listName) => (dispatch) => {
 	let listData = {
 		name: listName
 	}
-	dispatch(fetchListRequest(null, listData))
+	dispatch(createListRequest(listData))
 	return sync(LIST_API_URL, {
 		method: 'POST',
 		body: JSON.stringify(listData)
 	})
 	.then(
 		response => {
-			dispatch(fetchListSuccess(response))
+			dispatch(createListSuccess(response, response.id))
 			history.push('/new/' + response.id)
 		}
 	)

@@ -1,4 +1,4 @@
-import { compareByOrder, getReorderedItems } from './utils'
+import { compareByOrder, getReorderedItems, addItemToTop } from './utils'
 import * as listAPIActions from '../actions/list'
 import * as listItemAPIActions from '../actions/list-item'
 
@@ -6,10 +6,17 @@ import * as listItemAPIActions from '../actions/list-item'
 export const activeListItems = (state={}, action) => {
 	let newState = {...state}
 	switch(action.type) {
+		case listAPIActions.CREATE_LIST_SUCCESS:
 		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.data) {
 				return {...action.data.entities.listItems}
 			}
+		case listItemAPIActions.CREATE_LIST_ITEM_SUCCESS:
+			newState = {
+				...state,
+				...action.data.entities.listItems
+			}
+			return addItemToTop(newState, action.id)
 		case listItemAPIActions.FETCH_LIST_ITEM_SUCCESS:
 			if (action.data) {
 				return {

@@ -5,6 +5,8 @@ import { fetchActiveList } from './list'
 import * as schema from './schema'
 
 
+export const CREATE_LIST_ITEM_REQUEST = 'CREATE_LIST_ITEM_REQUEST'
+export const CREATE_LIST_ITEM_SUCCESS = 'CREATE_LIST_ITEM_SUCCESS'
 export const FETCH_LIST_ITEM_REQUEST = 'FETCH_LIST_ITEM_REQUEST'
 export const FETCH_LIST_ITEM_SUCCESS = 'FETCH_LIST_ITEM_SUCCESS'
 export const DELETE_LIST_ITEM_REQUEST = 'DELETE_LIST_ITEM_REQUEST'
@@ -16,6 +18,19 @@ export const MOVE_LIST_ITEM_SUCCESS = 'MOVE_LIST_ITEM_SUCCESS'
 
 
 const LIST_ITEM_API_URL = '/api/v2/list_items/'
+
+
+const createListItemRequest = (data) => ({
+	type: CREATE_LIST_ITEM_REQUEST,
+	data
+})
+
+
+const createListItemSuccess = (data, id) => ({
+	type: CREATE_LIST_ITEM_SUCCESS,
+	data: normalize(data, schema.listItemSchema),
+	id
+})
 
 
 const fetchListItemRequest = (id) => ({
@@ -77,13 +92,15 @@ export const createListItem = (title, listID) => (dispatch) => {
 		title: title,
 		list_id: listID
 	}
-	dispatch(fetchListItemRequest())
+	dispatch(createListItemRequest(itemData))
 	return sync(LIST_ITEM_API_URL, {
 		method: 'POST',
 		body: JSON.stringify(itemData)
 	})
 	.then(
-		response => dispatch(fetchListItemSuccess(response, response.id)))
+		response => {
+			dispatch(createListItemSuccess(response, response.id))
+		})
 	.then(
 		response => dispatch(fetchActiveList(listID, listID))
 	)

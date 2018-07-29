@@ -9,6 +9,7 @@ export const activeListID = (state=firstListID, action) => {
 				return action.nextListID
 			}
 			return state
+		case listAPIActions.CREATE_LIST_SUCCESS:
 		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.data.result) {
 				return action.data.result
@@ -32,6 +33,7 @@ export const fetchingActiveList = (state, action) => {
 			if (action.isActive) {
 				return false
 			}
+		case listAPIActions.CREATE_LIST_SUCCESS:
 		case listAPIActions.FETCH_ACTIVE_LIST_ERROR:
 			return false
 		default:
@@ -56,6 +58,8 @@ export const activeListError = (state, action) => {
 			if (action.isActive) {
 				return defaultState
 			}
+		case listAPIActions.CREATE_LIST_SUCCESS:
+			return defaultState
 		default:
 			return newState
 	}
