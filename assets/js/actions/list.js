@@ -26,8 +26,6 @@ const LIST_API_URL = '/api/v2/lists/'
 export const QUICK_SORT = '/actions/quick_sort/'
 export const CHECK_ALL = '/actions/complete_all/'
 export const UNCHECK_ALL = '/actions/uncomplete_all/'
-
-
 const history = createHistory()
 
 
@@ -107,9 +105,8 @@ const reorderListSuccess = (id, order) => ({
 })
 
 
-const activeListChanged = (id) => ({
-	type: ACTIVE_LIST_CHANGED,
-	id
+export const activeListChanged = () => ({
+	type: ACTIVE_LIST_CHANGED
 })
 
 
@@ -124,7 +121,7 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch,
 	}
 	dispatch(fetchListRequest(id))
 	if (oldActiveListID != id) {
-		dispatch(activeListChanged(id))
+		dispatch(activeListChanged())
 	}
 	return sync(LIST_API_URL + id + '/')
 	.then(
@@ -187,6 +184,7 @@ export const performActionOnList = (id, actionURL) => (dispatch) => {
 		return Promise.resolve()
 	}
 	dispatch(fetchListRequest(id, {}))
+	dispatch(activeListChanged())
 	return sync(LIST_API_URL + id + actionURL, {
 		method: 'POST',
 	})
