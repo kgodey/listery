@@ -5,9 +5,10 @@ import { connect } from 'react-redux'
 import { fetchAllLists, reorderList, previewListOrder } from '../../actions/list'
 import { moveListItem } from '../../actions/list-item'
 import { getActiveListID } from '../../reducers/activeList'
-import { getSortedLists, getAllListsFetchStatus } from '../../reducers/allLists'
+import { getSortedLists, getAllListsFetchStatus, getallListsErrorStatus } from '../../reducers/allLists'
 import ListLink from './ListSwitcher/ListLink.jsx'
 import AddList from './ListSwitcher/AddList.jsx'
+import { ErrorPanel } from './Shared/ErrorPanel.jsx'
 import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
 
 
@@ -26,7 +27,14 @@ class ListSwitcher extends React.Component {
 	}
 
 	render() {
-		const { isFetching, sortedLists, activeListID } = this.props
+		const { isFetching, sortedLists, activeListID, allListsError } = this.props
+		if (allListsError.isError) {
+			return (
+				<ErrorPanel show={allListsError.isError}>
+					The list of lists could not be retrieved. Error message: <em>{allListsError.errorMessage}</em>
+				</ErrorPanel>
+			)
+		}
 		if (isFetching) {
 			return (
 				<LoadingIndicator
@@ -79,6 +87,7 @@ class ListSwitcher extends React.Component {
 const mapStateToProps = (state) => ({
 	isFetching: getAllListsFetchStatus(state),
 	sortedLists: getSortedLists(state),
+	allListsError: getallListsErrorStatus(state),
 	activeListID: getActiveListID(state)
 })
 
@@ -88,6 +97,7 @@ ListSwitcher.propTypes = {
 	sortedLists: PropTypes.array.isRequired,
 	activeListID: PropTypes.number,
 	fetchAllLists: PropTypes.func.isRequired,
+	allListsError: PropTypes.object.isRequired,
 	reorderList: PropTypes.func.isRequired,
 	moveListItem: PropTypes.func.isRequired,
 	previewListOrder: PropTypes.func.isRequired

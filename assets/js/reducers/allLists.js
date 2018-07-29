@@ -47,8 +47,33 @@ export const fetchingAllLists = (state, action) => {
 }
 
 
+export const allListsError = (state, action) => {
+	let defaultState = {
+		isError: false,
+		errorMessage: null
+	}
+	let newState = state !== undefined ? state : defaultState
+	switch(action.type) {
+		case listAPIActions.FETCH_ALL_LISTS_ERROR:
+			return {
+				isError: true,
+				errorMessage: action.errorMessage
+			}
+		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
+			return defaultState
+		default:
+			return newState
+	}
+}
+
+
 export const getAllListsFetchStatus = (state) => {
 	return state.fetchingAllLists
+}
+
+
+export const getallListsErrorStatus = (state) => {
+	return state.allListsError
 }
 
 
