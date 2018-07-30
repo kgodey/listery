@@ -1,11 +1,11 @@
 import flow from 'lodash/flow'
 import PropTypes from 'prop-types'
 import React from 'react'
+import SweetAlert from 'react-bootstrap-sweetalert'
 import { DragSource, DropTarget } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
-import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { deleteListItem, updateListItem } from '../../../actions/list-item'
 import { getActiveListFetchStatus } from '../../../reducers/activeList'

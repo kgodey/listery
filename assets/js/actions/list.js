@@ -4,6 +4,7 @@ import { normalize } from 'normalizr'
 import { getActiveListFetchStatus } from '../reducers/activeList'
 import { getAllListsFetchStatus } from '../reducers/allLists'
 import { sync } from './base'
+import { apiActionFailure } from './common'
 import * as schema from './schema'
 
 
@@ -177,7 +178,8 @@ export const createList = (listName) => (dispatch) => {
 		response => {
 			dispatch(createListSuccess(response, response.id))
 			history.push('/new/' + response.id)
-		}
+		},
+		error => dispatch(apiActionFailure(error.message))
 	)
 }
 
