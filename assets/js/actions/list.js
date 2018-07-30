@@ -222,7 +222,8 @@ export const archiveList = (id, nextListID) => (dispatch) => {
 			if (id == nextListID || nextListID === null) {
 				dispatch(fetchActiveList(nextListID, id))
 			}
-		}
+		},
+		error => dispatch(apiActionFailure(error.message))
 	)
 }
 
