@@ -7,8 +7,8 @@ import { apiActionError } from './apiActionErrors'
 
 
 export const listeryApp = combineReducers({
-	fetchingActiveList,
 	activeListID,
+	fetchingActiveList,
 	fetchingListItems,
 	activeListItems,
 	activeListError,

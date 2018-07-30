@@ -27,7 +27,7 @@ class ActiveList extends React.Component {
 		const { fetchActiveList, match } = this.props
 		let urlListID
 		if (match.params.id !== undefined) {
-			urlListID = match.params.id
+			urlListID = parseInt(match.params.id)
 		}
 		fetchActiveList(urlListID)
 	}

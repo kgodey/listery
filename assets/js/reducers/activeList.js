@@ -9,8 +9,9 @@ export const activeListID = (state=firstListID, action) => {
 				return action.nextListID
 			}
 			return state
+		case listAPIActions.FETCH_LIST_REQUEST:
+			return action.id
 		case listAPIActions.CREATE_LIST_SUCCESS:
-		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.data.result) {
 				return action.data.result
 			}
