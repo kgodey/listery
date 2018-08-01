@@ -102,7 +102,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 			dispatch(createListItemSuccess(response, response.id))
 		})
 	.then(
-		response => dispatch(fetchActiveList(listID, listID))
+		response => dispatch(fetchActiveList(listID, false))
 	)
 }
 
@@ -119,7 +119,7 @@ export const updateListItem = (id, data) => (dispatch) => {
 		response => {
 			const id = response.data.result
 			const listID = response.data.entities.listItems[id].list_id
-			dispatch(fetchActiveList(listID, listID))
+			dispatch(fetchActiveList(listID, false))
 		}
 	)
 }
@@ -146,7 +146,7 @@ export const deleteListItem = (id, listID) => (dispatch) => {
 		method: 'DELETE'
 	})
 	.then(
-		response => dispatch(fetchActiveList(listID, listID)))
+		response => dispatch(fetchActiveList(listID, false)))
 	.then(
 		response => dispatch(deleteListItemSuccess(id))
 	)

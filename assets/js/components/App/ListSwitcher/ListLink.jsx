@@ -189,7 +189,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
 	onClick: () => {
-		dispatch(fetchActiveList(ownProps.id, ownProps.activeListID))
+		dispatch(fetchActiveList(ownProps.id))
 	},
 	archiveList: (nextListID) => {
 		dispatch(archiveList(ownProps.id, nextListID))

@@ -1,13 +1,12 @@
 import createHistory from 'history/createBrowserHistory'
 import { normalize } from 'normalizr'
 
-import { getActiveListFetchStatus } from '../reducers/activeList'
+import { getActiveListFetchStatus, getActiveListID } from '../reducers/activeList'
 import { getAllListsFetchStatus } from '../reducers/allLists'
 import { sync } from './base'
 import { apiActionFailure } from './common'
 import * as schema from './schema'
 
-export const ACTIVE_LIST_CHANGED = 'ACTIVE_LIST_CHANGED'
 export const FETCH_ALL_LISTS_REQUEST = 'FETCH_ALL_LISTS_REQUEST'
 export const FETCH_ALL_LISTS_SUCCESS = 'FETCH_ALL_LISTS_SUCCESS'
 export const FETCH_ALL_LISTS_ERROR = 'FETCH_ALL_LISTS_ERROR'
@@ -48,9 +47,10 @@ const fetchAllListsError = (errorMessage) => ({
 })
 
 
-const fetchListRequest = (id) => ({
+const fetchListRequest = (id, activeListChanged) => ({
 	type: FETCH_LIST_REQUEST,
 	id,
+	activeListChanged
 })
 
 
@@ -119,13 +119,11 @@ const reorderListSuccess = (id, order) => ({
 })
 
 
-export const activeListChanged = () => ({
-	type: ACTIVE_LIST_CHANGED
-})
+export const fetchActiveList = (id = firstListID, activeListChanged = true) => (dispatch, getState) => {
+	const state = getState()
+	const oldActiveListID = getActiveListID(state)
 
-
-export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch, getState) => {
-	if (getActiveListFetchStatus(getState())) {
+	if (getActiveListFetchStatus(state)) {
 		return Promise.resolve()
 	}
 	if (!Boolean(id)) {
@@ -133,10 +131,9 @@ export const fetchActiveList = (id = firstListID, oldActiveListID) => (dispatch,
 		dispatch(noListAvailable())
 		return Promise.resolve()
 	}
-	dispatch(fetchListRequest(id))
-	if (oldActiveListID != id) {
+	dispatch(fetchListRequest(id, activeListChanged))
+	if (activeListChanged) {
 		history.push('/new/' + id)
-		dispatch(activeListChanged())
 	}
 	return sync(LIST_API_URL + id + '/')
 	.then(
@@ -183,7 +180,7 @@ export const createList = (listName) => (dispatch) => {
 
 
 export const updateList = (id, data) => (dispatch) => {
-	dispatch(fetchListRequest(id))
+	dispatch(fetchListRequest(id, false))
 	return sync(LIST_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
@@ -198,8 +195,7 @@ export const performActionOnList = (id, actionURL) => (dispatch) => {
 	if (![QUICK_SORT, CHECK_ALL, UNCHECK_ALL].includes(actionURL)) {
 		return Promise.resolve()
 	}
-	dispatch(fetchListRequest(id))
-	dispatch(activeListChanged())
+	dispatch(fetchListRequest(id, true))
 	return sync(LIST_API_URL + id + actionURL, {
 		method: 'POST',
 	})
@@ -209,17 +205,18 @@ export const performActionOnList = (id, actionURL) => (dispatch) => {
 }
 
 
-export const archiveList = (id, nextListID) => (dispatch) => {
+export const archiveList = (id, nextListID) => (dispatch, getState) => {
 	dispatch(archiveListRequest(id))
 	return sync(LIST_API_URL + id + '/', {
 		method: 'DELETE'
 	})
 	.then(
 		response => {
-			dispatch(archiveListSuccess(id, nextListID))
-			if (id == nextListID || nextListID === null) {
-				dispatch(fetchActiveList(nextListID, id))
+			let activeListID = getActiveListID(getState())
+			if (id === activeListID) {
+				dispatch(fetchActiveList(nextListID))
 			}
+			dispatch(archiveListSuccess(id, nextListID))
 		},
 		error => dispatch(apiActionFailure(error.message))
 	)

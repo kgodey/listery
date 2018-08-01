@@ -3,12 +3,6 @@ import * as listAPIActions from '../actions/list'
 
 export const activeListID = (state=firstListID, action) => {
 	switch(action.type) {
-		case listAPIActions.ARCHIVE_LIST_SUCCESS:
-			// if the current list has been deleted, load the default list
-			if (state == action.id) {
-				return action.nextListID
-			}
-			return state
 		case listAPIActions.FETCH_LIST_REQUEST:
 			return action.id
 		case listAPIActions.CREATE_LIST_SUCCESS:
@@ -28,8 +22,8 @@ export const activeListID = (state=firstListID, action) => {
 export const fetchingActiveList = (state, action) => {
 	let newState = state !== undefined ? state : false
 	switch(action.type) {
-		case listAPIActions.ACTIVE_LIST_CHANGED:
-			return true
+		case listAPIActions.FETCH_LIST_REQUEST:
+			return action.activeListChanged ? true : false
 		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.isActive) {
 				return false
