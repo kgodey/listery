@@ -23,7 +23,7 @@ export const fetchingActiveList = (state, action) => {
 	let newState = state !== undefined ? state : false
 	switch(action.type) {
 		case listAPIActions.FETCH_LIST_REQUEST:
-			return action.activeListChanged ? true : false
+			return action.refreshList ? true : false
 		case listAPIActions.FETCH_LIST_SUCCESS:
 			if (action.isActive) {
 				return false

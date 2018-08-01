@@ -47,10 +47,10 @@ const fetchAllListsError = (errorMessage) => ({
 })
 
 
-const fetchListRequest = (id, activeListChanged) => ({
+const fetchListRequest = (id, refreshList) => ({
 	type: FETCH_LIST_REQUEST,
 	id,
-	activeListChanged
+	refreshList
 })
 
 
@@ -119,7 +119,7 @@ const reorderListSuccess = (id, order) => ({
 })
 
 
-export const fetchActiveList = (id = firstListID, activeListChanged = true) => (dispatch, getState) => {
+export const fetchActiveList = (id = firstListID, refreshList = true) => (dispatch, getState) => {
 	const state = getState()
 	const oldActiveListID = getActiveListID(state)
 
@@ -131,8 +131,8 @@ export const fetchActiveList = (id = firstListID, activeListChanged = true) => (
 		dispatch(noListAvailable())
 		return Promise.resolve()
 	}
-	dispatch(fetchListRequest(id, activeListChanged))
-	if (activeListChanged) {
+	dispatch(fetchListRequest(id, refreshList))
+	if (refreshList) {
 		history.push('/new/' + id)
 	}
 	return sync(LIST_API_URL + id + '/')
@@ -180,7 +180,7 @@ export const createList = (listName) => (dispatch) => {
 
 
 export const updateList = (id, data) => (dispatch) => {
-	dispatch(fetchListRequest(id, false))
+	dispatch(fetchListRequest(id, refreshList = false))
 	return sync(LIST_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
@@ -195,7 +195,7 @@ export const performActionOnList = (id, actionURL) => (dispatch) => {
 	if (![QUICK_SORT, CHECK_ALL, UNCHECK_ALL].includes(actionURL)) {
 		return Promise.resolve()
 	}
-	dispatch(fetchListRequest(id, true))
+	dispatch(fetchListRequest(id))
 	return sync(LIST_API_URL + id + actionURL, {
 		method: 'POST',
 	})
