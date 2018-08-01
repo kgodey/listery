@@ -15,7 +15,7 @@ export const CREATE_LIST_SUCCESS = 'CREATE_LIST_SUCCESS'
 export const FETCH_ACTIVE_LIST_REQUEST = 'FETCH_ACTIVE_LIST_REQUEST'
 export const FETCH_ACTIVE_LIST_SUCCESS = 'FETCH_ACTIVE_LIST_SUCCESS'
 export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
-export const NO_LIST_AVAILABLE = 'NO_LIST_AVAILABLE'
+export const NO_ACTIVE_LIST_AVAILABLE = 'NO_ACTIVE_LIST_AVAILABLE'
 export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
 export const ARCHIVE_LIST_SUCCESS = 'ARCHIVE_LIST_SUCCESS'
 export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
@@ -67,6 +67,11 @@ const fetchActiveListError = (errorMessage) => ({
 })
 
 
+const noActiveListAvailable = () => ({
+	type: NO_ACTIVE_LIST_AVAILABLE
+})
+
+
 const createListRequest = (data) => ({
 	type: CREATE_LIST_REQUEST,
 	data
@@ -77,11 +82,6 @@ const createListSuccess = (data, id) => ({
 	type: CREATE_LIST_SUCCESS,
 	data: normalize(data, schema.listSchema),
 	id
-})
-
-
-const noListAvailable = () => ({
-	type: NO_LIST_AVAILABLE
 })
 
 
@@ -128,7 +128,7 @@ export const fetchActiveList = (id = firstListID, refreshList = true) => (dispat
 	}
 	if (!Boolean(id)) {
 		history.push('/new/')
-		dispatch(noListAvailable())
+		dispatch(noActiveListAvailable())
 		return Promise.resolve()
 	}
 	dispatch(fetchActiveListRequest(id, refreshList))
