@@ -180,7 +180,7 @@ export const createList = (listName) => (dispatch) => {
 
 
 export const updateList = (id, data) => (dispatch) => {
-	dispatch(fetchActiveListRequest(id, refreshList))
+	dispatch(fetchActiveListRequest(id, false))
 	return sync(LIST_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
