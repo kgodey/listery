@@ -12,8 +12,8 @@ export const FETCH_ALL_LISTS_SUCCESS = 'FETCH_ALL_LISTS_SUCCESS'
 export const FETCH_ALL_LISTS_ERROR = 'FETCH_ALL_LISTS_ERROR'
 export const CREATE_LIST_REQUEST = 'CREATE_LIST_REQUEST'
 export const CREATE_LIST_SUCCESS = 'CREATE_LIST_SUCCESS'
-export const FETCH_LIST_REQUEST = 'FETCH_LIST_REQUEST'
-export const FETCH_LIST_SUCCESS = 'FETCH_LIST_SUCCESS'
+export const FETCH_ACTIVE_LIST_REQUEST = 'FETCH_ACTIVE_LIST_REQUEST'
+export const FETCH_ACTIVE_LIST_SUCCESS = 'FETCH_ACTIVE_LIST_SUCCESS'
 export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
 export const NO_LIST_AVAILABLE = 'NO_LIST_AVAILABLE'
 export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
@@ -47,17 +47,23 @@ const fetchAllListsError = (errorMessage) => ({
 })
 
 
-const fetchListRequest = (id, refreshList) => ({
-	type: FETCH_LIST_REQUEST,
+const fetchActiveListRequest = (id, refreshList) => ({
+	type: FETCH_ACTIVE_LIST_REQUEST,
 	id,
 	refreshList
 })
 
 
-const fetchListSuccess = (data, isActive) => ({
-	type: FETCH_LIST_SUCCESS,
+const fetchActiveListSuccess = (data, isActive) => ({
+	type: FETCH_ACTIVE_LIST_SUCCESS,
 	data: normalize(data, schema.listSchema),
 	isActive
+})
+
+
+const fetchActiveListError = (errorMessage) => ({
+	type: FETCH_ACTIVE_LIST_ERROR,
+	errorMessage
 })
 
 
@@ -71,12 +77,6 @@ const createListSuccess = (data, id) => ({
 	type: CREATE_LIST_SUCCESS,
 	data: normalize(data, schema.listSchema),
 	id
-})
-
-
-const fetchActiveListError = (errorMessage) => ({
-	type: FETCH_ACTIVE_LIST_ERROR,
-	errorMessage
 })
 
 
@@ -131,14 +131,14 @@ export const fetchActiveList = (id = firstListID, refreshList = true) => (dispat
 		dispatch(noListAvailable())
 		return Promise.resolve()
 	}
-	dispatch(fetchListRequest(id, refreshList))
+	dispatch(fetchActiveListRequest(id, refreshList))
 	if (refreshList) {
 		history.push('/new/' + id)
 	}
 	return sync(LIST_API_URL + id + '/')
 	.then(
 		response => {
-			dispatch(fetchListSuccess(response, true))
+			dispatch(fetchActiveListSuccess(response, true))
 		},
 		error => {
 			dispatch(fetchActiveListError(error.message))
@@ -180,13 +180,13 @@ export const createList = (listName) => (dispatch) => {
 
 
 export const updateList = (id, data) => (dispatch) => {
-	dispatch(fetchListRequest(id, refreshList))
+	dispatch(fetchActiveListRequest(id, refreshList))
 	return sync(LIST_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => dispatch(fetchListSuccess(response))
+		response => dispatch(fetchActiveListSuccess(response))
 	)
 }
 
@@ -195,12 +195,12 @@ export const performActionOnList = (id, actionURL) => (dispatch) => {
 	if (![QUICK_SORT, CHECK_ALL, UNCHECK_ALL].includes(actionURL)) {
 		return Promise.resolve()
 	}
-	dispatch(fetchListRequest(id))
+	dispatch(fetchActiveListRequest(id))
 	return sync(LIST_API_URL + id + actionURL, {
 		method: 'POST',
 	})
 	.then(
-		response => dispatch(fetchListSuccess(response))
+		response => dispatch(fetchActiveListSuccess(response))
 	)
 }
 

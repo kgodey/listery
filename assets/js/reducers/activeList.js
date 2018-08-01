@@ -3,7 +3,7 @@ import * as listAPIActions from '../actions/list'
 
 export const activeListID = (state=firstListID, action) => {
 	switch(action.type) {
-		case listAPIActions.FETCH_LIST_REQUEST:
+		case listAPIActions.FETCH_ACTIVE_LIST_REQUEST:
 			return action.id
 		case listAPIActions.CREATE_LIST_SUCCESS:
 			if (action.data.result) {
@@ -22,9 +22,9 @@ export const activeListID = (state=firstListID, action) => {
 export const fetchingActiveList = (state, action) => {
 	let newState = state !== undefined ? state : false
 	switch(action.type) {
-		case listAPIActions.FETCH_LIST_REQUEST:
+		case listAPIActions.FETCH_ACTIVE_LIST_REQUEST:
 			return action.refreshList ? true : false
-		case listAPIActions.FETCH_LIST_SUCCESS:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 			if (action.isActive) {
 				return false
 			}
@@ -49,7 +49,7 @@ export const activeListError = (state, action) => {
 				isError: true,
 				errorMessage: action.errorMessage
 			}
-		case listAPIActions.FETCH_LIST_SUCCESS:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 			if (action.isActive) {
 				return defaultState
 			}

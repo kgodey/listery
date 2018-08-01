@@ -15,7 +15,7 @@ export const allLists = (state={}, action) => {
 			}
 			return addItemToTop(newState, action.id)
 		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
-		case listAPIActions.FETCH_LIST_SUCCESS:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 			if (action.data) {
 				return {
 					...state,
