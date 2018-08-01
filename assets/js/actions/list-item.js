@@ -114,13 +114,7 @@ export const updateListItem = (id, data) => (dispatch) => {
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => dispatch(fetchListItemSuccess(response, id)))
-	.then(
-		response => {
-			const id = response.data.result
-			const listID = response.data.entities.listItems[id].list_id
-			dispatch(fetchActiveList(listID, false))
-		}
+		response => dispatch(fetchListItemSuccess(response, id))
 	)
 }
 
@@ -160,7 +154,9 @@ export const reorderListItem = (id, order, listID) => (dispatch) => {
 		body: JSON.stringify({order: order})
 	})
 	.then(
-		response => dispatch(reorderListItemSuccess(id, order))
+		response => dispatch(reorderListItemSuccess(id, order)))
+	.then(
+		response => dispatch(fetchActiveList(listID, false))
 	)
 }
 
