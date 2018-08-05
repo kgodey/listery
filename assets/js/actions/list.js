@@ -210,7 +210,7 @@ export const updateActiveList = (id, data, originalData) => (dispatch) => {
 }
 
 
-export const performActionOnList = (id, actionURL) => (dispatch) => {
+export const performActionOnList = (id, actionURL, originalData) => (dispatch) => {
 	if (![QUICK_SORT, CHECK_ALL, UNCHECK_ALL].includes(actionURL)) {
 		return Promise.resolve()
 	}
@@ -219,7 +219,8 @@ export const performActionOnList = (id, actionURL) => (dispatch) => {
 		method: 'POST',
 	})
 	.then(
-		response => dispatch(fetchActiveListSuccess(response))
+		response => dispatch(fetchActiveListSuccess(response)),
+		error => dispatch(updateActiveListError(error.message, originalData))
 	)
 }
 

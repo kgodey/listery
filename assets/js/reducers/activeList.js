@@ -25,8 +25,9 @@ export const fetchingActiveList = (state, action) => {
 		case listAPIActions.FETCH_ACTIVE_LIST_REQUEST:
 			return true
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
-			return false
+		case listAPIActions.UPDATE_ACTIVE_LIST_SUCCESS:
 		case listAPIActions.CREATE_LIST_SUCCESS:
+		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 		case listAPIActions.FETCH_ACTIVE_LIST_ERROR:
 			return false
 		default:

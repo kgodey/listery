@@ -56,7 +56,7 @@ class ListHeader extends React.Component {
 
 	updateListUsingAction(actionURL) {
 		const { performActionOnList, list } = this.props
-		performActionOnList(list.id, actionURL)
+		performActionOnList(list.id, actionURL, list)
 	}
 
 	handleQuickSortClick(event) {
