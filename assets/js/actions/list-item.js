@@ -1,7 +1,7 @@
 import { normalize } from 'normalizr'
 
 import { sync } from './base'
-import { fetchActiveList } from './list'
+import { updateActiveList } from './list'
 import * as schema from './schema'
 
 
@@ -103,7 +103,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 			dispatch(createListItemSuccess(response, response.id))
 		})
 	.then(
-		response => dispatch(fetchActiveList(listID, false))
+		response => dispatch(updateActiveList(listID))
 	)
 }
 
@@ -141,7 +141,7 @@ export const deleteListItem = (id, listID) => (dispatch) => {
 		method: 'DELETE'
 	})
 	.then(
-		response => dispatch(fetchActiveList(listID, false)))
+		response => dispatch(updateActiveList(listID)))
 	.then(
 		response => dispatch(deleteListItemSuccess(id))
 	)
@@ -157,7 +157,7 @@ export const reorderListItem = (id, order, listID) => (dispatch) => {
 	.then(
 		response => dispatch(reorderListItemSuccess(id, order)))
 	.then(
-		response => dispatch(fetchActiveList(listID, false))
+		response => dispatch(updateActiveList(listID))
 	)
 }
 

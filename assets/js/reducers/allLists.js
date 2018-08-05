@@ -17,6 +17,7 @@ export const allLists = (state={}, action) => {
 		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.UPDATE_ACTIVE_LIST_SUCCESS:
 			if (action.data) {
 				return {
 					...state,

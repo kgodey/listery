@@ -7,7 +7,7 @@ import { getActiveList, getActiveListFetchStatus } from '../../../reducers/activ
 import { ListTitle } from './ListHeader/ListTitle.jsx'
 import { ListActions } from './ListHeader/ListActions.jsx'
 import ListItemCount from './ListHeader/ListItemCount.jsx'
-import { updateList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions/list'
+import { updateActiveList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions/list'
 
 
 class ListHeader extends React.Component {
@@ -50,8 +50,8 @@ class ListHeader extends React.Component {
 	}
 
 	handlePrivacyClick(event) {
-		const { updateList, list } = this.props
-		updateList(list.id, { private: !list.private }, list)
+		const { updateActiveList, list } = this.props
+		updateActiveList(list.id, { private: !list.private }, list)
 	}
 
 	updateListUsingAction(actionURL) {
@@ -91,8 +91,8 @@ class ListHeader extends React.Component {
 	}
 
 	saveListName() {
-		const { updateList, list } = this.props
-		updateList(list.id, { name: this.state.data.name }, list)
+		const { updateActiveList, list } = this.props
+		updateActiveList(list.id, { name: this.state.data.name }, list)
 		this.setState({ currentlyEditing: false })
 	}
 
@@ -132,7 +132,7 @@ const mapStateToProps = (state) => ({
 
 ListHeader.propTypes = {
 	list: PropTypes.object.isRequired,
-	updateList: PropTypes.func.isRequired,
+	updateActiveList: PropTypes.func.isRequired,
 	performActionOnList: PropTypes.func.isRequired
 }
 
@@ -140,6 +140,6 @@ ListHeader.propTypes = {
 ListHeader = onClickOutside(ListHeader)
 ListHeader = connect(
 	mapStateToProps,
-	{ updateList, performActionOnList }
+	{ updateActiveList, performActionOnList }
 )(ListHeader)
 export default ListHeader

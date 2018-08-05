@@ -27,14 +27,11 @@ const listItemSource = {
 		}
 	},
 
-	endDrag({ order, listID, setNewOrder } , monitor) {
+	endDrag({ order, list_id, setNewOrder } , monitor) {
 		const didDrop = monitor.didDrop()
 		if (!didDrop) {
 			const dragID = monitor.getItem().id
-			const dropOrder = order
-			const listID = listID
-
-			setNewOrder(dragID, dropOrder, listID)
+			setNewOrder(dragID, order, list_id)
 		}
 	}
 }

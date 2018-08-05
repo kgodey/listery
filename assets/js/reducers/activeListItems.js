@@ -8,6 +8,7 @@ export const activeListItems = (state={}, action) => {
 	switch(action.type) {
 		case listAPIActions.CREATE_LIST_SUCCESS:
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.UPDATE_ACTIVE_LIST_SUCCESS:
 			if (action.data) {
 				return {...action.data.entities.listItems}
 			}
