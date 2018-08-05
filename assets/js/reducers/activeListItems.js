@@ -12,23 +12,17 @@ export const activeListItems = (state={}, action) => {
 			if (action.data) {
 				return {...action.data.entities.listItems}
 			}
-		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
-			return {
-				...state,
-				...action.data.entities.listItems
-			}
 		case listItemAPIActions.CREATE_LIST_ITEM_SUCCESS:
 			newState = {
 				...state,
 				...action.data.entities.listItems
 			}
 			return addItemToTop(newState, action.id)
+		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 		case listItemAPIActions.UPDATE_LIST_ITEM_SUCCESS:
-			if (action.data) {
-				return {
-					...state,
-					...action.data.entities.listItems
-				}
+			return {
+				...state,
+				...action.data.entities.listItems
 			}
 		case listItemAPIActions.REORDER_LIST_ITEM_SUCCESS:
 			// Update the order of all affected objects.
