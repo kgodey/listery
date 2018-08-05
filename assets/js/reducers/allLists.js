@@ -14,6 +14,7 @@ export const allLists = (state={}, action) => {
 				...action.data.entities.lists
 			}
 			return addItemToTop(newState, action.id)
+		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 			if (action.data) {

@@ -25,6 +25,7 @@ export const fetchingActiveList = (state, action) => {
 		case listAPIActions.FETCH_ACTIVE_LIST_REQUEST:
 			return action.refreshList ? true : false
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 			if (action.isActive) {
 				return false
 			}
@@ -49,6 +50,7 @@ export const activeListError = (state, action) => {
 				isError: true,
 				errorMessage: action.errorMessage
 			}
+		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
 			if (action.isActive) {
 				return defaultState

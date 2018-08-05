@@ -7,8 +7,8 @@ import * as schema from './schema'
 
 export const CREATE_LIST_ITEM_REQUEST = 'CREATE_LIST_ITEM_REQUEST'
 export const CREATE_LIST_ITEM_SUCCESS = 'CREATE_LIST_ITEM_SUCCESS'
-export const FETCH_LIST_ITEM_REQUEST = 'FETCH_LIST_ITEM_REQUEST'
-export const FETCH_LIST_ITEM_SUCCESS = 'FETCH_LIST_ITEM_SUCCESS'
+export const UPDATE_LIST_ITEM_REQUEST = 'UPDATE_LIST_ITEM_REQUEST'
+export const UPDATE_LIST_ITEM_SUCCESS = 'UPDATE_LIST_ITEM_SUCCESS'
 export const DELETE_LIST_ITEM_REQUEST = 'DELETE_LIST_ITEM_REQUEST'
 export const DELETE_LIST_ITEM_SUCCESS = 'DELETE_LIST_ITEM_SUCCESS'
 export const REORDER_LIST_ITEM_REQUEST = 'REORDER_LIST_ITEM_REQUEST'
@@ -33,14 +33,15 @@ const createListItemSuccess = (data, id) => ({
 })
 
 
-const fetchListItemRequest = (id) => ({
-	type: FETCH_LIST_ITEM_REQUEST,
+const updateListItemRequest = (id, data) => ({
+	type: UPDATE_LIST_ITEM_REQUEST,
+	data,
 	id
 })
 
 
-const fetchListItemSuccess = (data, id) => ({
-	type: FETCH_LIST_ITEM_SUCCESS,
+const updateListItemSuccess = (data, id) => ({
+	type: UPDATE_LIST_ITEM_SUCCESS,
 	data: normalize(data, schema.listItemSchema),
 	id
 })
@@ -108,13 +109,13 @@ export const createListItem = (title, listID) => (dispatch) => {
 
 
 export const updateListItem = (id, data) => (dispatch) => {
-	dispatch(fetchListItemRequest(id))
+	dispatch(updateListItemRequest(id, data))
 	return sync(LIST_ITEM_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => dispatch(fetchListItemSuccess(response, id))
+		response => dispatch(updateListItemSuccess(response, id))
 	)
 }
 

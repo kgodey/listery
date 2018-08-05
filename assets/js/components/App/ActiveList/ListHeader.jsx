@@ -51,7 +51,7 @@ class ListHeader extends React.Component {
 
 	handlePrivacyClick(event) {
 		const { updateList, list } = this.props
-		updateList(list.id, { private: !list.private })
+		updateList(list.id, { private: !list.private }, list)
 	}
 
 	updateListUsingAction(actionURL) {
@@ -92,7 +92,7 @@ class ListHeader extends React.Component {
 
 	saveListName() {
 		const { updateList, list } = this.props
-		updateList(list.id, { name: this.state.data.name })
+		updateList(list.id, { name: this.state.data.name }, list)
 		this.setState({ currentlyEditing: false })
 	}
 

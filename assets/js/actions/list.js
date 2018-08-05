@@ -16,6 +16,7 @@ export const FETCH_ACTIVE_LIST_REQUEST = 'FETCH_ACTIVE_LIST_REQUEST'
 export const FETCH_ACTIVE_LIST_SUCCESS = 'FETCH_ACTIVE_LIST_SUCCESS'
 export const FETCH_ACTIVE_LIST_ERROR = 'FETCH_ACTIVE_LIST_ERROR'
 export const NO_ACTIVE_LIST_AVAILABLE = 'NO_ACTIVE_LIST_AVAILABLE'
+export const UPDATE_ACTIVE_LIST_ERROR = 'UPDATE_ACTIVE_LIST_ERROR'
 export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
 export const ARCHIVE_LIST_SUCCESS = 'ARCHIVE_LIST_SUCCESS'
 export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
@@ -82,6 +83,13 @@ const createListSuccess = (data, id) => ({
 	type: CREATE_LIST_SUCCESS,
 	data: normalize(data, schema.listSchema),
 	id
+})
+
+
+const updateActiveListError = (errorMessage, data) => ({
+	type: UPDATE_ACTIVE_LIST_ERROR,
+	data: normalize(data, schema.listSchema),
+	errorMessage
 })
 
 
@@ -179,14 +187,15 @@ export const createList = (listName) => (dispatch) => {
 }
 
 
-export const updateList = (id, data) => (dispatch) => {
+export const updateList = (id, data, originalData) => (dispatch) => {
 	dispatch(fetchActiveListRequest(id, false))
 	return sync(LIST_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => dispatch(fetchActiveListSuccess(response))
+		response => dispatch(fetchActiveListSuccess(response)),
+		error => dispatch(updateActiveListError(error.message, originalData))
 	)
 }
 
