@@ -155,12 +155,8 @@ export const fetchActiveList = (id = firstListID) => (dispatch, getState) => {
 	history.push('/new/' + id)
 	return sync(LIST_API_URL + id + '/')
 	.then(
-		response => {
-			dispatch(fetchActiveListSuccess(response))
-		},
-		error => {
-			dispatch(fetchActiveListError(error.message))
-		}
+		response => dispatch(fetchActiveListSuccess(response)),
+		error => dispatch(fetchActiveListError(error.message))
 	)
 }
 
