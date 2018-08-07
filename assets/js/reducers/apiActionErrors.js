@@ -1,5 +1,6 @@
 import * as commonActions from '../actions/common'
 import * as listAPIActions from '../actions/list'
+import * as listItemAPIActions from '../actions/list-item'
 
 
 export const apiActionError = (state, action) => {
@@ -10,6 +11,7 @@ export const apiActionError = (state, action) => {
 	let newState = state !== undefined ? state : defaultState
 	switch(action.type) {
 		case commonActions.API_ACTION_FAILURE:
+		case listItemAPIActions.UPDATE_LIST_ITEM_ERROR:
 		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 			return {
 				isError: true,

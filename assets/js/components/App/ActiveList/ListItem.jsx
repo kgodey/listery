@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 
 import { deleteListItem, updateListItem } from '../../../actions/list-item'
 import { getActiveListFetchStatus } from '../../../reducers/activeList'
-import { getListItemFetchStatus } from '../../../reducers/activeListItems'
+import { getListItem, getListItemFetchStatus } from '../../../reducers/activeListItems'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
@@ -108,8 +108,8 @@ class ListItem extends React.Component {
 	}
 
 	handleCheckboxClick(event) {
-		const { updateListItem, id } = this.props
-		updateListItem(id, {completed: event.target.checked})
+		const { updateListItem, id, originalData } = this.props
+		updateListItem(id, {completed: event.target.checked}, originalData)
 	}
 
 	handleDoubleClick(event) {
@@ -167,11 +167,11 @@ class ListItem extends React.Component {
 	}
 
 	saveListItemTitleAndDescription() {
-		const { updateListItem, id } = this.props
+		const { updateListItem, id, originalData } = this.props
 		updateListItem(id, {
 			title: this.state.data.title,
 			description: this.state.data.description
-		})
+		}, originalData)
 		this.setState({currentlyEditing: false})
 	}
 
@@ -232,6 +232,7 @@ class ListItem extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({
+	originalData: getListItem(state, ownProps.id),
 	isFetchingList: getActiveListFetchStatus(state),
 	isFetching: getListItemFetchStatus(state, ownProps.id)
 })
@@ -242,6 +243,7 @@ ListItem.propTypes = {
 	completed: PropTypes.bool.isRequired,
 	title: PropTypes.string.isRequired,
 	description: PropTypes.string,
+	originalData: PropTypes.object.isRequired,
 	isFetchingList: PropTypes.bool,
 	isFetching: PropTypes.bool,
 	updateListItem: PropTypes.func.isRequired,

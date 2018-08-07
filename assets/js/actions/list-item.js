@@ -10,6 +10,7 @@ export const CREATE_LIST_ITEM_REQUEST = 'CREATE_LIST_ITEM_REQUEST'
 export const CREATE_LIST_ITEM_SUCCESS = 'CREATE_LIST_ITEM_SUCCESS'
 export const UPDATE_LIST_ITEM_REQUEST = 'UPDATE_LIST_ITEM_REQUEST'
 export const UPDATE_LIST_ITEM_SUCCESS = 'UPDATE_LIST_ITEM_SUCCESS'
+export const UPDATE_LIST_ITEM_ERROR = 'UPDATE_LIST_ITEM_ERROR'
 export const DELETE_LIST_ITEM_REQUEST = 'DELETE_LIST_ITEM_REQUEST'
 export const DELETE_LIST_ITEM_SUCCESS = 'DELETE_LIST_ITEM_SUCCESS'
 export const REORDER_LIST_ITEM_REQUEST = 'REORDER_LIST_ITEM_REQUEST'
@@ -45,6 +46,13 @@ const updateListItemSuccess = (data, id) => ({
 	type: UPDATE_LIST_ITEM_SUCCESS,
 	data: normalize(data, schema.listItemSchema),
 	id
+})
+
+
+const updateListItemError = (errorMessage, data) => ({
+	type: UPDATE_LIST_ITEM_ERROR,
+	data: normalize(data, schema.listItemSchema),
+	errorMessage
 })
 
 
@@ -109,14 +117,15 @@ export const createListItem = (title, listID) => (dispatch) => {
 }
 
 
-export const updateListItem = (id, data) => (dispatch) => {
+export const updateListItem = (id, data, originalData) => (dispatch) => {
 	dispatch(updateListItemRequest(id, data))
 	return sync(LIST_ITEM_API_URL + id + '/', {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => dispatch(updateListItemSuccess(response, id))
+		response => dispatch(updateListItemSuccess(response, id)),
+		error => dispatch(updateListItemError(error.message, originalData))
 	)
 }
 

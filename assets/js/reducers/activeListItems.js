@@ -20,6 +20,7 @@ export const activeListItems = (state={}, action) => {
 			return addItemToTop(newState, action.id)
 		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 		case listItemAPIActions.UPDATE_LIST_ITEM_SUCCESS:
+		case listItemAPIActions.UPDATE_LIST_ITEM_ERROR:
 			return {
 				...state,
 				...action.data.entities.listItems
@@ -46,6 +47,7 @@ export const fetchingListItems = (state, action) => {
 			newState[action.id] = true
 			return newState
 		case listItemAPIActions.UPDATE_LIST_ITEM_SUCCESS:
+		case listItemAPIActions.UPDATE_LIST_ITEM_ERROR:
 		case listItemAPIActions.REORDER_LIST_ITEM_SUCCESS:
 		case listItemAPIActions.MOVE_LIST_ITEM_SUCCESS:
 			newState[action.id] = false
@@ -53,6 +55,14 @@ export const fetchingListItems = (state, action) => {
 		default:
 			return newState
 	}
+}
+
+
+export const getListItem = (state, id) => {
+	if (id != null) {
+		return state.activeListItems[id]
+	}
+	return {}
 }
 
 
