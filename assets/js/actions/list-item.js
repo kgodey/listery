@@ -138,9 +138,7 @@ export const moveListItem = (id, listID) => (dispatch) => {
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => {
-			dispatch(moveListItemSuccess(response.id, response.list_id))
-		}
+		response => dispatch(moveListItemSuccess(response.id, response.list_id))
 	)
 }
 
