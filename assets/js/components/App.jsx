@@ -6,7 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { connect } from 'react-redux'
 
 import { apiErrorDismissed } from '../actions/common'
-import { getCurrentAPIError } from '../reducers/apiActionErrors.js'
+import { getCurrentAPIError } from '../reducers/apiErrors.js'
 import ActiveList from './App/ActiveList.jsx'
 import ListSwitcher from './App/ListSwitcher.jsx'
 

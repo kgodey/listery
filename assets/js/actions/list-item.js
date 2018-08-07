@@ -1,7 +1,7 @@
 import { normalize } from 'normalizr'
 
 import { sync } from './base'
-import { apiActionFailure } from './common'
+import { genericAPIActionFailure } from './common'
 import { updateActiveList } from './list'
 import * as schema from './schema'
 
@@ -112,7 +112,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 			dispatch(createListItemSuccess(response, response.id))
 			dispatch(updateActiveList(listID))
 		},
-		error => dispatch(apiActionFailure(error.message))
+		error => dispatch(genericAPIActionFailure(error.message))
 	)
 }
 

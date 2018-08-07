@@ -3,7 +3,7 @@ import { combineReducers } from 'redux'
 import { activeListID, fetchingActiveList, activeListError } from './activeList'
 import { activeListItems, fetchingListItems } from './activeListItems'
 import { allLists, fetchingAllLists, allListsError } from './allLists'
-import { apiActionError } from './apiActionErrors'
+import { apiError } from './apiErrors'
 
 
 export const listeryApp = combineReducers({
@@ -15,5 +15,5 @@ export const listeryApp = combineReducers({
 	fetchingAllLists,
 	allLists,
 	allListsError,
-	apiActionError
+	apiError
 })
