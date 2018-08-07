@@ -149,9 +149,11 @@ export const deleteListItem = (id, listID) => (dispatch) => {
 		method: 'DELETE'
 	})
 	.then(
-		response => dispatch(updateActiveList(listID)))
-	.then(
-		response => dispatch(deleteListItemSuccess(id))
+		response => {
+			dispatch(deleteListItemSuccess(id)),
+			dispatch(updateActiveList(listID))
+		},
+		error => dispatch(genericAPIActionFailure(error.message))
 	)
 }
 
