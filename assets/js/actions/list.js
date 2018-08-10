@@ -52,9 +52,10 @@ const fetchAllListsError = (errorMessage) => ({
 })
 
 
-const fetchActiveListRequest = (id) => ({
+const fetchActiveListRequest = (id, reload) => ({
 	type: FETCH_ACTIVE_LIST_REQUEST,
-	id
+	id,
+	reload
 })
 
 
@@ -148,7 +149,7 @@ const reorderListSuccess = (id, order) => ({
 })
 
 
-export const fetchActiveList = (id = firstListID) => (dispatch, getState) => {
+export const fetchActiveList = (id = firstListID, reload=true) => (dispatch, getState) => {
 	const state = getState()
 	const oldActiveListID = getActiveListID(state)
 
@@ -160,7 +161,7 @@ export const fetchActiveList = (id = firstListID) => (dispatch, getState) => {
 		dispatch(noActiveListAvailable())
 		return Promise.resolve()
 	}
-	dispatch(fetchActiveListRequest(id))
+	dispatch(fetchActiveListRequest(id, reload))
 	history.push('/new/' + id)
 	return sync(LIST_API_URL + id + '/')
 	.then(

@@ -2,7 +2,7 @@ import { normalize } from 'normalizr'
 
 import { sync } from './base'
 import { genericAPIActionFailure } from './common'
-import { updateActiveList } from './list'
+import { fetchActiveList } from './list'
 import * as schema from './schema'
 
 
@@ -119,7 +119,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 	.then(
 		response => {
 			dispatch(createListItemSuccess(response, response.id))
-			dispatch(updateActiveList(listID))
+			dispatch(fetchActiveList(listID, false))
 		},
 		error => dispatch(genericAPIActionFailure(error.message))
 	)
@@ -160,7 +160,7 @@ export const deleteListItem = (id, listID) => (dispatch) => {
 	.then(
 		response => {
 			dispatch(deleteListItemSuccess(id)),
-			dispatch(updateActiveList(listID))
+			dispatch(fetchActiveList(listID, false))
 		},
 		error => dispatch(genericAPIActionFailure(error.message))
 	)
@@ -176,7 +176,7 @@ export const reorderListItem = (id, order, listID, initialOrder) => (dispatch) =
 	.then(
 		response => {
 			dispatch(reorderListItemSuccess(id, order))
-			dispatch(updateActiveList(listID))
+			dispatch(fetchActiveList(listID, false))
 		},
 		error => {
 			dispatch(reorderListItemPreview(id, initialOrder))
