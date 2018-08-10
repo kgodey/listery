@@ -19,19 +19,16 @@ import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
 
 
 const listItemSource = {
-	beginDrag({ id, order, listID }) {
-		return {
-			id: id,
-			order: order,
-			listID: listID
-		}
+	beginDrag(props) {
+		let { id, order, list_id, initialOrder } = props
+		return { id, order, list_id, initialOrder }
 	},
 
 	endDrag({ order, list_id, setNewOrder } , monitor) {
 		const didDrop = monitor.didDrop()
 		if (!didDrop) {
-			const dragID = monitor.getItem().id
-			setNewOrder(dragID, order, list_id)
+			const dragItem = monitor.getItem()
+			setNewOrder(dragItem.id, order, list_id, dragItem.initialOrder)
 		}
 	}
 }

@@ -25,7 +25,7 @@ export const activeListItems = (state={}, action) => {
 				...state,
 				...action.data.entities.listItems
 			}
-		case listItemAPIActions.REORDER_LIST_ITEM_SUCCESS:
+		case listItemAPIActions.REORDER_LIST_ITEM_PREVIEW:
 			// Update the order of all affected objects.
 			return getReorderedItems(state, action)
 		case listItemAPIActions.MOVE_LIST_ITEM_SUCCESS:
@@ -58,11 +58,45 @@ export const fetchingListItems = (state, action) => {
 }
 
 
+export const listItemInitialOrders = (state={}, action) => {
+	let newState
+	switch(action.type) {
+		case listAPIActions.CREATE_LIST_SUCCESS:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.UPDATE_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
+			newState = {}
+			Object.keys(action.data.entities.listItems).map(function(key) {
+				newState[key] = action.data.entities.listItems[key].order
+			})
+			return newState
+		case listItemAPIActions.CREATE_LIST_ITEM_SUCCESS:
+		case listItemAPIActions.UPDATE_LIST_ITEM_SUCCESS:
+		case listItemAPIActions.UPDATE_LIST_ITEM_ERROR:
+			newState = state
+			newState[action.id] = action.data.entities.listItems[action.id].order
+			return newState
+		case listItemAPIActions.MOVE_LIST_ITEM_SUCCESS:
+		case listItemAPIActions.DELETE_LIST_ITEM_SUCCESS:
+			newState = state
+			delete newState[action.id]
+			return newState
+		default:
+			return state
+	}
+}
+
+
 export const getListItem = (state, id) => {
 	if (id != null) {
 		return state.activeListItems[id]
 	}
 	return {}
+}
+
+
+export const getListItemInitialOrders = (state) => {
+	return state.listItemInitialOrders
 }
 
 

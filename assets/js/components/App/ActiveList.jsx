@@ -5,7 +5,7 @@ import { withRouter } from 'react-router'
 
 import { fetchActiveList } from '../../actions/list'
 import { reorderListItem, previewListItemOrder } from '../../actions/list-item'
-import { getSortedListItems } from '../../reducers/activeListItems'
+import { getSortedListItems, getListItemInitialOrders } from '../../reducers/activeListItems'
 import { getActiveListID, getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
@@ -33,7 +33,7 @@ class ActiveList extends React.Component {
 	}
 
 	render() {
-		const { activeListID, activeListError, isFetching, sortedListItems } = this.props
+		const { activeListID, activeListError, isFetching, sortedListItems, initialOrders } = this.props
 		if (activeListID === null) {
 			if (activeListError.isError) {
 				return (
@@ -66,6 +66,7 @@ class ActiveList extends React.Component {
 							<ListItem
 								key={item.id}
 								{...item}
+								initialOrder={initialOrders[item.id]}
 								setNewOrder={this.setNewOrder}
 								previewNewOrder={this.previewNewOrder}
 							/>
@@ -76,9 +77,9 @@ class ActiveList extends React.Component {
 		}
 	}
 
-	setNewOrder(id, order, listID) {
+	setNewOrder(id, order, listID, initialOrder) {
 		const { reorderListItem } = this.props
-		reorderListItem(id, order, listID)
+		reorderListItem(id, order, listID, initialOrder)
 	}
 
 	previewNewOrder(dragID, dropOrder) {
@@ -89,6 +90,7 @@ class ActiveList extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+	initialOrders: getListItemInitialOrders(state),
 	activeListID: getActiveListID(state),
 	sortedListItems: getSortedListItems(state),
 	isFetching: getActiveListFetchStatus(state),
@@ -97,6 +99,7 @@ const mapStateToProps = (state) => ({
 
 
 ActiveList.propTypes = {
+	initialOrders: PropTypes.object.isRequired,
 	activeListID: PropTypes.number,
 	sortedListItems: PropTypes.array.isRequired,
 	isFetching: PropTypes.bool.isRequired,
