@@ -4,7 +4,7 @@ import { normalize } from 'normalizr'
 import { getActiveListFetchStatus, getActiveListID } from '../reducers/activeList'
 import { getAllListsFetchStatus } from '../reducers/allLists'
 import { sync } from './base'
-import { apiActionFailure } from './common'
+import { genericAPIActionFailure } from './common'
 import * as schema from './schema'
 
 export const FETCH_ALL_LISTS_REQUEST = 'FETCH_ALL_LISTS_REQUEST'
@@ -22,6 +22,7 @@ export const NO_ACTIVE_LIST_AVAILABLE = 'NO_ACTIVE_LIST_AVAILABLE'
 export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
 export const ARCHIVE_LIST_SUCCESS = 'ARCHIVE_LIST_SUCCESS'
 export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
+export const REORDER_LIST_PREVIEW = 'REORDER_LIST_PREVIEW'
 export const REORDER_LIST_REQUEST = 'REORDER_LIST_REQUEST'
 export const REORDER_LIST_SUCCESS = 'REORDER_LIST_SUCCESS'
 
@@ -33,8 +34,9 @@ export const UNCHECK_ALL = '/actions/uncomplete_all/'
 const history = createHistory()
 
 
-const fetchAllListsRequest = () => ({
-	type: FETCH_ALL_LISTS_REQUEST
+const fetchAllListsRequest = (reload) => ({
+	type: FETCH_ALL_LISTS_REQUEST,
+	reload
 })
 
 
@@ -80,7 +82,7 @@ const updateActiveListSuccess = (data) => ({
 })
 
 
-const updateActiveListError = (errorMessage, data) => ({
+const updateActiveListError = (id, errorMessage, data) => ({
 	type: UPDATE_ACTIVE_LIST_ERROR,
 	data: normalize(data, schema.listSchema),
 	errorMessage
@@ -125,6 +127,13 @@ const downloadListRequest = (id, downloadFormID) => ({
 })
 
 
+const reorderListPreview = (id, order) => ({
+	type: REORDER_LIST_PREVIEW,
+	id,
+	order
+})
+
+
 const reorderListRequest = (id, order) => ({
 	type: REORDER_LIST_REQUEST,
 	id,
@@ -161,11 +170,11 @@ export const fetchActiveList = (id = firstListID) => (dispatch, getState) => {
 }
 
 
-export const fetchAllLists = () => (dispatch, getState) => {
+export const fetchAllLists = (reload=true) => (dispatch, getState) => {
 	if (getAllListsFetchStatus(getState())) {
 		return Promise.resolve()
 	}
-	dispatch(fetchAllListsRequest())
+	dispatch(fetchAllListsRequest(reload))
 	return sync(LIST_API_URL)
 	.then(
 		response => dispatch(fetchAllListsSuccess(response)),
@@ -188,7 +197,7 @@ export const createList = (listName) => (dispatch) => {
 			dispatch(createListSuccess(response, response.id))
 			history.push('/new/' + response.id)
 		},
-		error => dispatch(apiActionFailure(error.message))
+		error => dispatch(genericAPIActionFailure(error.message))
 	)
 }
 
@@ -201,7 +210,7 @@ export const updateActiveList = (id, data, originalData) => (dispatch) => {
 	})
 	.then(
 		response => dispatch(updateActiveListSuccess(response)),
-		error => dispatch(updateActiveListError(error.message, originalData))
+		error => dispatch(updateActiveListError(id, error.message, originalData))
 	)
 }
 
@@ -216,7 +225,7 @@ export const performActionOnList = (id, actionURL, originalData) => (dispatch) =
 	})
 	.then(
 		response => dispatch(fetchActiveListSuccess(response)),
-		error => dispatch(updateActiveListError(error.message, originalData))
+		error => dispatch(updateActiveListError(id, error.message, originalData))
 	)
 }
 
@@ -234,7 +243,7 @@ export const archiveList = (id, nextListID) => (dispatch, getState) => {
 			}
 			dispatch(archiveListSuccess(id, nextListID))
 		},
-		error => dispatch(apiActionFailure(error.message))
+		error => dispatch(genericAPIActionFailure(error.message))
 	)
 }
 
@@ -247,18 +256,25 @@ export const downloadPlaintextList = (id, downloadFormID) => (dispatch) => {
 }
 
 
-export const reorderList = (id, order) => (dispatch) => {
+export const reorderList = (id, order, initialOrder) => (dispatch) => {
 	dispatch(reorderListRequest(id, order))
 	return sync(LIST_API_URL + id + '/reorder/', {
 		method: 'POST',
 		body: JSON.stringify({order: order})
 	})
 	.then(
-		response => dispatch(reorderListSuccess(id, order))
+		response => {
+			dispatch(reorderListSuccess(id, order))
+			dispatch(fetchAllLists(false))
+		},
+		error => {
+			dispatch(reorderListPreview(id, initialOrder))
+			dispatch(genericAPIActionFailure(error.message))
+		}
 	)
 }
 
 
 export const previewListOrder = (dragID, dropOrder) => (dispatch) => {
-	return dispatch(reorderListSuccess(dragID, dropOrder))
+	return dispatch(reorderListPreview(dragID, dropOrder))
 }

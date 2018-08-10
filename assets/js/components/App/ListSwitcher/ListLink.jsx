@@ -13,22 +13,16 @@ import { ItemTypes } from '../Shared/ItemTypes.jsx'
 
 
 const listSource = {
-	beginDrag({ id, order }) {
-		return {
-			id,
-			order
-		}
+	beginDrag({ id, order, initialOrder }) {
+		return { id, order, initialOrder }
 	},
 
 	endDrag({ order, setNewOrder }, monitor) {
 		const didDrop = monitor.didDrop()
 		if (!didDrop) {
 			const item = monitor.getItem()
-			const itemType = monitor.getItemType()
-			if (itemType == ItemTypes.LIST) {
-				const dragID = item.id
-				const dropOrder = order
-				setNewOrder(dragID, dropOrder)
+			if (monitor.getItemType() == ItemTypes.LIST) {
+				setNewOrder(item.id, order, item.initialOrder)
 			}
 		}
 	}

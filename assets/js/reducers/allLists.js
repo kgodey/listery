@@ -27,7 +27,7 @@ export const allLists = (state={}, action) => {
 		case listAPIActions.ARCHIVE_LIST_SUCCESS:
 			delete newState[action.id]
 			return newState
-		case listAPIActions.REORDER_LIST_SUCCESS:
+		case listAPIActions.REORDER_LIST_PREVIEW:
 			return getReorderedItems(state, action)
 		default:
 			return newState
@@ -35,11 +35,14 @@ export const allLists = (state={}, action) => {
 }
 
 
-export const fetchingAllLists = (state, action) => {
+export const loadingAllLists = (state, action) => {
 	let newState = state !== undefined ? state : false
 	switch(action.type) {
 		case listAPIActions.FETCH_ALL_LISTS_REQUEST:
-			return true
+			if (action.reload === true) {
+				return true
+			}
+			return false
 		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
 		case listAPIActions.FETCH_ALL_LISTS_ERROR:
 			return false
@@ -69,8 +72,36 @@ export const allListsError = (state, action) => {
 }
 
 
+export const listInitialOrders = (state={}, action) => {
+	let newState
+	switch(action.type) {
+		case listAPIActions.FETCH_ALL_LISTS_SUCCESS:
+		case listAPIActions.CREATE_LIST_SUCCESS:
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.UPDATE_ACTIVE_LIST_SUCCESS:
+		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
+			newState = {}
+			Object.keys(action.data.entities.lists).map(function(key) {
+				newState[key] = action.data.entities.lists[key].order
+			})
+			return newState
+		case listAPIActions.ARCHIVE_LIST_SUCCESS:
+			newState = state
+			delete newState[action.id]
+			return newState
+		default:
+			return state
+	}
+}
+
+
+export const getListInitialOrders = (state) => {
+	return state.listInitialOrders
+}
+
+
 export const getAllListsFetchStatus = (state) => {
-	return state.fetchingAllLists
+	return state.loadingAllLists
 }
 
 

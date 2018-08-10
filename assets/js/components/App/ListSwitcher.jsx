@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { fetchAllLists, reorderList, previewListOrder } from '../../actions/list'
 import { moveListItem } from '../../actions/list-item'
 import { getActiveListID } from '../../reducers/activeList'
-import { getSortedLists, getAllListsFetchStatus, getallListsErrorStatus } from '../../reducers/allLists'
+import { getSortedLists, getAllListsFetchStatus, getallListsErrorStatus, getListInitialOrders } from '../../reducers/allLists'
 import ListLink from './ListSwitcher/ListLink.jsx'
 import AddList from './ListSwitcher/AddList.jsx'
 import { ErrorPanel } from './Shared/ErrorPanel.jsx'
@@ -27,7 +27,7 @@ class ListSwitcher extends React.Component {
 	}
 
 	render() {
-		const { isFetching, sortedLists, activeListID, allListsError } = this.props
+		const { isFetching, sortedLists, activeListID, allListsError, initialOrders } = this.props
 		if (allListsError.isError) {
 			return (
 				<ErrorPanel show={allListsError.isError}>
@@ -52,6 +52,7 @@ class ListSwitcher extends React.Component {
 					{sortedLists.map(item =>
 						<ListLink
 							key={item.id}
+							initialOrder={initialOrders[item.id]}
 							{...item}
 							activeList={item.id == activeListID ? true : false}
 							activeListID={activeListID}
@@ -66,9 +67,9 @@ class ListSwitcher extends React.Component {
 		}
 	}
 
-	setNewOrder(id, order) {
+	setNewOrder(id, order, initialOrder) {
 		const { reorderList } = this.props
-		reorderList(id, order)
+		reorderList(id, order, initialOrder)
 	}
 
 	setListID(id, listID) {
@@ -85,6 +86,7 @@ class ListSwitcher extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+	initialOrders: getListInitialOrders(state),
 	isFetching: getAllListsFetchStatus(state),
 	sortedLists: getSortedLists(state),
 	allListsError: getallListsErrorStatus(state),
@@ -93,6 +95,7 @@ const mapStateToProps = (state) => ({
 
 
 ListSwitcher.propTypes = {
+	initialOrders: PropTypes.object.isRequired,
 	isFetching: PropTypes.bool.isRequired,
 	sortedLists: PropTypes.array.isRequired,
 	activeListID: PropTypes.number,
