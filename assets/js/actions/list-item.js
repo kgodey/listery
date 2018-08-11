@@ -1,5 +1,6 @@
 import { normalize } from 'normalizr'
 
+import { LIST_ITEM_API_URL } from '../utils/urls'
 import { sync } from './base'
 import { genericAPIActionFailure } from './common'
 import { fetchActiveList } from './list'
@@ -18,9 +19,6 @@ export const REORDER_LIST_ITEM_REQUEST = 'REORDER_LIST_ITEM_REQUEST'
 export const REORDER_LIST_ITEM_SUCCESS = 'REORDER_LIST_ITEM_SUCCESS'
 export const MOVE_LIST_ITEM_REQUEST = 'MOVE_LIST_ITEM_REQUEST'
 export const MOVE_LIST_ITEM_SUCCESS = 'MOVE_LIST_ITEM_SUCCESS'
-
-
-const LIST_ITEM_API_URL = '/api/v2/list_items/'
 
 
 const createListItemRequest = (data) => ({

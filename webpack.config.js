@@ -15,7 +15,7 @@ module.exports = {
 	},
 	output: {
 		filename: 'bundle.js',
-		path: __dirname + '/listery/static/listery_v2/js'
+		path: __dirname + '/listery/static/listery/js'
 	},
 	plugins: [
 		new webpack.ProvidePlugin({

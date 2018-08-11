@@ -10,12 +10,13 @@ import { connect } from 'react-redux'
 import { deleteListItem, updateListItem } from '../../../actions/list-item'
 import { getActiveListFetchStatus } from '../../../reducers/activeList'
 import { getListItem, getListItemFetchStatus } from '../../../reducers/activeListItems'
+import { ItemTypes } from '../../../utils/itemTypes'
+import { DeleteIcon } from '../Shared/Icons.jsx'
+import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
-import { DeleteIcon } from '../Shared/Icons.jsx'
-import { ItemTypes } from '../Shared/ItemTypes.jsx'
-import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
+
 
 
 const listItemSource = {

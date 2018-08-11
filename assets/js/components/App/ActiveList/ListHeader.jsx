@@ -7,7 +7,8 @@ import { getActiveList, getActiveListFetchStatus } from '../../../reducers/activ
 import { ListTitle } from './ListHeader/ListTitle.jsx'
 import { ListActions } from './ListHeader/ListActions.jsx'
 import ListItemCount from './ListHeader/ListItemCount.jsx'
-import { updateActiveList, performActionOnList, QUICK_SORT, CHECK_ALL, UNCHECK_ALL } from '../../../actions/list'
+import { updateActiveList, performActionOnList } from '../../../actions/list'
+import { QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX } from '../../../utils/urls'
 
 
 class ListHeader extends React.Component {
@@ -60,15 +61,15 @@ class ListHeader extends React.Component {
 	}
 
 	handleQuickSortClick(event) {
-		this.updateListUsingAction(QUICK_SORT)
+		this.updateListUsingAction(QUICK_SORT_URL_SUFFIX)
 	}
 
 	handleCheckAllClick(event) {
-		this.updateListUsingAction(CHECK_ALL)
+		this.updateListUsingAction(CHECK_ALL_URL_SUFFIX)
 	}
 
 	handleUncheckAllClick(event) {
-		this.updateListUsingAction(UNCHECK_ALL)
+		this.updateListUsingAction(UNCHECK_ALL_URL_SUFFIX)
 	}
 
 	handleNameDoubleClick(event) {

@@ -1,0 +1,6 @@
+export const LIST_API_URL = '/api/v1/lists/'
+export const LIST_ITEM_API_URL = '/api/v1/list_items/'
+export const ROOT_URL = '/'
+export const QUICK_SORT_URL_SUFFIX = '/actions/quick_sort/'
+export const CHECK_ALL_URL_SUFFIX = '/actions/complete_all/'
+export const UNCHECK_ALL_URL_SUFFIX = '/actions/uncomplete_all/'

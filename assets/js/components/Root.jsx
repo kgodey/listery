@@ -9,7 +9,7 @@ import App from './App.jsx'
 const Root = ({ store }) => (
 	<Provider store={store}>
 		<BrowserRouter>
-			<Route path='/new/:id?' component={App} />
+			<Route path='/:id?' component={App} />
 		 </BrowserRouter>
 	</Provider>
 )

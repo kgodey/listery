@@ -1,2 +1,2 @@
 webpack --mode=production --progress --colors
-cp -r node_modules/bootstrap/dist/css/bootstrap.min.css* listery/static/listery_v2/css/bootstrap/
+cp -r node_modules/bootstrap/dist/css/bootstrap.min.css* listery/static/listery/css/bootstrap/

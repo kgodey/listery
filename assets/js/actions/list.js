@@ -3,6 +3,7 @@ import { normalize } from 'normalizr'
 
 import { getActiveListFetchStatus, getActiveListID } from '../reducers/activeList'
 import { getAllListsFetchStatus } from '../reducers/allLists'
+import { LIST_API_URL, ROOT_URL, QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX } from '../utils/urls'
 import { sync } from './base'
 import { genericAPIActionFailure } from './common'
 import * as schema from './schema'
@@ -26,11 +27,6 @@ export const REORDER_LIST_PREVIEW = 'REORDER_LIST_PREVIEW'
 export const REORDER_LIST_REQUEST = 'REORDER_LIST_REQUEST'
 export const REORDER_LIST_SUCCESS = 'REORDER_LIST_SUCCESS'
 
-
-const LIST_API_URL = '/api/v2/lists/'
-export const QUICK_SORT = '/actions/quick_sort/'
-export const CHECK_ALL = '/actions/complete_all/'
-export const UNCHECK_ALL = '/actions/uncomplete_all/'
 const history = createHistory()
 
 
@@ -157,12 +153,12 @@ export const fetchActiveList = (id = firstListID, reload=true) => (dispatch, get
 		return Promise.resolve()
 	}
 	if (!Boolean(id)) {
-		history.push('/new/')
+		history.push(ROOT_URL)
 		dispatch(noActiveListAvailable())
 		return Promise.resolve()
 	}
 	dispatch(fetchActiveListRequest(id, reload))
-	history.push('/new/' + id)
+	history.push(ROOT_URL + id)
 	return sync(LIST_API_URL + id + '/')
 	.then(
 		response => dispatch(fetchActiveListSuccess(response)),
@@ -196,7 +192,7 @@ export const createList = (listName) => (dispatch) => {
 	.then(
 		response => {
 			dispatch(createListSuccess(response, response.id))
-			history.push('/new/' + response.id)
+			history.push(ROOT_URL + response.id)
 		},
 		error => dispatch(genericAPIActionFailure(error.message))
 	)
@@ -217,7 +213,7 @@ export const updateActiveList = (id, data, originalData) => (dispatch) => {
 
 
 export const performActionOnList = (id, actionURL, originalData) => (dispatch) => {
-	if (![QUICK_SORT, CHECK_ALL, UNCHECK_ALL].includes(actionURL)) {
+	if (![QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX].includes(actionURL)) {
 		return Promise.resolve()
 	}
 	dispatch(fetchActiveListRequest(id))
