@@ -6,4 +6,4 @@ npm-debug.log
 package-lock.json
 
 # This directory should be compiled using npm run build
-listery/static/listery/
+listery/static/listery/js/*
