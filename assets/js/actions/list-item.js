@@ -139,7 +139,7 @@ export const updateListItem = (id, data, originalData) => (dispatch) => {
 }
 
 
-export const moveListItem = (id, listID) => (dispatch) => {
+export const moveListItem = (id, listID, initialOrder) => (dispatch) => {
 	let data = {list_id: listID}
 	dispatch(moveListItemRequest(id, listID))
 	return sync(LIST_ITEM_API_URL + id + '/', {
@@ -147,7 +147,14 @@ export const moveListItem = (id, listID) => (dispatch) => {
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => dispatch(moveListItemSuccess(response.id, response.list_id))
+		response =>  {
+			dispatch(moveListItemSuccess(response.id, response.list_id))
+			dispatch(fetchActiveList(listID, false))
+		},
+		error => {
+			dispatch(reorderListItemPreview(id, initialOrder))
+			dispatch(genericAPIActionFailure(error.message))
+		}
 	)
 }
 

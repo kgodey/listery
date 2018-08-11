@@ -43,14 +43,13 @@ const listTarget = {
 		const item = monitor.getItem()
 		const itemType = monitor.getItemType()
 		if (itemType == ItemTypes.LIST_ITEM) {
-			const dragID = item.id
-			const oldListID = item.listID
+
 			const dropID = id
 			// Don't make any updates if the item is already in the list
-			if (oldListID == dropID) {
+			if (item.listID == dropID) {
 				return
 			}
-			setListID(dragID, dropID, oldListID)
+			setListID(item.id, dropID, item.initialOrder)
 		}
 	},
 
