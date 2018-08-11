@@ -12,7 +12,7 @@ Username: `demo2`, password: `demo2`
 
 ## Local setup
 
-You should be able to run Listery locally using the example project provided.
+You should be able to run Listery locally using the example Django project provided. `npm install` will install the necessary JavaScript packages, and `npm run watch` will rebuild the JavaScript files on save.
 
 ## Using Listery as an app
 
@@ -46,4 +46,11 @@ REST_FRAMEWORK = {
 }
 ```
 
-* Optionally set your site title using the setting `LISTERY_TITLE`
+* Optionally set your site title and whether to enable frontend JS logs using the setting `LISTERY` as follows. `LISTERY_FRONTEND_LOGS_ENABLED` will use the value of `DEBUG` if it is not set.
+
+```
+LISTERY = {
+	'LISTERY_TITLE': 'Listery Demo',
+	'LISTERY_FRONTEND_LOGS_ENABLED': True
+}
+```
