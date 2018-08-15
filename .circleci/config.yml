@@ -5,9 +5,6 @@
 version: 2
 jobs:
     build:
-        branches:
-            only:
-                - listery_v2
         working_directory: ~/listery
         docker:
             # specify the version you desire here
