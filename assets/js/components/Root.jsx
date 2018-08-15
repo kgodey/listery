@@ -9,8 +9,11 @@ import App from './App.jsx'
 const Root = ({ store }) => (
 	<Provider store={store}>
 		<BrowserRouter>
-			<Route path='/:id?' component={App} />
-		 </BrowserRouter>
+			<div>
+				<Route path='/:id?' component={App} />
+				<Route path='/lists/:id?' component={App} />
+			</div>
+		</BrowserRouter>
 	</Provider>
 )
 

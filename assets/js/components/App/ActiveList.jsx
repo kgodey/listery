@@ -24,10 +24,15 @@ class ActiveList extends React.Component {
 
 	componentDidMount() {
 		// Load initial data from backend once components mounts.
-		const { fetchActiveList, match } = this.props
+		const { fetchActiveList, match, location } = this.props
 		let urlListID
 		if (match.params.id !== undefined) {
 			urlListID = parseInt(match.params.id)
+		} else if (location.hash !== '') {
+			const oldURLPatternMatches = location.hash.match(/#list\/(\d+)/)
+			if (oldURLPatternMatches !== null) {
+				urlListID = parseInt(oldURLPatternMatches[1])
+			}
 		}
 		fetchActiveList(urlListID)
 	}
