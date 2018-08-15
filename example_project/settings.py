@@ -40,6 +40,7 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'ordered_model',
+	'django_filters',
 	'rest_framework',
 	'rest_framework.authtoken',
 	'listery',
@@ -122,12 +123,18 @@ LOGIN_REDIRECT_URL = '/'
 # REST Framwork settings
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': (
-		'rest_framework.authentication.TokenAuthentication',
 		'rest_framework.authentication.SessionAuthentication',
+		'rest_framework.authentication.TokenAuthentication',
+	),
+	'DEFAULT_FILTER_BACKENDS': (
+		'django_filters.rest_framework.DjangoFilterBackend',
 	)
 }
 
-LISTERY_TITLE = 'Listery Demo'
+LISTERY = {
+	'LISTERY_TITLE': 'Listery Demo',
+	'LISTERY_FRONTEND_LOGS_ENABLED': True
+}
 
 # Heroku settings
 

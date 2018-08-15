@@ -1,0 +1,66 @@
+{
+	"name": "listery",
+	"version": "0.0.0",
+	"description": "List management app",
+	"main": "assets/js/index.js",
+	"scripts": {
+		"build": "./build.sh",
+		"start": "./start.sh",
+		"watch": "watch 'npm run start' assets",
+		"test": "jest"
+	},
+	"jest": {
+		"testRegex": "assets/js/__tests__/.*\\.js$",
+		"transform": {
+			"^.+\\.jsx?$": "babel-jest"
+		},
+		"verbose": true
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kgodey/listery.git"
+	},
+	"author": "Kriti Godey",
+	"license": "GPL-2.0",
+	"bugs": {
+		"url": "https://github.com/kgodey/listery/issues"
+	},
+	"homepage": "https://github.com/kgodey/listery#readme",
+	"dependencies": {
+		"bootstrap": "^4.1.1",
+		"es6-promise": "^4.2.4",
+		"isomorphic-fetch": "^2.2.1",
+		"js-cookie": "^2.2.0",
+		"lodash": "^4.17.10",
+		"normalizr": "^3.2.4",
+		"prop-types": "^15.6.1",
+		"react": "^16.4.0",
+		"react-bootstrap-sweetalert": "^4.4.1",
+		"react-dnd": "^4.0.4",
+		"react-dnd-html5-backend": "^4.0.4",
+		"react-dom": "^16.4.0",
+		"react-icons": "^2.2.7",
+		"react-linkify": "^0.2.2",
+		"react-loading": "^2.0.3",
+		"react-onclickoutside": "^6.7.1",
+		"react-redux": "^5.0.7",
+		"react-router-dom": "^4.3.1",
+		"redux": "^4.0.0",
+		"redux-logger": "^3.0.6",
+		"redux-thunk": "^2.3.0"
+	},
+	"devDependencies": {
+		"babel-core": "^6.26.3",
+		"babel-jest": "^23.4.0",
+		"babel-loader": "^7.1.4",
+		"babel-plugin-transform-object-rest-spread": "^6.26.0",
+		"babel-preset-env": "^1.7.0",
+		"babel-preset-react": "^6.24.1",
+		"jest": "^23.4.1",
+		"jquery": "^3.3.1",
+		"react-test-renderer": "^16.4.1",
+		"watch": "^1.0.2",
+		"webpack": "^4.11.1",
+		"webpack-cli": "^3.0.3"
+	}
+}

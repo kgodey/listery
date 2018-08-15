@@ -1,9 +1,21 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from django.db.transaction import atomic
 from ordered_model.models import OrderedModel
 
 from listery.signals import *
+
+
+class ListQuerySet(models.QuerySet):
+	def all_for_user(self, user):
+		return self.filter((Q(owner=user) | Q(private=False)) & Q(archived=False))
+
+	def all(self):
+		return super(ListQuerySet, self).all().order_by('order')
+
+	def filter(self, *args, **kwargs):
+		return super(ListQuerySet, self).filter(*args, **kwargs).order_by('order')
 
 
 class List(OrderedModel):
@@ -13,19 +25,21 @@ class List(OrderedModel):
 	archived = models.BooleanField(default=False)
 	private = models.BooleanField(default=True)
 	owner = models.ForeignKey(User, null=True, blank=True)
-	
+
+	objects = ListQuerySet.as_manager()
+
 	@property
 	def items(self):
 		return self.listitem_set.order_by('order')
-	
+
 	@property
 	def item_count(self):
 		return self.items.count()
-	
+
 	@property
 	def checked_item_count(self):
 		return self.items.filter(completed=True).count()
-	
+
 	@property
 	def plaintext(self):
 		text = u'%s\n' % self.name.upper()
@@ -38,10 +52,11 @@ class List(OrderedModel):
 					'description': u'\n\t%s' % item.description if item.description else u'',
 				}
 		return text
-	
+
 	def __unicode__(self):
 		return self.name
-	
+
+	@atomic
 	def save(self, *args, **kwargs):
 		move_to_top = False
 		if not self.pk:
@@ -49,7 +64,7 @@ class List(OrderedModel):
 		super(List, self).save(*args, **kwargs)
 		if move_to_top:
 			self.to(1)
-	
+
 	@atomic
 	def reindex(self):
 		index = 1
@@ -59,7 +74,7 @@ class List(OrderedModel):
 				item.order = index
 				item.save()
 			index += 1
-	
+
 	@atomic
 	def quick_sort(self):
 		index = 1
@@ -73,12 +88,23 @@ class List(OrderedModel):
 			item.order = index
 			item.save()
 			index += 1
-	
+
 	def uncheck_all(self):
 		self.items.update(completed=False)
-	
+
 	def check_all(self):
 		self.items.update(completed=True)
+
+
+class ListItemQuerySet(models.QuerySet):
+	def all_for_user(self, user):
+		return self.filter(Q(list__owner=user) | Q(list__private=False))
+
+	def all(self):
+		return super(ListItemQuerySet, self).all().order_by('order')
+
+	def filter(self, *args, **kwargs):
+		return super(ListItemQuerySet, self).filter(*args, **kwargs).order_by('order')
 
 
 class ListItem(OrderedModel):
@@ -89,10 +115,13 @@ class ListItem(OrderedModel):
 	completed = models.BooleanField(default=False)
 	list = models.ForeignKey(List)
 	order_with_respect_to = 'list'
-	
+
+	objects = ListItemQuerySet.as_manager()
+
 	def __unicode__(self):
 		return '%s (%s)' % (self.title, self.list.name)
-	
+
+	@atomic
 	def save(self, *args, **kwargs):
 		move_to_top = False
 		old_list = None
