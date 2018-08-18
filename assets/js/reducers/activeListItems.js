@@ -66,9 +66,11 @@ export const listItemInitialOrders = (state={}, action) => {
 		case listAPIActions.UPDATE_ACTIVE_LIST_SUCCESS:
 		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 			newState = {}
-			Object.keys(action.data.entities.listItems).map(function(key) {
-				newState[key] = action.data.entities.listItems[key].order
-			})
+			if (action.data.entities.listItems !== undefined) {
+				Object.keys(action.data.entities.listItems).map(function(key) {
+					newState[key] = action.data.entities.listItems[key].order
+				})
+			}
 			return newState
 		case listItemAPIActions.CREATE_LIST_ITEM_SUCCESS:
 		case listItemAPIActions.UPDATE_LIST_ITEM_SUCCESS:

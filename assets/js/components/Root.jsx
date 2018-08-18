@@ -10,8 +10,9 @@ const Root = ({ store }) => (
 	<Provider store={store}>
 		<BrowserRouter>
 			<div>
-				<Route path='/:id?' component={App} />
-				<Route path='/lists/:id?' component={App} />
+				<Route exact path='/' component={App} />
+				<Route exact path='/lists/' component={App} />
+				<Route path='/lists/:id' component={App} />
 			</div>
 		</BrowserRouter>
 	</Provider>

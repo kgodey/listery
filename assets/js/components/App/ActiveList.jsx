@@ -46,12 +46,12 @@ class ActiveList extends React.Component {
 						This list could not be retrieved. Error message: <em>{activeListError.errorMessage}</em>
 					</ErrorPanel>
 				)
+			} else {
+				return (
+					<NoListPanel />
+				)
 			}
-			return (
-				<NoListPanel />
-			)
-		}
-		if (isFetching) {
+		} else if (isFetching) {
 			return (
 				<LoadingIndicator
 					isFetching={true}
