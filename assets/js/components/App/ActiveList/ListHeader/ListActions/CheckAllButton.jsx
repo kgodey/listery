@@ -1,18 +1,20 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import FaCheckSqaureO from 'react-icons/lib/fa/check-square-o'
+import { IconContext } from 'react-icons'
+import { FaCheckSquare } from 'react-icons/fa'
 
 import { Button } from './Button.jsx'
 
 
 export const CheckAllButton = ({ onClick }) => {
-	let icon = <FaCheckSqaureO className="align-middle" />
 	return (
-		<Button
-			icon={icon}
-			text={'Check All'}
-			onClick={onClick}
-		/>
+		<IconContext.Provider value={{ className:'align-middle' }}>
+			<Button
+				icon={<FaCheckSquare />}
+				text={'Check All'}
+				onClick={onClick}
+			/>
+		</IconContext.Provider>
 	)
 }
 

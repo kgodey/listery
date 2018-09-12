@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import FaCheck from 'react-icons/lib/fa/check'
+import { IconContext } from 'react-icons'
+import { FaCheck } from 'react-icons/fa'
 import { connect } from 'react-redux'
 
 import { getActiveList } from '../../../../reducers/activeList'
@@ -10,7 +11,9 @@ let ListItemCount = ({ numCompletedItems, numItems }) => {
 	return (
 		<div className="col-2">
 			<p className="text-right">
-				<FaCheck className="mr-2"/>
+				<IconContext.Provider value={{ className:'mr-2' }}>
+					<FaCheck />
+				</IconContext.Provider>
 				{numCompletedItems} / {numItems}
 			</p>
 		</div>

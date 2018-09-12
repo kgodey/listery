@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import FaArchive from 'react-icons/lib/fa/archive'
-import FaCloudDownload from 'react-icons/lib/fa/cloud-download'
-import FaTrash from 'react-icons/lib/fa/trash'
+import { IconContext } from 'react-icons'
+import { FaArchive, FaCloudDownloadAlt, FaTrash } from 'react-icons/fa'
 
 
 const iconStyle = {
@@ -16,7 +15,9 @@ const iconStyle = {
 export const DownloadIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
-			<FaCloudDownload onClick={onClick} style={iconStyle} size='20' />
+			<IconContext.Provider value={{ style: iconStyle, size: '20' }}>
+				<FaCloudDownloadAlt onClick={onClick} />
+			</IconContext.Provider>
 		)
 	}
 	return (null)
@@ -32,7 +33,9 @@ DownloadIcon.propTypes = {
 export const DeleteIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
-			<FaTrash onClick={onClick} style={iconStyle} size='20' />
+			<IconContext.Provider value={{ style: iconStyle, size: '20' }}>
+				<FaTrash onClick={onClick} />
+			</IconContext.Provider>
 		)
 	}
 	return (null)
@@ -48,7 +51,9 @@ DeleteIcon.propTypes = {
 export const ArchiveIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
-			<FaArchive onClick={onClick} style={iconStyle} size='20' />
+			<IconContext.Provider value={{ style: iconStyle, size: '20' }}>
+				<FaArchive onClick={onClick} />
+			</IconContext.Provider>
 		)
 	}
 	return (null)
