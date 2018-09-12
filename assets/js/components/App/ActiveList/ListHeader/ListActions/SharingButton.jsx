@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import FaShareAlt from 'react-icons/lib/fa/share-alt'
-import FaLock from 'react-icons/lib/fa/lock'
+import { IconContext } from 'react-icons'
+import { FaShareAlt, FaLock } from 'react-icons/fa'
 import { connect } from 'react-redux'
 
 import { Button } from './Button.jsx'
@@ -11,10 +11,18 @@ import { getActiveList } from '../../../../../reducers/activeList'
 let SharingButton = ({ listOwnerID, isPrivate, onClick }) => {
 	let icon, text
 	if (isPrivate) {
-		icon = <FaShareAlt className="align-middle" />
+		icon = (
+			<IconContext.Provider value={{ className: 'align-middle' }}>
+				<FaShareAlt />
+			</IconContext.Provider>
+		)
 		text = 'Share'
 	} else {
-		icon = <FaLock className="align-middle" />
+		icon = (
+			<IconContext.Provider value={{ className: 'align-middle' }}>
+				<FaLock />
+			</IconContext.Provider>
+		)
 		text = 'Make Private'
 	}
 	if (listOwnerID === currentUserID) {

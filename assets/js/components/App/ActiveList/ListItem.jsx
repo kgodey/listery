@@ -72,6 +72,7 @@ class ListItem extends React.Component {
 			},
 			currentlyEditing: false,
 			currentlyHovering: false,
+			currentlyOverInput: false,
 			showAlert: false
 		}
 		this.handleMouseEnter = this.handleMouseEnter.bind(this)
@@ -87,6 +88,8 @@ class ListItem extends React.Component {
 		this.handleDeleteConfirm = this.handleDeleteConfirm.bind(this)
 		this.handleDeleteCancel = this.handleDeleteCancel.bind(this)
 		this.saveListItemTitleAndDescription = this.saveListItemTitleAndDescription.bind(this)
+		this.handleInputMouseEnter = this.handleInputMouseEnter.bind(this)
+		this.handleInputMouseLeave = this.handleInputMouseLeave.bind(this)
 	}
 
 	static getDerivedStateFromProps({ completed }, state) {
@@ -174,12 +177,22 @@ class ListItem extends React.Component {
 		this.setState({currentlyEditing: false})
 	}
 
+	handleInputMouseEnter() {
+		console.log('entering input...')
+		this.setState({currentlyOverInput: true})
+	}
+
+	handleInputMouseLeave() {
+		console.log('leaving input...')
+		this.setState({currentlyOverInput: false})
+	}
+
 	render() {
 		const { isFetchingList } = this.props
 		if (!isFetchingList) {
 			const { connectDragSource, isDragging, connectDropTarget, isFetching } = this.props
 			const style = {opacity: isDragging ? 0 : 1}
-			return connectDragSource(connectDropTarget(
+			let element = (
 				<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
 					<div className="row">
 						<div className="col-10 d-inline-block">
@@ -189,12 +202,16 @@ class ListItem extends React.Component {
 								title={this.state.data.title}
 								onChange={this.handleTitleChange}
 								onKeyUp={this.handleTitleKeyUp}
+								onInputMouseEnter={this.handleInputMouseEnter}
+								onInputMouseLeave={this.handleInputMouseLeave}
 							/>
 							<Description
 								currentlyEditing={this.state.currentlyEditing}
 								description={this.state.data.description}
 								onChange={this.handleDescriptionChange}
 								onKeyUp={this.handleDescriptionKeyUp}
+								onInputMouseEnter={this.handleInputMouseEnter}
+								onInputMouseLeave={this.handleInputMouseLeave}
 							/>
 						</div>
 						<div className="col-2 d-inline-block text-right">
@@ -223,7 +240,13 @@ class ListItem extends React.Component {
 						Are you sure you want to permanently delete <em>{this.state.data.title}</em>?
 					</SweetAlert>
 				</div>
-			))
+			)
+			const { currentlyOverInput } = this.state
+			if (currentlyOverInput) {
+				return element
+			} else {
+				return connectDragSource(connectDropTarget(element))
+			}
 		}
 		return (null)
 	}

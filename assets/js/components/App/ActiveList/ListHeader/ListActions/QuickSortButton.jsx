@@ -1,18 +1,20 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import FaSortAlphaAsc from 'react-icons/lib/fa/sort-alpha-asc'
+import { IconContext } from 'react-icons'
+import { FaSortAlphaDown } from 'react-icons/fa'
 
 import { Button } from './Button.jsx'
 
 
 export const QuickSortButton = ({ onClick }) => {
-	let icon = <FaSortAlphaAsc className="align-middle" />
 	return (
-		<Button
-			icon={icon}
-			text={'Quick Sort'}
-			onClick={onClick}
-		/>
+		<IconContext.Provider value={{ className: 'align-middle' }}>
+			<Button
+				icon={<FaSortAlphaDown />}
+				text={'Quick Sort'}
+				onClick={onClick}
+			/>
+		</IconContext.Provider>
 	)
 }
 

@@ -19,7 +19,7 @@ const descriptionEditStyle = {
 }
 
 
-export const Description = ({ currentlyEditing, description, onChange, onKeyUp }) => {
+export const Description = ({ currentlyEditing, description, onChange, onKeyUp, onInputMouseEnter, onInputMouseLeave }) => {
 	if (currentlyEditing) {
 		return (
 			<input
@@ -30,6 +30,8 @@ export const Description = ({ currentlyEditing, description, onChange, onKeyUp }
 				value={description !== null ? description : ''}
 				onChange={onChange}
 				onKeyUp={onKeyUp}
+				onMouseEnter={onInputMouseEnter}
+				onMouseLeave={onInputMouseLeave}
 			/>
 		)
 	} else {

@@ -14,7 +14,7 @@ const titleEditStyle = {
 }
 
 
-export const Title = ({ currentlyEditing, title, onChange, onKeyUp }) => {
+export const Title = ({ currentlyEditing, title, onChange, onKeyUp, onInputMouseEnter, onInputMouseLeave  }) => {
 	if (currentlyEditing) {
 		return (
 			<input
@@ -25,6 +25,8 @@ export const Title = ({ currentlyEditing, title, onChange, onKeyUp }) => {
 				value={title}
 				onChange={onChange}
 				onKeyUp={onKeyUp}
+				onMouseEnter={onInputMouseEnter}
+				onMouseLeave={onInputMouseLeave}
 			/>
 		)
 	} else {
