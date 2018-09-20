@@ -13,7 +13,6 @@ import { ItemTypes } from '../../../utils/itemTypes'
 import { ArchiveIcon, DownloadIcon } from '../Shared/Icons.jsx'
 
 
-
 const listSource = {
 	beginDrag({ id, order, initialOrder }) {
 		return { id, order, initialOrder }
@@ -48,7 +47,7 @@ const listTarget = {
 
 			const dropID = id
 			// Don't make any updates if the item is already in the list
-			if (item.listID == dropID) {
+			if (item.list_id == dropID) {
 				return
 			}
 			setListID(item.id, dropID, item.initialOrder)

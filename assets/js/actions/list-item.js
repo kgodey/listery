@@ -1,5 +1,6 @@
 import { normalize } from 'normalizr'
 
+import { getNumTempItems } from '../reducers/activeListItems'
 import { LIST_ITEM_API_URL } from '../utils/urls'
 import { sync } from './base'
 import { genericAPIActionFailure } from './common'
@@ -9,6 +10,7 @@ import * as schema from './schema'
 
 export const CREATE_LIST_ITEM_REQUEST = 'CREATE_LIST_ITEM_REQUEST'
 export const CREATE_LIST_ITEM_SUCCESS = 'CREATE_LIST_ITEM_SUCCESS'
+export const CREATE_LIST_ITEM_ERROR = 'CREATE_LIST_ITEM_ERROR'
 export const UPDATE_LIST_ITEM_REQUEST = 'UPDATE_LIST_ITEM_REQUEST'
 export const UPDATE_LIST_ITEM_SUCCESS = 'UPDATE_LIST_ITEM_SUCCESS'
 export const UPDATE_LIST_ITEM_ERROR = 'UPDATE_LIST_ITEM_ERROR'
@@ -21,16 +23,25 @@ export const MOVE_LIST_ITEM_REQUEST = 'MOVE_LIST_ITEM_REQUEST'
 export const MOVE_LIST_ITEM_SUCCESS = 'MOVE_LIST_ITEM_SUCCESS'
 
 
-const createListItemRequest = (data) => ({
+const createListItemRequest = (data, tempID) => ({
 	type: CREATE_LIST_ITEM_REQUEST,
-	data
+	data,
+	tempID
 })
 
 
-const createListItemSuccess = (data, id) => ({
+const createListItemSuccess = (data, id, tempID) => ({
 	type: CREATE_LIST_ITEM_SUCCESS,
 	data: normalize(data, schema.listItemSchema),
+	tempID,
 	id
+})
+
+
+const createListItemError = (tempID, errorMessage) => ({
+	type: CREATE_LIST_ITEM_ERROR,
+	tempID,
+	errorMessage
 })
 
 
@@ -41,10 +52,11 @@ const updateListItemRequest = (id, data) => ({
 })
 
 
-const updateListItemSuccess = (data, id) => ({
+const updateListItemSuccess = (data, id, tempID) => ({
 	type: UPDATE_LIST_ITEM_SUCCESS,
 	data: normalize(data, schema.listItemSchema),
-	id
+	id,
+	tempID
 })
 
 
@@ -56,10 +68,9 @@ const updateListItemError = (id, errorMessage, data) => ({
 })
 
 
-const deleteListItemRequest = (id, listID) => ({
+const deleteListItemRequest = (id) => ({
 	type: DELETE_LIST_ITEM_REQUEST,
-	id,
-	listID
+	id
 })
 
 
@@ -104,22 +115,25 @@ const moveListItemSuccess = (id, listID) => ({
 })
 
 
-export const createListItem = (title, listID) => (dispatch) => {
+export const createListItem = (title, listID) => (dispatch, getState) => {
 	let itemData = {
 		title: title,
 		list_id: listID
 	}
-	dispatch(createListItemRequest(itemData))
+	let tempID = getNumTempItems(getState()) - 1
+	let requestData = {}
+	requestData[tempID] = itemData
+	dispatch(createListItemRequest(requestData, tempID))
 	return sync(LIST_ITEM_API_URL, {
 		method: 'POST',
 		body: JSON.stringify(itemData)
 	})
 	.then(
 		response => {
-			dispatch(createListItemSuccess(response, response.id))
+			dispatch(createListItemSuccess(response, response.id, tempID))
 			dispatch(fetchActiveList(listID, false))
 		},
-		error => dispatch(genericAPIActionFailure(error.message))
+		error => dispatch(createListItemError(tempID, error.message))
 	)
 }
 
@@ -147,7 +161,7 @@ export const moveListItem = (id, listID, initialOrder) => (dispatch) => {
 	.then(
 		response =>  {
 			dispatch(moveListItemSuccess(response.id, response.list_id))
-			dispatch(fetchActiveList(listID, false))
+			dispatch(fetchActiveList(null, false))
 		},
 		error => {
 			dispatch(reorderListItemPreview(id, initialOrder))
@@ -157,22 +171,22 @@ export const moveListItem = (id, listID, initialOrder) => (dispatch) => {
 }
 
 
-export const deleteListItem = (id, listID) => (dispatch) => {
-	dispatch(deleteListItemRequest(id, listID))
+export const deleteListItem = (id) => (dispatch) => {
+	dispatch(deleteListItemRequest(id))
 	return sync(LIST_ITEM_API_URL + id + '/', {
 		method: 'DELETE'
 	})
 	.then(
 		response => {
 			dispatch(deleteListItemSuccess(id)),
-			dispatch(fetchActiveList(listID, false))
+			dispatch(fetchActiveList(null, false))
 		},
 		error => dispatch(genericAPIActionFailure(error.message))
 	)
 }
 
 
-export const reorderListItem = (id, order, listID, initialOrder) => (dispatch) => {
+export const reorderListItem = (id, order, initialOrder) => (dispatch) => {
 	dispatch(reorderListItemRequest(id, order))
 	return sync(LIST_ITEM_API_URL + id + '/reorder/', {
 		method: 'POST',
@@ -181,7 +195,7 @@ export const reorderListItem = (id, order, listID, initialOrder) => (dispatch) =
 	.then(
 		response => {
 			dispatch(reorderListItemSuccess(id, order))
-			dispatch(fetchActiveList(listID, false))
+			dispatch(fetchActiveList(null, false))
 		},
 		error => {
 			dispatch(reorderListItemPreview(id, initialOrder))

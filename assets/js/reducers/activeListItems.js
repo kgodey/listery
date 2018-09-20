@@ -12,11 +12,30 @@ export const activeListItems = (state={}, action) => {
 			if (action.data) {
 				return {...action.data.entities.listItems}
 			}
+		case listItemAPIActions.CREATE_LIST_ITEM_REQUEST:
+			// Make a temporary list item so that the new item appears immediately.
+			// This will be removed when the API request succeeds.
+			let newValues = {
+				id: action.tempID,
+				completed: false,
+				order: 0
+			}
+			action.data[newValues.id] = {
+				...action.data[newValues.id],
+				...newValues
+			}
+			newState = {
+				...state,
+				...action.data
+			}
+			return addItemToTop(newState, newValues.id)
 		case listItemAPIActions.CREATE_LIST_ITEM_SUCCESS:
 			newState = {
 				...state,
 				...action.data.entities.listItems
 			}
+			// Remove temporary list item created earlier.
+			delete newState[action.tempID]
 			return addItemToTop(newState, action.id)
 		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 		case listItemAPIActions.UPDATE_LIST_ITEM_SUCCESS:
@@ -25,6 +44,10 @@ export const activeListItems = (state={}, action) => {
 				...state,
 				...action.data.entities.listItems
 			}
+		case listItemAPIActions.CREATE_LIST_ITEM_ERROR:
+			// Remove temporary list item created earlier.
+			delete newState[action.tempID]
+			return newState
 		case listItemAPIActions.REORDER_LIST_ITEM_PREVIEW:
 			// Update the order of all affected objects.
 			return getReorderedItems(state, action)
@@ -89,6 +112,22 @@ export const listItemInitialOrders = (state={}, action) => {
 }
 
 
+export const numTempItems = (state=0, action) => {
+	let newState = state
+	switch(action.type) {
+		case listItemAPIActions.CREATE_LIST_ITEM_REQUEST:
+			newState++
+			return newState
+		case listItemAPIActions.CREATE_LIST_ITEM_ERROR:
+		case listItemAPIActions.CREATE_LIST_ITEM_SUCCESS:
+			newState--
+			return newState
+		default:
+			return state
+	}
+}
+
+
 export const getListItem = (state, id) => {
 	if (id != null) {
 		return state.activeListItems[id]
@@ -99,6 +138,11 @@ export const getListItem = (state, id) => {
 
 export const getListItemInitialOrders = (state) => {
 	return state.listItemInitialOrders
+}
+
+
+export const getNumTempItems = (state) => {
+	return state.numTempItems
 }
 
 
