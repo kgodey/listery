@@ -73,7 +73,7 @@ class ListItem extends React.Component {
 			currentlyEditing: false,
 			currentlyHovering: false,
 			currentlyOverInput: false,
-			disabled: id === 0 ? true : false,
+			disabled: id < 0 ? true : false,
 			showAlert: false
 		}
 		this.handleMouseEnter = this.handleMouseEnter.bind(this)

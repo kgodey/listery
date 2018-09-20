@@ -1,5 +1,6 @@
 import { normalize } from 'normalizr'
 
+import { getNumTempItems } from '../reducers/activeListItems'
 import { LIST_ITEM_API_URL } from '../utils/urls'
 import { sync } from './base'
 import { genericAPIActionFailure } from './common'
@@ -22,21 +23,24 @@ export const MOVE_LIST_ITEM_REQUEST = 'MOVE_LIST_ITEM_REQUEST'
 export const MOVE_LIST_ITEM_SUCCESS = 'MOVE_LIST_ITEM_SUCCESS'
 
 
-const createListItemRequest = (data) => ({
+const createListItemRequest = (data, tempID) => ({
 	type: CREATE_LIST_ITEM_REQUEST,
-	data
+	data,
+	tempID
 })
 
 
-const createListItemSuccess = (data, id) => ({
+const createListItemSuccess = (data, id, tempID) => ({
 	type: CREATE_LIST_ITEM_SUCCESS,
 	data: normalize(data, schema.listItemSchema),
+	tempID,
 	id
 })
 
 
-const createListItemError = (errorMessage) => ({
+const createListItemError = (tempID, errorMessage) => ({
 	type: CREATE_LIST_ITEM_ERROR,
+	tempID,
 	errorMessage
 })
 
@@ -48,10 +52,11 @@ const updateListItemRequest = (id, data) => ({
 })
 
 
-const updateListItemSuccess = (data, id) => ({
+const updateListItemSuccess = (data, id, tempID) => ({
 	type: UPDATE_LIST_ITEM_SUCCESS,
 	data: normalize(data, schema.listItemSchema),
-	id
+	id,
+	tempID
 })
 
 
@@ -110,24 +115,25 @@ const moveListItemSuccess = (id, listID) => ({
 })
 
 
-export const createListItem = (title, listID) => (dispatch) => {
+export const createListItem = (title, listID) => (dispatch, getState) => {
 	let itemData = {
 		title: title,
 		list_id: listID
 	}
-	dispatch(createListItemRequest({
-		0: itemData
-	}))
+	let tempID = getNumTempItems(getState()) - 1
+	let requestData = {}
+	requestData[tempID] = itemData
+	dispatch(createListItemRequest(requestData, tempID))
 	return sync(LIST_ITEM_API_URL, {
 		method: 'POST',
 		body: JSON.stringify(itemData)
 	})
 	.then(
 		response => {
-			dispatch(createListItemSuccess(response, response.id))
+			dispatch(createListItemSuccess(response, response.id, tempID))
 			dispatch(fetchActiveList(listID, false))
 		},
-		error => dispatch(createListItemError(error.message))
+		error => dispatch(createListItemError(tempID, error.message))
 	)
 }
 
