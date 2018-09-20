@@ -216,7 +216,7 @@ export const performActionOnList = (id, actionURL, originalData) => (dispatch) =
 	if (![QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX].includes(actionURL)) {
 		return Promise.resolve()
 	}
-	dispatch(fetchActiveListRequest(id))
+	dispatch(fetchActiveListRequest(id, true))
 	return sync(LIST_API_URL + id + actionURL, {
 		method: 'POST',
 	})
