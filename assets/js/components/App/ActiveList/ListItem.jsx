@@ -178,12 +178,10 @@ class ListItem extends React.Component {
 	}
 
 	handleInputMouseEnter() {
-		console.log('entering input...')
 		this.setState({currentlyOverInput: true})
 	}
 
 	handleInputMouseLeave() {
-		console.log('leaving input...')
 		this.setState({currentlyOverInput: false})
 	}
 
