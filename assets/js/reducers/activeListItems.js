@@ -12,11 +12,30 @@ export const activeListItems = (state={}, action) => {
 			if (action.data) {
 				return {...action.data.entities.listItems}
 			}
+		case listItemAPIActions.CREATE_LIST_ITEM_REQUEST:
+			// Make a temporary list item so that the new item appears immediately.
+			// This will be removed when the API request succeeds.
+			let newValues = {
+				id: 0,
+				completed: false,
+				order: 0
+			}
+			action.data[0] = {
+				...action.data[0],
+				...newValues
+			}
+			newState = {
+				...state,
+				...action.data
+			}
+			return addItemToTop(newState, 0)
 		case listItemAPIActions.CREATE_LIST_ITEM_SUCCESS:
 			newState = {
 				...state,
 				...action.data.entities.listItems
 			}
+			// Remove temporary list item created earlier.
+			delete newState[0]
 			return addItemToTop(newState, action.id)
 		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 		case listItemAPIActions.UPDATE_LIST_ITEM_SUCCESS:
@@ -25,6 +44,10 @@ export const activeListItems = (state={}, action) => {
 				...state,
 				...action.data.entities.listItems
 			}
+		case listItemAPIActions.CREATE_LIST_ITEM_ERROR:
+			// Remove temporary list item created earlier.
+			delete newState[0]
+			return newState
 		case listItemAPIActions.REORDER_LIST_ITEM_PREVIEW:
 			// Update the order of all affected objects.
 			return getReorderedItems(state, action)

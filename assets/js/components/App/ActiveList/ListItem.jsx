@@ -63,7 +63,7 @@ const dropCollect = (connect) => ({
 class ListItem extends React.Component {
 	constructor(props) {
 		super(props)
-		const { completed, title, description } = props
+		const { completed, title, description, id } = props
 		this.state = {
 			data: {
 				completed: completed,
@@ -73,6 +73,7 @@ class ListItem extends React.Component {
 			currentlyEditing: false,
 			currentlyHovering: false,
 			currentlyOverInput: false,
+			disabled: id === 0 ? true : false,
 			showAlert: false
 		}
 		this.handleMouseEnter = this.handleMouseEnter.bind(this)
@@ -110,11 +111,13 @@ class ListItem extends React.Component {
 	}
 
 	handleCheckboxClick(event) {
+		if (this.state.disabled) return;
 		const { updateListItem, id, originalData } = this.props
 		updateListItem(id, {completed: event.target.checked}, originalData)
 	}
 
 	handleDoubleClick(event) {
+		if (this.state.disabled) return;
 		this.setState({currentlyEditing: true})
 	}
 
@@ -155,6 +158,7 @@ class ListItem extends React.Component {
 	}
 
 	handleDeleteClick(event) {
+		if (this.state.disabled) return;
 		this.setState({showAlert: true})
 	}
 
@@ -190,8 +194,9 @@ class ListItem extends React.Component {
 		if (!isFetchingList) {
 			const { connectDragSource, isDragging, connectDropTarget, isFetching } = this.props
 			const style = {opacity: isDragging ? 0 : 1}
+			const className = this.state.disabled ? 'list-group-item disabled' : 'list-group-item'
 			let element = (
-				<div className='list-group-item' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
+				<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
 					<div className="row">
 						<div className="col-10 d-inline-block">
 							<Checkbox checked={this.state.data.completed} onClick={this.handleCheckboxClick} />

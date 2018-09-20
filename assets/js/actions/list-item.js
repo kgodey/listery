@@ -9,6 +9,7 @@ import * as schema from './schema'
 
 export const CREATE_LIST_ITEM_REQUEST = 'CREATE_LIST_ITEM_REQUEST'
 export const CREATE_LIST_ITEM_SUCCESS = 'CREATE_LIST_ITEM_SUCCESS'
+export const CREATE_LIST_ITEM_ERROR = 'CREATE_LIST_ITEM_ERROR'
 export const UPDATE_LIST_ITEM_REQUEST = 'UPDATE_LIST_ITEM_REQUEST'
 export const UPDATE_LIST_ITEM_SUCCESS = 'UPDATE_LIST_ITEM_SUCCESS'
 export const UPDATE_LIST_ITEM_ERROR = 'UPDATE_LIST_ITEM_ERROR'
@@ -31,6 +32,12 @@ const createListItemSuccess = (data, id) => ({
 	type: CREATE_LIST_ITEM_SUCCESS,
 	data: normalize(data, schema.listItemSchema),
 	id
+})
+
+
+const createListItemError = (errorMessage) => ({
+	type: CREATE_LIST_ITEM_ERROR,
+	errorMessage
 })
 
 
@@ -108,7 +115,9 @@ export const createListItem = (title, listID) => (dispatch) => {
 		title: title,
 		list_id: listID
 	}
-	dispatch(createListItemRequest(itemData))
+	dispatch(createListItemRequest({
+		0: itemData
+	}))
 	return sync(LIST_ITEM_API_URL, {
 		method: 'POST',
 		body: JSON.stringify(itemData)
@@ -118,7 +127,7 @@ export const createListItem = (title, listID) => (dispatch) => {
 			dispatch(createListItemSuccess(response, response.id))
 			dispatch(fetchActiveList(listID, false))
 		},
-		error => dispatch(genericAPIActionFailure(error.message))
+		error => dispatch(createListItemError(error.message))
 	)
 }
 
