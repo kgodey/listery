@@ -145,9 +145,13 @@ const reorderListSuccess = (id, order) => ({
 })
 
 
-export const fetchActiveList = (id = firstListID, reload=true) => (dispatch, getState) => {
+export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
 	const state = getState()
-	const oldActiveListID = getActiveListID(state)
+
+	// if there's no ID passed, use the current active ID or the first list ID provided by the HTML page.
+	if (!Boolean(id)) {
+		id = getActiveListID(state) || firstListID
+	}
 
 	if (getActiveListFetchStatus(state)) {
 		return Promise.resolve()
@@ -157,6 +161,7 @@ export const fetchActiveList = (id = firstListID, reload=true) => (dispatch, get
 		dispatch(noActiveListAvailable())
 		return Promise.resolve()
 	}
+
 	dispatch(fetchActiveListRequest(id, reload))
 	history.push(ROOT_URL + id)
 	return sync(LIST_API_URL + id + '/')

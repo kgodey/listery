@@ -56,10 +56,9 @@ const updateListItemError = (id, errorMessage, data) => ({
 })
 
 
-const deleteListItemRequest = (id, listID) => ({
+const deleteListItemRequest = (id) => ({
 	type: DELETE_LIST_ITEM_REQUEST,
-	id,
-	listID
+	id
 })
 
 
@@ -147,7 +146,7 @@ export const moveListItem = (id, listID, initialOrder) => (dispatch) => {
 	.then(
 		response =>  {
 			dispatch(moveListItemSuccess(response.id, response.list_id))
-			dispatch(fetchActiveList(listID, false))
+			dispatch(fetchActiveList(null, false))
 		},
 		error => {
 			dispatch(reorderListItemPreview(id, initialOrder))
@@ -157,22 +156,22 @@ export const moveListItem = (id, listID, initialOrder) => (dispatch) => {
 }
 
 
-export const deleteListItem = (id, listID) => (dispatch) => {
-	dispatch(deleteListItemRequest(id, listID))
+export const deleteListItem = (id) => (dispatch) => {
+	dispatch(deleteListItemRequest(id))
 	return sync(LIST_ITEM_API_URL + id + '/', {
 		method: 'DELETE'
 	})
 	.then(
 		response => {
 			dispatch(deleteListItemSuccess(id)),
-			dispatch(fetchActiveList(listID, false))
+			dispatch(fetchActiveList(null, false))
 		},
 		error => dispatch(genericAPIActionFailure(error.message))
 	)
 }
 
 
-export const reorderListItem = (id, order, listID, initialOrder) => (dispatch) => {
+export const reorderListItem = (id, order, initialOrder) => (dispatch) => {
 	dispatch(reorderListItemRequest(id, order))
 	return sync(LIST_ITEM_API_URL + id + '/reorder/', {
 		method: 'POST',
@@ -181,7 +180,7 @@ export const reorderListItem = (id, order, listID, initialOrder) => (dispatch) =
 	.then(
 		response => {
 			dispatch(reorderListItemSuccess(id, order))
-			dispatch(fetchActiveList(listID, false))
+			dispatch(fetchActiveList(null, false))
 		},
 		error => {
 			dispatch(reorderListItemPreview(id, initialOrder))

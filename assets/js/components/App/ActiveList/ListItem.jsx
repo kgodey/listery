@@ -26,11 +26,11 @@ const listItemSource = {
 		return { id, order, list_id, initialOrder }
 	},
 
-	endDrag({ order, list_id, setNewOrder } , monitor) {
+	endDrag({ order, setNewOrder } , monitor) {
 		const didDrop = monitor.didDrop()
 		if (!didDrop) {
 			const dragItem = monitor.getItem()
-			setNewOrder(dragItem.id, order, list_id, dragItem.initialOrder)
+			setNewOrder(dragItem.id, order, dragItem.initialOrder)
 		}
 	}
 }
@@ -159,9 +159,9 @@ class ListItem extends React.Component {
 	}
 
 	handleDeleteConfirm(event) {
-		const { deleteListItem, id, list_id } = this.props
+		const { deleteListItem, id } = this.props
 		this.setState({showAlert: false})
-		deleteListItem(id, list_id)
+		deleteListItem(id)
 	}
 
 	handleDeleteCancel(event) {
