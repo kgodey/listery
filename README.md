@@ -4,26 +4,28 @@ Listery is a simple single-page list management application built with Django, R
 
 Tests: [![CircleCI](https://circleci.com/gh/kgodey/listery/tree/master.svg?style=svg)](https://circleci.com/gh/kgodey/listery/tree/master)
 
-## Demo
 
-A Listery demo is available at https://dry-scrubland-6661.herokuapp.com/. There are two user accounts available:
-Username: `demo1`, password: `demo1`
-Username: `demo2`, password: `demo2`
+## Installation
 
-## Local Development
+You can [clone this repository](https://help.github.com/articles/cloning-a-repository/) to install a local copy of Listery.
 
-You should be able to run Listery locally using the example Django project provided.
+You can either run Listery using the example project provided (for local development) or install Listery as an app in an existing Django project. In either case, follow these steps first:
 
-1. Make sure you have Python & npm installed locally. Listery is tested against Python 2.7 (for now).
-2. Install the Python requirements using `pip install -r requirements.txt`
-3. Install the JavaScript requirements using `npm install`
-4. Run `python manage.py runserver` to serve the backend at `localhost:8000`.
-5. Run `npm run watch` to build the JavaScript files and rebuild them whenever there is an update to the JS code. Use `npm run start` (development mode) or `npm run build` (production mode) to build the JavaScript without any automatic rebuilding on save.
+1. Make sure you have Python installed locally. Listery is currently tested against Python 2.7.
+1. Make sure you have [npm installed locally](https://www.npmjs.com/get-npm).
+1. Install the Python requirements using `pip install -r requirements.txt`
+1. Install the JavaScript requirements using `npm install`
 
+### Using the example project
 
-## Setting Up Listery as a Django App
+1. Run `python manage.py runserver` to serve the backend at `localhost:8000`.
+1. Run `npm run watch` to build the JavaScript files and rebuild them whenever there is an update to the JS code. You can also use `npm run start` (development mode) or `npm run build` (production mode) to build the JavaScript without any automatic rebuilding on save.
 
-This guide assumes you have an existing Django project already set up. Do NOT use the example project provided in production since the `SECRET_KEY` setting is public and it is insecure.
+Do NOT use the example project provided in production,. There are a lot of reasons why that's a terrble idea including the `SECRET_KEY` setting being public and insecure and the database being SQLite.
+
+### Setting up Listery in an existing project.
+
+This guide assumes you have an existing Django project already set up. The `listery` folder in this repository contains the app, a PyPI package will be released eventually to make it easier to install.
 
 * Add the following to your `INSTALLED_APPS` in your project `settings.py` file:
 
@@ -64,12 +66,16 @@ LISTERY = {
 }
 ```
 
+* If you use the `STATICFILES_FINDERS` setting, make sure that `django.contrib.staticfiles.finders.AppDirectoriesFinder` is specified in it. If you don't have the setting defined, don't worry about it since the `AppDirectoriesFinder` is used by default.
+
 ## Upgrading Listery
 
 If you would like to upgrade Listery to the latest code, please follow these steps:
 
 1. Pull the latest code from the `master` branch of this git repository.
-2. Run any new Django migrations using `python manage.py migrate`.
-3. Run `npm run build` to build the JavaScript and CSS files (with production settings) into the `listery` app folder's `static/listery` directory.
+1. Update the Python requirements using `pip install -r requirements.txt`
+1. Run any new Django migrations using `python manage.py migrate`.
+1. Update the JavaScript requirements using `npm install`
+1. Run `npm run build` to build the JavaScript and CSS files (with production settings) into the `listery` app folder's `static/listery` directory.
 4. Run `python manage.py collecstatic` to copy the static files over to the static root folder that you have configured in your Django settings.
 5. Restart your web server(s). You should be up and running.
