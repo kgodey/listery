@@ -111,13 +111,13 @@ class ListItem extends React.Component {
 	}
 
 	handleCheckboxClick(event) {
-		if (this.state.disabled) return;
+		if (this.state.disabled) return
 		const { updateListItem, id, originalData } = this.props
 		updateListItem(id, {completed: event.target.checked}, originalData)
 	}
 
 	handleDoubleClick(event) {
-		if (this.state.disabled) return;
+		if (this.state.disabled) return
 		this.setState({currentlyEditing: true})
 	}
 
@@ -158,7 +158,7 @@ class ListItem extends React.Component {
 	}
 
 	handleDeleteClick(event) {
-		if (this.state.disabled) return;
+		if (this.state.disabled) return
 		this.setState({showAlert: true})
 	}
 

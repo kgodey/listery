@@ -147,6 +147,8 @@ const reorderListSuccess = (id, order) => ({
 
 export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
 	const state = getState()
+	let currentLocation = history.location.pathname
+	let newLocation
 
 	// if there's no ID passed, use the current active ID or the first list ID provided by the HTML page.
 	if (!Boolean(id)) {
@@ -157,13 +159,15 @@ export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
 		return Promise.resolve()
 	}
 	if (!Boolean(id)) {
-		history.push(ROOT_URL)
+		newLocation = ROOT_URL
+		if (currentLocation !== newLocation) history.push(newLocation)
 		dispatch(noActiveListAvailable())
 		return Promise.resolve()
 	}
 
 	dispatch(fetchActiveListRequest(id, reload))
-	history.push(ROOT_URL + id)
+	newLocation = ROOT_URL + id
+	if (currentLocation !== newLocation) history.push(newLocation)
 	return sync(LIST_API_URL + id + '/')
 	.then(
 		response => dispatch(fetchActiveListSuccess(response)),
