@@ -2,6 +2,8 @@
 
 Listery is a simple single-page list management application built with Django, React, and Redux. It has an intuitive drag and drop interface, supports multiple users with a simple shared list mechanic, and can export lists to text files.
 
+**Note**: Listery has not been officially released and should be considered alpha software.
+
 Tests: [![CircleCI](https://circleci.com/gh/kgodey/listery/tree/master.svg?style=svg)](https://circleci.com/gh/kgodey/listery/tree/master)
 
 
