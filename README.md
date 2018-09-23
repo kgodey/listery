@@ -75,7 +75,8 @@ If you would like to upgrade Listery to the latest code, please follow these ste
 1. Pull the latest code from the `master` branch of this git repository.
 1. Update the Python requirements using `pip install -r requirements.txt`
 1. Run any new Django migrations using `python manage.py migrate`.
+1. Ensure that all the settings present in the **Setting up Listery in an existing project** section above are present in your project's `settings.py`.
 1. Update the JavaScript requirements using `npm install`
 1. Run `npm run build` to build the JavaScript and CSS files (with production settings) into the `listery` app folder's `static/listery` directory.
-4. Run `python manage.py collecstatic` to copy the static files over to the static root folder that you have configured in your Django settings.
-5. Restart your web server(s). You should be up and running.
+1. Run `python manage.py collecstatic` to copy the static files over to the static root folder that you have configured in your Django settings.
+1. Restart your web server(s). You should be up and running.
