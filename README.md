@@ -80,3 +80,8 @@ If you would like to upgrade Listery to the latest code, please follow these ste
 1. Run `npm run build` to build the JavaScript and CSS files (with production settings) into the `listery` app folder's `static/listery` directory.
 1. Run `python manage.py collecstatic` to copy the static files over to the static root folder that you have configured in your Django settings.
 1. Restart your web server(s). You should be up and running.
+
+## Tests
+
+* You can run tests locally using `npm test` which will run the tests via Jest.
+* To pass additional options, use `npm test -- <Jest options here>`. For example, to update component snapshots, run `npm test -- --updateSnapshot`.
