@@ -8,18 +8,20 @@
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		  <div class="container-fluid">
-			<span class="navbar-brand">{{ LISTERY_TITLE }}</span>
-			<ul class="nav navbar-nav navbar-right">
-				{% if user.is_authenticated %}
-					<li>
-						<a href="{% url 'logout' %}?next=/">
-							<button class="btn btn-light btn-sm">Logout</button>
-						</a>
-					</li>
-				{% endif %}
-			</ul>
+			<div class="container-fluid">
+				<span class="navbar-brand">{{ LISTERY_TITLE }}</span>
+				<ul class="nav navbar-nav navbar-right">
+					{% if user.is_authenticated %}
+						<li>
+							<a href="{% url 'logout' %}?next=/">
+								<button class="btn btn-light btn-sm">Logout</button>
+							</a>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
 		</nav>
+
 		{% block content %}
 		{% endblock %}
 
