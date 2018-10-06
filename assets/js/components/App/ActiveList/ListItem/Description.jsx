@@ -7,7 +7,7 @@ const descriptionStyle = {
 	marginTop: 0,
 	paddingTop: 0,
 	display: 'block',
-	marginLeft: '35px',
+	marginLeft: '23px',
 	width: '90%'
 }
 
@@ -15,7 +15,7 @@ const descriptionEditStyle = {
 	width: '90%',
 	marginTop: '0.5em',
 	fontSize: '0.8em',
-	marginLeft: '35px',
+	marginLeft: '23px',
 }
 
 

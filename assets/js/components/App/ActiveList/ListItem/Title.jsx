@@ -5,12 +5,14 @@ import Linkify from 'react-linkify'
 
 const titleDisplayStyle = {
 	width: '90%',
-	display: 'inline'
+	display: 'inline-block',
+	marginLeft: '10px'
 }
 
 
 const titleEditStyle = {
-	width: '90%'
+	width: '90%',
+	marginLeft: '10px'
 }
 
 
