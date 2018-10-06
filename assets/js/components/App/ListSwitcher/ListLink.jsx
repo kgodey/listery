@@ -147,10 +147,10 @@ class ListLink extends React.Component {
 		const linkURL = '/new/' + id
 		return connectDragSource(connectDropTarget(
 			<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} style={containerStyle}>
-				<div onClick={onClick} className='col-10 px-0 d-inline-block'>
+				<div onClick={onClick} className='col-9 px-0 d-inline-block'>
 					{name}
 				</div>
-				<div className='col-2 d-inline-block px-0 text-right'>
+				<div className='col-3 d-inline-block px-0 text-right'>
 					<DownloadIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDownloadClick} />
 					<ArchiveIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleArchiveClick} />
 				</div>
