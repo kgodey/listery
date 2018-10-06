@@ -131,7 +131,7 @@ export const createListItem = (title, listID) => (dispatch, getState) => {
 	.then(
 		response => {
 			dispatch(createListItemSuccess(response, response.id, tempID))
-			dispatch(fetchActiveList(listID, false))
+			dispatch(fetchActiveList(null, false))
 		},
 		error => dispatch(createListItemError(tempID, error.message))
 	)
@@ -145,7 +145,10 @@ export const updateListItem = (id, data, originalData) => (dispatch) => {
 		body: JSON.stringify(data)
 	})
 	.then(
-		response => dispatch(updateListItemSuccess(response, id)),
+		response => {
+			dispatch(updateListItemSuccess(response, id)),
+			dispatch(fetchActiveList(null, false))
+		},
 		error => dispatch(id, updateListItemError(error.message, originalData))
 	)
 }
