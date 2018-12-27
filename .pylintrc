@@ -7,7 +7,7 @@ extension-pkg-whitelist=
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
-ignore=CVS
+ignore=migrations
 
 # Add files or directories matching the regex patterns to the blacklist. The
 # regex matches against base names, not paths.
@@ -22,7 +22,7 @@ jobs=1
 
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins=pylint_django
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -273,11 +273,14 @@ function-naming-style=snake_case
 
 # Good variable names which should always be accepted, separated by a comma
 good-names=i,
-           j,
-           k,
-           ex,
-           Run,
-           _
+		   j,
+		   k,
+		   pk,
+		   ex,
+		   Run,
+		   urlpatterns,
+		   router,
+		   _
 
 # Include a hint for the correct naming format with invalid-name
 include-naming-hint=no
@@ -339,15 +342,15 @@ expected-line-ending-format=
 # Regexp for a line that is allowed to be longer than the limit.
 ignore-long-lines=^\s*(# )?<?https?://\S+>?$
 
-# Number of spaces of indent required inside a hanging  or continued line.
-indent-after-paren=4
+# Number of spaces of indent required inside a hanging or continued line.
+indent-after-paren=1
 
 # String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1
 # tab).
-indent-string='    '
+indent-string='\t'
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=200
 
 # Maximum number of lines in a module
 max-module-lines=1000
