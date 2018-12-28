@@ -32,10 +32,20 @@ commands:
             - run: sudo chown -R circleci:circleci /usr/local/lib/python2.7/site-packages
             - run:
                 command: sudo pip install pipenv
+            - restore_cache:
+                keys:
+                    # when lock file changes, use increasingly general patterns to restore cache
+                    - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+                    - pip-packages-v1-{{ .Branch }}-
+                    - pip-packages-v1-
             - run:
                 command: pipenv install
             - run:
                 command: pipenv install -r requirements_testing.txt --dev
+            - save_cache:
+                paths:
+                    - ~/.local/share/virtualenvs/venv  # this path depends on where pipenv creates a virtualenv
+                key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 jobs:
     javascript:
         executor: base-executor
