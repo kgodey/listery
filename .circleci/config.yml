@@ -1,63 +1,63 @@
 version: 2.1
 executors:
-	base-executor:
-		working_directory: ~/listery
-		docker:
-			- image: circleci/python:2.7.15-stretch-node-browsers
+    base-executor:
+        working_directory: ~/listery
+        docker:
+            - image: circleci/python:2.7.15-stretch-node-browsers
 commands:
-	javascript_setup:
-		description: "Set up JavaScript code"
-		steps:
-			- checkout
-			- run:
-				name: update-npm
-				command: 'sudo npm install -g npm@latest'
-			# Download and cache dependencies
-			- restore_cache:
-				keys:
-					- v1-dependencies-{{ checksum "package.json" }}
-					# fallback to using the latest cache if no exact match is found
-					- v1-dependencies-
-			- run:
-				command: npm install
-			- save_cache:
-				paths:
-					- node_modules
-				key: v1-dependencies-{{ checksum "package.json" }}
-	python_setup:
-		description: "Set up Python code"
-		steps:
-			- javascript_setup
-			- run: sudo chown -R circleci:circleci /usr/local/bin
-			- run: sudo chown -R circleci:circleci /usr/local/lib/python2.7/site-packages
-			- restore_cache:
-				key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-			- run:
-				command: |
-					sudo pip install pipenv
-					pipenv install
-					pipenv install -r requirements_testing.txt --dev
-			- save_cache: # cache Python dependencies using checksum of Pipfile as the cache-key
-				key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-				paths:
-					- ".venv"
-					- "/usr/local/bin"
-					- "/usr/local/lib/python3.6/site-packages"
+    javascript_setup:
+        description: "Set up JavaScript code"
+        steps:
+            - checkout
+            - run:
+                name: update-npm
+                command: 'sudo npm install -g npm@latest'
+            # Download and cache dependencies
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "package.json" }}
+                    # fallback to using the latest cache if no exact match is found
+                    - v1-dependencies-
+            - run:
+                command: npm install
+            - save_cache:
+                paths:
+                    - node_modules
+                key: v1-dependencies-{{ checksum "package.json" }}
+    python_setup:
+        description: "Set up Python code"
+        steps:
+            - javascript_setup
+            - run: sudo chown -R circleci:circleci /usr/local/bin
+            - run: sudo chown -R circleci:circleci /usr/local/lib/python2.7/site-packages
+            - restore_cache:
+                key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - run:
+                command: |
+                    sudo pip install pipenv
+                    pipenv install
+                    pipenv install -r requirements_testing.txt --dev
+            - save_cache: # cache Python dependencies using checksum of Pipfile as the cache-key
+                key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+                paths:
+                    - ".venv"
+                    - "/usr/local/bin"
+                    - "/usr/local/lib/python3.6/site-packages"
 jobs:
-	javascript:
-		executor: base-executor
-		steps:
-			- javascript_setup
-			- run: npm run test
-	python:
-		executor: base-executor
-		steps:
-			- python_setup
-			- run:
-				command: pipenv run "python manage.py test"
+    javascript:
+        executor: base-executor
+        steps:
+            - javascript_setup
+            - run: npm run test
+    python:
+        executor: base-executor
+        steps:
+            - python_setup
+            - run:
+                command: pipenv run "python manage.py test"
 workflows:
-	version: 2.1
-	test_in_parallel:
-		jobs:
-			- javascript
-			- python
+    version: 2.1
+    test_in_parallel:
+        jobs:
+            - javascript
+            - python
