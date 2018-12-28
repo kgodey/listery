@@ -55,6 +55,8 @@ jobs:
             - python_setup
             - run:
                 command: pipenv run "python manage.py test"
+            - run:
+                command: pipenv run "pylint listery"
 workflows:
     version: 2.1
     test_in_parallel:
