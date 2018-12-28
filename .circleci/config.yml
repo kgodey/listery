@@ -30,10 +30,11 @@ commands:
             - run: sudo chown -R circleci:circleci /usr/local/bin
             - run: sudo chown -R circleci:circleci /usr/local/lib/python2.7/site-packages
             - run:
-                command: |
-                    sudo pip install pipenv
-                    pipenv install
-                    pipenv install -r requirements_testing.txt --dev
+                command: sudo pip install pipenv
+            - run:
+                command: pipenv install
+            - run:
+                command: pipenv install -r requirements_testing.txt --dev
 jobs:
     javascript:
         executor: base-executor
