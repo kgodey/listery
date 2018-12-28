@@ -32,6 +32,8 @@ commands:
             - run:
                 command: sudo pip install pipenv
             - run:
+                command: ls -laF
+            - run:
                 command: pipenv install
             - run:
                 command: pipenv install -r requirements_testing.txt --dev
