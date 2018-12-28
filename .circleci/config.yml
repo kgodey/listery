@@ -27,12 +27,11 @@ commands:
     python_setup:
         description: "Set up Python code"
         steps:
+            - checkout
             - run: sudo chown -R circleci:circleci /usr/local/bin
             - run: sudo chown -R circleci:circleci /usr/local/lib/python2.7/site-packages
             - run:
                 command: sudo pip install pipenv
-            - run:
-                command: pwd
             - run:
                 command: pipenv install
             - run:
