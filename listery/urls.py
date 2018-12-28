@@ -1,3 +1,7 @@
+"""
+Sets up the app's URLs.
+"""
+
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from rest_framework import routers
