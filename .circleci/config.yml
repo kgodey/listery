@@ -32,7 +32,7 @@ commands:
             - run:
                 command: sudo pip install pipenv
             - run:
-                command: ls -laF
+                command: pwd
             - run:
                 command: pipenv install
             - run:
