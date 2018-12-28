@@ -1,19 +1,12 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
-version: 2
-jobs:
-    build:
+version: 2.1
+executors:
+    base-executor:
         working_directory: ~/listery
         docker:
-            # specify the version you desire here
-            - image: circleci/node:10.6.0
-
-            # Specify service dependencies here if necessary
-            # CircleCI maintains a library of pre-built images
-            # documented at https://circleci.com/docs/2.0/circleci-images/
-
+            - image: circleci/python:2.7.15-stretch-node-browsers
+commands:
+    javascript_setup:
+        description: "Set up JavaScript code"
         steps:
             - checkout
             - run:
@@ -25,14 +18,51 @@ jobs:
                     - v1-dependencies-{{ checksum "package.json" }}
                     # fallback to using the latest cache if no exact match is found
                     - v1-dependencies-
-
             - run:
                 command: npm install
-
             - save_cache:
                 paths:
                     - node_modules
                 key: v1-dependencies-{{ checksum "package.json" }}
-
-            # run tests!
+    python_setup:
+        description: "Set up Python code"
+        steps:
+            - checkout
+            - run: sudo chown -R circleci:circleci /usr/local/bin
+            - run: sudo chown -R circleci:circleci /usr/local/lib/python2.7/site-packages
+            - run:
+                command: sudo pip install pipenv
+            - restore_cache:
+                keys:
+                    # when lock file changes, use increasingly general patterns to restore cache
+                    - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+                    - pip-packages-v1-{{ .Branch }}-
+                    - pip-packages-v1-
+            - run:
+                command: pipenv install
+            - run:
+                command: pipenv install -r requirements_testing.txt --dev
+            - save_cache:
+                paths:
+                    - ~/.local/share/virtualenvs/venv  # this path depends on where pipenv creates a virtualenv
+                key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+jobs:
+    javascript:
+        executor: base-executor
+        steps:
+            - javascript_setup
             - run: npm run test
+    python:
+        executor: base-executor
+        steps:
+            - python_setup
+            - run:
+                command: pipenv run python manage.py test
+            - run:
+                command: pipenv run pylint listery
+workflows:
+    version: 2.1
+    test_in_parallel:
+        jobs:
+            - javascript
+            - python
