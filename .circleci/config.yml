@@ -73,6 +73,11 @@ jobs:
                 command: pipenv run python manage.py test
             - run:
                 command: pipenv run pylint listery
+            - store_test_results:
+                path: reports
+            - store_artifacts:
+                path: reports
+                destination: tr1
 workflows:
     version: 2.1
     test_in_parallel:
