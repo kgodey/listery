@@ -128,13 +128,13 @@ export const createListItem = (title, listID) => (dispatch, getState) => {
 		method: 'POST',
 		body: JSON.stringify(itemData)
 	})
-	.then(
-		response => {
-			dispatch(createListItemSuccess(response, response.id, tempID))
-			dispatch(fetchActiveList(null, false))
-		},
-		error => dispatch(createListItemError(tempID, error.message))
-	)
+		.then(
+			response => {
+				dispatch(createListItemSuccess(response, response.id, tempID))
+				dispatch(fetchActiveList(null, false))
+			},
+			error => dispatch(createListItemError(tempID, error.message))
+		)
 }
 
 
@@ -144,13 +144,13 @@ export const updateListItem = (id, data, originalData) => (dispatch) => {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	})
-	.then(
-		response => {
-			dispatch(updateListItemSuccess(response, id)),
-			dispatch(fetchActiveList(null, false))
-		},
-		error => dispatch(id, updateListItemError(error.message, originalData))
-	)
+		.then(
+			response => {
+				dispatch(updateListItemSuccess(response, id)),
+				dispatch(fetchActiveList(null, false))
+			},
+			error => dispatch(id, updateListItemError(error.message, originalData))
+		)
 }
 
 
@@ -161,16 +161,16 @@ export const moveListItem = (id, listID, initialOrder) => (dispatch) => {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	})
-	.then(
-		response =>  {
-			dispatch(moveListItemSuccess(response.id, response.list_id))
-			dispatch(fetchActiveList(null, false))
-		},
-		error => {
-			dispatch(reorderListItemPreview(id, initialOrder))
-			dispatch(genericAPIActionFailure(error.message))
-		}
-	)
+		.then(
+			response =>  {
+				dispatch(moveListItemSuccess(response.id, response.list_id))
+				dispatch(fetchActiveList(null, false))
+			},
+			error => {
+				dispatch(reorderListItemPreview(id, initialOrder))
+				dispatch(genericAPIActionFailure(error.message))
+			}
+		)
 }
 
 
@@ -179,13 +179,13 @@ export const deleteListItem = (id) => (dispatch) => {
 	return sync(LIST_ITEM_API_URL + id + '/', {
 		method: 'DELETE'
 	})
-	.then(
-		response => {
-			dispatch(deleteListItemSuccess(id)),
-			dispatch(fetchActiveList(null, false))
-		},
-		error => dispatch(genericAPIActionFailure(error.message))
-	)
+		.then(
+			response => {
+				dispatch(deleteListItemSuccess(id)),
+				dispatch(fetchActiveList(null, false))
+			},
+			error => dispatch(genericAPIActionFailure(error.message))
+		)
 }
 
 
@@ -195,16 +195,16 @@ export const reorderListItem = (id, order, initialOrder) => (dispatch) => {
 		method: 'POST',
 		body: JSON.stringify({order: order})
 	})
-	.then(
-		response => {
-			dispatch(reorderListItemSuccess(id, order))
-			dispatch(fetchActiveList(null, false))
-		},
-		error => {
-			dispatch(reorderListItemPreview(id, initialOrder))
-			dispatch(genericAPIActionFailure(error.message))
-		}
-	)
+		.then(
+			response => {
+				dispatch(reorderListItemSuccess(id, order))
+				dispatch(fetchActiveList(null, false))
+			},
+			error => {
+				dispatch(reorderListItemPreview(id, initialOrder))
+				dispatch(genericAPIActionFailure(error.message))
+			}
+		)
 }
 
 

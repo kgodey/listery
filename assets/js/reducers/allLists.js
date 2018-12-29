@@ -24,6 +24,7 @@ export const allLists = (state={}, action) => {
 					...action.data.entities.lists
 				}
 			}
+			/* falls through */
 		case listAPIActions.ARCHIVE_LIST_SUCCESS:
 			delete newState[action.id]
 			return newState

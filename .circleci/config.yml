@@ -52,6 +52,7 @@ jobs:
         steps:
             - javascript_setup
             - run: npm run test
+            - run: ./node_modules/.bin/eslint assets/
     python:
         executor: base-executor
         steps:
