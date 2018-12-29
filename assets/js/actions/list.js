@@ -151,14 +151,14 @@ export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
 	let newLocation
 
 	// if there's no ID passed, use the current active ID or the first list ID provided by the HTML page.
-	if (!Boolean(id)) {
+	if (!id) {
 		id = getActiveListID(state) || firstListID
 	}
 
 	if (getActiveListFetchStatus(state)) {
 		return Promise.resolve()
 	}
-	if (!Boolean(id)) {
+	if (!id) {
 		newLocation = ROOT_URL
 		if (currentLocation !== newLocation) history.push(newLocation)
 		dispatch(noActiveListAvailable())
@@ -169,10 +169,10 @@ export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
 	newLocation = ROOT_URL + id
 	if (currentLocation !== newLocation) history.push(newLocation)
 	return sync(LIST_API_URL + id + '/')
-	.then(
-		response => dispatch(fetchActiveListSuccess(response)),
-		error => dispatch(fetchActiveListError(error.message))
-	)
+		.then(
+			response => dispatch(fetchActiveListSuccess(response)),
+			error => dispatch(fetchActiveListError(error.message))
+		)
 }
 
 
@@ -182,10 +182,10 @@ export const fetchAllLists = (reload=true) => (dispatch, getState) => {
 	}
 	dispatch(fetchAllListsRequest(reload))
 	return sync(LIST_API_URL)
-	.then(
-		response => dispatch(fetchAllListsSuccess(response)),
-		error => dispatch(fetchAllListsError(error.message))
-	)
+		.then(
+			response => dispatch(fetchAllListsSuccess(response)),
+			error => dispatch(fetchAllListsError(error.message))
+		)
 }
 
 
@@ -198,13 +198,13 @@ export const createList = (listName) => (dispatch) => {
 		method: 'POST',
 		body: JSON.stringify(listData)
 	})
-	.then(
-		response => {
-			dispatch(createListSuccess(response, response.id))
-			history.push(ROOT_URL + response.id)
-		},
-		error => dispatch(genericAPIActionFailure(error.message))
-	)
+		.then(
+			response => {
+				dispatch(createListSuccess(response, response.id))
+				history.push(ROOT_URL + response.id)
+			},
+			error => dispatch(genericAPIActionFailure(error.message))
+		)
 }
 
 
@@ -214,10 +214,10 @@ export const updateActiveList = (id, data, originalData) => (dispatch) => {
 		method: 'PATCH',
 		body: JSON.stringify(data)
 	})
-	.then(
-		response => dispatch(updateActiveListSuccess(response)),
-		error => dispatch(updateActiveListError(id, error.message, originalData))
-	)
+		.then(
+			response => dispatch(updateActiveListSuccess(response)),
+			error => dispatch(updateActiveListError(id, error.message, originalData))
+		)
 }
 
 
@@ -229,10 +229,10 @@ export const performActionOnList = (id, actionURL, originalData) => (dispatch) =
 	return sync(LIST_API_URL + id + actionURL, {
 		method: 'POST',
 	})
-	.then(
-		response => dispatch(fetchActiveListSuccess(response)),
-		error => dispatch(updateActiveListError(id, error.message, originalData))
-	)
+		.then(
+			response => dispatch(fetchActiveListSuccess(response)),
+			error => dispatch(updateActiveListError(id, error.message, originalData))
+		)
 }
 
 
@@ -241,16 +241,16 @@ export const archiveList = (id, nextListID) => (dispatch, getState) => {
 	return sync(LIST_API_URL + id + '/', {
 		method: 'DELETE'
 	})
-	.then(
-		response => {
-			let activeListID = getActiveListID(getState())
-			if (id === activeListID) {
-				dispatch(fetchActiveList(nextListID))
-			}
-			dispatch(archiveListSuccess(id, nextListID))
-		},
-		error => dispatch(genericAPIActionFailure(error.message))
-	)
+		.then(
+			response => {
+				let activeListID = getActiveListID(getState())
+				if (id === activeListID) {
+					dispatch(fetchActiveList(nextListID))
+				}
+				dispatch(archiveListSuccess(id, nextListID))
+			},
+			error => dispatch(genericAPIActionFailure(error.message))
+		)
 }
 
 
@@ -268,16 +268,16 @@ export const reorderList = (id, order, initialOrder) => (dispatch) => {
 		method: 'POST',
 		body: JSON.stringify({order: order})
 	})
-	.then(
-		response => {
-			dispatch(reorderListSuccess(id, order))
-			dispatch(fetchAllLists(false))
-		},
-		error => {
-			dispatch(reorderListPreview(id, initialOrder))
-			dispatch(genericAPIActionFailure(error.message))
-		}
-	)
+		.then(
+			response => {
+				dispatch(reorderListSuccess(id, order))
+				dispatch(fetchAllLists(false))
+			},
+			error => {
+				dispatch(reorderListPreview(id, initialOrder))
+				dispatch(genericAPIActionFailure(error.message))
+			}
+		)
 }
 
 

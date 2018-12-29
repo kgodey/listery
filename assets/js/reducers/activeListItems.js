@@ -5,6 +5,7 @@ import * as listItemAPIActions from '../actions/list-item'
 
 export const activeListItems = (state={}, action) => {
 	let newState = {...state}
+	let newValues
 	switch(action.type) {
 		case listAPIActions.CREATE_LIST_SUCCESS:
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
@@ -12,10 +13,11 @@ export const activeListItems = (state={}, action) => {
 			if (action.data) {
 				return {...action.data.entities.listItems}
 			}
+			/* falls through */
 		case listItemAPIActions.CREATE_LIST_ITEM_REQUEST:
 			// Make a temporary list item so that the new item appears immediately.
 			// This will be removed when the API request succeeds.
-			let newValues = {
+			newValues = {
 				id: action.tempID,
 				completed: false,
 				order: 0

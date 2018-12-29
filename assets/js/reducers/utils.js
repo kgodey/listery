@@ -8,17 +8,18 @@ export const compareByOrder = (listA, listB) => {
 
 
 export const getReorderedItems = (state, action) => {
+	let key
 	let newState = {...state}
 	let oldOrder = newState[action.id].order
 	newState[action.id].order = action.order
 	if (action.order > oldOrder) {
-		for (var key in newState) {
+		for (key in newState) {
 			if (newState[key].order <= action.order && newState[key].order > oldOrder && newState[key].id != action.id) {
 				newState[key].order = newState[key].order - 1
 			}
 		}
 	} else if (action.order < oldOrder) {
-		for (var key in newState) {
+		for (key in newState) {
 			if (newState[key].order >= action.order && newState[key].order < oldOrder && newState[key].id != action.id) {
 				newState[key].order = newState[key].order + 1
 			}
