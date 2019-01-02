@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+dj-database-url = "==0.4.2"
+dj-static = "==0.0.6"
+django-filter = "==1.0.4"
+django-ordered-model = "==1.4.1"
+djangorestframework = "==3.9.0"
+gunicorn = "==19.3.0"
+six = "==1.10.0"
+static3 = "==0.6.1"
+wsgiref = "==0.1.2"
+Django = "==1.11.17"
+
+[requires]
+python_version = "2.7"
