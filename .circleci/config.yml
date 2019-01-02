@@ -57,9 +57,7 @@ jobs:
                 command: npm install jest-junit --save-dev
             - run:
                 name: Run tests with JUnit as reporter
-                command: npm run test -- --ci --reporters=default --reporters=jest-junit
-                environment:
-                    JEST_JUNIT_OUTPUT: "~/reports/jest/test-results.xml"
+                command: npm run test -- --ci
             - run: ./node_modules/.bin/eslint assets/ --format junit --output-file ~/reports/eslint/test-results.xml
             - store_test_results:
                 path: ~/reports

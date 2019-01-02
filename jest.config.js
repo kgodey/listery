@@ -1,3 +1,6 @@
 {
-	reporters: ["default", "jest-junit"]
+	reporters: [
+		"default",
+			["jest-junit", { outputName: "~/reports/jest/test-results.xml" }]
+	]
 }
