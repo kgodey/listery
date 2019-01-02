@@ -59,8 +59,8 @@ jobs:
                 name: Run tests with JUnit as reporter
                 command: npm run test -- --ci --reporters=default --reporters=jest-junit
                 environment:
-                    JEST_JUNIT_OUTPUT: "~/reports/js-test-results.xml"
-            - run: ./node_modules/.bin/eslint assets/ --format junit --output-file ~/reports/eslint.xml
+                    JEST_JUNIT_OUTPUT: "~/reports/jest/test-results.xml"
+            - run: ./node_modules/.bin/eslint assets/ --format junit --output-file ~/reports/eslint/test-results.xml
             - store_test_results:
                 path: ~/reports
             - store_artifacts:
@@ -71,9 +71,9 @@ jobs:
             - python_setup
             - run: mkdir -p ~/reports
             - run:
-                command: pipenv run pytest --junitxml=~/reports/django.xml
+                command: pipenv run pytest --junitxml=~/reports/django/test-results.xml
             - run:
-                command: pipenv run pytest --pylint --pylint-rcfile=.pylintrc listery --junitxml=~/reports/pylint.xml
+                command: pipenv run pytest --pylint --pylint-rcfile=.pylintrc listery --junitxml=~/reports/pylint/test-results.xml
             - store_test_results:
                 path: ~/reports
             - store_artifacts:
