@@ -71,14 +71,13 @@ jobs:
             - python_setup
             - run: mkdir -p reports
             - run:
-                command: pipenv run pytest --junitxml=reports/pytest.xml
+                command: pipenv run pytest --junitxml=reports/django.xml
             - run:
-                command: pipenv run pylint listery
+                command: pipenv run pytest --pylint --pylint-rcfile=.pylintrc listery --junitxml=reports/pylint.xml
             - store_test_results:
                 path: reports
             - store_artifacts:
                 path: reports
-                destination: tr1
 workflows:
     version: 2.1
     test_in_parallel:
