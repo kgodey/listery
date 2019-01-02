@@ -51,7 +51,7 @@ jobs:
         executor: base-executor
         steps:
             - javascript_setup
-            - run: mkdir -p ~/reports
+            - run: mkdir -p ~/reports/jest ~/reports/eslint
             - run:
                 name: Install JUnit coverage reporter
                 command: npm install jest-junit --save-dev
@@ -69,7 +69,7 @@ jobs:
         executor: base-executor
         steps:
             - python_setup
-            - run: mkdir -p ~/reports
+            - run: mkdir -p ~/reports/django ~/reports/pylint
             - run:
                 command: pipenv run pytest --junitxml=~/reports/django/test-results.xml
             - run:
