@@ -298,7 +298,9 @@ method-naming-style=snake_case
 
 # Regular expression matching correct method names. Overrides method-naming-
 # style
-#method-rgx=
+# This is customized because of this bug returning false positive errors: https://github.com/PyCQA/pylint/issues/2047
+# It is fixed in pylint 2.1 but since Listery still uses Python 2, we can't use that pylint version.
+method-rgx=(([a-z_][a-z0-9_]{2,})|(_[a-z0-9_]*)|(__[a-z][a-z0-9_]+__))$
 
 # Naming style matching correct module names
 module-naming-style=snake_case
