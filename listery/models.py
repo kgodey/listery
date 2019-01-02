@@ -31,7 +31,7 @@ class List(OrderedModel):
 	updated_at = models.DateTimeField(auto_now=True)
 	archived = models.BooleanField(default=False)
 	private = models.BooleanField(default=True)
-	owner = models.ForeignKey(User, null=True, blank=True)
+	owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
 	objects = ListQuerySet.as_manager()
 
@@ -136,7 +136,7 @@ class ListItem(OrderedModel):
 	updated_at = models.DateTimeField(auto_now=True)
 	description = models.TextField(null=True, blank=True)
 	completed = models.BooleanField(default=False)
-	list = models.ForeignKey(List)
+	list = models.ForeignKey(List, on_delete=models.CASCADE)
 	order_with_respect_to = 'list'
 
 	objects = ListItemQuerySet.as_manager()

@@ -71,7 +71,7 @@ jobs:
             - python_setup
             - run: mkdir -p reports
             - run:
-                command: pipenv run python manage.py test
+                command: pipenv run pytest --junitxml=reports/pytest.xml
             - run:
                 command: pipenv run pylint listery
             - store_test_results:

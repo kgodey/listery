@@ -1,2 +1,3 @@
 pylint==1.9.4
 pylint-django==0.11
+pytest-django==3.4.4

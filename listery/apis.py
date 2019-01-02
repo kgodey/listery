@@ -6,7 +6,7 @@ TODO: merge this with views.py
 from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework import status, viewsets
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -43,7 +43,7 @@ class ListViewSet(viewsets.ModelViewSet):
 		item.save()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
-	@detail_route(methods=['post'], url_path='actions/quick_sort')
+	@action(detail=True, methods=['post'], url_path='actions/quick_sort')
 	def quick_sort(self, request, pk=None):
 		"""Sorts the list according to the rules defined by the quick sort method."""
 		# pylint: disable=unused-argument
@@ -52,7 +52,7 @@ class ListViewSet(viewsets.ModelViewSet):
 		serializer = self.get_serializer_class()(item)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
-	@detail_route(methods=['post'], url_path='actions/complete_all')
+	@action(detail=True, methods=['post'], url_path='actions/complete_all')
 	def complete_all(self, request, pk=None):
 		"""Marks all list items belonging to the list as completed."""
 		# pylint: disable=unused-argument
@@ -61,7 +61,7 @@ class ListViewSet(viewsets.ModelViewSet):
 		serializer = self.get_serializer_class()(item)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
-	@detail_route(methods=['post'], url_path='actions/uncomplete_all')
+	@action(detail=True, methods=['post'], url_path='actions/uncomplete_all')
 	def uncomplete_all(self, request, pk=None):
 		"""Marks all list items belonging to the list as not completed."""
 		# pylint: disable=unused-argument
@@ -70,7 +70,7 @@ class ListViewSet(viewsets.ModelViewSet):
 		serializer = self.get_serializer_class()(item)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
-	@detail_route(methods=['post'])
+	@action(detail=True, methods=['post'])
 	def plaintext(self, request, pk=None):
 		"""Returns plaintext file containing a representation of the list."""
 		# pylint: disable=unused-argument
@@ -79,7 +79,7 @@ class ListViewSet(viewsets.ModelViewSet):
 		response['Content-Disposition'] = 'attachment; filename="%s-%s.txt"' % (item.name, timezone.now())
 		return response
 
-	@detail_route(methods=['post'])
+	@action(detail=True, methods=['post'])
 	def reorder(self, request, pk=None):
 		"""Reorders a list (with respect to other lists) based on the order passed in."""
 		# pylint: disable=unused-argument
@@ -104,7 +104,7 @@ class ListItemViewSet(viewsets.ModelViewSet):
 		"""Overrides default queryset to filter to list items the user has access to."""
 		return self.queryset.all_for_user(self.request.user)
 
-	@detail_route(methods=['post'])
+	@action(detail=True, methods=['post'])
 	def reorder(self, request, pk=None):
 		"""Reorders a list item (with respect to other list items in the list) based on the order passed in."""
 		# pylint: disable=unused-argument

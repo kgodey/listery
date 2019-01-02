@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('archived', models.BooleanField(default=False)),
                 ('private', models.BooleanField(default=True)),
-                ('owner', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('owner', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ('order',),
@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('description', models.TextField(null=True, blank=True)),
                 ('completed', models.BooleanField(default=False)),
-                ('list', models.ForeignKey(to='listery.List')),
+                ('list', models.ForeignKey(to='listery.List', on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ('order',),
