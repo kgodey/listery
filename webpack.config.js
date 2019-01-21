@@ -20,12 +20,6 @@ module.exports = {
 		path: __dirname + '/listery/static/listery/js'
 	},
 	plugins: [
-		new webpack.ProvidePlugin({
-			$: 'jquery',
-			jQuery: 'jquery',
-			'window.jQuery': 'jquery',
-			Tether: 'tether'
-		}),
 		new BundleAnalyzerPlugin({
 			generateStatsFile: true
 		})
@@ -46,5 +40,11 @@ module.exports = {
 		minimizer: [
 			new UglifyJsPlugin()
 		]
-    },
+	},
+	resolve: {
+		alias: {
+			'react': 'preact-compat',
+			'react-dom': 'preact-compat'
+		}
+	}
 };

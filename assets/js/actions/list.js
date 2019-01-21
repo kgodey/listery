@@ -255,9 +255,9 @@ export const archiveList = (id, nextListID) => (dispatch, getState) => {
 
 
 export const downloadPlaintextList = (id, downloadFormID) => (dispatch) => {
-	var jQueryFormID = '#' + downloadFormID
-	$(jQueryFormID).attr('action', LIST_API_URL + id + '/plaintext/')
-	$(jQueryFormID).submit()
+	var formElement = document.querySelector('#' + downloadFormID)
+	formElement.setAttribute('action', LIST_API_URL + id + '/plaintext/')
+	formElement.submit()
 	dispatch(downloadListRequest(id, downloadFormID))
 }
 

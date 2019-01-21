@@ -34,6 +34,8 @@
 		"js-cookie": "^2.2.0",
 		"lodash": "^4.17.11",
 		"normalizr": "^3.3.0",
+		"preact": "^8.4.2",
+		"preact-compat": "^3.18.4",
 		"prop-types": "^15.6.2",
 		"react": "^16.7.0",
 		"react-bootstrap-sweetalert": "^4.4.1",
