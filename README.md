@@ -6,6 +6,11 @@ Listery is a simple single-page list management application built with Django, R
 
 Tests: [![CircleCI](https://circleci.com/gh/kgodey/listery/tree/master.svg?style=svg)](https://circleci.com/gh/kgodey/listery/tree/master)
 
+## Demo
+
+A demo instance of Listery [is available here](https://dry-scrubland-6661.herokuapp.com/). There are two user accounts available:
+Username: `demo1`, password: `demo1`
+Username: `demo2`, password: `demo2`
 
 ## Installation
 
