@@ -8,8 +8,8 @@ Tests: [![CircleCI](https://circleci.com/gh/kgodey/listery/tree/master.svg?style
 
 ## Demo
 
-A demo instance of Listery [is available here](https://dry-scrubland-6661.herokuapp.com/). There are two user accounts available:
-Username: `demo1`, password: `demo1`
+A demo instance of Listery [is available here](https://dry-scrubland-6661.herokuapp.com/). There are two user accounts available:  
+Username: `demo1`, password: `demo1`  
 Username: `demo2`, password: `demo2`
 
 ## Installation
