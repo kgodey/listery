@@ -7,7 +7,8 @@
 		"build": "./build.sh",
 		"start": "./start.sh",
 		"watch": "watch 'npm run start' assets",
-		"test": "jest"
+		"test": "jest",
+		"postinstall": "npm run build"
 	},
 	"jest": {
 		"testRegex": "assets/js/__tests__/.*\\.js$",
