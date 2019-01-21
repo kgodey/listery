@@ -15,7 +15,8 @@ You can either run Listery using the example project provided (for local develop
 
 1. Make sure you have Python installed locally. Listery is currently tested against Python 2.7.
 1. Make sure you have [npm installed locally](https://www.npmjs.com/get-npm).
-1. Install the Python requirements using `pip install -r requirements.txt`
+1. Make sure you have [pipenv](https://pipenv.readthedocs.io/en/latest/) installed.
+1. Install the Python requirements using `pipenv install --dev`
 1. Install the JavaScript requirements using `npm install`
 
 ### Using the example project
@@ -75,7 +76,7 @@ LISTERY = {
 If you would like to upgrade Listery to the latest code, please follow these steps:
 
 1. Pull the latest code from the `master` branch of this git repository.
-1. Update the Python requirements using `pip install -r requirements.txt`
+1. Update the Python requirements using `pipenv install`
 1. Run any new Django migrations using `python manage.py migrate`.
 1. Ensure that all the settings present in the **Setting up Listery in an existing project** section above are present in your project's `settings.py`.
 1. Update the JavaScript requirements using `npm install`

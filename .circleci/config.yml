@@ -31,6 +31,7 @@ commands:
             - run: sudo chown -R circleci:circleci /usr/local/bin
             - run: sudo chown -R circleci:circleci /usr/local/lib/python2.7/site-packages
             - run:
+                name: Install pipenv
                 command: sudo pip install pipenv
             - restore_cache:
                 keys:
@@ -39,9 +40,8 @@ commands:
                     - pip-packages-v1-{{ .Branch }}-
                     - pip-packages-v1-
             - run:
-                command: pipenv install
-            - run:
-                command: pipenv install -r requirements_testing.txt --dev
+                name: Install all Python requirements
+                command: pipenv install --dev
             - save_cache:
                 paths:
                     - ~/.local/share/virtualenvs/venv  # this path depends on where pipenv creates a virtualenv
