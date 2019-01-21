@@ -2,10 +2,16 @@
 Sets up the Django admin interface.
 """
 
-from django.contrib import admin
+from django.contrib.admin import AdminSite
 
 from listery.models import List, ListItem
 
 
-admin.site.register(List, admin.ModelAdmin)
-admin.site.register(ListItem, admin.ModelAdmin)
+class ListeryAdminSite(AdminSite):
+	"""Admin site class for Listery, nothing fancy."""
+	site_header = 'Listery administration'
+
+
+admin_site = ListeryAdminSite(name='listery') # pylint: disable=invalid-name
+admin_site.register(List)
+admin_site.register(ListItem)

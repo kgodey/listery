@@ -51,16 +51,42 @@ jobs:
         executor: base-executor
         steps:
             - javascript_setup
-            - run: npm run test
-            - run: ./node_modules/.bin/eslint assets/
+            - run:
+                name: Create test reporting directories
+                command: mkdir -p ~/reports/jest ~/reports/eslint
+            - run:
+                name: Set up environment variable to specify jest-junit output location
+                command: echo 'export JEST_JUNIT_OUTPUT=~/reports/jest/test-results.xml' >> $BASH_ENV
+            - run:
+                name: Install jest-junit coverage reporter
+                command: npm install jest-junit --save-dev
+            - run:
+                name: Run Jest tests
+                command: npm run test -- --ci --reporters=default --reporters=jest-junit
+            - run:
+                name: Run ESLint
+                command: ./node_modules/.bin/eslint assets/ --format junit --output-file ~/reports/eslint/test-results.xml
+            - store_test_results:
+                path: ~/reports
+            - store_artifacts:
+                path: ~/reports
     python:
         executor: base-executor
         steps:
             - python_setup
             - run:
-                command: pipenv run python manage.py test
+                name: Create test reporting directories
+                command: mkdir -p ~/reports/django ~/reports/pylint
             - run:
-                command: pipenv run pylint listery
+                name: Run Django tests
+                command: pipenv run pytest --junitxml=~/reports/django/test-results.xml
+            - run:
+                name: Run Pylint
+                command: pipenv run pytest --pylint --pylint-rcfile=.pylintrc listery --junitxml=~/reports/pylint/test-results.xml
+            - store_test_results:
+                path: ~/reports
+            - store_artifacts:
+                path: ~/reports
 workflows:
     version: 2.1
     test_in_parallel:
