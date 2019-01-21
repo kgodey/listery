@@ -1,5 +1,7 @@
 var path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 var webpack = require('webpack')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 
 module.exports = {
@@ -23,6 +25,26 @@ module.exports = {
 			jQuery: 'jquery',
 			'window.jQuery': 'jquery',
 			Tether: 'tether'
+		}),
+		new BundleAnalyzerPlugin({
+			generateStatsFile: true
 		})
-	]
+	],
+	optimization: {
+		sideEffects: true,
+		splitChunks: {
+			cacheGroups: {
+				commons: {
+					test: /[\\/]node_modules[\\/]/,
+					name: 'vendor',
+					chunks: 'all'
+				}
+			},
+			minSize: 30000,
+			maxAsyncRequests: 5
+		},
+		minimizer: [
+			new UglifyJsPlugin()
+		]
+    },
 };

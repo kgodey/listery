@@ -3,8 +3,10 @@
 		"react",
 		["env", {
 			"targets": {
-				"browsers": ["last 10 versions"]
-			}
+				"browsers": ["last 10 versions"],
+				"uglify" : true
+			},
+			"modules": false
 		}]
 	],
 	"plugins": ["transform-object-rest-spread"]
