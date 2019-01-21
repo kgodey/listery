@@ -53,13 +53,14 @@ jobs:
             - javascript_setup
             - run: mkdir -p ~/reports/jest ~/reports/eslint
             - run:
+                name: Set up environment variable
+                command: echo 'export JEST_JUNIT_OUTPUT=~/reports/jest/test-results.xml' >> $BASH_ENV
+            - run:
                 name: Install JUnit coverage reporter
                 command: npm install jest-junit --save-dev
             - run:
                 name: Run tests with JUnit as reporter
                 command: npm run test -- --ci --reporters=default --reporters=jest-junit
-                environment:
-                    JEST_JUNIT_OUTPUT: ~/reports/jest/test-results.xml
             - run: ./node_modules/.bin/eslint assets/ --format junit --output-file ~/reports/eslint/test-results.xml
             - store_test_results:
                 path: ~/reports
