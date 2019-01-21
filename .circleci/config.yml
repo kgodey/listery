@@ -51,17 +51,21 @@ jobs:
         executor: base-executor
         steps:
             - javascript_setup
-            - run: mkdir -p ~/reports/jest ~/reports/eslint
             - run:
-                name: Set up environment variable
+                name: Create test reporting directories
+                command: mkdir -p ~/reports/jest ~/reports/eslint
+            - run:
+                name: Set up environment variable to specify jest-junit output location
                 command: echo 'export JEST_JUNIT_OUTPUT=~/reports/jest/test-results.xml' >> $BASH_ENV
             - run:
-                name: Install JUnit coverage reporter
+                name: Install jest-junit coverage reporter
                 command: npm install jest-junit --save-dev
             - run:
-                name: Run tests with JUnit as reporter
+                name: Run Jest tests
                 command: npm run test -- --ci --reporters=default --reporters=jest-junit
-            - run: ./node_modules/.bin/eslint assets/ --format junit --output-file ~/reports/eslint/test-results.xml
+            - run:
+                name: Run ESLint
+                command: ./node_modules/.bin/eslint assets/ --format junit --output-file ~/reports/eslint/test-results.xml
             - store_test_results:
                 path: ~/reports
             - store_artifacts:
@@ -70,10 +74,14 @@ jobs:
         executor: base-executor
         steps:
             - python_setup
-            - run: mkdir -p ~/reports/django ~/reports/pylint
             - run:
+                name: Create test reporting directories
+                command: mkdir -p ~/reports/django ~/reports/pylint
+            - run:
+                name: Run Django tests
                 command: pipenv run pytest --junitxml=~/reports/django/test-results.xml
             - run:
+                name: Run Pylint
                 command: pipenv run pytest --pylint --pylint-rcfile=.pylintrc listery --junitxml=~/reports/pylint/test-results.xml
             - store_test_results:
                 path: ~/reports
