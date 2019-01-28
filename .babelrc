@@ -4,8 +4,14 @@
 		["env", {
 			"targets": {
 				"browsers": ["last 10 versions"]
-			}
+			},
+			"modules": false
 		}]
 	],
-	"plugins": ["transform-object-rest-spread"]
+	"plugins": ["transform-object-rest-spread"],
+	"env": {
+		"test": {
+			"presets": ["env", "react"]
+		}
+	}
 }

@@ -65,6 +65,7 @@
 		"react-test-renderer": "^16.7.0",
 		"watch": "^1.0.2",
 		"webpack": "^4.29.0",
+		"webpack-bundle-analyzer": "^3.0.3",
 		"webpack-cli": "^3.2.1"
 	}
 }
