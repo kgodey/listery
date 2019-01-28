@@ -3,8 +3,7 @@
 		"react",
 		["env", {
 			"targets": {
-				"browsers": ["last 10 versions"],
-				"uglify" : true
+				"browsers": ["last 10 versions"]
 			},
 			"modules": false
 		}]
