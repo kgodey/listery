@@ -1,6 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+/* Uncomment the line below for local bundle size analysis */
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 
 module.exports = {
@@ -19,9 +20,10 @@ module.exports = {
 		path: __dirname + '/listery/static/listery/js'
 	},
 	plugins: [
-		new BundleAnalyzerPlugin({
-			generateStatsFile: true
-		})
+		/* Uncomment the lines below for local bundle size analysis */
+		// new BundleAnalyzerPlugin({
+		// 	generateStatsFile: true
+		// })
 	],
 	optimization: {
 		sideEffects: true
