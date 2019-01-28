@@ -25,11 +25,5 @@ module.exports = {
 	],
 	optimization: {
 		sideEffects: true
-	},
-	resolve: {
-		alias: {
-			'react': 'preact-compat',
-			'react-dom': 'preact-compat'
-		}
 	}
 };
