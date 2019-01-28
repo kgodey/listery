@@ -1,5 +1,4 @@
 var path = require('path')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 var webpack = require('webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
@@ -25,21 +24,7 @@ module.exports = {
 		})
 	],
 	optimization: {
-		sideEffects: true,
-		splitChunks: {
-			cacheGroups: {
-				commons: {
-					test: /[\\/]node_modules[\\/]/,
-					name: 'vendor',
-					chunks: 'all'
-				}
-			},
-			minSize: 30000,
-			maxAsyncRequests: 5
-		},
-		minimizer: [
-			new UglifyJsPlugin()
-		]
+		sideEffects: true
 	},
 	resolve: {
 		alias: {
