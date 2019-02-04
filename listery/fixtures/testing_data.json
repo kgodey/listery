@@ -1,0 +1,138 @@
+[{
+	"model": "auth.user",
+	"pk": 1,
+	"fields": {
+		"password": "pbkdf2_sha256$36000$ayGL4ye3TlKl$K5w8enerYVZjAFTPByBUu5t2PWv3ILEN68RU25wpnss=",
+		"last_login": "2019-01-21T20:54:22.763Z",
+		"is_superuser": false,
+		"username": "test",
+		"first_name": "",
+		"last_name": "",
+		"email": "test@example.com",
+		"is_staff": false,
+		"is_active": true,
+		"date_joined": "2018-08-18T08:49:42.908Z",
+		"groups": [],
+		"user_permissions": []
+	}
+}, {
+	"model": "listery.list",
+	"pk": 1,
+	"fields": {
+		"order": 5,
+		"name": "Archive Me",
+		"created_at": "2018-08-18T09:33:03.345Z",
+		"updated_at": "2018-08-18T09:34:28.451Z",
+		"archived": true,
+		"private": true,
+		"owner": 1
+	}
+}, {
+	"model": "listery.list",
+	"pk": 2,
+	"fields": {
+		"order": 4,
+		"name": "Books",
+		"created_at": "2018-08-18T09:34:36.414Z",
+		"updated_at": "2018-08-18T09:35:47.782Z",
+		"archived": true,
+		"private": true,
+		"owner": 1
+	}
+}, {
+	"model": "listery.list",
+	"pk": 3,
+	"fields": {
+		"order": 3,
+		"name": "Dogs",
+		"created_at": "2018-08-18T09:35:53.258Z",
+		"updated_at": "2018-08-18T09:36:28.691Z",
+		"archived": true,
+		"private": true,
+		"owner": 1
+	}
+}, {
+	"model": "listery.list",
+	"pk": 4,
+	"fields": {
+		"order": 2,
+		"name": "Food",
+		"created_at": "2018-08-18T09:38:18.403Z",
+		"updated_at": "2019-01-21T20:56:29.077Z",
+		"archived": false,
+		"private": true,
+		"owner": 1
+	}
+}, {
+	"model": "listery.list",
+	"pk": 5,
+	"fields": {
+		"order": 1,
+		"name": "Pizzas",
+		"created_at": "2019-01-21T21:48:53.031Z",
+		"updated_at": "2019-01-21T21:48:53.036Z",
+		"archived": false,
+		"private": true,
+		"owner": 1
+	}
+}, {
+	"model": "listery.listitem",
+	"pk": 1,
+	"fields": {
+		"order": 2,
+		"title": "To Kill a Mockingbird",
+		"created_at": "2018-08-18T09:34:39.671Z",
+		"updated_at": "2018-08-18T09:34:39.678Z",
+		"description": null,
+		"completed": false,
+		"list": 2
+	}
+}, {
+	"model": "listery.listitem",
+	"pk": 2,
+	"fields": {
+		"order": 1,
+		"title": "The Jungle Book",
+		"created_at": "2018-08-18T09:34:53.998Z",
+		"updated_at": "2018-08-18T09:34:54.004Z",
+		"description": null,
+		"completed": false,
+		"list": 2
+	}
+}, {
+	"model": "listery.listitem",
+	"pk": 3,
+	"fields": {
+		"order": 1,
+		"title": "Chicken",
+		"created_at": "2019-01-21T20:56:19.930Z",
+		"updated_at": "2019-01-21T20:56:36.015Z",
+		"description": null,
+		"completed": false,
+		"list": 4
+	}
+}, {
+	"model": "listery.listitem",
+	"pk": 4,
+	"fields": {
+		"order": 2,
+		"title": "Pork",
+		"created_at": "2019-01-21T20:56:33.968Z",
+		"updated_at": "2019-01-21T20:56:36.020Z",
+		"description": null,
+		"completed": false,
+		"list": 4
+	}
+}, {
+	"model": "listery.listitem",
+	"pk": 5,
+	"fields": {
+		"order": 1,
+		"title": "Pepperoni",
+		"created_at": "2019-01-21T21:48:58.418Z",
+		"updated_at": "2019-01-21T21:48:58.425Z",
+		"description": null,
+		"completed": false,
+		"list": 5
+	}
+}]
