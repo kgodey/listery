@@ -13,7 +13,7 @@ class ListItemSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = ListItem
-		fields = ['id', 'title', 'description', 'created_at', 'completed', 'list_id', 'order']
+		fields = ['id', 'title', 'description', 'created_at', 'updated_at', 'completed', 'list_id', 'order']
 
 
 class MinimalListSerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class MinimalListSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = List
-		fields = ['id', 'name', 'order', 'private', 'created_at', 'owner_id', 'item_count', 'completed_item_count']
+		fields = ['id', 'name', 'order', 'private', 'created_at', 'updated_at', 'owner_id', 'item_count', 'completed_item_count']
 
 	def validate(self, attrs):
 		owner = self.context['request'].user
@@ -42,4 +42,4 @@ class ListSerializer(MinimalListSerializer):
 
 	class Meta:
 		model = List
-		fields = ['id', 'name', 'order', 'private', 'created_at', 'owner_id', 'items', 'item_count', 'completed_item_count']
+		fields = ['id', 'name', 'order', 'private', 'created_at', 'updated_at', 'owner_id', 'items', 'item_count', 'completed_item_count']
