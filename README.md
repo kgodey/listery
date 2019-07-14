@@ -42,6 +42,7 @@ This guide assumes you have an existing Django project already set up. The `list
 'django_filters',
 'rest_framework',
 'rest_framework.authtoken',
+'taggit',
 'listery',
 ```
 

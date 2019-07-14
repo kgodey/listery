@@ -7,6 +7,7 @@ import DropTarget from 'react-dnd/lib/DropTarget'
 import { findDOMNode } from 'react-dom'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
+import ReactTags from 'react-tag-autocomplete'
 
 import { deleteListItem, updateListItem } from '../../../actions/list-item'
 import { getActiveListFetchStatus } from '../../../reducers/activeList'
@@ -17,7 +18,6 @@ import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
-
 
 
 const listItemSource = {
@@ -63,12 +63,18 @@ const dropCollect = (connect) => ({
 class ListItem extends React.Component {
 	constructor(props) {
 		super(props)
-		const { completed, title, description, id } = props
+		const { completed, title, description, id, tags } = props
 		this.state = {
 			data: {
 				completed: completed,
 				title: title,
-				description: description
+				description: description,
+				tags: tags.map(function(name, index) {
+					return {
+						id: index+1,
+						name: name
+					}
+				}),
 			},
 			currentlyEditing: false,
 			currentlyHovering: false,
@@ -89,8 +95,11 @@ class ListItem extends React.Component {
 		this.handleDeleteConfirm = this.handleDeleteConfirm.bind(this)
 		this.handleDeleteCancel = this.handleDeleteCancel.bind(this)
 		this.saveListItemTitleAndDescription = this.saveListItemTitleAndDescription.bind(this)
+		this.saveTags = this.saveTags.bind(this)
 		this.handleInputMouseEnter = this.handleInputMouseEnter.bind(this)
 		this.handleInputMouseLeave = this.handleInputMouseLeave.bind(this)
+		this.handleTagAddition = this.handleTagAddition.bind(this)
+		this.handleTagDeletion = this.handleTagDeletion.bind(this)
 	}
 
 	static getDerivedStateFromProps({ completed }, state) {
@@ -185,12 +194,39 @@ class ListItem extends React.Component {
 		this.setState({currentlyEditing: false})
 	}
 
+	saveTags(tags) {
+		const { updateListItem, id, originalData } = this.props
+		const tagNames = Array.from(tags, tag => tag.name)
+		updateListItem(id, {
+			tags: tagNames
+		}, originalData)
+	}
+
 	handleInputMouseEnter() {
 		this.setState({currentlyOverInput: true})
 	}
 
 	handleInputMouseLeave() {
 		this.setState({currentlyOverInput: false})
+	}
+
+	handleTagAddition(tag) {
+		let newState = {...this.state}
+		let currentTags = this.state.data.tags
+		tag['id'] = currentTags.length + 1
+		const newTags = [...currentTags, tag]
+		newState['data']['tags'] = newTags
+		this.setState(newState)
+		this.saveTags(newTags)
+	}
+
+	handleTagDeletion(index) {
+		let newState = {...this.state}
+		const tags = this.state.data.tags.slice(0)
+		tags.splice(index, 1)
+		newState['data']['tags'] = tags
+		this.setState(newState)
+		this.saveTags(tags)
 	}
 
 	render() {
@@ -231,6 +267,16 @@ class ListItem extends React.Component {
 							/>
 							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 						</div>
+					</div>
+					<div className="row">
+						<ReactTags
+							tags={this.state.data.tags}
+							placeholder={'Add a new tag'}
+							autoresize={false}
+							allowNew={true}
+							handleAddition={this.handleTagAddition}
+							handleDelete={this.handleTagDeletion}
+						/>
 					</div>
 					<SweetAlert
 						warning

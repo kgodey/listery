@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.transaction import atomic
 from ordered_model.models import OrderedModel
+from taggit.managers import TaggableManager
 
 
 class ListQuerySet(models.QuerySet):
@@ -139,6 +140,7 @@ class ListItem(OrderedModel):
 	list = models.ForeignKey(List, on_delete=models.CASCADE)
 	order_with_respect_to = 'list'
 
+	tags = TaggableManager()
 	objects = ListItemQuerySet.as_manager()
 
 	def __unicode__(self):
