@@ -101,7 +101,7 @@ class ListHeader extends React.Component {
 		return (
 			<div>
 				<div className="row">
-					<div className="col-md-8">
+					<div className="col-md-12">
 						<ListTitle
 							name={this.state.data.name}
 							currentlyEditing={this.state.currentlyEditing}
