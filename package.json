@@ -28,7 +28,7 @@
 	},
 	"homepage": "https://github.com/kgodey/listery#readme",
 	"dependencies": {
-		"bootstrap": "^4.2.1",
+		"bootstrap": "^4.3.1",
 		"es6-promise": "^4.2.5",
 		"isomorphic-fetch": "^2.2.1",
 		"js-cookie": "^2.2.0",
@@ -53,19 +53,19 @@
 	"devDependencies": {
 		"babel-core": "^6.26.3",
 		"babel-eslint": "^10.0.1",
-		"babel-jest": "^23.6.0",
+		"babel-jest": "^24.8.0",
 		"babel-loader": "^7.1.4",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-preset-env": "^1.7.0",
 		"babel-preset-react": "^6.24.1",
 		"eslint": "^5.12.1",
 		"eslint-plugin-react": "^7.12.4",
-		"jest": "^23.6.0",
-		"jquery": "^3.3.1",
+		"jest": "^24.8.0",
+		"jquery": "^3.4.1",
 		"react-test-renderer": "^16.7.0",
 		"watch": "^1.0.2",
 		"webpack": "^4.29.0",
-		"webpack-bundle-analyzer": "^3.0.3",
+		"webpack-bundle-analyzer": "^3.3.2",
 		"webpack-cli": "^3.2.1"
 	}
 }
