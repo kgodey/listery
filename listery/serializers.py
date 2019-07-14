@@ -19,22 +19,28 @@ class TagField(serializers.RelatedField):
 class ListItemSerializer(serializers.ModelSerializer):
 	"""Serializes ListItem model."""
 	list_id = serializers.PrimaryKeyRelatedField(source='list', queryset=List.objects.all())
-	tags = TagField(many=True, queryset=Tag.objects.all(), read_only=False)
+	tags = TagField(many=True, queryset=Tag.objects.all(), read_only=False, required=False)
 
 	def create(self, validated_data):
-		tags = validated_data.pop('tags')
+		tags = None
+		if 'tags' in validated_data:
+			tags = validated_data.pop('tags')
 		list_item = ListItem.objects.create(**validated_data)
-		list_item.tags.set(*tags)
+		if tags:
+			list_item.tags.set(*tags)
 		return list_item
 
 	def update(self, instance, validated_data):
-		tags = validated_data.pop('tags')
+		tags = None
+		if 'tags' in validated_data:
+			tags = validated_data.pop('tags')
 		instance.title = validated_data.get('title', instance.title)
 		instance.description = validated_data.get('description', instance.description)
 		instance.completed = validated_data.get('completed', instance.completed)
 		instance.list_id = validated_data.get('list_id', instance.list_id)
 		instance.save()
-		instance.tags.set(*tags)
+		if tags:
+			instance.tags.set(*tags)
 		return instance
 
 	class Meta:

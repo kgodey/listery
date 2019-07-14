@@ -118,7 +118,8 @@ const moveListItemSuccess = (id, listID) => ({
 export const createListItem = (title, listID) => (dispatch, getState) => {
 	let itemData = {
 		title: title,
-		list_id: listID
+		list_id: listID,
+		tags: []
 	}
 	let tempID = getNumTempItems(getState()) - 1
 	let requestData = {}
