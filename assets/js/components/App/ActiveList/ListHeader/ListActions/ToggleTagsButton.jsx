@@ -8,10 +8,10 @@ import { Button } from './Button.jsx'
 import { getActiveList } from '../../../../../reducers/activeList'
 
 
-let ToggleTagsButton = ({ onClick, tagsEnabled }) => {
-	let text = 'Enable Tags'
-	if (tagsEnabled) {
-		text = 'Disable Tags'
+let ToggleTagsButton = ({ onClick, showTags }) => {
+	let text = 'Show Tags'
+	if (showTags) {
+		text = 'Hide Tags'
 	}
 	return (
 		<IconContext.Provider value={{ className:'align-middle' }}>
@@ -26,13 +26,13 @@ let ToggleTagsButton = ({ onClick, tagsEnabled }) => {
 
 
 const mapStateToProps = (state) => ({
-	tagsEnabled: getActiveList(state).tags_enabled
+	showTags: getActiveList(state).show_tags_by_default
 })
 
 
 ToggleTagsButton.propTypes = {
 	onClick: PropTypes.func.isRequired,
-	tagsEnabled: PropTypes.bool,
+	showTags: PropTypes.bool,
 }
 
 

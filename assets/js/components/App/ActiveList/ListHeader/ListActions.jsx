@@ -13,7 +13,7 @@ const divStyle = {
 }
 
 
-export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick, onTagsEnabledClick }) => {
+export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick, onTagsToggleClick }) => {
 	return (
 		<div style={divStyle} className="col">
 			<QuickSortButton
@@ -29,7 +29,7 @@ export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllCli
 				onClick={onShareClick}
 			/>
 			<ToggleTagsButton
-				onClick={onTagsEnabledClick}
+				onClick={onTagsToggleClick}
 			/>
 		</div>
 	)
@@ -41,6 +41,6 @@ ListActions.propTypes = {
 	onCheckAllClick: PropTypes.func.isRequired,
 	onUncheckAllClick: PropTypes.func.isRequired,
 	onShareClick: PropTypes.func.isRequired,
-	onTagsEnabledClick: PropTypes.func.isRequired,
+	onTagsToggleClick: PropTypes.func.isRequired,
 }
 

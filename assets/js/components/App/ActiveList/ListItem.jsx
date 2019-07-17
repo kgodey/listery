@@ -63,7 +63,7 @@ const dropCollect = (connect) => ({
 class ListItem extends React.Component {
 	constructor(props) {
 		super(props)
-		const { completed, title, description, id, tags, tagsEnabled } = props
+		const { completed, title, description, id, tags, showTags } = props
 		this.state = {
 			data: {
 				completed: completed,
@@ -76,7 +76,7 @@ class ListItem extends React.Component {
 					}
 				})
 			},
-			tagsEnabled: tagsEnabled,
+			showTags: showTags,
 			currentlyEditing: false,
 			currentlyHovering: false,
 			currentlyOverInput: false,
@@ -234,10 +234,10 @@ class ListItem extends React.Component {
 		const { isFetchingList } = this.props
 		if (!isFetchingList) {
 			let tagsElement
-			const { connectDragSource, isDragging, connectDropTarget, isFetching, tagsEnabled } = this.props
+			const { connectDragSource, isDragging, connectDropTarget, isFetching, showTags } = this.props
 			const style = {opacity: isDragging ? 0 : 1}
 			const className = this.state.disabled ? 'list-group-item disabled' : 'list-group-item'
-			if (tagsEnabled) {
+			if (showTags) {
 				tagsElement = <div className="row">
 						<ReactTags
 							tags={this.state.data.tags}
@@ -323,7 +323,7 @@ ListItem.propTypes = {
 	completed: PropTypes.bool.isRequired,
 	title: PropTypes.string.isRequired,
 	description: PropTypes.string,
-	tagsEnabled: PropTypes.bool,
+	showTags: PropTypes.bool,
 	originalData: PropTypes.object.isRequired,
 	isFetchingList: PropTypes.bool,
 	isFetching: PropTypes.bool,

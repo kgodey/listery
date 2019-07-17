@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='list',
-            name='tags_enabled',
+            name='show_tags_by_default',
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(

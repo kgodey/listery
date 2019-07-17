@@ -75,7 +75,7 @@ class ListHeader extends React.Component {
 
 	handleTagsEnabledClick() {
 		const { updateActiveList, list } = this.props
-		updateActiveList(list.id, { tags_enabled: !list.tags_enabled }, list)
+		updateActiveList(list.id, { show_tags_by_default: !list.show_tags_by_default }, list)
 	}
 
 	handleNameDoubleClick(event) {
@@ -123,7 +123,7 @@ class ListHeader extends React.Component {
 						onQuickSortClick={this.handleQuickSortClick}
 						onCheckAllClick={this.handleCheckAllClick}
 						onUncheckAllClick={this.handleUncheckAllClick}
-						onTagsEnabledClick={this.handleTagsEnabledClick}
+						onTagsToggleClick={this.handleTagsEnabledClick}
 					/>
 					<ListItemCount />
 				</div>
