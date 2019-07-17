@@ -63,7 +63,7 @@ const dropCollect = (connect) => ({
 class ListItem extends React.Component {
 	constructor(props) {
 		super(props)
-		const { completed, title, description, id, tags } = props
+		const { completed, title, description, id, tags, tagsEnabled } = props
 		this.state = {
 			data: {
 				completed: completed,
@@ -74,8 +74,9 @@ class ListItem extends React.Component {
 						id: index+1,
 						name: name
 					}
-				}),
+				})
 			},
+			tagsEnabled: tagsEnabled,
 			currentlyEditing: false,
 			currentlyHovering: false,
 			currentlyOverInput: false,
@@ -232,9 +233,22 @@ class ListItem extends React.Component {
 	render() {
 		const { isFetchingList } = this.props
 		if (!isFetchingList) {
-			const { connectDragSource, isDragging, connectDropTarget, isFetching } = this.props
+			let tagsElement
+			const { connectDragSource, isDragging, connectDropTarget, isFetching, tagsEnabled } = this.props
 			const style = {opacity: isDragging ? 0 : 1}
 			const className = this.state.disabled ? 'list-group-item disabled' : 'list-group-item'
+			if (tagsEnabled) {
+				tagsElement = <div className="row">
+						<ReactTags
+							tags={this.state.data.tags}
+							placeholder={'Add a new tag'}
+							autoresize={false}
+							allowNew={true}
+							handleAddition={this.handleTagAddition}
+							handleDelete={this.handleTagDeletion}
+						/>
+					</div>
+			}
 			let element = (
 				<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
 					<div className="row">
@@ -268,16 +282,7 @@ class ListItem extends React.Component {
 							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 						</div>
 					</div>
-					<div className="row">
-						<ReactTags
-							tags={this.state.data.tags}
-							placeholder={'Add a new tag'}
-							autoresize={false}
-							allowNew={true}
-							handleAddition={this.handleTagAddition}
-							handleDelete={this.handleTagDeletion}
-						/>
-					</div>
+					{tagsElement}
 					<SweetAlert
 						warning
 						showCancel
@@ -318,6 +323,7 @@ ListItem.propTypes = {
 	completed: PropTypes.bool.isRequired,
 	title: PropTypes.string.isRequired,
 	description: PropTypes.string,
+	tagsEnabled: PropTypes.bool,
 	originalData: PropTypes.object.isRequired,
 	isFetchingList: PropTypes.bool,
 	isFetching: PropTypes.bool,

@@ -6,7 +6,7 @@ import { withRouter } from 'react-router'
 import { fetchActiveList } from '../../actions/list'
 import { reorderListItem, previewListItemOrder } from '../../actions/list-item'
 import { getSortedListItems, getListItemInitialOrders } from '../../reducers/activeListItems'
-import { getActiveListID, getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
+import { getActiveList, getActiveListID, getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
@@ -38,7 +38,7 @@ class ActiveList extends React.Component {
 	}
 
 	render() {
-		const { activeListID, activeListError, isFetching, sortedListItems, initialOrders } = this.props
+		const { activeListID, activeListError, isFetching, sortedListItems, initialOrders, list } = this.props
 		if (activeListID === null) {
 			if (activeListError.isError) {
 				return (
@@ -74,6 +74,7 @@ class ActiveList extends React.Component {
 								initialOrder={initialOrders[item.id]}
 								setNewOrder={this.setNewOrder}
 								previewNewOrder={this.previewNewOrder}
+								tagsEnabled = {list.tags_enabled}
 							/>
 						)}
 					</div>
@@ -95,6 +96,7 @@ class ActiveList extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+	list: getActiveList(state),
 	initialOrders: getListItemInitialOrders(state),
 	activeListID: getActiveListID(state),
 	sortedListItems: getSortedListItems(state),

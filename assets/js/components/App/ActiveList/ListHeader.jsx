@@ -27,6 +27,7 @@ class ListHeader extends React.Component {
 		this.handleCheckAllClick = this.handleCheckAllClick.bind(this)
 		this.handleUncheckAllClick = this.handleUncheckAllClick.bind(this)
 		this.handleNameDoubleClick = this.handleNameDoubleClick.bind(this)
+		this.handleTagsEnabledClick = this.handleTagsEnabledClick.bind(this)
 		this.handleClickOutside = this.handleClickOutside.bind(this)
 		this.handleNameChange = this.handleNameChange.bind(this)
 		this.handleNameKeyUp = this.handleNameKeyUp.bind(this)
@@ -70,6 +71,11 @@ class ListHeader extends React.Component {
 
 	handleUncheckAllClick(event) {
 		this.updateListUsingAction(UNCHECK_ALL_URL_SUFFIX)
+	}
+
+	handleTagsEnabledClick() {
+		const { updateActiveList, list } = this.props
+		updateActiveList(list.id, { tags_enabled: !list.tags_enabled }, list)
 	}
 
 	handleNameDoubleClick(event) {
@@ -117,6 +123,7 @@ class ListHeader extends React.Component {
 						onQuickSortClick={this.handleQuickSortClick}
 						onCheckAllClick={this.handleCheckAllClick}
 						onUncheckAllClick={this.handleUncheckAllClick}
+						onTagsEnabledClick={this.handleTagsEnabledClick}
 					/>
 					<ListItemCount />
 				</div>
