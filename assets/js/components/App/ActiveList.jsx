@@ -38,8 +38,8 @@ class ActiveList extends React.Component {
 	}
 
 	render() {
-		const { activeListID, activeListError, isFetching, sortedListItems, initialOrders, list } = this.props
-		if (activeListID === null) {
+		const { activeListError, isFetching, sortedListItems, initialOrders, activeList } = this.props
+		if (activeList.id === null) {
 			if (activeListError.isError) {
 				return (
 					<ErrorPanel show={activeListError.isError}>
@@ -74,7 +74,7 @@ class ActiveList extends React.Component {
 								initialOrder={initialOrders[item.id]}
 								setNewOrder={this.setNewOrder}
 								previewNewOrder={this.previewNewOrder}
-								tagsEnabled = {list.tags_enabled}
+								tagsEnabled = {activeList.tags_enabled}
 							/>
 						)}
 					</div>
@@ -96,9 +96,8 @@ class ActiveList extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-	list: getActiveList(state),
+	activeList: getActiveList(state),
 	initialOrders: getListItemInitialOrders(state),
-	activeListID: getActiveListID(state),
 	sortedListItems: getSortedListItems(state),
 	isFetching: getActiveListFetchStatus(state),
 	activeListError: getActiveListErrorStatus(state)
@@ -107,7 +106,7 @@ const mapStateToProps = (state) => ({
 
 ActiveList.propTypes = {
 	initialOrders: PropTypes.object.isRequired,
-	activeListID: PropTypes.number,
+	activeList: PropTypes.object.isRequired,
 	sortedListItems: PropTypes.array.isRequired,
 	isFetching: PropTypes.bool.isRequired,
 	fetchActiveList: PropTypes.func.isRequired,
