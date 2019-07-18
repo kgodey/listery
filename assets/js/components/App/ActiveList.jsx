@@ -74,7 +74,7 @@ class ActiveList extends React.Component {
 								initialOrder={initialOrders[item.id]}
 								setNewOrder={this.setNewOrder}
 								previewNewOrder={this.previewNewOrder}
-								showTags = {activeList.show_tags_by_default}
+								showTags = {activeList.show_tags}
 							/>
 						)}
 					</div>

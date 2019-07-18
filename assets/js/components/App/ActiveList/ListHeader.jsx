@@ -14,7 +14,7 @@ import { QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX } f
 class ListHeader extends React.Component {
 	constructor(props) {
 		super(props)
-		const { name } = props.list
+		const { name } = props.activeList
 		this.state = {
 			data: {
 				name: name
@@ -35,7 +35,7 @@ class ListHeader extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const { name } = nextProps.list
+		const { name } = nextProps.activeList
 		this.setState({
 			data: {
 				name: name
@@ -52,13 +52,13 @@ class ListHeader extends React.Component {
 	}
 
 	handlePrivacyClick(event) {
-		const { updateActiveList, list } = this.props
-		updateActiveList(list.id, { private: !list.private }, list)
+		const { updateActiveList, activeList } = this.props
+		updateActiveList(activeList.id, { private: !activeList.private }, activeList)
 	}
 
 	updateListUsingAction(actionURL) {
-		const { performActionOnList, list } = this.props
-		performActionOnList(list.id, actionURL, list)
+		const { performActionOnList, activeList } = this.props
+		performActionOnList(activeList.id, actionURL, activeList)
 	}
 
 	handleQuickSortClick(event) {
@@ -74,8 +74,8 @@ class ListHeader extends React.Component {
 	}
 
 	handleTagsEnabledClick() {
-		const { updateActiveList, list } = this.props
-		updateActiveList(list.id, { show_tags_by_default: !list.show_tags_by_default }, list)
+		const { updateActiveList, activeList } = this.props
+		updateActiveList(activeList.id, { show_tags: !activeList.show_tags }, activeList)
 	}
 
 	handleNameDoubleClick(event) {
@@ -98,12 +98,13 @@ class ListHeader extends React.Component {
 	}
 
 	saveListName() {
-		const { updateActiveList, list } = this.props
-		updateActiveList(list.id, { name: this.state.data.name }, list)
+		const { updateActiveList, activeList } = this.props
+		updateActiveList(activeList.id, { name: this.state.data.name }, activeList)
 		this.setState({ currentlyEditing: false })
 	}
 
 	render() {
+		const { activeList } = this.props
 		return (
 			<div>
 				<div className="row">
@@ -134,12 +135,12 @@ class ListHeader extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-	list: getActiveList(state)
+	activeList: getActiveList(state)
 })
 
 
 ListHeader.propTypes = {
-	list: PropTypes.object.isRequired,
+	activeList: PropTypes.object.isRequired,
 	updateActiveList: PropTypes.func.isRequired,
 	performActionOnList: PropTypes.func.isRequired
 }

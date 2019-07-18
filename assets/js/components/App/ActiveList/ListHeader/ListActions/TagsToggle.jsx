@@ -19,7 +19,7 @@ let TagsToggle = ({ onClick, showTags }) => {
 
 
 const mapStateToProps = (state) => ({
-	showTags: getActiveList(state).show_tags_by_default
+	showTags: getActiveList(state).show_tags
 })
 
 

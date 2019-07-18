@@ -33,7 +33,7 @@ class List(OrderedModel):
 	archived = models.BooleanField(default=False)
 	private = models.BooleanField(default=True)
 	owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
-	show_tags_by_default = models.BooleanField(default=False)
+	show_tags = models.BooleanField(default=False)
 
 	objects = ListQuerySet.as_manager()
 
