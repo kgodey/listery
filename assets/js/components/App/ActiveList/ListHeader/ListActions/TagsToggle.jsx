@@ -1,26 +1,19 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { IconContext } from 'react-icons'
+import Dropdown from 'react-bootstrap/Dropdown'
 import { FaTags } from 'react-icons/fa'
 import { connect } from 'react-redux'
 
-import { Button } from './Button.jsx'
 import { getActiveList } from '../../../../../reducers/activeList'
 
 
-let ToggleTagsButton = ({ onClick, showTags }) => {
+let TagsToggle = ({ onClick, showTags }) => {
 	let text = 'Show Tags'
 	if (showTags) {
 		text = 'Hide Tags'
 	}
 	return (
-		<IconContext.Provider value={{ className:'align-middle' }}>
-			<Button
-				icon={<FaTags />}
-				text={text}
-				onClick={onClick}
-			/>
-		</IconContext.Provider>
+		<Dropdown.Item as="button" onClick={onClick}>{<FaTags />}&nbsp;{text}</Dropdown.Item>
 	)
 }
 
@@ -30,11 +23,11 @@ const mapStateToProps = (state) => ({
 })
 
 
-ToggleTagsButton.propTypes = {
+TagsToggle.propTypes = {
 	onClick: PropTypes.func.isRequired,
 	showTags: PropTypes.bool,
 }
 
 
-ToggleTagsButton = connect(mapStateToProps, null)(ToggleTagsButton)
-export default ToggleTagsButton
+TagsToggle = connect(mapStateToProps, null)(TagsToggle)
+export default TagsToggle

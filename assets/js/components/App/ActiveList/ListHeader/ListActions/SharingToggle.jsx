@@ -1,37 +1,28 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { IconContext } from 'react-icons'
+import Dropdown from 'react-bootstrap/Dropdown'
 import { FaShareAlt, FaLock } from 'react-icons/fa'
 import { connect } from 'react-redux'
 
-import { Button } from './Button.jsx'
 import { getActiveList } from '../../../../../reducers/activeList'
 
 
-let SharingButton = ({ listOwnerID, isPrivate, onClick }) => {
+let SharingToggle = ({ listOwnerID, isPrivate, onClick }) => {
 	let icon, text
 	if (isPrivate) {
 		icon = (
-			<IconContext.Provider value={{ className: 'align-middle' }}>
-				<FaShareAlt />
-			</IconContext.Provider>
+			<FaShareAlt />
 		)
 		text = 'Share'
 	} else {
 		icon = (
-			<IconContext.Provider value={{ className: 'align-middle' }}>
-				<FaLock />
-			</IconContext.Provider>
+			<FaLock />
 		)
 		text = 'Make Private'
 	}
 	if (listOwnerID === currentUserID) {
 		return (
-			<Button
-				icon={icon}
-				text={text}
-				onClick={onClick}
-			/>
+			<Dropdown.Item as="button" onClick={onClick}>{icon}&nbsp;{text}</Dropdown.Item>
 		)
 	}
 	return (null)
@@ -44,12 +35,12 @@ const mapStateToProps = (state) => ({
 })
 
 
-SharingButton.propTypes = {
+SharingToggle.propTypes = {
 	listOwnerID: PropTypes.number,
 	isPrivate: PropTypes.bool,
 	onClick: PropTypes.func.isRequired
 }
 
 
-SharingButton = connect(mapStateToProps, null)(SharingButton)
-export default SharingButton
+SharingToggle = connect(mapStateToProps, null)(SharingToggle)
+export default SharingToggle
