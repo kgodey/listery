@@ -35,7 +35,7 @@ export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllCli
 					</Dropdown>
 					<Dropdown>
 						<Dropdown.Toggle size="sm" variant="outline-dark" id="listSettingsDropdown">
-							<FaCog />&nbsp;List Settings
+							<FaCog />&nbsp;Settings
 						</Dropdown.Toggle>
 						<Dropdown.Menu>
 							<SharingToggle
