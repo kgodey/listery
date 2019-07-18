@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Dropdown from 'react-bootstrap/Dropdown'
-import { FaShareAlt, FaLock } from 'react-icons/fa'
+import { FaGlobeAmericas, FaLock } from 'react-icons/fa'
 import { connect } from 'react-redux'
 
 import { getActiveList } from '../../../../../reducers/activeList'
@@ -11,9 +11,9 @@ let SharingToggle = ({ listOwnerID, isPrivate, onClick }) => {
 	let icon, text
 	if (isPrivate) {
 		icon = (
-			<FaShareAlt />
+			<FaGlobeAmericas />
 		)
-		text = 'Share'
+		text = 'Make Shared'
 	} else {
 		icon = (
 			<FaLock />
