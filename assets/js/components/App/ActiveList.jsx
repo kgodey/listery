@@ -74,7 +74,6 @@ class ActiveList extends React.Component {
 								initialOrder={initialOrders[item.id]}
 								setNewOrder={this.setNewOrder}
 								previewNewOrder={this.previewNewOrder}
-								showTags = {activeList.show_tags}
 							/>
 						)}
 					</div>
@@ -107,6 +106,7 @@ const mapStateToProps = (state) => ({
 
 ActiveList.propTypes = {
 	initialOrders: PropTypes.object.isRequired,
+	activeList: PropTypes.object,
 	activeListID: PropTypes.number,
 	sortedListItems: PropTypes.array.isRequired,
 	isFetching: PropTypes.bool.isRequired,

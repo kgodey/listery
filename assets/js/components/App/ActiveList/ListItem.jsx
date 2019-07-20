@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import ReactTags from 'react-tag-autocomplete'
 
 import { deleteListItem, updateListItem } from '../../../actions/list-item'
-import { getActiveListFetchStatus } from '../../../reducers/activeList'
+import { getActiveList, getActiveListFetchStatus } from '../../../reducers/activeList'
 import { getListItem, getListItemFetchStatus } from '../../../reducers/activeListItems'
 import { ItemTypes } from '../../../utils/itemTypes'
 import { DeleteIcon } from '../Shared/Icons.jsx'
@@ -69,12 +69,7 @@ class ListItem extends React.Component {
 				completed: completed,
 				title: title,
 				description: description,
-				tags: tags.map(function(name, index) {
-					return {
-						id: index+1,
-						name: name
-					}
-				})
+				tags: tags
 			},
 			showTags: showTags,
 			currentlyEditing: false,
@@ -197,9 +192,8 @@ class ListItem extends React.Component {
 
 	saveTags(tags) {
 		const { updateListItem, id, originalData } = this.props
-		const tagNames = Array.from(tags, tag => tag.name)
 		updateListItem(id, {
-			tags: tagNames
+			tags: tags
 		}, originalData)
 	}
 
@@ -234,18 +228,20 @@ class ListItem extends React.Component {
 		const { isFetchingList } = this.props
 		if (!isFetchingList) {
 			let tagsElement
-			const { connectDragSource, isDragging, connectDropTarget, isFetching, showTags } = this.props
+			const { connectDragSource, isDragging, connectDropTarget, isFetching, activeList } = this.props
 			const style = {opacity: isDragging ? 0 : 1}
 			const className = this.state.disabled ? 'list-group-item disabled' : 'list-group-item'
-			if (showTags) {
+			if (activeList.show_tags) {
 				tagsElement = <div className="row">
 						<ReactTags
 							tags={this.state.data.tags}
+							suggestions={activeList.tags}
 							placeholder={'Add a new tag'}
 							autoresize={false}
 							allowNew={true}
 							handleAddition={this.handleTagAddition}
 							handleDelete={this.handleTagDeletion}
+							minQueryLength={1}
 						/>
 					</div>
 			}
@@ -312,6 +308,7 @@ class ListItem extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({
+	activeList: getActiveList(state),
 	originalData: getListItem(state, ownProps.id),
 	isFetchingList: getActiveListFetchStatus(state),
 	isFetching: getListItemFetchStatus(state, ownProps.id)
@@ -320,10 +317,10 @@ const mapStateToProps = (state, ownProps) => ({
 
 ListItem.propTypes = {
 	id: PropTypes.number.isRequired,
+	activeList: PropTypes.object.isRequired,
 	completed: PropTypes.bool.isRequired,
 	title: PropTypes.string.isRequired,
 	description: PropTypes.string,
-	showTags: PropTypes.bool,
 	originalData: PropTypes.object.isRequired,
 	isFetchingList: PropTypes.bool,
 	isFetching: PropTypes.bool,

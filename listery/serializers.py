@@ -10,7 +10,10 @@ from listery.models import List, ListItem
 
 class TagField(serializers.RelatedField):
 	def to_representation(self, value):
-		return value.name
+		return {
+			'id': value.id,
+			'name': value.name
+		}
 
 	def to_internal_value(self, data):
 		return data
@@ -24,23 +27,23 @@ class ListItemSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 		tags = None
 		if 'tags' in validated_data:
-			tags = validated_data.pop('tags')
+			tags = [tag['name'] for tag in validated_data.pop('tags')]
 		list_item = ListItem.objects.create(**validated_data)
-		if tags:
-			list_item.tags.set(*tags)
+		if tags is not None:
+			list_item.update_tags(tags)
 		return list_item
 
 	def update(self, instance, validated_data):
 		tags = None
 		if 'tags' in validated_data:
-			tags = validated_data.pop('tags')
+			tags = [tag['name'] for tag in validated_data.pop('tags')]
 		instance.title = validated_data.get('title', instance.title)
 		instance.description = validated_data.get('description', instance.description)
 		instance.completed = validated_data.get('completed', instance.completed)
 		instance.list_id = validated_data.get('list_id', instance.list_id)
 		instance.save()
-		if tags:
-			instance.tags.set(*tags)
+		if tags is not None:
+			instance.update_tags(tags)
 		return instance
 
 	class Meta:
@@ -52,10 +55,11 @@ class MinimalListSerializer(serializers.ModelSerializer):
 	"""Minimal serializer for List model (used for list views)."""
 	item_count = serializers.ReadOnlyField()
 	completed_item_count = serializers.ReadOnlyField()
+	tags = TagField(many=True, read_only=True)
 
 	class Meta:
 		model = List
-		fields = ['id', 'name', 'order', 'private', 'created_at', 'updated_at', 'owner_id', 'item_count', 'completed_item_count', 'show_tags']
+		fields = ['id', 'name', 'order', 'private', 'created_at', 'updated_at', 'owner_id', 'item_count', 'completed_item_count', 'show_tags', 'tags']
 
 	def validate(self, attrs):
 		owner = self.context['request'].user
@@ -74,4 +78,4 @@ class ListSerializer(MinimalListSerializer):
 
 	class Meta:
 		model = List
-		fields = ['id', 'name', 'order', 'private', 'created_at', 'updated_at', 'owner_id', 'items', 'item_count', 'completed_item_count', 'show_tags']
+		fields = ['id', 'name', 'order', 'private', 'created_at', 'updated_at', 'owner_id', 'items', 'item_count', 'completed_item_count', 'show_tags', 'tags']

@@ -8,6 +8,15 @@ from django.db.models import Q
 from django.db.transaction import atomic
 from ordered_model.models import OrderedModel
 from taggit.managers import TaggableManager
+from taggit.models import Tag, TaggedItemBase
+
+
+class TaggedList(TaggedItemBase):
+	content_object = models.ForeignKey('List')
+
+
+class TaggedListItem(TaggedItemBase):
+	content_object = models.ForeignKey('ListItem')
 
 
 class ListQuerySet(models.QuerySet):
@@ -34,6 +43,7 @@ class List(OrderedModel):
 	private = models.BooleanField(default=True)
 	owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 	show_tags = models.BooleanField(default=False)
+	tags = TaggableManager(through=TaggedList)
 
 	objects = ListQuerySet.as_manager()
 
@@ -141,7 +151,7 @@ class ListItem(OrderedModel):
 	list = models.ForeignKey(List, on_delete=models.CASCADE)
 	order_with_respect_to = 'list'
 
-	tags = TaggableManager()
+	tags = TaggableManager(through=TaggedListItem)
 	objects = ListItemQuerySet.as_manager()
 
 	def __unicode__(self):
@@ -166,3 +176,17 @@ class ListItem(OrderedModel):
 			self.list.reindex()
 		if old_list:
 			old_list.reindex()
+
+	def update_tags(self, tags):
+		# Add all passed in tags to list and set list item tags to the tags passed in
+		self.list.tags.add(*tags)
+		self.tags.set(*tags)
+		# Remove tags from the list if no list item belonging to the list has them anymore
+		tags_to_delete = []
+		all_list_item_tags =  Tag.objects.filter(listery_taggedlistitem_items__content_object__list=self.list).distinct()
+		all_list_tags = Tag.objects.filter(listery_taggedlist_items__content_object=self.list).distinct()
+		tags_to_remove = []
+		for tag in all_list_tags:
+			if tag not in all_list_item_tags:
+				tags_to_remove.append(tag.name)
+		self.list.tags.remove(*tags_to_remove)
