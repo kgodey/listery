@@ -96,6 +96,8 @@ class ListItem extends React.Component {
 		this.handleInputMouseLeave = this.handleInputMouseLeave.bind(this)
 		this.handleTagAddition = this.handleTagAddition.bind(this)
 		this.handleTagDeletion = this.handleTagDeletion.bind(this)
+		this.handleTagValidate = this.handleTagValidate.bind(this)
+		this.tagSuggestionsFilter = this.tagSuggestionsFilter.bind(this)
 	}
 
 	static getDerivedStateFromProps({ completed }, state) {
@@ -224,6 +226,26 @@ class ListItem extends React.Component {
 		this.saveTags(tags)
 	}
 
+	handleTagValidate(tag) {
+		const currentTags = this.state.data.tags.map((tagObject) => {
+			return tagObject.name
+		})
+		if (currentTags.indexOf(tag.name) > -1) {
+			return false
+		}
+		return true
+	}
+
+	tagSuggestionsFilter(suggestion, query) {
+		const currentTags = this.state.data.tags.map((tagObject) => {
+			return tagObject.name
+		})
+		if (currentTags.indexOf(suggestion.name) > -1) {
+			return false
+		}
+		return true
+	}
+
 	render() {
 		const { isFetchingList } = this.props
 		if (!isFetchingList) {
@@ -239,9 +261,11 @@ class ListItem extends React.Component {
 							placeholder={'Add a new tag'}
 							autoresize={false}
 							allowNew={true}
+							minQueryLength={1}
 							handleAddition={this.handleTagAddition}
 							handleDelete={this.handleTagDeletion}
-							minQueryLength={1}
+							handleValidate={this.handleTagValidate}
+							suggestionsFilter={this.tagSuggestionsFilter}
 						/>
 					</div>
 			}
