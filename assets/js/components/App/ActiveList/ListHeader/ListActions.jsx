@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import Button from 'react-bootstrap/Button'
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { IconContext } from 'react-icons'
@@ -13,7 +14,7 @@ const divStyle = {
 	marginBottom: '10px'
 }
 
-const dropDownStyle = {
+const buttonStyle = {
 	marginRight: '10px'
 }
 
@@ -23,16 +24,30 @@ export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllCli
 		<div style={divStyle} className="col">
 			<IconContext.Provider value={{ className:'align-middle' }}>
 				<ButtonToolbar>
-					<Dropdown style={dropDownStyle}>
-						<Dropdown.Toggle size="sm" variant="outline-dark" id="listActionsDropdown">
-							<FaMagic />&nbsp;Actions
-						</Dropdown.Toggle>
-						<Dropdown.Menu>
-							<Dropdown.Item as="button" onClick={onQuickSortClick}><FaSortAlphaDown />&nbsp;Quick sort</Dropdown.Item>
-							<Dropdown.Item as="button" onClick={onCheckAllClick}><FaRegCheckSquare />&nbsp;Check all</Dropdown.Item>
-							<Dropdown.Item as="button" onClick={onUncheckAllClick}><FaRegSquare />&nbsp;Uncheck all</Dropdown.Item>
-						</Dropdown.Menu>
-					</Dropdown>
+					<Button
+						style={buttonStyle}
+						variant="outline-dark"
+						size="sm"
+						onClick={onQuickSortClick}
+					>
+						<FaSortAlphaDown />&nbsp;Quick sort
+					</Button>
+					<Button
+						style={buttonStyle}
+						variant="outline-dark"
+						size="sm"
+						onClick={onCheckAllClick}
+					>
+						<FaRegCheckSquare />&nbsp;Check all
+					</Button>
+					<Button
+						style={buttonStyle}
+						variant="outline-dark"
+						size="sm"
+						onClick={onUncheckAllClick}
+					>
+						<FaRegSquare />&nbsp;Uncheck all
+					</Button>
 					<Dropdown>
 						<Dropdown.Toggle size="sm" variant="outline-dark" id="listSettingsDropdown">
 							<FaCog />&nbsp;Settings

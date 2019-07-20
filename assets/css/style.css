@@ -1,7 +1,7 @@
 /* Styles for React Tags*/
 div.ReactTags__tags {
 	position: relative;
-	padding: 3px 30px 0px;
+	padding: 5px 10px 3px 35px;
 	font-size: 75%;
 	line-height: 1;
 	text-transform: uppercase;
@@ -28,7 +28,7 @@ div.ReactTags__selected span.ReactTags__tag {
 	background: #f8f9fa;
 	display: inline-block;
 	padding: 5px;
-	margin: 0 5px;
+	margin-right: 5px;
 	border-radius: 0.25em;
 }
 div.ReactTags__selected a.ReactTags__remove {
