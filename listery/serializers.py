@@ -11,8 +11,8 @@ from listery.models import List, ListItem
 class TagField(serializers.RelatedField):
 	def to_representation(self, value):
 		return {
-			'id': value.id,
-			'name': value.name
+			'id': value.slug,
+			'text': value.name
 		}
 
 	def to_internal_value(self, data):
@@ -27,7 +27,7 @@ class ListItemSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 		tags = None
 		if 'tags' in validated_data:
-			tags = [tag['name'] for tag in validated_data.pop('tags')]
+			tags = [tag['text'] for tag in validated_data.pop('tags')]
 		list_item = ListItem.objects.create(**validated_data)
 		if tags is not None:
 			list_item.update_tags(tags)
@@ -36,7 +36,7 @@ class ListItemSerializer(serializers.ModelSerializer):
 	def update(self, instance, validated_data):
 		tags = None
 		if 'tags' in validated_data:
-			tags = [tag['name'] for tag in validated_data.pop('tags')]
+			tags = [tag['text'] for tag in validated_data.pop('tags')]
 		instance.title = validated_data.get('title', instance.title)
 		instance.description = validated_data.get('description', instance.description)
 		instance.completed = validated_data.get('completed', instance.completed)

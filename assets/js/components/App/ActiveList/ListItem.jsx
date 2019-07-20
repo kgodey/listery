@@ -7,7 +7,7 @@ import DropTarget from 'react-dnd/lib/DropTarget'
 import { findDOMNode } from 'react-dom'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
-import ReactTags from 'react-tag-autocomplete'
+import { WithOutContext as ReactTags } from 'react-tag-input'
 
 import { deleteListItem, updateListItem } from '../../../actions/list-item'
 import { getActiveList, getActiveListFetchStatus } from '../../../reducers/activeList'
@@ -96,8 +96,7 @@ class ListItem extends React.Component {
 		this.handleInputMouseLeave = this.handleInputMouseLeave.bind(this)
 		this.handleTagAddition = this.handleTagAddition.bind(this)
 		this.handleTagDeletion = this.handleTagDeletion.bind(this)
-		this.handleTagValidate = this.handleTagValidate.bind(this)
-		this.tagSuggestionsFilter = this.tagSuggestionsFilter.bind(this)
+		this.handleTagFilterSuggestions = this.handleTagFilterSuggestions.bind(this)
 	}
 
 	static getDerivedStateFromProps({ completed }, state) {
@@ -209,12 +208,10 @@ class ListItem extends React.Component {
 
 	handleTagAddition(tag) {
 		let newState = {...this.state}
-		let currentTags = this.state.data.tags
-		tag['id'] = currentTags.length + 1
-		const newTags = [...currentTags, tag]
+		const newTags = [...this.state.data.tags, tag]
 		newState['data']['tags'] = newTags
-		this.setState(newState)
 		this.saveTags(newTags)
+		this.setState(newState)
 	}
 
 	handleTagDeletion(index) {
@@ -222,28 +219,21 @@ class ListItem extends React.Component {
 		const tags = this.state.data.tags.slice(0)
 		tags.splice(index, 1)
 		newState['data']['tags'] = tags
-		this.setState(newState)
 		this.saveTags(tags)
+		this.setState(newState)
 	}
 
-	handleTagValidate(tag) {
-		const currentTags = this.state.data.tags.map((tagObject) => {
-			return tagObject.name
-		})
-		if (currentTags.indexOf(tag.name) > -1) {
-			return false
-		}
-		return true
-	}
+	handleTagFilterSuggestions(textInputValue, possibleSuggestionsArray) {
+		var lowerCaseQuery = textInputValue.toLowerCase()
 
-	tagSuggestionsFilter(suggestion, query) {
-		const currentTags = this.state.data.tags.map((tagObject) => {
-			return tagObject.name
+		return possibleSuggestionsArray.filter((suggestion) => {
+			const matchLowerCase = suggestion.text.toLowerCase().includes(lowerCaseQuery)
+			const currentTags = this.state.data.tags.map((tagObject) => {
+				return tagObject.text
+			})
+			const notDuplicate = currentTags.indexOf(suggestion.text) > -1 ? false : true
+			return matchLowerCase && notDuplicate
 		})
-		if (currentTags.indexOf(suggestion.name) > -1) {
-			return false
-		}
-		return true
 	}
 
 	render() {
@@ -258,14 +248,13 @@ class ListItem extends React.Component {
 						<ReactTags
 							tags={this.state.data.tags}
 							suggestions={activeList.tags}
-							placeholder={'Add a new tag'}
-							autoresize={false}
-							allowNew={true}
+							autocomplete={true}
+							allowDragDrop={false}
 							minQueryLength={1}
 							handleAddition={this.handleTagAddition}
 							handleDelete={this.handleTagDeletion}
-							handleValidate={this.handleTagValidate}
-							suggestionsFilter={this.tagSuggestionsFilter}
+							handleFilterSuggestions={this.handleTagFilterSuggestions}
+							delimiters={[9, 13, 188]} // tab, enter, comma
 						/>
 					</div>
 			}
