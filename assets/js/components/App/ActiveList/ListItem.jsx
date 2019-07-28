@@ -237,8 +237,8 @@ class ListItem extends React.Component {
 	}
 
 	render() {
-		const { isFetchingList } = this.props
-		if (!isFetchingList) {
+		const { isFetchingList, hidden } = this.props
+		if (!isFetchingList && !hidden) {
 			let tagsElement
 			const { connectDragSource, isDragging, connectDropTarget, isFetching, activeList } = this.props
 			const style = {opacity: isDragging ? 0 : 1}
@@ -335,6 +335,7 @@ ListItem.propTypes = {
 	title: PropTypes.string.isRequired,
 	description: PropTypes.string,
 	originalData: PropTypes.object.isRequired,
+	hidden: PropTypes.bool,
 	isFetchingList: PropTypes.bool,
 	isFetching: PropTypes.bool,
 	updateListItem: PropTypes.func.isRequired,

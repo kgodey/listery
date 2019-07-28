@@ -5,6 +5,7 @@ import { FaSearch } from 'react-icons/fa'
 import { connect } from 'react-redux'
 import { WithOutContext as ReactTags } from 'react-tag-input'
 
+import { filterActiveList } from '../../../actions/list'
 import { getActiveList, getShowFilterInterface } from '../../../reducers/activeList'
 
 
@@ -17,24 +18,33 @@ const iconStyle = {
 class FilterList extends React.Component {
 	constructor(props) {
 		super(props)
+		this.validateTagAddition = this.validateTagAddition.bind(this)
 		this.handleTagAddition = this.handleTagAddition.bind(this)
 		this.handleTagDeletion = this.handleTagDeletion.bind(this)
 		this.handleTagInputChange = this.handleTagInputChange.bind(this)
 		this.handleTagFilterSuggestions = this.handleTagFilterSuggestions.bind(this)
+		this.sendFilterRequest = this.sendFilterRequest.bind(this)
 		this.state = {
 			tags: [],
 			text: ''
 		}
 	}
 
-	handleTagAddition(tag) {
+	validateTagAddition(tag) {
 		const { activeList } = this.props
 		if (activeList.tags.find(t => t.id == tag.id)) {
-			this.setState({
-				tags: [...this.state.tags, tag],
-				text: ''
-			})
+			return true
 		}
+		return false
+	}
+
+	handleTagAddition(tag) {
+		const newState = {
+			tags: [...this.state.tags, tag],
+			text: ''
+		}
+		this.setState(newState)
+		this.sendFilterRequest(newState)
 	}
 
 	handleTagDeletion(index) {
@@ -43,12 +53,14 @@ class FilterList extends React.Component {
 		tags.splice(index, 1)
 		newState['tags'] = tags
 		this.setState(newState)
+		this.sendFilterRequest(newState)
 	}
 
 	handleTagInputChange(value) {
 		let newState = {...this.state}
 		newState['text'] = value
 		this.setState(newState)
+		this.sendFilterRequest(newState)
 	}
 
 	handleTagFilterSuggestions(textInputValue, possibleSuggestionsArray) {
@@ -62,6 +74,11 @@ class FilterList extends React.Component {
 			const notDuplicate = currentTags.indexOf(suggestion.text) > -1 ? false : true
 			return matchLowerCase && notDuplicate
 		})
+	}
+
+	sendFilterRequest(state) {
+		const { filterActiveList, activeList } = this.props
+		filterActiveList(activeList.id, state.tags, state.text)
 	}
 
 	render() {
@@ -88,6 +105,7 @@ class FilterList extends React.Component {
 						allowDragDrop={false}
 						minQueryLength={1}
 						handleAddition={this.handleTagAddition}
+						validateAddition={this.validateTagAddition}
 						handleDelete={this.handleTagDeletion}
 						handleInputChange={this.handleTagInputChange}
 						handleFilterSuggestions={this.handleTagFilterSuggestions}
@@ -109,12 +127,13 @@ const mapStateToProps = (state) => ({
 
 FilterList.propTypes = {
 	activeList: PropTypes.object.isRequired,
-	showFilterInterface: PropTypes.bool.isRequired
+	showFilterInterface: PropTypes.bool.isRequired,
+	filterActiveList: PropTypes.func.isRequired
 }
 
 
 FilterList = connect(
 	mapStateToProps,
-	null
+	{ filterActiveList }
 )(FilterList)
 export default FilterList

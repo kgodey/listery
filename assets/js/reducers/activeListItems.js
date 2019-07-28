@@ -57,6 +57,15 @@ export const activeListItems = (state={}, action) => {
 		case listItemAPIActions.DELETE_LIST_ITEM_SUCCESS:
 			delete newState[action.id]
 			return newState
+		case listAPIActions.FILTER_LIST_SUCCESS:
+			Object.keys(newState).forEach(itemID => {
+				if (action.visibleListItemIDs.indexOf(Number(itemID)) > -1) {
+					newState[itemID].hidden = false
+				} else {
+					newState[itemID].hidden = true
+				}
+			})
+			return newState
 		default:
 			return state
 	}

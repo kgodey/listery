@@ -2,6 +2,7 @@ import createHistory from 'history/createBrowserHistory'
 import { normalize } from 'normalizr'
 
 import { getActiveListFetchStatus, getActiveListID } from '../reducers/activeList'
+import { getSortedListItems } from '../reducers/activeListItems'
 import { getAllListsFetchStatus } from '../reducers/allLists'
 import { LIST_API_URL, ROOT_URL, QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX } from '../utils/urls'
 import { sync } from './base'
@@ -26,7 +27,10 @@ export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
 export const REORDER_LIST_PREVIEW = 'REORDER_LIST_PREVIEW'
 export const REORDER_LIST_REQUEST = 'REORDER_LIST_REQUEST'
 export const REORDER_LIST_SUCCESS = 'REORDER_LIST_SUCCESS'
-export const TOGGLE_FILTER_INTERFACE_REQUEST = 'TOGGLE_FILTER_INTERFACE_REQUEST'
+export const FILTER_INTERFACE_TOGGLED = 'FILTER_INTERFACE_TOGGLED'
+export const FILTER_LIST_REQUEST = 'FILTER_LIST_REQUEST'
+export const FILTER_LIST_SUCCESS = 'FILTER_LIST_SUCCESS'
+
 
 const history = createHistory()
 
@@ -146,10 +150,24 @@ const reorderListSuccess = (id, order) => ({
 })
 
 
-const toggleFilterInterfaceRequest = () => ({
-	type: TOGGLE_FILTER_INTERFACE_REQUEST,
+const filterInterfaceToggled = () => ({
+	type: FILTER_INTERFACE_TOGGLED,
 })
 
+
+const filterListRequest = (id, filterTags, filterText) => ({
+	type: FILTER_LIST_REQUEST,
+	filterTags,
+	filterText
+})
+
+
+const filterListSuccess = (id, filterTags, filterText, visibleListItemIDs) => ({
+	type: FILTER_LIST_SUCCESS,
+	filterTags,
+	filterText,
+	visibleListItemIDs
+})
 
 
 export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
@@ -180,6 +198,28 @@ export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
 			response => dispatch(fetchActiveListSuccess(response)),
 			error => dispatch(fetchActiveListError(error.message))
 		)
+}
+
+
+export const filterActiveList = (id, filterTags, filterText) => (dispatch, getState) => {
+	dispatch(filterListRequest(id, filterTags, filterText))
+	const sortedListItems = getSortedListItems(getState())
+	const lowerCaseFilterText = filterText.toLowerCase()
+	const visibleListItems = sortedListItems.filter(item => {
+		// all filtered tags should be present in the list item
+		// filtered text should be present in the title or description of the list item
+		return filterTags.every(
+			filterTag => item.tags.find(
+				itemTag => itemTag.id == filterTag.id
+			)
+		) && (
+			item.title.toLowerCase().search(lowerCaseFilterText) > -1 ||
+				(item.description != null &&
+					item.description.toLowerCase().search(lowerCaseFilterText) > -1)
+		)
+	})
+	const visibleListItemIDs = visibleListItems.map(item => item.id)
+	return dispatch(filterListSuccess(id, filterTags, filterText, visibleListItemIDs))
 }
 
 
@@ -294,5 +334,5 @@ export const previewListOrder = (dragID, dropOrder) => (dispatch) => {
 
 
 export const toggleFilterInterface = () => (dispatch) => {
-	return dispatch(toggleFilterInterfaceRequest())
+	return dispatch(filterInterfaceToggled())
 }
