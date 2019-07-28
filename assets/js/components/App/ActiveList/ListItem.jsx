@@ -249,6 +249,7 @@ class ListItem extends React.Component {
 							tags={this.state.data.tags}
 							suggestions={activeList.tags}
 							autocomplete={true}
+							autofocus={false}
 							allowDragDrop={false}
 							minQueryLength={1}
 							handleAddition={this.handleTagAddition}
