@@ -66,6 +66,11 @@ export const showFilterInterface = (state=false, action) => {
 			return !state
 		case listAPIActions.FILTER_LIST_SUCCESS:
 			return true
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+			if (action.switchedList) {
+				return false
+			}
+			return state
 		default:
 			return state
 	}

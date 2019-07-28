@@ -60,9 +60,10 @@ const fetchActiveListRequest = (id, reload) => ({
 })
 
 
-const fetchActiveListSuccess = (data) => ({
+const fetchActiveListSuccess = (data, switchedList) => ({
 	type: FETCH_ACTIVE_LIST_SUCCESS,
-	data: normalize(data, schema.listSchema)
+	data: normalize(data, schema.listSchema),
+	switchedList: switchedList
 })
 
 
@@ -172,12 +173,14 @@ const filterListSuccess = (id, filterTags, filterText, visibleListItemIDs) => ({
 
 export const fetchActiveList = ({id, reload = true, filters = {tags: [], text: ''}}) => (dispatch, getState) => {
 	const state = getState()
+	const originalActiveListID = getActiveListID(state)
+
 	let currentLocation = history.location.pathname
 	let newLocation
 
 	// if there's no ID passed, use the current active ID or the first list ID provided by the HTML page.
 	if (!id) {
-		id = getActiveListID(state) || firstListID
+		id = originalActiveListID || firstListID
 	}
 
 	if (getActiveListFetchStatus(state)) {
@@ -185,19 +188,23 @@ export const fetchActiveList = ({id, reload = true, filters = {tags: [], text: '
 	}
 	if (!id) {
 		newLocation = ROOT_URL
-		if (currentLocation !== newLocation) history.push(constructFilterURL(newLocation, filters.tags, filters.text))
+		if (currentLocation !== newLocation) history.push(constructFilterURL(newLocation, [], ''))
 		dispatch(noActiveListAvailable())
 		return Promise.resolve()
 	}
 
+	const switchedList = id != originalActiveListID
+
 	dispatch(fetchActiveListRequest(id, reload))
 	newLocation = ROOT_URL + id
-	if (currentLocation !== newLocation) history.push(constructFilterURL(newLocation, filters.tags, filters.text))
+	if (currentLocation !== newLocation) history.push(constructFilterURL(newLocation, [], ''))
 	return sync(LIST_API_URL + id + '/')
 		.then(
 			response => {
-				dispatch(fetchActiveListSuccess(response))
-				return dispatch(filterActiveList(id, filters.tags, filters.text))
+				if (filters.tags.length > 0 || filters.text) {
+					dispatch(filterActiveList(id, filters.tags, filters.text))
+				}
+				return dispatch(fetchActiveListSuccess(response, switchedList))
 			},
 			error => dispatch(fetchActiveListError(error.message))
 		)
@@ -302,7 +309,7 @@ export const performActionOnList = (id, actionURL, originalData) => (dispatch) =
 		method: 'POST',
 	})
 		.then(
-			response => dispatch(fetchActiveListSuccess(response)),
+			response => dispatch(fetchActiveListSuccess(response, false)),
 			error => dispatch(updateActiveListError(id, error.message, originalData))
 		)
 }
