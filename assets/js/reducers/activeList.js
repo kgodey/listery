@@ -60,14 +60,8 @@ export const activeListError = (state, action) => {
 }
 
 
-export const currentFilters = (state, action) => {
+export const currentFilters = (state={id: null, tags: [], text: '', showInterface: false}, action) => {
 	let newState = {...state}
-	let emptyState = {
-		id: null,
-		tags: [],
-		text: '',
-		showInterface: false
-	}
 	switch (action.type) {
 		case listAPIActions.FILTER_INTERFACE_TOGGLED:
 			newState.showInterface = !state.showInterface
@@ -78,13 +72,14 @@ export const currentFilters = (state, action) => {
 			newState.showInterface = true
 			return newState
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
-			if (state.id != null && state.id != action.data.result) {
-				emptyState.id = action.data.result
-				return emptyState
+			return {
+				id: action.data.result,
+				tags: action.filterTags,
+				text: action.filterText,
+				showInterface: action.filterTags.length > 0 || action.filterText ? true : false
 			}
-			return state
 		default:
-			return emptyState
+			return state
 	}
 }
 

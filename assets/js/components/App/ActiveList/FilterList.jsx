@@ -32,6 +32,7 @@ class FilterList extends React.Component {
 			}) : [],
 			text: currentFilters.text ? currentFilters.text : ''
 		}
+		console.log('STATE', this.state)
 	}
 
 	validateTagAddition(tag) {

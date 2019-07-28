@@ -60,9 +60,11 @@ const fetchActiveListRequest = (id, reload) => ({
 })
 
 
-const fetchActiveListSuccess = (data) => ({
+const fetchActiveListSuccess = (data, filterTags, filterText) => ({
 	type: FETCH_ACTIVE_LIST_SUCCESS,
-	data: normalize(data, schema.listSchema)
+	data: normalize(data, schema.listSchema),
+	filterTags,
+	filterText
 })
 
 
@@ -195,7 +197,7 @@ export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='' }
 	return sync(LIST_API_URL + id + '/')
 		.then(
 			response => {
-				dispatch(fetchActiveListSuccess(response))
+				dispatch(fetchActiveListSuccess(response, filterTags, filterText))
 				if (filterTags.length > 0 || filterText) {
 					dispatch(setFilters(id, filterTags, filterText))
 				}
@@ -257,7 +259,7 @@ export const setFilters = (id, filterTags, filterText) => (dispatch, getState) =
 	}
 	dispatch(filterListRequest(currentFilters))
 	const visibleListItemIDs = filterActiveListItems(getState(), currentFilters)
-	history.push(constructFilterURL(ROOT_URL + id + '/', currentFilters))
+	history.push(constructFilterURL(ROOT_URL + id, currentFilters))
 	return dispatch(filterListSuccess(currentFilters, visibleListItemIDs))
 }
 
