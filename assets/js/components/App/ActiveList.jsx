@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import queryString from 'query-string'
 import React from 'react'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -30,6 +31,12 @@ const inputStyle = {
 class ActiveList extends React.Component {
 	constructor(props) {
 		super(props)
+		this.state = {
+			filters: {
+				tags: [],
+				text: ''
+			}
+		}
 		this.setNewOrder = this.setNewOrder.bind(this)
 		this.previewNewOrder = this.previewNewOrder.bind(this)
 	}
@@ -37,6 +44,17 @@ class ActiveList extends React.Component {
 	componentDidMount() {
 		// Load initial data from backend once components mounts.
 		const { fetchActiveList, match, location } = this.props
+		const queryFilters = queryString.parse(this.props.location.search, {arrayFormat: 'comma'})
+		const tags = queryFilters.tags ? (
+			Array.isArray(queryFilters.tags) ?
+				queryFilters.tags.map(tag => { return {id: tag, text: tag} }) :
+					[{id: queryFilters.tags, text: queryFilters.tags}]
+		) : []
+		let currentFilters = {
+			tags: tags,
+			text: queryFilters.text ? queryFilters.text : ''
+		}
+		this.setState({filters: currentFilters})
 		let urlListID
 		if (match.params.id !== undefined) {
 			urlListID = parseInt(match.params.id)
@@ -46,7 +64,7 @@ class ActiveList extends React.Component {
 				urlListID = parseInt(oldURLPatternMatches[1])
 			}
 		}
-		fetchActiveList(urlListID)
+		fetchActiveList({id: urlListID, filters: currentFilters})
 	}
 
 	render() {
@@ -78,7 +96,7 @@ class ActiveList extends React.Component {
 				<div>
 					<ListHeader />
 					<ListGroup variant="flush">
-						<FilterList />
+						<FilterList filters={this.state.filters} />
 						<AddListItem />
 						{sortedListItems.map(item =>
 							<ListItem

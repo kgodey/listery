@@ -35,6 +35,7 @@
 		"lodash": "^4.17.14",
 		"normalizr": "^3.4.0",
 		"prop-types": "^15.7.2",
+		"query-string": "^6.8.2",
 		"react": "^16.8.6",
 		"react-bootstrap": "^1.0.0-beta.9",
 		"react-bootstrap-sweetalert": "^4.4.1",
