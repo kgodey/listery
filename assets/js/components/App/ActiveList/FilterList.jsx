@@ -100,7 +100,7 @@ class FilterList extends React.Component {
 						}}
 						tags={this.state.tags}
 						suggestions={activeList.tags}
-						placeholder="Type to filer..."
+						placeholder="Type to filter..."
 						autocomplete={true}
 						allowDragDrop={false}
 						minQueryLength={1}
