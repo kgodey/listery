@@ -96,14 +96,14 @@ div.filterTagInput input.filterTagInputField:focus {
 div.filterSelected span.filterTag {
 	font-weight: 700;
 	border: 0;
-	background: #343a40;
+	background: #6c757d;
 	color: #ffffff;
 	display: inline-block;
 	padding: 5px;
 	margin-right: 5px;
 	border-radius: 0.25em;
 	text-transform: uppercase;
-	font-size: 75%;
+	font-size: 0.9em;
 }
 div.filterSelected a.filterRemove {
 	font-weight: 700;
@@ -118,7 +118,7 @@ div.filterSuggestions {
 	z-index: 1000;
 	overflow-y: hidden;
 	text-transform: uppercase;
-	font-size: 75%;
+	font-size: 0.9em;
 }
 div.filterSuggestions ul {
 	padding: 0px;

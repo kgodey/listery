@@ -67,7 +67,7 @@ export const showFilterInterface = (state=false, action) => {
 		case listAPIActions.FILTER_LIST_SUCCESS:
 			return true
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
-			if (action.switchedList) {
+			if (action.switchedList && (action.filters.tags.length <= 0 && !action.filters.text)) {
 				return false
 			}
 			return state

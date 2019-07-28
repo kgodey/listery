@@ -60,10 +60,11 @@ const fetchActiveListRequest = (id, reload) => ({
 })
 
 
-const fetchActiveListSuccess = (data, switchedList) => ({
+const fetchActiveListSuccess = (data, switchedList, filters = {tags: [], text: ''}) => ({
 	type: FETCH_ACTIVE_LIST_SUCCESS,
 	data: normalize(data, schema.listSchema),
-	switchedList: switchedList
+	switchedList: switchedList,
+	filters
 })
 
 
@@ -204,7 +205,7 @@ export const fetchActiveList = ({id, reload = true, filters = {tags: [], text: '
 				if (filters.tags.length > 0 || filters.text) {
 					dispatch(filterActiveList(id, filters.tags, filters.text))
 				}
-				return dispatch(fetchActiveListSuccess(response, switchedList))
+				return dispatch(fetchActiveListSuccess(response, switchedList, filters))
 			},
 			error => dispatch(fetchActiveListError(error.message))
 		)
