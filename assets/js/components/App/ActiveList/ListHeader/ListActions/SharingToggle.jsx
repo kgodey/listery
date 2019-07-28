@@ -7,22 +7,27 @@ import { connect } from 'react-redux'
 import { getActiveList } from '../../../../../reducers/activeList'
 
 
+const iconStyle = {
+	marginRight: '5px'
+}
+
+
 let SharingToggle = ({ listOwnerID, isPrivate, onClick }) => {
 	let icon, text
 	if (isPrivate) {
 		icon = (
-			<FaGlobeAmericas />
+			<FaGlobeAmericas style={iconStyle} />
 		)
 		text = 'Make Shared'
 	} else {
 		icon = (
-			<FaLock />
+			<FaLock style={iconStyle} />
 		)
 		text = 'Make Private'
 	}
 	if (listOwnerID === currentUserID) {
 		return (
-			<Dropdown.Item as="button" onClick={onClick}>{icon}&nbsp;{text}</Dropdown.Item>
+			<Dropdown.Item as="button" onClick={onClick}>{icon}{text}</Dropdown.Item>
 		)
 	}
 	return (null)

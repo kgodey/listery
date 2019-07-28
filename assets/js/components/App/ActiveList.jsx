@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
@@ -9,10 +11,20 @@ import { getSortedListItems, getListItemInitialOrders } from '../../reducers/act
 import { getActiveList, getActiveListID, getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
+import FilterList from './ActiveList/FilterList.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
 import { NoListPanel } from './ActiveList/NoListPanel.jsx'
 import { ErrorPanel } from './Shared/ErrorPanel.jsx'
 import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
+
+
+const iconStyle = {
+	marginRight: '5px'
+}
+
+const inputStyle = {
+	width: '100%'
+}
 
 
 class ActiveList extends React.Component {
@@ -65,7 +77,8 @@ class ActiveList extends React.Component {
 			return (
 				<div>
 					<ListHeader />
-					<div className='list-group list-group-flush'>
+					<ListGroup variant="flush">
+						<FilterList />
 						<AddListItem />
 						{sortedListItems.map(item =>
 							<ListItem
@@ -76,7 +89,7 @@ class ActiveList extends React.Component {
 								previewNewOrder={this.previewNewOrder}
 							/>
 						)}
-					</div>
+					</ListGroup>
 				</div>
 			)
 		}

@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
 
-import { getActiveList, getActiveListFetchStatus } from '../../../reducers/activeList'
+import { getActiveList, getShowFilterInterface } from '../../../reducers/activeList'
 import { ListTitle } from './ListHeader/ListTitle.jsx'
 import { ListActions } from './ListHeader/ListActions.jsx'
 import ListItemCount from './ListHeader/ListItemCount.jsx'
-import { updateActiveList, performActionOnList } from '../../../actions/list'
+import { updateActiveList, performActionOnList, toggleFilterInterface } from '../../../actions/list'
 import { QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX } from '../../../utils/urls'
 
 
@@ -21,12 +23,12 @@ class ListHeader extends React.Component {
 			},
 			currentlyEditing: false
 		}
-		this.handleNameChange = this.handleNameChange.bind(this)
-		this.handlePrivacyClick = this.handlePrivacyClick.bind(this)
+		this.handleNameDoubleClick = this.handleNameDoubleClick.bind(this)
+		this.handleFilterClick = this.handleFilterClick.bind(this)
 		this.handleQuickSortClick = this.handleQuickSortClick.bind(this)
 		this.handleCheckAllClick = this.handleCheckAllClick.bind(this)
 		this.handleUncheckAllClick = this.handleUncheckAllClick.bind(this)
-		this.handleNameDoubleClick = this.handleNameDoubleClick.bind(this)
+		this.handlePrivacyClick = this.handlePrivacyClick.bind(this)
 		this.handleTagsEnabledClick = this.handleTagsEnabledClick.bind(this)
 		this.handleClickOutside = this.handleClickOutside.bind(this)
 		this.handleNameChange = this.handleNameChange.bind(this)
@@ -59,6 +61,11 @@ class ListHeader extends React.Component {
 	updateListUsingAction(actionURL) {
 		const { performActionOnList, activeList } = this.props
 		performActionOnList(activeList.id, actionURL, activeList)
+	}
+
+	handleFilterClick(event) {
+		const { toggleFilterInterface } = this.props
+		toggleFilterInterface()
 	}
 
 	handleQuickSortClick(event) {
@@ -104,30 +111,30 @@ class ListHeader extends React.Component {
 	}
 
 	render() {
-		const { activeList } = this.props
+		const { activeList, showFilterInterface } = this.props
 		return (
 			<div>
-				<div className="row">
-					<div className="col-md-12">
-						<ListTitle
-							name={this.state.data.name}
-							currentlyEditing={this.state.currentlyEditing}
-							onChange={this.handleNameChange}
-							onKeyUp={this.handleNameKeyUp}
-							onDoubleClick={this.handleNameDoubleClick}
-						/>
-					</div>
-				</div>
-				<div className="row align-items-end">
+				<Row>
+					<ListTitle
+						name={this.state.data.name}
+						currentlyEditing={this.state.currentlyEditing}
+						onChange={this.handleNameChange}
+						onKeyUp={this.handleNameKeyUp}
+						onDoubleClick={this.handleNameDoubleClick}
+					/>
+				</Row>
+				<Row>
 					<ListActions
-						onShareClick={this.handlePrivacyClick}
+						showFilterInterface={showFilterInterface}
+						onFilterClick={this.handleFilterClick}
 						onQuickSortClick={this.handleQuickSortClick}
 						onCheckAllClick={this.handleCheckAllClick}
 						onUncheckAllClick={this.handleUncheckAllClick}
+						onShareClick={this.handlePrivacyClick}
 						onTagsToggleClick={this.handleTagsEnabledClick}
 					/>
 					<ListItemCount />
-				</div>
+				</Row>
 			</div>
 		)
 	}
@@ -135,20 +142,23 @@ class ListHeader extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-	activeList: getActiveList(state)
+	activeList: getActiveList(state),
+	showFilterInterface: getShowFilterInterface(state)
 })
 
 
 ListHeader.propTypes = {
 	activeList: PropTypes.object.isRequired,
 	updateActiveList: PropTypes.func.isRequired,
-	performActionOnList: PropTypes.func.isRequired
+	performActionOnList: PropTypes.func.isRequired,
+	showFilterInterface: PropTypes.bool.isRequired,
+	toggleFilterInterface: PropTypes.func.isRequired,
 }
 
 
 ListHeader = onClickOutside(ListHeader)
 ListHeader = connect(
 	mapStateToProps,
-	{ updateActiveList, performActionOnList }
+	{ updateActiveList, performActionOnList, toggleFilterInterface }
 )(ListHeader)
 export default ListHeader

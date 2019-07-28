@@ -7,13 +7,18 @@ import { connect } from 'react-redux'
 import { getActiveList } from '../../../../../reducers/activeList'
 
 
+const iconStyle = {
+	marginRight: '5px'
+}
+
+
 let TagsToggle = ({ onClick, showTags }) => {
 	let text = 'Show Tags'
 	if (showTags) {
 		text = 'Hide Tags'
 	}
 	return (
-		<Dropdown.Item as="button" onClick={onClick}>{<FaTags />}&nbsp;{text}</Dropdown.Item>
+		<Dropdown.Item as="button" onClick={onClick}>{<FaTags style={iconStyle} />}{text}</Dropdown.Item>
 	)
 }
 

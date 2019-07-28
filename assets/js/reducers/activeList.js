@@ -60,6 +60,16 @@ export const activeListError = (state, action) => {
 }
 
 
+export const showFilterInterface = (state=true, action) => {
+	switch (action.type) {
+		case listAPIActions.TOGGLE_FILTER_INTERFACE_REQUEST:
+			return !state
+		default:
+			return state
+	}
+}
+
+
 export const getActiveListID = (state) => {
 	return state.activeListID
 }
@@ -77,4 +87,9 @@ export const getActiveListFetchStatus = (state) => {
 
 export const getActiveListErrorStatus = (state) => {
 	return state.activeListError
+}
+
+
+export const getShowFilterInterface = (state) => {
+	return state.showFilterInterface
 }

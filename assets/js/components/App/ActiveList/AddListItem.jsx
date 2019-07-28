@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import ListGroup from 'react-bootstrap/ListGroup'
 import { connect } from 'react-redux'
 
 import { createListItem } from '../../../actions/list-item'
@@ -35,7 +36,7 @@ class AddListItem extends React.Component {
 		const { isFetching} = this.props
 		if (!isFetching) {
 			return (
-				<div className='list-group-item'>
+				<ListGroup.Item>
 					<input
 						type='text'
 						value={this.state.value}
@@ -45,7 +46,7 @@ class AddListItem extends React.Component {
 						onChange={this.handleChange}
 						onKeyUp={this.handleKeyUp}
 					/>
-				</div>
+				</ListGroup.Item>
 			)
 		}
 		return (null)

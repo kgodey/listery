@@ -26,6 +26,7 @@ export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
 export const REORDER_LIST_PREVIEW = 'REORDER_LIST_PREVIEW'
 export const REORDER_LIST_REQUEST = 'REORDER_LIST_REQUEST'
 export const REORDER_LIST_SUCCESS = 'REORDER_LIST_SUCCESS'
+export const TOGGLE_FILTER_INTERFACE_REQUEST = 'TOGGLE_FILTER_INTERFACE_REQUEST'
 
 const history = createHistory()
 
@@ -143,6 +144,12 @@ const reorderListSuccess = (id, order) => ({
 	id,
 	order
 })
+
+
+const toggleFilterInterfaceRequest = () => ({
+	type: TOGGLE_FILTER_INTERFACE_REQUEST,
+})
+
 
 
 export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
@@ -283,4 +290,9 @@ export const reorderList = (id, order, initialOrder) => (dispatch) => {
 
 export const previewListOrder = (dragID, dropOrder) => (dispatch) => {
 	return dispatch(reorderListPreview(dragID, dropOrder))
+}
+
+
+export const toggleFilterInterface = () => (dispatch) => {
+	return dispatch(toggleFilterInterfaceRequest())
 }

@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { IconContext } from 'react-icons'
-import { FaRegCheckSquare, FaMagic, FaSortAlphaDown, FaRegSquare, FaCog } from 'react-icons/fa'
+import { FaCog, FaRegCheckSquare, FaRegSquare, FaSearch, FaSortAlphaDown } from 'react-icons/fa'
 
 import SharingToggle from './ListActions/SharingToggle.jsx'
 import TagsToggle from './ListActions/TagsToggle.jsx'
@@ -14,23 +14,38 @@ const divStyle = {
 	marginBottom: '10px'
 }
 
+
 const buttonStyle = {
 	marginRight: '10px'
 }
 
 
-export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick, onTagsToggleClick }) => {
+const iconStyle = {
+	marginRight: '5px'
+}
+
+
+export const ListActions = ({ showFilterInterface, onFilterClick, onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick, onTagsToggleClick }) => {
+	const filterButtonVariant = showFilterInterface ? 'dark' : 'outline-dark'
 	return (
 		<div style={divStyle} className="col">
 			<IconContext.Provider value={{ className:'align-middle' }}>
 				<ButtonToolbar>
 					<Button
 						style={buttonStyle}
+						variant={filterButtonVariant}
+						size="sm"
+						onClick={onFilterClick}
+					>
+						<FaSearch style={iconStyle} />Filters
+					</Button>
+					<Button
+						style={buttonStyle}
 						variant="outline-dark"
 						size="sm"
 						onClick={onQuickSortClick}
 					>
-						<FaSortAlphaDown />&nbsp;Quick sort
+						<FaSortAlphaDown style={iconStyle} />Quick sort
 					</Button>
 					<Button
 						style={buttonStyle}
@@ -38,7 +53,7 @@ export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllCli
 						size="sm"
 						onClick={onCheckAllClick}
 					>
-						<FaRegCheckSquare />&nbsp;Check all
+						<FaRegCheckSquare style={iconStyle} />Check all
 					</Button>
 					<Button
 						style={buttonStyle}
@@ -46,7 +61,7 @@ export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllCli
 						size="sm"
 						onClick={onUncheckAllClick}
 					>
-						<FaRegSquare />&nbsp;Uncheck all
+						<FaRegSquare style={iconStyle} />Uncheck all
 					</Button>
 					<Dropdown>
 						<Dropdown.Toggle size="sm" variant="outline-dark" id="listSettingsDropdown">
@@ -69,6 +84,7 @@ export const ListActions = ({ onQuickSortClick, onCheckAllClick, onUncheckAllCli
 
 
 ListActions.propTypes = {
+	onFilterClick: PropTypes.func.isRequired,
 	onQuickSortClick: PropTypes.func.isRequired,
 	onCheckAllClick: PropTypes.func.isRequired,
 	onUncheckAllClick: PropTypes.func.isRequired,
