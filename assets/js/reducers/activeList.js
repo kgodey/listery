@@ -60,7 +60,7 @@ export const activeListError = (state, action) => {
 }
 
 
-export const showFilterInterface = (state=true, action) => {
+export const showFilterInterface = (state=false, action) => {
 	switch (action.type) {
 		case listAPIActions.FILTER_INTERFACE_TOGGLED:
 			return !state
