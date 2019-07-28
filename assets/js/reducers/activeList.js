@@ -60,19 +60,31 @@ export const activeListError = (state, action) => {
 }
 
 
-export const showFilterInterface = (state=false, action) => {
+export const currentFilters = (state, action) => {
+	let newState = {...state}
+	let emptyState = {
+		id: null,
+		tags: [],
+		text: '',
+		showInterface: false
+	}
 	switch (action.type) {
 		case listAPIActions.FILTER_INTERFACE_TOGGLED:
-			return !state
+			newState.showInterface = !state.showInterface
+			return newState
+		case listAPIActions.FILTER_LIST_REQUEST:
 		case listAPIActions.FILTER_LIST_SUCCESS:
-			return true
+			newState = {...action.data}
+			newState.showInterface = true
+			return newState
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
-			if (action.switchedList && (action.filters.tags.length <= 0 && !action.filters.text)) {
-				return false
+			if (state.id != null && state.id != action.data.result) {
+				emptyState.id = action.data.result
+				return emptyState
 			}
 			return state
 		default:
-			return state
+			return emptyState
 	}
 }
 
@@ -97,6 +109,6 @@ export const getActiveListErrorStatus = (state) => {
 }
 
 
-export const getShowFilterInterface = (state) => {
-	return state.showFilterInterface
+export const getCurrentFilters = (state) => {
+	return state.currentFilters
 }

@@ -1,8 +1,8 @@
 import createHistory from 'history/createBrowserHistory'
 import { normalize } from 'normalizr'
 
-import { getActiveListFetchStatus, getActiveListID } from '../reducers/activeList'
-import { getSortedListItems } from '../reducers/activeListItems'
+import { getActiveListFetchStatus, getActiveListID, getCurrentFilters } from '../reducers/activeList'
+import { getActiveListItems } from '../reducers/activeListItems'
 import { getAllListsFetchStatus } from '../reducers/allLists'
 import { LIST_API_URL, ROOT_URL, QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX } from '../utils/urls'
 import { sync } from './base'
@@ -60,11 +60,9 @@ const fetchActiveListRequest = (id, reload) => ({
 })
 
 
-const fetchActiveListSuccess = (data, switchedList, filters = {tags: [], text: ''}) => ({
+const fetchActiveListSuccess = (data) => ({
 	type: FETCH_ACTIVE_LIST_SUCCESS,
-	data: normalize(data, schema.listSchema),
-	switchedList: switchedList,
-	filters
+	data: normalize(data, schema.listSchema)
 })
 
 
@@ -157,31 +155,28 @@ const filterInterfaceToggled = () => ({
 })
 
 
-const filterListRequest = (id, filterTags, filterText) => ({
+const filterListRequest = (currentFilters) => ({
 	type: FILTER_LIST_REQUEST,
-	filterTags,
-	filterText
+	data: currentFilters
 })
 
 
-const filterListSuccess = (id, filterTags, filterText, visibleListItemIDs) => ({
+const filterListSuccess = (currentFilters, visibleListItemIDs) => ({
 	type: FILTER_LIST_SUCCESS,
-	filterTags,
-	filterText,
+	data: currentFilters,
 	visibleListItemIDs
 })
 
 
-export const fetchActiveList = ({id, reload = true, filters = {tags: [], text: ''}}) => (dispatch, getState) => {
+export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='' }) => (dispatch, getState) => {
 	const state = getState()
-	const originalActiveListID = getActiveListID(state)
 
 	let currentLocation = history.location.pathname
 	let newLocation
 
 	// if there's no ID passed, use the current active ID or the first list ID provided by the HTML page.
 	if (!id) {
-		id = originalActiveListID || firstListID
+		id = getActiveListID(state) || firstListID
 	}
 
 	if (getActiveListFetchStatus(state)) {
@@ -189,36 +184,42 @@ export const fetchActiveList = ({id, reload = true, filters = {tags: [], text: '
 	}
 	if (!id) {
 		newLocation = ROOT_URL
-		if (currentLocation !== newLocation) history.push(constructFilterURL(newLocation, [], ''))
+		if (currentLocation !== newLocation) history.push(newLocation)
 		dispatch(noActiveListAvailable())
 		return Promise.resolve()
 	}
 
-	const switchedList = id != originalActiveListID
-
 	dispatch(fetchActiveListRequest(id, reload))
 	newLocation = ROOT_URL + id
-	if (currentLocation !== newLocation) history.push(constructFilterURL(newLocation, [], ''))
+	if (currentLocation !== newLocation) history.push(newLocation)
 	return sync(LIST_API_URL + id + '/')
 		.then(
 			response => {
-				if (filters.tags.length > 0 || filters.text) {
-					dispatch(filterActiveList(id, filters.tags, filters.text))
+				dispatch(fetchActiveListSuccess(response))
+				if (filterTags.length > 0 || filterText) {
+					dispatch(setFilters(id, filterTags, filterText))
 				}
-				return dispatch(fetchActiveListSuccess(response, switchedList, filters))
 			},
 			error => dispatch(fetchActiveListError(error.message))
 		)
 }
 
 
-const constructFilterURL = (pathname, filterTags, filterText) => {
-	let paramStrings = []
-	if (filterTags.length > 0) {
-		paramStrings.push('tags=' + filterTags.map(tag => tag.id).join(','))
+const areFiltersEmpty = (currentFilters) => {
+	if ((!currentFilters) || (currentFilters.tags.length == 0 && !currentFilters.text)) {
+		return true
 	}
-	if (filterText) {
-		paramStrings.push('text=' + filterText)
+	return false
+}
+
+
+const constructFilterURL = (pathname, currentFilters) => {
+	let paramStrings = []
+	if (currentFilters.tags.length > 0) {
+		paramStrings.push('tags=' + currentFilters.tags.map(tag => tag.id).join(','))
+	}
+	if (currentFilters.text) {
+		paramStrings.push('text=' + currentFilters.text)
 	}
 	return {
 		pathname: pathname,
@@ -227,12 +228,14 @@ const constructFilterURL = (pathname, filterTags, filterText) => {
 }
 
 
-const filterSortedItems = (sortedListItems, filterTags, filterText) => {
-	const lowerCaseFilterText = filterText.toLowerCase()
-	const visibleListItems = sortedListItems.filter(item => {
+const filterActiveListItems = (state, currentFilters) => {
+	const activeListItems = getActiveListItems(state)
+	const lowerCaseFilterText = currentFilters.text.toLowerCase()
+	let visibleListItemIDs = Object.keys(activeListItems).filter(itemID => {
+		let item = activeListItems[itemID]
 		// all filtered tags should be present in the list item
 		// filtered text should be present in the title or description of the list item
-		return filterTags.every(
+		return currentFilters.tags.every(
 			filterTag => item.tags.find(
 				itemTag => itemTag.id == filterTag.id
 			)
@@ -242,17 +245,20 @@ const filterSortedItems = (sortedListItems, filterTags, filterText) => {
 					item.description.toLowerCase().search(lowerCaseFilterText) > -1)
 		)
 	})
-	const visibleListItemIDs = visibleListItems.map(item => item.id)
-	return visibleListItemIDs
+	return visibleListItemIDs.map(id => Number(id))
 }
 
 
-export const filterActiveList = (id, filterTags, filterText) => (dispatch, getState) => {
-	dispatch(filterListRequest(id, filterTags, filterText))
-	const sortedListItems = getSortedListItems(getState())
-	const visibleListItemIDs = filterSortedItems(sortedListItems, filterTags, filterText)
-	history.push(constructFilterURL(ROOT_URL + id + '/', filterTags, filterText))
-	return dispatch(filterListSuccess(id, filterTags, filterText, visibleListItemIDs))
+export const setFilters = (id, filterTags, filterText) => (dispatch, getState) => {
+	const currentFilters = {
+		id: id,
+		tags: filterTags,
+		text: filterText
+	}
+	dispatch(filterListRequest(currentFilters))
+	const visibleListItemIDs = filterActiveListItems(getState(), currentFilters)
+	history.push(constructFilterURL(ROOT_URL + id + '/', currentFilters))
+	return dispatch(filterListSuccess(currentFilters, visibleListItemIDs))
 }
 
 

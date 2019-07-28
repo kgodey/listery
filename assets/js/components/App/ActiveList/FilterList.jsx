@@ -5,8 +5,8 @@ import { FaSearch } from 'react-icons/fa'
 import { connect } from 'react-redux'
 import { WithOutContext as ReactTags } from 'react-tag-input'
 
-import { filterActiveList } from '../../../actions/list'
-import { getActiveList, getShowFilterInterface } from '../../../reducers/activeList'
+import { setFilters } from '../../../actions/list'
+import { getActiveList, getCurrentFilters } from '../../../reducers/activeList'
 
 
 const iconStyle = {
@@ -18,7 +18,7 @@ const iconStyle = {
 class FilterList extends React.Component {
 	constructor(props) {
 		super(props)
-		const { activeList, filters } = props
+		const { activeList, currentFilters } = props
 		this.validateTagAddition = this.validateTagAddition.bind(this)
 		this.handleTagAddition = this.handleTagAddition.bind(this)
 		this.handleTagDeletion = this.handleTagDeletion.bind(this)
@@ -26,11 +26,11 @@ class FilterList extends React.Component {
 		this.handleTagFilterSuggestions = this.handleTagFilterSuggestions.bind(this)
 		this.sendFilterRequest = this.sendFilterRequest.bind(this)
 		this.state = {
-			tags: filters.tags ? filters.tags.map(tag => {
+			tags: currentFilters.tags ? currentFilters.tags.map(tag => {
 				const listTag = activeList.tags.find(activeListTag => activeListTag.id == tag.id)
 				return listTag ? listTag : tag
 			}) : [],
-			text: filters.text ? filters.text : ''
+			text: currentFilters.text ? currentFilters.text : ''
 		}
 	}
 
@@ -81,13 +81,13 @@ class FilterList extends React.Component {
 	}
 
 	sendFilterRequest(state) {
-		const { filterActiveList, activeList } = this.props
-		filterActiveList(activeList.id, state.tags, state.text)
+		const { setFilters, activeList } = this.props
+		setFilters(activeList.id, state.tags, state.text)
 	}
 
 	render() {
-		const { activeList, showFilterInterface } = this.props
-		if (showFilterInterface) {
+		const { activeList, currentFilters } = this.props
+		if (currentFilters.showInterface) {
 			return (
 				<ListGroup.Item variant="light">
 					<FaSearch style={iconStyle} />
@@ -126,20 +126,19 @@ class FilterList extends React.Component {
 
 const mapStateToProps = (state) => ({
 	activeList: getActiveList(state),
-	showFilterInterface: getShowFilterInterface(state)
+	currentFilters: getCurrentFilters(state)
 })
 
 
 FilterList.propTypes = {
-	filters: PropTypes.object,
 	activeList: PropTypes.object.isRequired,
-	showFilterInterface: PropTypes.bool.isRequired,
-	filterActiveList: PropTypes.func.isRequired
+	currentFilters: PropTypes.object.isRequired,
+	setFilters: PropTypes.func.isRequired
 }
 
 
 FilterList = connect(
 	mapStateToProps,
-	{ filterActiveList }
+	{ setFilters }
 )(FilterList)
 export default FilterList

@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
 
-import { getActiveList, getShowFilterInterface } from '../../../reducers/activeList'
+import { getActiveList, getCurrentFilters } from '../../../reducers/activeList'
 import { ListTitle } from './ListHeader/ListTitle.jsx'
 import { ListActions } from './ListHeader/ListActions.jsx'
 import ListItemCount from './ListHeader/ListItemCount.jsx'
@@ -111,7 +111,7 @@ class ListHeader extends React.Component {
 	}
 
 	render() {
-		const { activeList, showFilterInterface } = this.props
+		const { activeList, currentFilters } = this.props
 		return (
 			<div>
 				<Row className="px-3">
@@ -125,7 +125,7 @@ class ListHeader extends React.Component {
 				</Row>
 				<Row>
 					<ListActions
-						showFilterInterface={showFilterInterface}
+						showFilterInterface={currentFilters.showInterface}
 						onFilterClick={this.handleFilterClick}
 						onQuickSortClick={this.handleQuickSortClick}
 						onCheckAllClick={this.handleCheckAllClick}
@@ -143,15 +143,15 @@ class ListHeader extends React.Component {
 
 const mapStateToProps = (state) => ({
 	activeList: getActiveList(state),
-	showFilterInterface: getShowFilterInterface(state)
+	currentFilters: getCurrentFilters(state)
 })
 
 
 ListHeader.propTypes = {
 	activeList: PropTypes.object.isRequired,
 	updateActiveList: PropTypes.func.isRequired,
+	currentFilters: PropTypes.object.isRequired,
 	performActionOnList: PropTypes.func.isRequired,
-	showFilterInterface: PropTypes.bool.isRequired,
 	toggleFilterInterface: PropTypes.func.isRequired,
 }
 

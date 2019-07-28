@@ -157,6 +157,11 @@ export const getNumTempItems = (state) => {
 }
 
 
+export const getActiveListItems = (state) => {
+	return state.activeListItems
+}
+
+
 export const getSortedListItems = (state) => {
 	let items = Object.keys(state.activeListItems).map(item => state.activeListItems[item])
 	return items.sort(compareByOrder)
