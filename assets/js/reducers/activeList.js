@@ -64,6 +64,8 @@ export const showFilterInterface = (state=false, action) => {
 	switch (action.type) {
 		case listAPIActions.FILTER_INTERFACE_TOGGLED:
 			return !state
+		case listAPIActions.FILTER_LIST_SUCCESS:
+			return true
 		default:
 			return state
 	}

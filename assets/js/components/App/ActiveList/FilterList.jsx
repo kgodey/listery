@@ -18,6 +18,7 @@ const iconStyle = {
 class FilterList extends React.Component {
 	constructor(props) {
 		super(props)
+		const { activeList, filters } = props
 		this.validateTagAddition = this.validateTagAddition.bind(this)
 		this.handleTagAddition = this.handleTagAddition.bind(this)
 		this.handleTagDeletion = this.handleTagDeletion.bind(this)
@@ -25,8 +26,11 @@ class FilterList extends React.Component {
 		this.handleTagFilterSuggestions = this.handleTagFilterSuggestions.bind(this)
 		this.sendFilterRequest = this.sendFilterRequest.bind(this)
 		this.state = {
-			tags: [],
-			text: ''
+			tags: filters.tags ? filters.tags.map(tag => {
+				const listTag = activeList.tags.find(activeListTag => activeListTag.id == tag.id)
+				return listTag ? listTag : tag
+			}) : [],
+			text: filters.text ? filters.text : ''
 		}
 	}
 
@@ -108,6 +112,7 @@ class FilterList extends React.Component {
 						validateAddition={this.validateTagAddition}
 						handleDelete={this.handleTagDeletion}
 						handleInputChange={this.handleTagInputChange}
+						inputValue={this.state.text}
 						handleFilterSuggestions={this.handleTagFilterSuggestions}
 						delimiters={[9, 13, 188]} // tab, enter, comma
 					/>
@@ -126,6 +131,7 @@ const mapStateToProps = (state) => ({
 
 
 FilterList.propTypes = {
+	filters: PropTypes.object,
 	activeList: PropTypes.object.isRequired,
 	showFilterInterface: PropTypes.bool.isRequired,
 	filterActiveList: PropTypes.func.isRequired
