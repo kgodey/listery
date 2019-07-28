@@ -114,7 +114,7 @@ class ListHeader extends React.Component {
 		const { activeList, showFilterInterface } = this.props
 		return (
 			<div>
-				<Row>
+				<Row className="px-3">
 					<ListTitle
 						name={this.state.data.name}
 						currentlyEditing={this.state.currentlyEditing}

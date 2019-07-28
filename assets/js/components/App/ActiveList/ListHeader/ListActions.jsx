@@ -16,7 +16,8 @@ const divStyle = {
 
 
 const buttonStyle = {
-	marginRight: '10px'
+	marginRight: '10px',
+	marginTop: '5px'
 }
 
 
@@ -64,8 +65,8 @@ export const ListActions = ({ showFilterInterface, onFilterClick, onQuickSortCli
 						<FaRegSquare style={iconStyle} />Uncheck all
 					</Button>
 					<Dropdown>
-						<Dropdown.Toggle size="sm" variant="outline-dark" id="listSettingsDropdown">
-							<FaCog />&nbsp;Settings
+						<Dropdown.Toggle size="sm" variant="outline-dark" style={buttonStyle} id="listSettingsDropdown">
+							<FaCog style={iconStyle} />Settings
 						</Dropdown.Toggle>
 						<Dropdown.Menu>
 							<SharingToggle
