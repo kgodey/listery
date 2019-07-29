@@ -132,7 +132,7 @@ export const createListItem = (title, listID) => (dispatch, getState) => {
 		.then(
 			response => {
 				dispatch(createListItemSuccess(response, response.id, tempID))
-				dispatch(fetchActiveList({id: null, reload: false}))
+				dispatch(fetchActiveList({id: null, reload: false, useCurrentFilters: true}))
 			},
 			error => dispatch(createListItemError(tempID, error.message))
 		)
@@ -148,7 +148,7 @@ export const updateListItem = (id, data, originalData) => (dispatch) => {
 		.then(
 			response => {
 				dispatch(updateListItemSuccess(response, id)),
-				dispatch(fetchActiveList({id: null, reload: false}))
+				dispatch(fetchActiveList({id: null, reload: false, useCurrentFilters: true}))
 			},
 			error => dispatch(id, updateListItemError(error.message, originalData))
 		)
@@ -165,7 +165,7 @@ export const moveListItem = (id, listID, initialOrder) => (dispatch) => {
 		.then(
 			response =>  {
 				dispatch(moveListItemSuccess(response.id, response.list_id))
-				dispatch(fetchActiveList({id: null, reload: false}))
+				dispatch(fetchActiveList({id: null, reload: false, useCurrentFilters: true}))
 			},
 			error => {
 				dispatch(reorderListItemPreview(id, initialOrder))
@@ -183,7 +183,7 @@ export const deleteListItem = (id) => (dispatch) => {
 		.then(
 			response => {
 				dispatch(deleteListItemSuccess(id)),
-				dispatch(fetchActiveList({id: null, reload: false}))
+				dispatch(fetchActiveList({id: null, reload: false, useCurrentFilters: true}))
 			},
 			error => dispatch(genericAPIActionFailure(error.message))
 		)
@@ -199,7 +199,7 @@ export const reorderListItem = (id, order, initialOrder) => (dispatch) => {
 		.then(
 			response => {
 				dispatch(reorderListItemSuccess(id, order))
-				dispatch(fetchActiveList({id: null, reload: false}))
+				dispatch(fetchActiveList({id: null, reload: false, useCurrentFilters: true}))
 			},
 			error => {
 				dispatch(reorderListItemPreview(id, initialOrder))

@@ -170,7 +170,7 @@ const filterListSuccess = (currentFilters, visibleListItemIDs) => ({
 })
 
 
-export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='' }) => (dispatch, getState) => {
+export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='', useCurrentFilters=false}) => (dispatch, getState) => {
 	const state = getState()
 
 	let currentLocation = history.location.pathname
@@ -198,20 +198,17 @@ export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='' }
 		.then(
 			response => {
 				dispatch(fetchActiveListSuccess(response, filterTags, filterText))
+				if (useCurrentFilters) {
+					const currentFilters = getCurrentFilters(state)
+					filterTags = currentFilters.tags
+					filterText = currentFilters.text
+				}
 				if (filterTags.length > 0 || filterText) {
 					dispatch(setFilters(id, filterTags, filterText))
 				}
 			},
 			error => dispatch(fetchActiveListError(error.message))
 		)
-}
-
-
-const areFiltersEmpty = (currentFilters) => {
-	if ((!currentFilters) || (currentFilters.tags.length == 0 && !currentFilters.text)) {
-		return true
-	}
-	return false
 }
 
 
