@@ -72,12 +72,15 @@ export const currentFilters = (state={id: null, tags: [], text: '', showInterfac
 			newState.showInterface = true
 			return newState
 		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
-			return {
-				id: action.data.result,
-				tags: action.filterTags,
-				text: action.filterText,
-				showInterface: action.filterTags.length > 0 || action.filterText ? true : false
+			if (state.id == null || state.id != action.data.result) {
+				return {
+					id: action.data.result,
+					tags: action.filterTags,
+					text: action.filterText,
+					showInterface: action.filterTags.length > 0 || action.filterText ? true : false
+				}
 			}
+			return state
 		default:
 			return state
 	}
