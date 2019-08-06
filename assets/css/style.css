@@ -96,7 +96,7 @@ div.filterTagInput input.filterTagInputField:focus {
 div.filterSelected span.filterTag {
 	font-weight: 700;
 	border: 0;
-	background: #6c757d;
+	background: #343a40;
 	color: #ffffff;
 	display: inline-block;
 	padding: 5px;

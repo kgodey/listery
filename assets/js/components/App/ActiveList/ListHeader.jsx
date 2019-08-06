@@ -112,6 +112,7 @@ class ListHeader extends React.Component {
 
 	render() {
 		const { activeList, currentFilters } = this.props
+
 		return (
 			<div>
 				<Row className="px-3">
@@ -125,7 +126,7 @@ class ListHeader extends React.Component {
 				</Row>
 				<Row>
 					<ListActions
-						showFilterInterface={currentFilters.showInterface}
+						currentFilters={currentFilters}
 						onFilterClick={this.handleFilterClick}
 						onQuickSortClick={this.handleQuickSortClick}
 						onCheckAllClick={this.handleCheckAllClick}

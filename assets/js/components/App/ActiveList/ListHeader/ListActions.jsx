@@ -26,8 +26,9 @@ const iconStyle = {
 }
 
 
-export const ListActions = ({ showFilterInterface, onFilterClick, onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick, onTagsToggleClick }) => {
-	const filterButtonVariant = showFilterInterface ? 'dark' : 'outline-dark'
+export const ListActions = ({ currentFilters, onFilterClick, onQuickSortClick, onCheckAllClick, onUncheckAllClick, onShareClick, onTagsToggleClick }) => {
+	const filtersActive = currentFilters.tags.length > 0 || currentFilters.text
+	const filterButtonVariant = currentFilters.showInterface ? 'dark' : (filtersActive ? 'info' : 'outline-dark')
 	return (
 		<div style={divStyle} className="col">
 			<IconContext.Provider value={{ className:'align-middle' }}>
@@ -85,6 +86,7 @@ export const ListActions = ({ showFilterInterface, onFilterClick, onQuickSortCli
 
 
 ListActions.propTypes = {
+	currentFilters: PropTypes.object.isRequired,
 	onFilterClick: PropTypes.func.isRequired,
 	onQuickSortClick: PropTypes.func.isRequired,
 	onCheckAllClick: PropTypes.func.isRequired,
