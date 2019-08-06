@@ -87,6 +87,7 @@ class FilterList extends React.Component {
 
 	render() {
 		const { activeList, currentFilters } = this.props
+		const suggestions = activeList.show_tags ? activeList.tags : []
 		if (currentFilters.showInterface) {
 			return (
 				<ListGroup.Item variant="light">
@@ -103,7 +104,7 @@ class FilterList extends React.Component {
 							activeSuggestion: 'filterActiveSuggestion'
 						}}
 						tags={this.state.tags}
-						suggestions={activeList.tags}
+						suggestions={suggestions}
 						placeholder="Type to filter..."
 						autocomplete={true}
 						allowDragDrop={false}
