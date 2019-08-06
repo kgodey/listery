@@ -203,6 +203,9 @@ export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='', 
 					filterTags = currentFilters.tags
 					filterText = currentFilters.text
 				}
+				if (!response.show_tags) {
+					filterTags = []
+				}
 				if (filterTags.length > 0 || filterText) {
 					dispatch(setFilters(id, filterTags, filterText))
 				}

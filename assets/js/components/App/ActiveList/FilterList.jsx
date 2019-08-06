@@ -26,7 +26,7 @@ class FilterList extends React.Component {
 		this.handleTagFilterSuggestions = this.handleTagFilterSuggestions.bind(this)
 		this.sendFilterRequest = this.sendFilterRequest.bind(this)
 		this.state = {
-			tags: currentFilters.tags ? currentFilters.tags.map(tag => {
+			tags: currentFilters.tags && activeList.show_tags ? currentFilters.tags.map(tag => {
 				const listTag = activeList.tags.find(activeListTag => activeListTag.id == tag.id)
 				return listTag ? listTag : tag
 			}) : [],
