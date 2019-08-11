@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { IconContext } from 'react-icons'
-import { FaCog, FaRegCheckSquare, FaRegSquare, FaSearch, FaSortAlphaDown } from 'react-icons/fa'
+import { FaCog, FaRegCheckSquare, FaRegSquare, FaFilter, FaSortAlphaDown } from 'react-icons/fa'
 
 import SharingToggle from './ListActions/SharingToggle.jsx'
 import TagsToggle from './ListActions/TagsToggle.jsx'
@@ -39,7 +39,7 @@ export const ListActions = ({ currentFilters, onFilterClick, onQuickSortClick, o
 						size="sm"
 						onClick={onFilterClick}
 					>
-						<FaSearch style={iconStyle} />Filters
+						<FaFilter style={iconStyle} />Filters
 					</Button>
 					<Button
 						style={buttonStyle}

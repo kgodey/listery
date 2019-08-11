@@ -1,17 +1,31 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
-import { FaSearch } from 'react-icons/fa'
+import { IconContext } from 'react-icons'
+import { FaDownload, FaFilter } from 'react-icons/fa'
 import { connect } from 'react-redux'
 import { WithOutContext as ReactTags } from 'react-tag-input'
 
-import { setFilters } from '../../../actions/list'
+import { setFilters, downloadPlaintextList } from '../../../actions/list'
 import { getActiveList, getCurrentFilters } from '../../../reducers/activeList'
+import { getVisibleListIDs } from '../../../reducers/activeListItems'
 
 
 const iconStyle = {
 	marginRight: '5px',
 	fontSize: '125%'
+}
+
+
+const buttonStyle = {
+	marginRight: '10px',
+	marginTop: '5px'
+}
+
+
+const buttonIconStyle = {
+	marginRight: '5px'
 }
 
 
@@ -25,6 +39,7 @@ class FilterList extends React.Component {
 		this.handleTagInputChange = this.handleTagInputChange.bind(this)
 		this.handleTagFilterSuggestions = this.handleTagFilterSuggestions.bind(this)
 		this.sendFilterRequest = this.sendFilterRequest.bind(this)
+		this.handleDownloadClick = this.handleDownloadClick.bind(this)
 		this.state = {
 			tags: currentFilters.tags && activeList.show_tags ? currentFilters.tags.map(tag => {
 				const listTag = activeList.tags.find(activeListTag => activeListTag.id == tag.id)
@@ -68,7 +83,7 @@ class FilterList extends React.Component {
 	}
 
 	handleTagFilterSuggestions(textInputValue, possibleSuggestionsArray) {
-		var lowerCaseQuery = textInputValue.toLowerCase()
+		const lowerCaseQuery = textInputValue.toLowerCase()
 
 		return possibleSuggestionsArray.filter((suggestion) => {
 			const matchLowerCase = suggestion.text.toLowerCase().includes(lowerCaseQuery)
@@ -85,38 +100,54 @@ class FilterList extends React.Component {
 		setFilters(activeList.id, state.tags, state.text)
 	}
 
+	handleDownloadClick(event) {
+		const {activeList, downloadPlaintextList, visibleListIDs } = this.props
+		downloadPlaintextList(activeList.id, activeList.name, visibleListIDs)
+	}
+
 	render() {
 		const { activeList, currentFilters } = this.props
 		const suggestions = activeList.show_tags ? activeList.tags : []
 		if (currentFilters.showInterface) {
 			return (
 				<ListGroup.Item variant="light">
-					<FaSearch style={iconStyle} />
-					<ReactTags
-						classNames={{
-							tags: 'filterTags',
-							tagInput: 'filterTagInput',
-							tagInputField: 'filterTagInputField',
-							selected: 'filterSelected',
-							tag: 'filterTag',
-							remove: 'filterRemove',
-							suggestions: 'filterSuggestions',
-							activeSuggestion: 'filterActiveSuggestion'
-						}}
-						tags={this.state.tags}
-						suggestions={suggestions}
-						placeholder="Type to filter..."
-						autocomplete={true}
-						allowDragDrop={false}
-						minQueryLength={1}
-						handleAddition={this.handleTagAddition}
-						validateAddition={this.validateTagAddition}
-						handleDelete={this.handleTagDeletion}
-						handleInputChange={this.handleTagInputChange}
-						inputValue={this.state.text}
-						handleFilterSuggestions={this.handleTagFilterSuggestions}
-						delimiters={[9, 13, 188]} // tab, enter, comma
-					/>
+					<IconContext.Provider value={{ className:'align-middle' }}>
+						<FaFilter style={iconStyle} />
+						<ReactTags
+							classNames={{
+								tags: 'filterTags',
+								tagInput: 'filterTagInput',
+								tagInputField: 'filterTagInputField',
+								selected: 'filterSelected',
+								tag: 'filterTag',
+								remove: 'filterRemove',
+								suggestions: 'filterSuggestions',
+								activeSuggestion: 'filterActiveSuggestion'
+							}}
+							tags={this.state.tags}
+							suggestions={suggestions}
+							placeholder="Type to filter..."
+							autocomplete={true}
+							allowDragDrop={false}
+							minQueryLength={1}
+							handleAddition={this.handleTagAddition}
+							validateAddition={this.validateTagAddition}
+							handleDelete={this.handleTagDeletion}
+							handleInputChange={this.handleTagInputChange}
+							inputValue={this.state.text}
+							handleFilterSuggestions={this.handleTagFilterSuggestions}
+							delimiters={[9, 13, 188]} // tab, enter, comma
+						/>
+						<Button
+							style={buttonStyle}
+							variant='secondary'
+							size="sm"
+							className="float-right"
+							onClick={this.handleDownloadClick}
+						>
+							<FaDownload style={buttonIconStyle} />Download Current View
+						</Button>
+					</IconContext.Provider>
 				</ListGroup.Item>
 			)
 		}
@@ -127,19 +158,22 @@ class FilterList extends React.Component {
 
 const mapStateToProps = (state) => ({
 	activeList: getActiveList(state),
-	currentFilters: getCurrentFilters(state)
+	currentFilters: getCurrentFilters(state),
+	visibleListIDs: getVisibleListIDs(state),
 })
 
 
 FilterList.propTypes = {
 	activeList: PropTypes.object.isRequired,
 	currentFilters: PropTypes.object.isRequired,
-	setFilters: PropTypes.func.isRequired
+	visibleListIDs: PropTypes.array.isRequired,
+	setFilters: PropTypes.func.isRequired,
+	downloadPlaintextList: PropTypes.func.isRequired
 }
 
 
 FilterList = connect(
 	mapStateToProps,
-	{ setFilters }
+	{ setFilters, downloadPlaintextList }
 )(FilterList)
 export default FilterList

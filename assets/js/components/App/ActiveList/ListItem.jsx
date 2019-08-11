@@ -224,7 +224,7 @@ class ListItem extends React.Component {
 	}
 
 	handleTagFilterSuggestions(textInputValue, possibleSuggestionsArray) {
-		var lowerCaseQuery = textInputValue.toLowerCase()
+		const lowerCaseQuery = textInputValue.toLowerCase()
 
 		return possibleSuggestionsArray.filter((suggestion) => {
 			const matchLowerCase = suggestion.text.toLowerCase().includes(lowerCaseQuery)

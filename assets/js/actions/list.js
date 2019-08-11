@@ -1,11 +1,12 @@
 import createHistory from 'history/createBrowserHistory'
 import { normalize } from 'normalizr'
+import filenamify from 'filenamify'
 
 import { getActiveListFetchStatus, getActiveListID, getCurrentFilters } from '../reducers/activeList'
 import { getActiveListItems } from '../reducers/activeListItems'
 import { getAllListsFetchStatus } from '../reducers/allLists'
 import { LIST_API_URL, ROOT_URL, QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX } from '../utils/urls'
-import { sync } from './base'
+import { sync, syncWithoutJSON } from './base'
 import { genericAPIActionFailure } from './common'
 import * as schema from './schema'
 
@@ -124,10 +125,11 @@ const archiveListSuccess = (id, nextListID) => ({
 })
 
 
-const downloadListRequest = (id, downloadFormID) => ({
+const downloadListRequest = (id, listName, visibleListIDs) => ({
 	type: DOWNLOAD_LIST_REQUEST,
 	id,
-	downloadFormID
+	listName,
+	visibleListIDs
 })
 
 
@@ -342,11 +344,31 @@ export const archiveList = (id, nextListID) => (dispatch, getState) => {
 }
 
 
-export const downloadPlaintextList = (id, downloadFormID) => (dispatch) => {
-	var formElement = document.querySelector('#' + downloadFormID)
-	formElement.setAttribute('action', LIST_API_URL + id + '/plaintext/')
-	formElement.submit()
-	dispatch(downloadListRequest(id, downloadFormID))
+export const downloadPlaintextList = (id, listName, visibleListIDs=null) => (dispatch) => {
+	dispatch(downloadListRequest(id, listName, visibleListIDs))
+	const downloadData = {
+		item_ids: visibleListIDs
+	}
+	syncWithoutJSON(LIST_API_URL + id + '/plaintext/',{
+		method: 'POST',
+		body: JSON.stringify(downloadData)
+	})
+		.then(
+			response => {
+				const now = new Date()
+				response.blob({type: 'text/plain;charset=utf-8'}).then(blob => {
+					const url = window.URL.createObjectURL(blob)
+					const dummyAnchor = document.createElement('a')
+					dummyAnchor.style.display = 'none'
+					dummyAnchor.href = url
+					dummyAnchor.download = filenamify(listName + '_' + now.toISOString().replace(/:|\.|T/g, '-') + '.txt')
+					document.body.appendChild(dummyAnchor)
+					dummyAnchor.click()
+					window.URL.revokeObjectURL(url)
+				})
+			},
+			error => dispatch(genericAPIActionFailure('There was an error with downloading this list.'))
+		)
 }
 
 

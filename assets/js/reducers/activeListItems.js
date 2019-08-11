@@ -162,6 +162,12 @@ export const getActiveListItems = (state) => {
 }
 
 
+export const getVisibleListIDs = (state) => {
+	const idStrings = Object.keys(state.activeListItems).filter(itemID => !state.activeListItems[itemID].hidden)
+	return idStrings.map(itemID => Number(itemID))
+}
+
+
 export const getSortedListItems = (state) => {
 	let items = Object.keys(state.activeListItems).map(item => state.activeListItems[item])
 	return items.sort(compareByOrder)

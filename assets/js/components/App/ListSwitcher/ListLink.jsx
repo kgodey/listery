@@ -101,8 +101,8 @@ class ListLink extends React.Component {
 	}
 
 	handleDownloadClick(event) {
-		const { id, downloadFormID, downloadPlaintextList } = this.props
-		downloadPlaintextList(id, downloadFormID)
+		const { id, name, downloadPlaintextList } = this.props
+		downloadPlaintextList(id, name)
 	}
 
 	handleArchiveClick(event) {
@@ -176,8 +176,7 @@ class ListLink extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({
-	nextListID: getNextList(state, ownProps.id),
-	downloadFormID: 'download-form'
+	nextListID: getNextList(state, ownProps.id)
 })
 
 
@@ -188,8 +187,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	archiveList: (nextListID) => {
 		dispatch(archiveList(ownProps.id, nextListID))
 	},
-	downloadPlaintextList: (id, downloadFormID) => {
-		dispatch(downloadPlaintextList(id, downloadFormID))
+	downloadPlaintextList: (id, name) => {
+		dispatch(downloadPlaintextList(id, name))
 	}
 })
 

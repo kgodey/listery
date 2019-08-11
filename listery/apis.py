@@ -75,9 +75,9 @@ class ListViewSet(viewsets.ModelViewSet):
 		"""Returns plaintext file containing a representation of the list."""
 		# pylint: disable=unused-argument
 		item = self.get_object()
-		response = HttpResponse(item.plaintext, content_type='text/plain')
-		response['Content-Disposition'] = 'attachment; filename="%s-%s.txt"' % (item.name, timezone.now())
-		return response
+		item_ids = request.data.get('item_ids', [])
+		filter_items = True if item_ids else False
+		return HttpResponse(item.plaintext(filter_items, item_ids), content_type='text/plain')
 
 	@action(detail=True, methods=['post'])
 	def reorder(self, request, pk=None):

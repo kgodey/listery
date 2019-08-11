@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { IconContext } from 'react-icons'
-import { FaArchive, FaCloudDownloadAlt, FaTrash } from 'react-icons/fa'
+import { FaArchive, FaFileDownload, FaTrash } from 'react-icons/fa'
 
 
 const iconStyle = {
@@ -16,7 +16,7 @@ export const DownloadIcon = ({ currentlyHovering, onClick }) => {
 	if (currentlyHovering) {
 		return (
 			<IconContext.Provider value={{ style: iconStyle, size: '20' }}>
-				<FaCloudDownloadAlt onClick={onClick} />
+				<FaFileDownload onClick={onClick} />
 			</IconContext.Provider>
 		)
 	}
