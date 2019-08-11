@@ -25,6 +25,7 @@ export const NO_ACTIVE_LIST_AVAILABLE = 'NO_ACTIVE_LIST_AVAILABLE'
 export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
 export const ARCHIVE_LIST_SUCCESS = 'ARCHIVE_LIST_SUCCESS'
 export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
+export const DOWNLOAD_LIST_SUCCESS = 'DOWNLOAD_LIST_SUCCESS'
 export const REORDER_LIST_PREVIEW = 'REORDER_LIST_PREVIEW'
 export const REORDER_LIST_REQUEST = 'REORDER_LIST_REQUEST'
 export const REORDER_LIST_SUCCESS = 'REORDER_LIST_SUCCESS'
@@ -125,11 +126,21 @@ const archiveListSuccess = (id, nextListID) => ({
 })
 
 
-const downloadListRequest = (id, listName, visibleListIDs) => ({
+const downloadListRequest = (id, listName, visibleListIDs, currentFilters) => ({
 	type: DOWNLOAD_LIST_REQUEST,
 	id,
 	listName,
-	visibleListIDs
+	visibleListIDs,
+	currentFilters
+})
+
+
+const downloadListSuccess = (id, listName, visibleListIDs, currentFilters) => ({
+	type: DOWNLOAD_LIST_SUCCESS,
+	id,
+	listName,
+	visibleListIDs,
+	currentFilters
 })
 
 
@@ -344,11 +355,16 @@ export const archiveList = (id, nextListID) => (dispatch, getState) => {
 }
 
 
-export const downloadPlaintextList = (id, listName, visibleListIDs=null) => (dispatch) => {
-	dispatch(downloadListRequest(id, listName, visibleListIDs))
+export const downloadPlaintextList = (id, listName, visibleListIDs=null, currentFilters=null) => (dispatch) => {
+	dispatch(downloadListRequest(id, listName, visibleListIDs, currentFilters))
 	const downloadData = {
-		item_ids: visibleListIDs
+		item_ids: visibleListIDs,
+		filtered_tags: currentFilters ? currentFilters.tags.map(tag => tag.text) : [],
+		filtered_text: currentFilters ? currentFilters.text : ''
 	}
+	const now = new Date()
+	const filteredText = visibleListIDs ? '_filtered_' : '_'
+	const filename = filenamify(listName + filteredText + now.toISOString().replace(/:|\.|T/g, '-') + '.txt')
 	syncWithoutJSON(LIST_API_URL + id + '/plaintext/',{
 		method: 'POST',
 		body: JSON.stringify(downloadData)
@@ -361,11 +377,12 @@ export const downloadPlaintextList = (id, listName, visibleListIDs=null) => (dis
 					const dummyAnchor = document.createElement('a')
 					dummyAnchor.style.display = 'none'
 					dummyAnchor.href = url
-					dummyAnchor.download = filenamify(listName + '_' + now.toISOString().replace(/:|\.|T/g, '-') + '.txt')
+					dummyAnchor.download = filename
 					document.body.appendChild(dummyAnchor)
 					dummyAnchor.click()
 					window.URL.revokeObjectURL(url)
 				})
+				dispatch(downloadListSuccess(id, listName, visibleListIDs, currentFilters))
 			},
 			error => dispatch(genericAPIActionFailure('There was an error with downloading this list.'))
 		)

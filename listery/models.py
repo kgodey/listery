@@ -62,10 +62,17 @@ class List(OrderedModel):
 		"""Returns count of list items belonging to the list that have the checked attribute set to True."""
 		return self.items.filter(completed=True).count()
 
-	def plaintext(self, filter_items=False, item_ids=[]):
+	def plaintext(self, filter_items, item_ids, filtered_tags, filtered_text):
 		"""Returns a plaintext representation of the list for download."""
 		# pylint: disable=bad-continuation
 		text = u'%s\n' % self.name.upper()
+		if filter_items and (filtered_tags or filtered_text):
+			filter_description = []
+			if filtered_text:
+				filter_description.append('text: "%s"' % filtered_text)
+			if filtered_tags:
+				filter_description.append('tags: %s' % ', '.join(filtered_tags))
+			text += u'Filtered by %s\n' % (' & '.join(filter_description))
 		if self.items.exists():
 			text += u'\n'
 			for item in self.items:
@@ -74,7 +81,7 @@ class List(OrderedModel):
 						'checked': u'x' if item.completed else u' ',
 						'title': item.title,
 						'description': u'\n\t%s' % item.description if item.description else u'',
-						'tags': u'\n\ttagged:%s' % ','.join([tag.name for tag in item.tags.all()]) if item.tags.exists() and self.show_tags else u'',
+						'tags': u'\n\ttags: [%s]' % ', '.join([tag.name for tag in item.tags.all()]) if item.tags.exists() and self.show_tags else u'',
 					}
 		return text
 

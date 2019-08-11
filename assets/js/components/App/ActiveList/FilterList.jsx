@@ -101,8 +101,8 @@ class FilterList extends React.Component {
 	}
 
 	handleDownloadClick(event) {
-		const {activeList, downloadPlaintextList, visibleListIDs } = this.props
-		downloadPlaintextList(activeList.id, activeList.name, visibleListIDs)
+		const {activeList, downloadPlaintextList, visibleListIDs, currentFilters } = this.props
+		downloadPlaintextList(activeList.id, activeList.name, visibleListIDs, currentFilters)
 	}
 
 	render() {
