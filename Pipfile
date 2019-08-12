@@ -18,9 +18,9 @@ djangorestframework = "==3.9.0"
 gunicorn = "==19.5.0"
 six = "==1.10.0"
 static3 = "==0.6.1"
-wsgiref = "==0.1.2"
 Django = "==1.11.18"
 psycopg2 = "==2.7.6.1"
+django-taggit = "==0.24.0"
 
 [requires]
 python_version = "2.7"
