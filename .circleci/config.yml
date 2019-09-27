@@ -32,7 +32,7 @@ commands:
             - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
             - run:
                 name: Install pipenv
-                command: sudo pip install pipenv
+                command: sudo pip3 install pipenv
             - restore_cache:
                 keys:
                     # when lock file changes, use increasingly general patterns to restore cache
