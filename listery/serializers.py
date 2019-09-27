@@ -9,11 +9,11 @@ from listery.models import List, ListItem
 
 
 class TagField(serializers.RelatedField):
+	"""
+	Custom serializer field representing tags
+	"""
 	def to_representation(self, value):
-		return {
-			'id': value.slug,
-			'text': value.name
-		}
+		return {'id': value.slug, 'text': value.name}
 
 	def to_internal_value(self, data):
 		return data

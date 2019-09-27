@@ -12,11 +12,25 @@ from taggit.models import Tag, TaggedItemBase
 
 
 class TaggedList(TaggedItemBase):
+	"""
+	Through model for tags for lists
+	"""
 	content_object = models.ForeignKey('List')
+
+	def __unicode__(self):
+		"""Returns a short identifying description of the list tag."""
+		return 'Tag "%s" for list "%s"' % (self.tag.name, self.content_object.name)
 
 
 class TaggedListItem(TaggedItemBase):
+	"""
+	Through model for tags for list items
+	"""
 	content_object = models.ForeignKey('ListItem')
+
+	def __unicode__(self):
+		"""Returns a short identifying description of the list item tag."""
+		return 'Tag "%s" for list item "%s" from list "%s"' % (self.tag.name, self.content_object.title, self.content_object.list.name)
 
 
 class ListQuerySet(models.QuerySet):
@@ -186,12 +200,14 @@ class ListItem(OrderedModel):
 			old_list.reindex()
 
 	def update_tags(self, tags):
+		"""
+		Set the tags of the list based on the the tags of all the list items belonging to that list.
+		"""
 		# Add all passed in tags to list and set list item tags to the tags passed in
 		self.list.tags.add(*tags)
 		self.tags.set(*tags)
 		# Remove tags from the list if no list item belonging to the list has them anymore
-		tags_to_delete = []
-		all_list_item_tags =  Tag.objects.filter(listery_taggedlistitem_items__content_object__list=self.list).distinct()
+		all_list_item_tags = Tag.objects.filter(listery_taggedlistitem_items__content_object__list=self.list).distinct()
 		all_list_tags = Tag.objects.filter(listery_taggedlist_items__content_object=self.list).distinct()
 		tags_to_remove = []
 		for tag in all_list_tags:
