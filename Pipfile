@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pytest = "*"
 pylint = "==1.9.4"
 pylint-django = "==0.11"
 pytest-django = "==3.4.4"
@@ -21,7 +22,6 @@ static3 = "==0.6.1"
 Django = "==1.11.23"
 psycopg2 = "==2.7.6.1"
 django-taggit = "==0.24.0"
-pytest = "*"
 
 [requires]
 python_version = "2.7"
