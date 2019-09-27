@@ -371,7 +371,6 @@ export const downloadPlaintextList = (id, listName, visibleListIDs=null, current
 	})
 		.then(
 			response => {
-				const now = new Date()
 				response.blob({type: 'text/plain;charset=utf-8'}).then(blob => {
 					const url = window.URL.createObjectURL(blob)
 					const dummyAnchor = document.createElement('a')
