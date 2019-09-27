@@ -4,7 +4,6 @@ TODO: merge this with views.py
 """
 
 from django.http import HttpResponse
-from django.utils import timezone
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -75,9 +74,11 @@ class ListViewSet(viewsets.ModelViewSet):
 		"""Returns plaintext file containing a representation of the list."""
 		# pylint: disable=unused-argument
 		item = self.get_object()
-		response = HttpResponse(item.plaintext, content_type='text/plain')
-		response['Content-Disposition'] = 'attachment; filename="%s-%s.txt"' % (item.name, timezone.now())
-		return response
+		item_ids = request.data.get('item_ids', [])
+		filtered_tags = request.data.get('filtered_tags', [])
+		filtered_text = request.data.get('filtered_text', '')
+		filter_items = True if item_ids else False
+		return HttpResponse(item.plaintext(filter_items, item_ids, filtered_tags, filtered_text), content_type='text/plain')
 
 	@action(detail=True, methods=['post'])
 	def reorder(self, request, pk=None):

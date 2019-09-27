@@ -1,18 +1,31 @@
 import PropTypes from 'prop-types'
+import queryString from 'query-string'
 import React from 'react'
+import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
 import { fetchActiveList } from '../../actions/list'
 import { reorderListItem, previewListItemOrder } from '../../actions/list-item'
 import { getSortedListItems, getListItemInitialOrders } from '../../reducers/activeListItems'
-import { getActiveListID, getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
+import { getActiveList, getActiveListID, getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
 import ListHeader from './ActiveList/ListHeader.jsx'
 import AddListItem from './ActiveList/AddListItem.jsx'
+import FilterList from './ActiveList/FilterList.jsx'
 import ListItem from './ActiveList/ListItem.jsx'
 import { NoListPanel } from './ActiveList/NoListPanel.jsx'
 import { ErrorPanel } from './Shared/ErrorPanel.jsx'
 import { LoadingIndicator } from './Shared/LoadingIndicator.jsx'
+
+
+const iconStyle = {
+	marginRight: '5px'
+}
+
+const inputStyle = {
+	width: '100%'
+}
 
 
 class ActiveList extends React.Component {
@@ -25,6 +38,12 @@ class ActiveList extends React.Component {
 	componentDidMount() {
 		// Load initial data from backend once components mounts.
 		const { fetchActiveList, match, location } = this.props
+		const queryFilters = queryString.parse(this.props.location.search, {arrayFormat: 'comma'})
+		const tags = queryFilters.tags ? (
+			Array.isArray(queryFilters.tags) ?
+				queryFilters.tags.map(tag => { return {id: tag, text: tag} }) :
+					[{id: queryFilters.tags, text: queryFilters.tags}]
+		) : []
 		let urlListID
 		if (match.params.id !== undefined) {
 			urlListID = parseInt(match.params.id)
@@ -34,11 +53,11 @@ class ActiveList extends React.Component {
 				urlListID = parseInt(oldURLPatternMatches[1])
 			}
 		}
-		fetchActiveList(urlListID)
+		fetchActiveList({id: urlListID, filterTags: tags, filterText: queryFilters.text})
 	}
 
 	render() {
-		const { activeListID, activeListError, isFetching, sortedListItems, initialOrders } = this.props
+		const { activeListError, isFetching, sortedListItems, initialOrders, activeListID } = this.props
 		if (activeListID === null) {
 			if (activeListError.isError) {
 				return (
@@ -65,7 +84,8 @@ class ActiveList extends React.Component {
 			return (
 				<div>
 					<ListHeader />
-					<div className='list-group list-group-flush'>
+					<ListGroup variant="flush">
+						<FilterList />
 						<AddListItem />
 						{sortedListItems.map(item =>
 							<ListItem
@@ -76,7 +96,7 @@ class ActiveList extends React.Component {
 								previewNewOrder={this.previewNewOrder}
 							/>
 						)}
-					</div>
+					</ListGroup>
 				</div>
 			)
 		}

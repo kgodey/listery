@@ -57,6 +57,15 @@ export const activeListItems = (state={}, action) => {
 		case listItemAPIActions.DELETE_LIST_ITEM_SUCCESS:
 			delete newState[action.id]
 			return newState
+		case listAPIActions.FILTER_LIST_SUCCESS:
+			Object.keys(newState).forEach(itemID => {
+				if (action.visibleListItemIDs.indexOf(Number(itemID)) > -1) {
+					newState[itemID].hidden = false
+				} else {
+					newState[itemID].hidden = true
+				}
+			})
+			return newState
 		default:
 			return state
 	}
@@ -92,7 +101,7 @@ export const listItemInitialOrders = (state={}, action) => {
 		case listAPIActions.UPDATE_ACTIVE_LIST_ERROR:
 			newState = {}
 			if (action.data.entities.listItems !== undefined) {
-				Object.keys(action.data.entities.listItems).map(function(key) {
+				Object.keys(action.data.entities.listItems).map(key => {
 					newState[key] = action.data.entities.listItems[key].order
 				})
 			}
@@ -145,6 +154,17 @@ export const getListItemInitialOrders = (state) => {
 
 export const getNumTempItems = (state) => {
 	return state.numTempItems
+}
+
+
+export const getActiveListItems = (state) => {
+	return state.activeListItems
+}
+
+
+export const getVisibleListIDs = (state) => {
+	const idStrings = Object.keys(state.activeListItems).filter(itemID => !state.activeListItems[itemID].hidden)
+	return idStrings.map(itemID => Number(itemID))
 }
 
 

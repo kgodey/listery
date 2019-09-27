@@ -43,6 +43,7 @@ INSTALLED_APPS = (
 	'django_filters',
 	'rest_framework',
 	'rest_framework.authtoken',
+	'taggit',
 	'listery',
 )
 
@@ -131,10 +132,14 @@ REST_FRAMEWORK = {
 	)
 }
 
+# Listery settings
 LISTERY = {
 	'LISTERY_TITLE': 'Listery Demo',
 	'LISTERY_FRONTEND_LOGS_ENABLED': True
 }
+
+# Taggit settings
+TAGGIT_CASE_INSENSITIVE = True
 
 # Heroku settings
 

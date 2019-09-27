@@ -1,10 +1,12 @@
 import createHistory from 'history/createBrowserHistory'
 import { normalize } from 'normalizr'
+import filenamify from 'filenamify'
 
-import { getActiveListFetchStatus, getActiveListID } from '../reducers/activeList'
+import { getActiveListFetchStatus, getActiveListID, getCurrentFilters } from '../reducers/activeList'
+import { getActiveListItems } from '../reducers/activeListItems'
 import { getAllListsFetchStatus } from '../reducers/allLists'
 import { LIST_API_URL, ROOT_URL, QUICK_SORT_URL_SUFFIX, CHECK_ALL_URL_SUFFIX, UNCHECK_ALL_URL_SUFFIX } from '../utils/urls'
-import { sync } from './base'
+import { sync, syncWithoutJSON } from './base'
 import { genericAPIActionFailure } from './common'
 import * as schema from './schema'
 
@@ -23,9 +25,14 @@ export const NO_ACTIVE_LIST_AVAILABLE = 'NO_ACTIVE_LIST_AVAILABLE'
 export const ARCHIVE_LIST_REQUEST = 'ARCHIVE_LIST_REQUEST'
 export const ARCHIVE_LIST_SUCCESS = 'ARCHIVE_LIST_SUCCESS'
 export const DOWNLOAD_LIST_REQUEST = 'DOWNLOAD_LIST_REQUEST'
+export const DOWNLOAD_LIST_SUCCESS = 'DOWNLOAD_LIST_SUCCESS'
 export const REORDER_LIST_PREVIEW = 'REORDER_LIST_PREVIEW'
 export const REORDER_LIST_REQUEST = 'REORDER_LIST_REQUEST'
 export const REORDER_LIST_SUCCESS = 'REORDER_LIST_SUCCESS'
+export const FILTER_INTERFACE_TOGGLED = 'FILTER_INTERFACE_TOGGLED'
+export const FILTER_LIST_REQUEST = 'FILTER_LIST_REQUEST'
+export const FILTER_LIST_SUCCESS = 'FILTER_LIST_SUCCESS'
+
 
 const history = createHistory()
 
@@ -55,9 +62,11 @@ const fetchActiveListRequest = (id, reload) => ({
 })
 
 
-const fetchActiveListSuccess = (data) => ({
+const fetchActiveListSuccess = (data, filterTags, filterText) => ({
 	type: FETCH_ACTIVE_LIST_SUCCESS,
-	data: normalize(data, schema.listSchema)
+	data: normalize(data, schema.listSchema),
+	filterTags,
+	filterText
 })
 
 
@@ -117,10 +126,21 @@ const archiveListSuccess = (id, nextListID) => ({
 })
 
 
-const downloadListRequest = (id, downloadFormID) => ({
+const downloadListRequest = (id, listName, visibleListIDs, currentFilters) => ({
 	type: DOWNLOAD_LIST_REQUEST,
 	id,
-	downloadFormID
+	listName,
+	visibleListIDs,
+	currentFilters
+})
+
+
+const downloadListSuccess = (id, listName, visibleListIDs, currentFilters) => ({
+	type: DOWNLOAD_LIST_SUCCESS,
+	id,
+	listName,
+	visibleListIDs,
+	currentFilters
 })
 
 
@@ -145,8 +165,27 @@ const reorderListSuccess = (id, order) => ({
 })
 
 
-export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
+const filterInterfaceToggled = () => ({
+	type: FILTER_INTERFACE_TOGGLED,
+})
+
+
+const filterListRequest = (currentFilters) => ({
+	type: FILTER_LIST_REQUEST,
+	data: currentFilters
+})
+
+
+const filterListSuccess = (currentFilters, visibleListItemIDs) => ({
+	type: FILTER_LIST_SUCCESS,
+	data: currentFilters,
+	visibleListItemIDs
+})
+
+
+export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='', useCurrentFilters=false}) => (dispatch, getState) => {
 	const state = getState()
+
 	let currentLocation = history.location.pathname
 	let newLocation
 
@@ -170,9 +209,71 @@ export const fetchActiveList = (id, reload=true) => (dispatch, getState) => {
 	if (currentLocation !== newLocation) history.push(newLocation)
 	return sync(LIST_API_URL + id + '/')
 		.then(
-			response => dispatch(fetchActiveListSuccess(response)),
+			response => {
+				dispatch(fetchActiveListSuccess(response, filterTags, filterText))
+				if (useCurrentFilters) {
+					const currentFilters = getCurrentFilters(state)
+					filterTags = currentFilters.tags
+					filterText = currentFilters.text
+				}
+				if (!response.show_tags) {
+					filterTags = []
+				}
+				if (filterTags.length > 0 || filterText) {
+					dispatch(setFilters(id, filterTags, filterText))
+				}
+			},
 			error => dispatch(fetchActiveListError(error.message))
 		)
+}
+
+
+const constructFilterURL = (pathname, currentFilters) => {
+	let paramStrings = []
+	if (currentFilters.tags.length > 0) {
+		paramStrings.push('tags=' + currentFilters.tags.map(tag => tag.id).join(','))
+	}
+	if (currentFilters.text) {
+		paramStrings.push('text=' + currentFilters.text)
+	}
+	return {
+		pathname: pathname,
+		search: '?' + paramStrings.join('&')
+	}
+}
+
+
+const filterActiveListItems = (state, currentFilters) => {
+	const activeListItems = getActiveListItems(state)
+	const lowerCaseFilterText = currentFilters.text.toLowerCase()
+	let visibleListItemIDs = Object.keys(activeListItems).filter(itemID => {
+		let item = activeListItems[itemID]
+		// all filtered tags should be present in the list item
+		// filtered text should be present in the title or description of the list item
+		return currentFilters.tags.every(
+			filterTag => item.tags.find(
+				itemTag => itemTag.id == filterTag.id
+			)
+		) && (
+			item.title.toLowerCase().search(lowerCaseFilterText) > -1 ||
+				(item.description != null &&
+					item.description.toLowerCase().search(lowerCaseFilterText) > -1)
+		)
+	})
+	return visibleListItemIDs.map(id => Number(id))
+}
+
+
+export const setFilters = (id, filterTags, filterText) => (dispatch, getState) => {
+	const currentFilters = {
+		id: id,
+		tags: filterTags,
+		text: filterText
+	}
+	dispatch(filterListRequest(currentFilters))
+	const visibleListItemIDs = filterActiveListItems(getState(), currentFilters)
+	history.push(constructFilterURL(ROOT_URL + id, currentFilters))
+	return dispatch(filterListSuccess(currentFilters, visibleListItemIDs))
 }
 
 
@@ -230,7 +331,7 @@ export const performActionOnList = (id, actionURL, originalData) => (dispatch) =
 		method: 'POST',
 	})
 		.then(
-			response => dispatch(fetchActiveListSuccess(response)),
+			response => dispatch(fetchActiveListSuccess(response, false)),
 			error => dispatch(updateActiveListError(id, error.message, originalData))
 		)
 }
@@ -245,7 +346,7 @@ export const archiveList = (id, nextListID) => (dispatch, getState) => {
 			response => {
 				let activeListID = getActiveListID(getState())
 				if (id === activeListID) {
-					dispatch(fetchActiveList(nextListID))
+					dispatch(fetchActiveList({id: nextListID}))
 				}
 				dispatch(archiveListSuccess(id, nextListID))
 			},
@@ -254,11 +355,36 @@ export const archiveList = (id, nextListID) => (dispatch, getState) => {
 }
 
 
-export const downloadPlaintextList = (id, downloadFormID) => (dispatch) => {
-	var formElement = document.querySelector('#' + downloadFormID)
-	formElement.setAttribute('action', LIST_API_URL + id + '/plaintext/')
-	formElement.submit()
-	dispatch(downloadListRequest(id, downloadFormID))
+export const downloadPlaintextList = (id, listName, visibleListIDs=null, currentFilters=null) => (dispatch) => {
+	dispatch(downloadListRequest(id, listName, visibleListIDs, currentFilters))
+	const downloadData = {
+		item_ids: visibleListIDs,
+		filtered_tags: currentFilters ? currentFilters.tags.map(tag => tag.text) : [],
+		filtered_text: currentFilters ? currentFilters.text : ''
+	}
+	const now = new Date()
+	const filteredText = visibleListIDs ? '_filtered_' : '_'
+	const filename = filenamify(listName + filteredText + now.toISOString().replace(/:|\.|T/g, '-') + '.txt')
+	syncWithoutJSON(LIST_API_URL + id + '/plaintext/',{
+		method: 'POST',
+		body: JSON.stringify(downloadData)
+	})
+		.then(
+			response => {
+				response.blob({type: 'text/plain;charset=utf-8'}).then(blob => {
+					const url = window.URL.createObjectURL(blob)
+					const dummyAnchor = document.createElement('a')
+					dummyAnchor.style.display = 'none'
+					dummyAnchor.href = url
+					dummyAnchor.download = filename
+					document.body.appendChild(dummyAnchor)
+					dummyAnchor.click()
+					window.URL.revokeObjectURL(url)
+				})
+				dispatch(downloadListSuccess(id, listName, visibleListIDs, currentFilters))
+			},
+			error => dispatch(genericAPIActionFailure('There was an error with downloading this list.'))
+		)
 }
 
 
@@ -283,4 +409,9 @@ export const reorderList = (id, order, initialOrder) => (dispatch) => {
 
 export const previewListOrder = (dragID, dropOrder) => (dispatch) => {
 	return dispatch(reorderListPreview(dragID, dropOrder))
+}
+
+
+export const toggleFilterInterface = () => (dispatch) => {
+	return dispatch(filterInterfaceToggled())
 }

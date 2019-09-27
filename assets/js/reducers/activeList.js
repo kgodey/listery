@@ -60,6 +60,33 @@ export const activeListError = (state, action) => {
 }
 
 
+export const currentFilters = (state={id: null, tags: [], text: '', showInterface: false}, action) => {
+	let newState = {...state}
+	switch (action.type) {
+		case listAPIActions.FILTER_INTERFACE_TOGGLED:
+			newState.showInterface = !state.showInterface
+			return newState
+		case listAPIActions.FILTER_LIST_REQUEST:
+		case listAPIActions.FILTER_LIST_SUCCESS:
+			newState = {...action.data}
+			newState.showInterface = true
+			return newState
+		case listAPIActions.FETCH_ACTIVE_LIST_SUCCESS:
+			if (state.id == null || state.id != action.data.result) {
+				return {
+					id: action.data.result,
+					tags: action.filterTags,
+					text: action.filterText,
+					showInterface: action.filterTags.length > 0 || action.filterText ? true : false
+				}
+			}
+			return state
+		default:
+			return state
+	}
+}
+
+
 export const getActiveListID = (state) => {
 	return state.activeListID
 }
@@ -77,4 +104,9 @@ export const getActiveListFetchStatus = (state) => {
 
 export const getActiveListErrorStatus = (state) => {
 	return state.activeListError
+}
+
+
+export const getCurrentFilters = (state) => {
+	return state.currentFilters
 }

@@ -7,9 +7,10 @@ import DropTarget from 'react-dnd/lib/DropTarget'
 import { findDOMNode } from 'react-dom'
 import onClickOutside from 'react-onclickoutside'
 import { connect } from 'react-redux'
+import { WithOutContext as ReactTags } from 'react-tag-input'
 
 import { deleteListItem, updateListItem } from '../../../actions/list-item'
-import { getActiveListFetchStatus } from '../../../reducers/activeList'
+import { getActiveList, getActiveListFetchStatus } from '../../../reducers/activeList'
 import { getListItem, getListItemFetchStatus } from '../../../reducers/activeListItems'
 import { ItemTypes } from '../../../utils/itemTypes'
 import { DeleteIcon } from '../Shared/Icons.jsx'
@@ -17,7 +18,6 @@ import { LoadingIndicator } from '../Shared/LoadingIndicator.jsx'
 import { Checkbox } from './ListItem/Checkbox.jsx'
 import { Title } from './ListItem/Title.jsx'
 import { Description } from './ListItem/Description.jsx'
-
 
 
 const listItemSource = {
@@ -63,13 +63,15 @@ const dropCollect = (connect) => ({
 class ListItem extends React.Component {
 	constructor(props) {
 		super(props)
-		const { completed, title, description, id } = props
+		const { completed, title, description, id, tags, showTags } = props
 		this.state = {
 			data: {
 				completed: completed,
 				title: title,
-				description: description
+				description: description,
+				tags: tags
 			},
+			showTags: showTags,
 			currentlyEditing: false,
 			currentlyHovering: false,
 			currentlyOverInput: false,
@@ -89,8 +91,12 @@ class ListItem extends React.Component {
 		this.handleDeleteConfirm = this.handleDeleteConfirm.bind(this)
 		this.handleDeleteCancel = this.handleDeleteCancel.bind(this)
 		this.saveListItemTitleAndDescription = this.saveListItemTitleAndDescription.bind(this)
+		this.saveTags = this.saveTags.bind(this)
 		this.handleInputMouseEnter = this.handleInputMouseEnter.bind(this)
 		this.handleInputMouseLeave = this.handleInputMouseLeave.bind(this)
+		this.handleTagAddition = this.handleTagAddition.bind(this)
+		this.handleTagDeletion = this.handleTagDeletion.bind(this)
+		this.handleTagFilterSuggestions = this.handleTagFilterSuggestions.bind(this)
 	}
 
 	static getDerivedStateFromProps({ completed }, state) {
@@ -185,6 +191,13 @@ class ListItem extends React.Component {
 		this.setState({currentlyEditing: false})
 	}
 
+	saveTags(tags) {
+		const { updateListItem, id, originalData } = this.props
+		updateListItem(id, {
+			tags: tags
+		}, originalData)
+	}
+
 	handleInputMouseEnter() {
 		this.setState({currentlyOverInput: true})
 	}
@@ -193,12 +206,59 @@ class ListItem extends React.Component {
 		this.setState({currentlyOverInput: false})
 	}
 
+	handleTagAddition(tag) {
+		let newState = {...this.state}
+		const newTags = [...this.state.data.tags, tag]
+		newState['data']['tags'] = newTags
+		this.saveTags(newTags)
+		this.setState(newState)
+	}
+
+	handleTagDeletion(index) {
+		let newState = {...this.state}
+		const tags = this.state.data.tags.slice(0)
+		tags.splice(index, 1)
+		newState['data']['tags'] = tags
+		this.saveTags(tags)
+		this.setState(newState)
+	}
+
+	handleTagFilterSuggestions(textInputValue, possibleSuggestionsArray) {
+		const lowerCaseQuery = textInputValue.toLowerCase()
+
+		return possibleSuggestionsArray.filter((suggestion) => {
+			const matchLowerCase = suggestion.text.toLowerCase().includes(lowerCaseQuery)
+			const currentTags = this.state.data.tags.map((tagObject) => {
+				return tagObject.text
+			})
+			const notDuplicate = currentTags.indexOf(suggestion.text) > -1 ? false : true
+			return matchLowerCase && notDuplicate
+		})
+	}
+
 	render() {
-		const { isFetchingList } = this.props
-		if (!isFetchingList) {
-			const { connectDragSource, isDragging, connectDropTarget, isFetching } = this.props
+		const { isFetchingList, hidden } = this.props
+		if (!isFetchingList && !hidden) {
+			let tagsElement
+			const { connectDragSource, isDragging, connectDropTarget, isFetching, activeList } = this.props
 			const style = {opacity: isDragging ? 0 : 1}
 			const className = this.state.disabled ? 'list-group-item disabled' : 'list-group-item'
+			if (activeList.show_tags) {
+				tagsElement = <div className="row">
+						<ReactTags
+							tags={this.state.data.tags}
+							suggestions={activeList.tags}
+							autocomplete={true}
+							autofocus={false}
+							allowDragDrop={false}
+							minQueryLength={1}
+							handleAddition={this.handleTagAddition}
+							handleDelete={this.handleTagDeletion}
+							handleFilterSuggestions={this.handleTagFilterSuggestions}
+							delimiters={[9, 13, 188]} // tab, enter, comma
+						/>
+					</div>
+			}
 			let element = (
 				<div className={className} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onDoubleClick={this.handleDoubleClick} style={style}>
 					<div className="row">
@@ -232,6 +292,7 @@ class ListItem extends React.Component {
 							<DeleteIcon currentlyHovering={this.state.currentlyHovering} onClick={this.handleDeleteClick} />
 						</div>
 					</div>
+					{tagsElement}
 					<SweetAlert
 						warning
 						showCancel
@@ -261,6 +322,7 @@ class ListItem extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({
+	activeList: getActiveList(state),
 	originalData: getListItem(state, ownProps.id),
 	isFetchingList: getActiveListFetchStatus(state),
 	isFetching: getListItemFetchStatus(state, ownProps.id)
@@ -269,10 +331,12 @@ const mapStateToProps = (state, ownProps) => ({
 
 ListItem.propTypes = {
 	id: PropTypes.number.isRequired,
+	activeList: PropTypes.object.isRequired,
 	completed: PropTypes.bool.isRequired,
 	title: PropTypes.string.isRequired,
 	description: PropTypes.string,
 	originalData: PropTypes.object.isRequired,
+	hidden: PropTypes.bool,
 	isFetchingList: PropTypes.bool,
 	isFetching: PropTypes.bool,
 	updateListItem: PropTypes.func.isRequired,
