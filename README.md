@@ -77,6 +77,12 @@ LISTERY = {
 
 * If you use the `STATICFILES_FINDERS` setting, make sure that `django.contrib.staticfiles.finders.AppDirectoriesFinder` is specified in it. If you don't have the setting defined, don't worry about it since the `AppDirectoriesFinder` is used by default.
 
+* If desired, set your tags to be case-insensitive
+
+```
+TAGGIT_CASE_INSENSITIVE = True
+```
+
 ## Upgrading Listery
 
 If you would like to upgrade Listery to the latest code, please follow these steps:
