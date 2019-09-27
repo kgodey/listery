@@ -21,6 +21,7 @@ static3 = "==0.6.1"
 Django = "==1.11.18"
 psycopg2 = "==2.7.6.1"
 django-taggit = "==0.24.0"
+pytest = "*"
 
 [requires]
 python_version = "2.7"

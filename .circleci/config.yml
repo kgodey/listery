@@ -3,7 +3,7 @@ executors:
     base-executor:
         working_directory: ~/listery
         docker:
-            - image: circleci/python:3.7.4-stretch-node-browsers
+            - image: circleci/python:2.7.15-stretch-node-browsers
 commands:
     javascript_setup:
         description: "Set up JavaScript code"
@@ -29,10 +29,10 @@ commands:
         steps:
             - checkout
             - run: sudo chown -R circleci:circleci /usr/local/bin
-            - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+            - run: sudo chown -R circleci:circleci /usr/local/lib/python2.7/site-packages
             - run:
                 name: Install pipenv
-                command: sudo pip3 install pipenv
+                command: sudo pip install pipenv
             - restore_cache:
                 keys:
                     # when lock file changes, use increasingly general patterns to restore cache
