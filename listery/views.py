@@ -14,3 +14,11 @@ def web(request):
 	first_list = List.objects.all_for_user(request.user).first()
 	first_list_id = first_list.id if first_list else None
 	return render(request, 'listery/web.html', {'first_list_id': first_list_id})
+
+
+@login_required
+def mobile(request):
+	"""Renders base page for the single-page app."""
+	first_list = List.objects.all_for_user(request.user).first()
+	first_list_id = first_list.id if first_list else None
+	return render(request, 'listery/mobile.html', {'first_list_id': first_list_id})
