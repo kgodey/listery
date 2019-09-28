@@ -2,16 +2,16 @@
 	"name": "listery",
 	"version": "0.0.0",
 	"description": "List management app",
-	"main": "assets/js/index.js",
+	"main": "listery/assets/web/js/index.js",
 	"scripts": {
 		"build": "./build.sh",
 		"start": "./start.sh",
-		"watch": "watch 'npm run start' assets",
+		"watch": "watch 'npm run start' listery/assets",
 		"test": "jest",
 		"postinstall": "npm run build"
 	},
 	"jest": {
-		"testRegex": "assets/js/__tests__/.*\\.js$",
+		"testRegex": "listery/assets/web/js/__tests__/.*\\.js$",
 		"transform": {
 			"^.+\\.jsx?$": "babel-jest"
 		},

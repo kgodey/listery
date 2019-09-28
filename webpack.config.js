@@ -5,7 +5,7 @@ var webpack = require('webpack')
 
 
 module.exports = {
-	entry: __dirname + '/assets/js/index.js',
+	entry: __dirname + '/listery/assets/web/js/index.js',
 	module: {
 		rules: [
 			{
@@ -17,7 +17,7 @@ module.exports = {
 	},
 	output: {
 		filename: 'bundle.js',
-		path: __dirname + '/listery/static/listery/js'
+		path: __dirname + '/listery/static/listery/js/web'
 	},
 	plugins: [
 		/* Uncomment the lines below for local bundle size analysis */
