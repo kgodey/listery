@@ -6,7 +6,7 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from listery.models import List
+from listery.models import List, ListItem
 
 
 class APITestsWithoutAuthentication(APITestCase):
@@ -109,3 +109,43 @@ class ListAPITests(APITestCase):
 		self.assertEqual(list_data['name'], 'Vegetables')
 		self.assertEqual(test_list.name, 'Vegetables')
 		self.assertFalse(test_list.private)
+
+
+class ListItemAPITests(APITestCase):
+	"""Tests for the List Item API with authentication"""
+	fixtures = ['testing_data.json']
+
+	def setUp(self):
+		self.client.login(username='test', password='password')
+
+	def test_create_list_item(self):
+		"""Ensure that list item creation works and returns the correct default data."""
+		url = reverse('listery-api-v1:list-item-list')
+		response = self.client.post(url, {'title': 'Spinach', 'list_id': 4})
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		list_item_data = response.json()
+		self.assertEqual(list_item_data['title'], 'Spinach')
+		self.assertFalse(list_item_data['completed'])
+		self.assertEqual(list_item_data['description'], None)
+		self.assertEqual(list_item_data['list_id'], 4)
+
+	def test_mark_list_item_completed(self):
+		"""Ensure that list item can be marked completed."""
+		test_list_item = ListItem.objects.create(list_id=4, title='Kale')
+		self.assertEqual(test_list_item.title, 'Kale')
+		self.assertFalse(test_list_item.completed)
+		url = reverse('listery-api-v1:list-item-detail', args=[test_list_item.id])
+		response = self.client.patch(url, {'completed': True})
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		list_item_data = response.json()
+		self.assertTrue(list_item_data['completed'])
+
+	def test_move_list_item(self):
+		"""Ensure that list item can be marked completed."""
+		test_list_item = ListItem.objects.create(list_id=4, title='Green Eggs and Ham')
+		self.assertEqual(test_list_item.list.id, 4)
+		url = reverse('listery-api-v1:list-item-detail', args=[test_list_item.id])
+		response = self.client.patch(url, {'list_id': 2})
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		list_item_data = response.json()
+		self.assertEqual(list_item_data['list_id'], 2)
