@@ -11,7 +11,7 @@
 		"postinstall": "npm run build"
 	},
 	"jest": {
-		"testRegex": "listery/assets/web/js/__tests__/.*\\.js$",
+		"testRegex": "listery/assets/js/__tests__/.*\\.js$",
 		"transform": {
 			"^.+\\.jsx?$": "babel-jest"
 		},
