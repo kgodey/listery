@@ -3,12 +3,12 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(../fonts/MaterialIcons-Regular.eot);
+  src: url("/static/listery/fonts/MaterialIcons-Regular.eot");
   src: local('Material Icons'),
        local('MaterialIcons-Regular'),
-       url(../fonts/MaterialIcons-Regular.woff2) format('woff2'),
-       url(../fonts/MaterialIcons-Regular.woff) format('woff'),
-       url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
+       url("/static/listery/fonts/MaterialIcons-Regular.woff2") format('woff2'),
+       url("/static/listery/fonts/MaterialIcons-Regular.woff") format('woff'),
+       url("/static/listery/fonts/MaterialIcons-Regular.ttf") format('truetype');
 }
 .material-icons {
   font-family: 'Material Icons';
@@ -33,10 +33,10 @@
   font-family: 'Framework7 Icons';
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/Framework7Icons-Regular.eot");
-  src: url("../fonts/Framework7Icons-Regular.woff2") format("woff2"),
-       url("../fonts/Framework7Icons-Regular.woff") format("woff"),
-       url("../fonts/Framework7Icons-Regular.ttf") format("truetype");
+  src: url("/static/listery/fonts/Framework7Icons-Regular.eot");
+  src: url("/static/listery/fonts/Framework7Icons-Regular.woff2") format("woff2"),
+       url("/static/listery/fonts/Framework7Icons-Regular.woff") format("woff"),
+       url("/static/listery/fonts/Framework7Icons-Regular.ttf") format("truetype");
 }
 .f7-icons {
   font-family: 'Framework7 Icons';

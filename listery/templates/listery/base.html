@@ -16,6 +16,7 @@
 	<script>
 		var currentUserID = {{ user.id }};
 		var frontendLogsEnabled = '{{ LISTERY_FRONTEND_LOGS_ENABLED }}' == 'True' ? true : false;
+		var listeryTitle = "{{ LISTERY_TITLE }}";
 	</script>
 	<script>
 		var csrfTokenInput = "{% csrf_token %}";

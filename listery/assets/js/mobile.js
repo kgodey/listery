@@ -8,7 +8,7 @@ import Framework7React from 'framework7-react'
 
 // Import styles
 import 'framework7/css/framework7.bundle.css'
-import '../css/icons.css'
+import '../css/icons.scss'
 import '../css/mobile.scss'
 
 // Import root compontnent and store
