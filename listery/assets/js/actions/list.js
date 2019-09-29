@@ -188,6 +188,7 @@ export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='', 
 
 	let currentLocation = history.location.pathname
 	let newLocation
+	let baseURL = currentLocation.startsWith('/mobile/') ? '/mobile' + ROOT_URL : ROOT_URL
 
 	// if there's no ID passed, use the current active ID or the first list ID provided by the HTML page.
 	if (!id) {
@@ -198,14 +199,14 @@ export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='', 
 		return Promise.resolve()
 	}
 	if (!id) {
-		newLocation = ROOT_URL
+		newLocation = baseURL
 		if (currentLocation !== newLocation) history.push(newLocation)
 		dispatch(noActiveListAvailable())
 		return Promise.resolve()
 	}
 
 	dispatch(fetchActiveListRequest(id, reload))
-	newLocation = ROOT_URL + id
+	newLocation = baseURL + id
 	if (currentLocation !== newLocation) history.push(newLocation)
 	return sync(LIST_API_URL + id + '/')
 		.then(
@@ -265,6 +266,7 @@ const filterActiveListItems = (state, currentFilters) => {
 
 
 export const setFilters = (id, filterTags, filterText) => (dispatch, getState) => {
+	let baseURL = history.location.pathname.startsWith('/mobile/') ? '/mobile' + ROOT_URL : ROOT_URL
 	const currentFilters = {
 		id: id,
 		tags: filterTags,
@@ -272,7 +274,7 @@ export const setFilters = (id, filterTags, filterText) => (dispatch, getState) =
 	}
 	dispatch(filterListRequest(currentFilters))
 	const visibleListItemIDs = filterActiveListItems(getState(), currentFilters)
-	history.push(constructFilterURL(ROOT_URL + id, currentFilters))
+	history.push(constructFilterURL(baseURL + id, currentFilters))
 	return dispatch(filterListSuccess(currentFilters, visibleListItemIDs))
 }
 
@@ -291,6 +293,7 @@ export const fetchAllLists = (reload=true) => (dispatch, getState) => {
 
 
 export const createList = (listName) => (dispatch) => {
+	let baseURL = history.location.pathname.startsWith('/mobile/') ? '/mobile' + ROOT_URL : ROOT_URL
 	let listData = {
 		name: listName
 	}
@@ -302,7 +305,7 @@ export const createList = (listName) => (dispatch) => {
 		.then(
 			response => {
 				dispatch(createListSuccess(response, response.id))
-				history.push(ROOT_URL + response.id)
+				history.push(baseURL + response.id)
 			},
 			error => dispatch(genericAPIActionFailure(error.message))
 		)
