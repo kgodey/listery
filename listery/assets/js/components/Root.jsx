@@ -3,16 +3,16 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import App from './App.jsx'
+import WebApp from './WebApp.jsx'
 
 
 const Root = ({ store }) => (
 	<Provider store={store}>
 		<BrowserRouter>
 			<div>
-				<Route exact path='/' component={App} />
-				<Route exact path='/lists/' component={App} />
-				<Route path='/lists/:id' component={App} />
+				<Route exact path='/' component={WebApp} />
+				<Route exact path='/lists/' component={WebApp} />
+				<Route path='/lists/:id' component={WebApp} />
 			</div>
 		</BrowserRouter>
 	</Provider>

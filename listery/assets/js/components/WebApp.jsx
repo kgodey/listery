@@ -7,8 +7,8 @@ import { connect } from 'react-redux'
 
 import { apiErrorDismissed } from '../actions/common'
 import { getCurrentAPIError } from '../reducers/apiErrors.js'
-import ActiveList from './App/ActiveList.jsx'
-import ListSwitcher from './App/ListSwitcher.jsx'
+import ActiveList from './WebApp/ActiveList.jsx'
+import ListSwitcher from './WebApp/ListSwitcher.jsx'
 
 
 const switcherStyle = {
@@ -16,7 +16,7 @@ const switcherStyle = {
 }
 
 
-class App extends React.Component {
+class WebApp extends React.Component {
 	constructor(props) {
 		super(props)
 		this.hideAlert = this.hideAlert.bind(this)
@@ -59,11 +59,11 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 
-App.propTypes = {
+WebApp.propTypes = {
 	currentError: PropTypes.object.isRequired,
 	apiErrorDismissed: PropTypes.func.isRequired
 }
 
 
-App = connect(mapStateToProps, { apiErrorDismissed })(App)
-export default DragDropContext(HTML5Backend)(App)
+WebApp = connect(mapStateToProps, { apiErrorDismissed })(WebApp)
+export default DragDropContext(HTML5Backend)(WebApp)

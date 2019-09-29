@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		{% block meta %}
+		{% endblock %}
+		{% block style %}
+		{% endblock %}
+		{% block title %}
+		<title>{{ LISTERY_TITLE }}</title>
+		{% endblock %}
+	</head>
+	<body>
+	{% block content %}
+	{% endblock %}
+	<script>
+		var currentUserID = {{ user.id }};
+		var frontendLogsEnabled = '{{ LISTERY_FRONTEND_LOGS_ENABLED }}' == 'True' ? true : false;
+	</script>
+	<script>
+		var csrfTokenInput = "{% csrf_token %}";
+		{% if first_list_id %}
+			var firstListID = {{ first_list_id }};
+		{% else %}
+			var firstListID = null;
+		{% endif %}
+	</script>
+	{% block scripts %}
+	{% endblock %}
+	</body>
+</html>

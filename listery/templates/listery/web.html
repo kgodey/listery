@@ -1,53 +1,36 @@
+{% extends "listery/base.html" %}
 {% load staticfiles %}
-<html>
-	<head>
-		<title>{{ LISTERY_TITLE }}</title>
-		<link rel="stylesheet" href="{% static 'listery/css/web/bootstrap/bootstrap.min.css' %}">
-		<link rel="stylesheet" href="{% static 'listery/css/web/style.css' %}">
-	{% block style %}
-	{% endblock %}
-	</head>
-	<body>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<div class="container-fluid">
-				<span class="navbar-brand">{{ LISTERY_TITLE }}</span>
-				<ul class="nav navbar-nav navbar-right">
-					{% if user.is_authenticated %}
-						<li>
-							<a href="{% url 'logout' %}?next=/">
-								<button class="btn btn-light btn-sm">Logout</button>
-							</a>
-						</li>
-					{% endif %}
-				</ul>
-			</div>
-		</nav>
 
-		<div id="app" class="container-fluid">
-		</div>
-
-		<script>
-			var currentUserID = {{ user.id }};
-			var frontendLogsEnabled = '{{ LISTERY_FRONTEND_LOGS_ENABLED }}' == 'True' ? true : false;
-		</script>
-		<script>
-			var csrfTokenInput = "{% csrf_token %}";
-			{% if first_list_id %}
-				var firstListID = {{ first_list_id }};
-			{% else %}
-				var firstListID = null;
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<div class="container-fluid">
+		<span class="navbar-brand">{{ LISTERY_TITLE }}</span>
+		<ul class="nav navbar-nav navbar-right">
+			{% if user.is_authenticated %}
+				<li>
+					<a href="{% url 'logout' %}?next=/">
+						<button class="btn btn-light btn-sm">Logout</button>
+					</a>
+				</li>
 			{% endif %}
-		</script>
-		<script src="{% static 'listery/js/web/bundle.js' %}"></script>
+		</ul>
+	</div>
+</nav>
 
-		{% if user.is_authenticated %}
-		<div class="row justify-content-center mx-0">
-			<div class="col-md-6">
-				<p>&nbsp;</p>
-				<p class="text-center"><strong>API token:</strong>&nbsp;&nbsp;&nbsp;<code>{{ user.auth_token }}</code></p>
-				<p>&nbsp;</p>
-			</div>
-		</div>
-		{% endif %}
-	</body>
-</html>
+<div id="app" class="container-fluid">
+</div>
+
+{% if user.is_authenticated %}
+<div class="row justify-content-center mx-0">
+	<div class="col-md-6">
+		<p>&nbsp;</p>
+		<p class="text-center"><strong>API token:</strong>&nbsp;&nbsp;&nbsp;<code>{{ user.auth_token }}</code></p>
+		<p>&nbsp;</p>
+	</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'listery/web.js' %}"></script>
+{% endblock %}
