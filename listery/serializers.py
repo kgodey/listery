@@ -40,7 +40,7 @@ class ListItemSerializer(serializers.ModelSerializer):
 		instance.title = validated_data.get('title', instance.title)
 		instance.description = validated_data.get('description', instance.description)
 		instance.completed = validated_data.get('completed', instance.completed)
-		instance.list_id = validated_data.get('list_id', instance.list_id)
+		instance.list_id = validated_data['list'].id if 'list' in validated_data else instance.list_id
 		instance.save()
 		if tags is not None:
 			instance.update_tags(tags)
