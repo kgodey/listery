@@ -4,7 +4,7 @@ import { render } from 'react-dom'
 import Root from './components/Root.jsx'
 import configureStore from './store'
 
-import '../css/style.css'
+import '../css/web.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 
