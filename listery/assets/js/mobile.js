@@ -23,4 +23,4 @@ const store = configureStore()
 render(
 	<MobileApp store={store} />,
 	document.getElementById('app'),
-);
+)
