@@ -1,12 +1,12 @@
-import { Block, Preloader, List, ListItem } from 'framework7-react'
+import { Block, Preloader, List } from 'framework7-react'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
 
 import { fetchAllLists } from '../../actions/list'
-import { getActiveListID } from '../../reducers/activeList'
 import { getSortedLists, getAllListsFetchStatus, getallListsErrorStatus } from '../../reducers/allLists'
+import ListLink from './ListSwitcher/ListLink.jsx'
 
 
 class ListSwitcher extends React.Component {
@@ -33,10 +33,9 @@ class ListSwitcher extends React.Component {
 			return (
 				<List>
 					{sortedLists.map(item =>
-						<ListItem
+						<ListLink
 							key={item.id}
-							title={item.name}
-							bgColor={item.id == activeListID ? 'primary' : 'black'}
+							{...item}
 						/>
 					)}
 				</List>
@@ -48,7 +47,6 @@ class ListSwitcher extends React.Component {
 const mapStateToProps = (state) => ({
 	isFetching: getAllListsFetchStatus(state),
 	sortedLists: getSortedLists(state),
-	activeListID: getActiveListID(state),
 	allListsError: getallListsErrorStatus(state)
 })
 
@@ -56,7 +54,6 @@ const mapStateToProps = (state) => ({
 ListSwitcher.propTypes = {
 	isFetching: PropTypes.bool.isRequired,
 	sortedLists: PropTypes.array.isRequired,
-	activeListID: PropTypes.number,
 	allListsError: PropTypes.object.isRequired,
 	fetchAllLists: PropTypes.func.isRequired
 }
