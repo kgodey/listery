@@ -18,10 +18,12 @@ class ActiveListItem extends React.Component {
 	}
 
 	render() {
-		const { title, description } = this.props
+		const { title, description, completed } = this.props
 		return (
 			<ListItem
 				swipeout
+				checkbox
+				checked={completed}
 				title={title}
 				text={description}
 			>
