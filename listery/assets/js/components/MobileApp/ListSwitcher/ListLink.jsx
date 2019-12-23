@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { fetchActiveList, archiveList } from '../../../actions/list'
+import { archiveList } from '../../../actions/list'
 import { getNextList } from '../../../reducers/allLists'
 import { getActiveListID } from '../../../reducers/activeList'
 
@@ -27,7 +27,9 @@ class ListLink extends React.Component {
 				onSwipeoutDeleted={this.handleArchived}
 				title={name}
 				bgColor={activeListID == id ? 'primary' : 'black'}
-				onClick={onClick}
+				link={"/mobile/lists/" + id}
+				view=".view-main"
+				panel-close
 			>
 				<SwipeoutActions right>
 					<SwipeoutButton
@@ -51,9 +53,6 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-	onClick: () => {
-		dispatch(fetchActiveList({id: ownProps.id}))
-	},
 	archiveList: (nextListID) => {
 		dispatch(archiveList(ownProps.id, nextListID))
 	}
@@ -65,7 +64,6 @@ ListLink.propTypes = {
 	name: PropTypes.string.isRequired,
 	activeListID: PropTypes.number,
 	nextListID: PropTypes.number,
-	onClick: PropTypes.func.isRequired,
 	archiveList: PropTypes.func.isRequired
 }
 

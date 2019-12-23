@@ -192,7 +192,7 @@ export const fetchActiveList = ({id, reload=true, filterTags=[], filterText='', 
 
 	// if there's no ID passed, use the current active ID or the first list ID provided by the HTML page.
 	if (!id) {
-		id = getActiveListID(state) || firstListID
+		id = getActiveListID(state) || pageListID
 	}
 
 	if (getActiveListFetchStatus(state)) {

@@ -1,10 +1,10 @@
-import { App, Statusbar, Panel, View, Page, Navbar, NavRight, Link, BlockTitle } from 'framework7-react'
+import { App, Statusbar, View, Page, Panel, BlockTitle } from 'framework7-react'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Provider } from 'react-redux'
 
-import ListSwitcher from './MobileApp/ListSwitcher.jsx'
 import ActiveList from './MobileApp/ActiveList.jsx'
+import ListSwitcher from './MobileApp/ListSwitcher.jsx'
 
 
 class MobileApp extends React.Component {
@@ -14,10 +14,20 @@ class MobileApp extends React.Component {
 			f7params: {
 				name: 'Listery', // App name
 				theme: 'auto', // Automatic theme detection
-				// Enable panel left visibility breakpoint
+				// Enable panel right visibility breakpoint
 				panel: {
 					rightBreakpoint: 960,
 				},
+				routes: [
+						{
+							path: '/mobile/lists/:urlListID',
+							component: ActiveList,
+						},
+						{
+							path: '/mobile/',
+							component: ActiveList,
+						}
+					],
 			}
 		}
 	}
@@ -28,16 +38,7 @@ class MobileApp extends React.Component {
 			<Provider store={store}>
 				<App params={ this.state.f7params }>
 					<Statusbar></Statusbar>
-					<View main className="safe-areas">
-						<Page>
-							<Navbar title={listeryTitle}>
-								<NavRight>
-									<Link iconF7="bars" panelOpen="right" title="Menu"></Link>
-								</NavRight>
-							</Navbar>
-							<ActiveList />
-						</Page>
-					</View>
+					<View main className="safe-areas" stackPages={false} />
 					<Panel right cover themeDark>
 						<View>
 							<Page>

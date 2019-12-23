@@ -23,6 +23,7 @@ urlpatterns = [
 	url(r'^api/v1/', include((rest_framework_urls, 'rest_framework'), namespace='rest_framework')),
 	url(r'^api/v1/token/$', rest_framework_views.obtain_auth_token),
 	url(r'^api/v1/', include((router.urls, 'listery'), namespace='listery-api-v1')),
-	url(r'^mobile/', views.mobile, name='mobile'),
+	url(r'^mobile/lists/(?P<list_id>[0-9]+)/?$', views.mobile),
+	url(r'^mobile', views.mobile, name='mobile'),
 	url(r'', views.web, name='web'),
 ]

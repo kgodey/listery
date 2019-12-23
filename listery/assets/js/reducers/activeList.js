@@ -1,7 +1,7 @@
 import * as listAPIActions from '../actions/list'
 
 
-export const activeListID = (state=firstListID, action) => {
+export const activeListID = (state=pageListID, action) => {
 	switch(action.type) {
 		case listAPIActions.FETCH_ACTIVE_LIST_REQUEST:
 			return action.id

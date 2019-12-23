@@ -6,7 +6,7 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import WebApp from './WebApp.jsx'
 
 
-const Root = ({ store }) => (
+const WebRoot = ({ store }) => (
 	<Provider store={store}>
 		<BrowserRouter>
 			<div>
@@ -19,9 +19,9 @@ const Root = ({ store }) => (
 )
 
 
-Root.propTypes = {
+WebRoot.propTypes = {
   store: PropTypes.object.isRequired,
 }
 
 
-export default Root
+export default WebRoot

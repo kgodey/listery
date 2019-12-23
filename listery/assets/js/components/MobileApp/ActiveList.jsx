@@ -1,4 +1,4 @@
-import { Block, Preloader, BlockTitle, List, ListItem } from 'framework7-react'
+import { Page, Block, Preloader, Navbar, NavRight, Link, BlockTitle, List, ListItem } from 'framework7-react'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
@@ -10,8 +10,8 @@ import { getActiveList, getActiveListID, getActiveListErrorStatus, getActiveList
 
 class ActiveList extends React.Component {
 	componentDidMount() {
-		const { fetchActiveList, activeListID } = this.props
-		fetchActiveList({id: activeListID})
+		const { fetchActiveList, activeListID, urlListID } = this.props
+		fetchActiveList({id: urlListID ? parseInt(urlListID) : activeListID})
 	}
 
 	render() {
@@ -35,8 +35,13 @@ class ActiveList extends React.Component {
 			)
 		} else {
 			return (
-				<div>
-				<BlockTitle medium>{activeList.name}</BlockTitle>
+				<Page>
+					<Navbar title={listeryTitle}>
+						<NavRight>
+							<Link iconF7="bars" panelOpen="right" title="Menu"></Link>
+						</NavRight>
+					</Navbar>
+					<BlockTitle medium>{activeList.name}</BlockTitle>
 					<List mediaList>
 						{sortedListItems.map(item =>
 							<ListItem
@@ -46,7 +51,7 @@ class ActiveList extends React.Component {
 							/>
 						)}
 					</List>
-				</div>
+				</Page>
 			)
 		}
 	}

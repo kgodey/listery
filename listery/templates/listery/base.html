@@ -20,10 +20,10 @@
 	</script>
 	<script>
 		var csrfTokenInput = "{% csrf_token %}";
-		{% if first_list_id %}
-			var firstListID = {{ first_list_id }};
+		{% if page_list_id %}
+			var pageListID = {{ page_list_id }};
 		{% else %}
-			var firstListID = null;
+			var pageListID = null;
 		{% endif %}
 	</script>
 	{% block scripts %}
