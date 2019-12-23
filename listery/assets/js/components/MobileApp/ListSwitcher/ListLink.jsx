@@ -24,7 +24,6 @@ class ListLink extends React.Component {
 		return (
 			<ListItem
 				swipeout
-				onSwipeoutDeleted={this.handleArchived}
 				title={name}
 				bgColor={activeListID == id ? 'primary' : 'black'}
 				link={"/mobile/lists/" + id}
@@ -33,7 +32,8 @@ class ListLink extends React.Component {
 			>
 				<SwipeoutActions right>
 					<SwipeoutButton
-						delete
+						color="red"
+						onClick={this.handleArchived}
 						confirmText="Are you sure you want to archive this list?"
 						confirmTitle="Confirm Archival"
 				>
