@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 
+import ActiveListItem from './ActiveList/ActiveListItem.jsx'
 import { fetchActiveList } from '../../actions/list'
 import { getSortedListItems } from '../../reducers/activeListItems'
 import { getActiveList, getActiveListID, getActiveListErrorStatus, getActiveListFetchStatus } from '../../reducers/activeList'
@@ -44,10 +45,9 @@ class ActiveList extends React.Component {
 					<BlockTitle medium>{activeList.name}</BlockTitle>
 					<List mediaList>
 						{sortedListItems.map(item =>
-							<ListItem
+							<ActiveListItem
 								key={item.id}
-								title={item.title}
-								text={item.description}
+								{...item}
 							/>
 						)}
 					</List>
