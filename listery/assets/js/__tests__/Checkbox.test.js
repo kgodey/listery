@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox } from '../components/App/ActiveList/ListItem/Checkbox.jsx'
+import { Checkbox } from '../components/WebApp/ActiveList/ListItem/Checkbox.jsx'
 import renderer from 'react-test-renderer'
 
 

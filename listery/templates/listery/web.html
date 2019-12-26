@@ -1,0 +1,36 @@
+{% extends "listery/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<div class="container-fluid">
+		<span class="navbar-brand">{{ LISTERY_TITLE }}</span>
+		<ul class="nav navbar-nav navbar-right">
+			{% if user.is_authenticated %}
+				<li>
+					<a href="{% url 'logout' %}?next=/">
+						<button class="btn btn-light btn-sm">Logout</button>
+					</a>
+				</li>
+			{% endif %}
+		</ul>
+	</div>
+</nav>
+
+<div id="app" class="container-fluid">
+</div>
+
+{% if user.is_authenticated %}
+<div class="row justify-content-center mx-0">
+	<div class="col-md-6">
+		<p>&nbsp;</p>
+		<p class="text-center"><strong>API token:</strong>&nbsp;&nbsp;&nbsp;<code>{{ user.auth_token }}</code></p>
+		<p>&nbsp;</p>
+	</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'listery/web.js' %}"></script>
+{% endblock %}

@@ -9,8 +9,17 @@ from listery.models import List
 
 
 @login_required
-def index(request):
+def web(request):
 	"""Renders base page for the single-page app."""
 	first_list = List.objects.all_for_user(request.user).first()
-	first_list_id = first_list.id if first_list else None
-	return render(request, 'listery/index.html', {'first_list_id': first_list_id})
+	page_list_id = first_list.id if first_list else None
+	return render(request, 'listery/web.html', {'page_list_id': page_list_id})
+
+
+@login_required
+def mobile(request, list_id=None):
+	"""Renders base page for the single-page app."""
+	if not list_id:
+		first_list = List.objects.all_for_user(request.user).first()
+		list_id = first_list.id if first_list else None
+	return render(request, 'listery/mobile.html', {'page_list_id': list_id})

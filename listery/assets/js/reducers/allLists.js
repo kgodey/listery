@@ -4,8 +4,8 @@ import * as listAPIActions from '../actions/list'
 
 export const allLists = (state={}, action) => {
 	let newState = {...state}
-	if (!(firstListID in newState)) {
-		newState[firstListID] = {}
+	if (!(pageListID in newState)) {
+		newState[pageListID] = {}
 	}
 	switch(action.type) {
 		case listAPIActions.CREATE_LIST_SUCCESS:

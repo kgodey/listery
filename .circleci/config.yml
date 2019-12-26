@@ -65,7 +65,7 @@ jobs:
                 command: npm run test -- --ci --reporters=default --reporters=jest-junit
             - run:
                 name: Run ESLint
-                command: ./node_modules/.bin/eslint assets/ --format junit --output-file ~/reports/eslint/test-results.xml
+                command: ./node_modules/.bin/eslint listery/assets/ --format junit --output-file ~/reports/eslint/test-results.xml
             - store_test_results:
                 path: ~/reports
             - store_artifacts:
